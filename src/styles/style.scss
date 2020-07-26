@@ -1,0 +1,400 @@
+$grid-columns: 60;
+$grid-breakpoints: (
+  xs: 0,
+  sm: 567px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1900px,
+);
+
+$container-max-widths: (
+  sm: 567px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1900px,
+);
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+
+$root: rgb(0, 0, 0);
+$over-root: rgb(17, 17, 17);
+$primary-custom: rgb(255, 0, 64);
+$primary: rgb(0, 74, 213);
+$green: #00db54;
+$orange: #ff9d00;
+
+.bg-white-10 {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.bg-white-5-10 {
+  background: rgba(255, 255, 255, 0.05);
+  transition: background 0.3s;
+}
+
+.bg-white-5-10:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.bg-root {
+  background: $root;
+}
+
+.bg-over-root {
+  background: $over-root;
+}
+
+.bg-over-root-lighter {
+  background: lighten($color: $over-root, $amount: 10);
+}
+
+.text-green {
+  color: $green;
+}
+
+.text-orange {
+  color: $orange;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: Montserrat, Helvetica, Arial, sans-serif !important;
+  background: $root;
+}
+
+.bg-image {
+  background-size: cover;
+  background-position: center;
+}
+
+.font-weight-500 {
+  font-weight: 500;
+}
+
+.text-light {
+  color: rgb(202, 202, 202) !important;
+}
+
+.btn-reaction {
+  user-select: none;
+  cursor: pointer;
+  border-radius: 25px;
+  border: 1.5px solid $primary;
+  height: 40px;
+  @extend .px-3;
+  transition: background 0.3s;
+}
+
+.btn-reaction:hover {
+  background: rgba($color: $primary, $alpha: 0.4);
+}
+
+.btn-reaction:active {
+  background: rgba($color: $primary, $alpha: 0.7);
+}
+
+.btn-reaction-selected {
+  user-select: none;
+  cursor: pointer;
+  border-radius: 25px;
+  border: 1.5px solid $primary;
+  height: 40px;
+  background: $primary;
+  @extend .px-3;
+  transition: background 0.3s;
+}
+
+.btn-custom {
+  line-height: 60px;
+  height: 60px;
+  border-radius: 4px;
+  user-select: none;
+  cursor: pointer;
+  transition: background 0.3s;
+  text-align: center;
+}
+
+.btn-custom-iconic {
+  background: $primary;
+  min-width: 64px;
+}
+
+.btn-custom-iconic:hover {
+  background: darken($color: $primary, $amount: 10);
+}
+
+.btn-custom-iconic:active {
+  background: darken($color: $primary, $amount: 20);
+}
+
+.btn-custom-primary {
+  background: $primary-custom;
+}
+
+.btn-custom-primary:hover {
+  background: darken($color: $primary-custom, $amount: 10);
+}
+
+.btn-custom-primary:active {
+  background: darken($color: $primary-custom, $amount: 20);
+}
+.btn-long {
+  min-width: 311px;
+  @extend .text-truncate, .px-5;
+}
+
+.btn-small {
+  min-width: 212px;
+  @extend .text-truncate, .px-3;
+}
+
+.btn-tertiary {
+  cursor: pointer;
+  user-select: none;
+  line-height: 60px;
+  height: 60px;
+  text-align: center;
+}
+
+.btn-tertiary-selected {
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 3px solid $orange;
+  line-height: 60px;
+  height: 60px;
+  text-align: center;
+}
+
+.modal-container {
+  position: fixed;
+  z-index: 99;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.8);
+  animation-name: fadein;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.trailer-player-wrapper {
+  position: relative;
+  padding-top: 56.25%; /* Player ratio: 100 / (1280 / 720) */
+}
+
+.trailer-player {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.square-40 {
+  width: 40px;
+  height: 40px;
+}
+
+.square-50 {
+  width: 50px;
+  height: 50px;
+}
+
+.square-64 {
+  width: 64px;
+  height: 64px;
+}
+
+.square-70 {
+  width: 70px;
+  height: 70px;
+}
+
+.simplebar-scrollbar::before {
+  background: white !important;
+}
+
+.modal-closer {
+  cursor: pointer;
+  user-select: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  @extend .flex-center;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.modal-closer:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.user-select-none {
+  user-select: none;
+}
+
+.textarea {
+  background: $over-root;
+  transition: all 0.3s;
+  border-radius: 4px;
+  padding: 10px;
+  outline: none !important;
+  @extend .text-light;
+}
+
+.textarea:hover {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) !important;
+}
+
+.textarea:focus {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5) !important;
+}
+
+.textarea::placeholder {
+  @extend .text-muted;
+}
+
+.input {
+  line-height: 56px;
+  border-radius: 0 50px 50px 0;
+  background: transparent;
+  outline: none;
+  border: 2px solid white;
+  padding: 0 50px 0 20px;
+  color: white;
+}
+
+.input::placeholder {
+  @extend .text-muted;
+}
+
+.input-prepend-select {
+  line-height: 60px;
+  height: 60px;
+  border-radius: 50px 0 0 50px;
+  background: white;
+  min-width: 150px;
+  padding: 0 20px;
+}
+
+.popover-item {
+  line-height: 50px;
+  @extend .px-3;
+  min-width: 222px;
+  text-align: left;
+  transition: all 0.3s;
+  user-select: none;
+  cursor: pointer;
+}
+
+.popover-item:hover {
+  background: $primary-custom;
+  color: white;
+}
+
+.popover-item:active {
+  background: darken($color: $primary-custom, $amount: 10);
+}
+
+.tippy-tooltip {
+  padding: 0 !important;
+}
+
+.h0 {
+  font-size: 65px;
+  font-weight: 800;
+}
+
+@media only screen and (max-width: 567px) {
+  .movies-list-image {
+    width: 100px;
+  }
+}
+
+.text-light-white {
+  @extend .text-light;
+  transition: color 0.3s;
+}
+
+.text-light-white:hover {
+  @extend .text-white;
+}
+
+.text-muted-light:hover {
+  @extend .text-light;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-weight: 600;
+}
+
+.text-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bg-movie-over-root {
+  background: black;
+  @include media-breakpoint-up(lg) {
+    background: $over-root;
+  }
+}
+
+.text-movie-muted {
+  color: #cacaca;
+  @include media-breakpoint-up(lg) {
+    color: #6c757d;
+  }
+}
+
+.text-muted-light {
+  transition: color 0.3s;
+  color: #cacaca;
+  @include media-breakpoint-up(lg) {
+    color: #6c757d;
+  }
+}
