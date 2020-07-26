@@ -52,16 +52,25 @@ const Home = () => {
     <div className="row no-gutters">
       <div className="col-60">
         <div
-          className="row no-gutters justify-content-end position-relative overflow-hidden"
+          className="row no-gutters align-items-end position-relative overflow-hidden"
           style={{ height: window.innerHeight }}
         >
+          <div
+            className="position-absolute w-100 h-100"
+            style={{
+              top: 0,
+              left: 0,
+              zIndex: 2,
+              background: `linear-gradient(180deg, rgba(0, 0, 0, 0.3) 72%, black)`,
+            }}
+          ></div>
           <div
             className="col-60 position-absolute"
             style={{ top: 0, left: 0, zIndex: 5 }}
           >
             <Navbar></Navbar>
           </div>
-          <div className="col-60 position-relative">
+          <div className="col-60 position-absolute" style={{ top: 0, left: 0 }}>
             <div className="position-relative">
               <img
                 className="d-block d-lg-none"
@@ -84,22 +93,11 @@ const Home = () => {
                 }}
               ></div>
             </div>
-            <div
-              className="position-absolute w-100 h-100"
-              style={{
-                background: "linear-gradient(rgb(0 0 0 / 30%), black)",
-                top: 0,
-                left: 0,
-              }}
-            ></div>
           </div>
           <div
-            className="col-60 position-absolute px-md-5 px-4 py-4"
+            className="col-60 px-md-5 px-4 py-4 position-relative"
             style={{
-              bottom: 0,
-              left: 0,
-              right: 0,
-              margin: "auto",
+              zIndex: 5,
               maxWidth: "1500px",
             }}
           >
