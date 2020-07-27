@@ -11,6 +11,7 @@ import MovieReviews from "./MovieReviews";
 import { connect } from "react-redux";
 import { FormatDuration } from "../utilities/Functions";
 import Navbar from "./Navbar";
+import { FindOrCreateMovie } from "../server/DatabaseApi";
 
 const Movie = (props) => {
   const movieId = props.match.params.movieId;
@@ -41,7 +42,11 @@ const Movie = (props) => {
         let credits = await GetCredits(movieId);
         let director = credits.crew.find((x) => x.job === "Director").name;
         let cast = credits.cast.map((x) => x.name);
+        data.director = director;
+        data.cast = cast;
         setMovie((prev) => Object.assign({}, prev, { director, cast }));
+        let storedMovie = await FindOrCreateMovie(data);
+        console.log("Stored movie", storedMovie);
       }
     }
     getData();
