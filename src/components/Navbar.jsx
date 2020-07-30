@@ -67,7 +67,7 @@ const Navbar = (props) => {
             className="btn-link font-size-14 cursor-pointer"
             onClick={() => history.push("/admin")}
           >
-            Admin dashboard
+            Admin
           </div>
         </div>
         <div className="col pr-5 d-none d-md-block">
