@@ -64,12 +64,7 @@ const Home = () => {
               background: `linear-gradient(180deg, rgba(0, 0, 0, 0.3) 72%, black)`,
             }}
           ></div>
-          <div
-            className="col-60 position-absolute"
-            style={{ top: 0, left: 0, zIndex: 5 }}
-          >
-            <Navbar></Navbar>
-          </div>
+          <Navbar></Navbar>
           <div className="col-60 position-absolute" style={{ top: 0, left: 0 }}>
             <div className="position-relative">
               <img
@@ -95,7 +90,7 @@ const Home = () => {
             </div>
           </div>
           <div
-            className="col-60 px-md-5 px-4 py-4 position-relative"
+            className="col-60 px-md-5 px-4 py-4 position-relative mx-auto"
             style={{
               zIndex: 5,
               maxWidth: "1500px",

@@ -91,9 +91,8 @@ const Movie = (props) => {
           ></div>
         </div>
       </div>
-      <div className="col-60">
-        <Navbar></Navbar>
-      </div>
+      <div className="col-60 bg-root" style={{ height: "92px" }}></div>
+      <Navbar></Navbar>
       <div
         className="col-60 text-white px-md-5 py-5 px-4"
         style={{ maxWidth: "1500px" }}

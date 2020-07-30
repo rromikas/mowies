@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Reviews } from "../Data";
+import { Reviews, PublicUsers } from "../Data";
 import date from "date-and-time";
 import { nFormatter } from "../utilities/Functions";
 import { Emoji } from "emoji-mart";
@@ -59,7 +59,9 @@ const MovieReviews = ({ initialData, movie, user }) => {
             <div className="col-auto pr-4 d-none d-md-block">
               <div
                 className="bg-image rounded-circle square-70"
-                style={{ backgroundImage: `url(${x.author.photo})` }}
+                style={{
+                  backgroundImage: `url(${PublicUsers[x.author].photo})`,
+                }}
               ></div>
             </div>
             <div className="col">

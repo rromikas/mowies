@@ -49,12 +49,16 @@ $orange: #ff9d00;
   background: lighten($color: $over-root, $amount: 10);
 }
 
+.bg-custom-primary {
+  background: $primary-custom !important;
+}
+
 .text-green {
-  color: $green;
+  color: $green !important;
 }
 
 .text-orange {
-  color: $orange;
+  color: $orange !important;
 }
 
 html,
@@ -113,6 +117,32 @@ body {
   transition: background 0.3s;
 }
 
+.rounded-left {
+  border-radius: 45px 0 0 45px !important;
+}
+
+.rounded-right {
+  border-radius: 0 45px 45px 0 !important;
+}
+
+.table-btn-selected {
+  border: none !important;
+  background: $primary-custom !important;
+  color: white !important;
+}
+
+.table-btn {
+  line-height: 58px;
+  height: 60px;
+  border-radius: 4px;
+  border: 1px solid $over-root;
+  user-select: none;
+  cursor: pointer;
+  transition: background 0.3s;
+  text-align: center;
+  @extend .px-3;
+}
+
 .btn-custom {
   line-height: 60px;
   height: 60px;
@@ -121,6 +151,7 @@ body {
   cursor: pointer;
   transition: background 0.3s;
   text-align: center;
+  @extend .px-3;
 }
 
 .btn-custom-iconic {
@@ -137,6 +168,7 @@ body {
 }
 
 .btn-custom-primary {
+  color: white;
   background: $primary-custom;
 }
 
@@ -147,6 +179,21 @@ body {
 .btn-custom-primary:active {
   background: darken($color: $primary-custom, $amount: 20);
 }
+
+.btn-custom-secondary {
+  border: 2px solid $primary-custom;
+  color: $primary-custom;
+}
+
+.btn-custom-secondary:hover {
+  background: $primary-custom;
+  color: white;
+}
+
+.btn-custom-secondary:active {
+  background: darken($color: $primary-custom, $amount: 20);
+}
+
 .btn-long {
   min-width: 311px;
   @extend .text-truncate, .px-5;
@@ -154,6 +201,11 @@ body {
 
 .btn-small {
   min-width: 212px;
+  @extend .text-truncate, .px-3;
+}
+
+.btn-xsmall {
+  min-width: 151px;
   @extend .text-truncate, .px-3;
 }
 
@@ -341,6 +393,16 @@ body {
   }
 }
 
+.login-rounded {
+  border-radius: 4px;
+}
+
+@media only screen and (max-width: 567px) {
+  .login-rounded {
+    border-radius: 0 !important;
+  }
+}
+
 .text-light-white {
   @extend .text-light;
   transition: color 0.3s;
@@ -369,9 +431,21 @@ h6,
   font-weight: 600;
 }
 
+.font-size-14 {
+  font-size: 14px;
+}
+
 .text-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text-clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -397,4 +471,185 @@ h6,
   @include media-breakpoint-up(lg) {
     color: #6c757d;
   }
+}
+
+.bg-transition {
+  transition: background 0.3s;
+}
+
+.textarea-light {
+  background: white;
+  transition: all 0.3s;
+  border: 1px solid rgb(223, 225, 230);
+  box-shadow: 0 0 0 1px rgb(223, 225, 230) !important;
+  border-radius: 4px;
+  padding: 10px;
+  outline: none !important;
+  resize: none;
+  @extend .text-dark;
+}
+
+.textarea-light::placeholder {
+  color: rgb(192, 192, 203);
+}
+
+.textarea:hover {
+  box-shadow: 0 0 0 1px rgba($color: $primary-custom, $alpha: 0.7) !important;
+}
+
+.textarea:focus {
+  box-shadow: 0 0 0 3px rgba($color: $primary-custom, $alpha: 0.7) !important;
+}
+
+.input-light {
+  height: 60px;
+  line-height: 58px;
+  border: 1px solid rgb(223, 225, 230);
+  background: white;
+  outline: none;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgb(223, 225, 230) !important;
+  transition: all 0.3s;
+}
+
+.input-light::placeholder {
+  color: rgb(192, 192, 203);
+}
+
+.input-light:hover {
+  box-shadow: 0 0 0 1px rgba($color: $primary-custom, $alpha: 0.7) !important;
+}
+
+.input-light:focus {
+  box-shadow: 0 0 0 3px rgba($color: $primary-custom, $alpha: 0.7) !important;
+}
+
+.input-light-selected {
+  height: 60px;
+  line-height: 58px;
+  border: 1px solid $primary-custom;
+  background: $primary-custom;
+  color: white;
+  outline: none;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgb(223, 225, 230) !important;
+  transition: all 0.3s;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+.bg-dark-lighter {
+  background: lighten($color: #343a40, $amount: 10);
+}
+
+.input-search-admin {
+  background: lighten($color: #343a40, $amount: 10);
+  border: none;
+  outline: none;
+  padding: 0 20px 0 54px;
+  line-height: 60px;
+  height: 60px;
+  border-radius: 45px;
+  color: white;
+}
+
+.input-search-admin::placeholder {
+  color: white;
+}
+
+.zindex-99 {
+  z-index: 99;
+}
+
+.zindex-0-1 {
+  animation-name: zindex-0;
+  animation-delay: 0.3s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes zindex-0 {
+  from {
+    z-index: 99;
+  }
+  to {
+    z-index: 0;
+  }
+}
+
+.table-input {
+  height: 60px;
+  line-height: 58px;
+  border: 1px solid rgb(223, 225, 230);
+  background: white;
+  outline: none;
+  border-radius: 0 45px 45px 0;
+  transition: all 0.3s;
+}
+
+.table-input::placeholder {
+  @extend .text-dark;
+}
+
+.table-input-prepend-select {
+  height: 60px;
+  line-height: 58px;
+  border: 1px solid rgb(223, 225, 230);
+  background: rgb(236, 236, 236);
+  outline: none;
+  border-radius: 45px 0 0 45px;
+  transition: all 0.3s;
+}
+
+.table-header,
+.table-footer {
+  background: white;
+  vertical-align: middle !important;
+  font-weight: 600;
+}
+
+.fb-btn {
+  line-height: 40px;
+  height: 40px;
+  transition: all 0.3s;
+  padding: 0 20px !important;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.fb-btn:hover {
+  color: white;
+  background: $primary-custom;
+}
+
+.react-time-picker__wrapper {
+  border: none !important;
+}
+
+.DayPickerInput {
+  width: 100% !important;
+}
+
+.line-height-60 {
+  line-height: 60px;
+}
+
+.input-light-resize {
+  min-height: 60px;
+  border: 1px solid rgb(223, 225, 230);
+  background: white;
+  outline: none;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgb(223, 225, 230) !important;
+  transition: all 0.3s;
+}
+
+.input-light-resize::placeholder {
+  color: rgb(192, 192, 203);
+}
+
+.input-light-resize:hover {
+  box-shadow: 0 0 0 1px rgba($color: $primary-custom, $alpha: 0.7) !important;
 }

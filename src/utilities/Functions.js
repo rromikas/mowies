@@ -1,7 +1,7 @@
 export const nFormatter = (num, digits) => {
   var si = [
     { value: 1, symbol: "" },
-    { value: 1e3, symbol: "k" },
+    { value: 1e3, symbol: "K" },
     { value: 1e6, symbol: "M" },
     { value: 1e9, symbol: "G" },
     { value: 1e12, symbol: "T" },
@@ -23,3 +23,5 @@ export const FormatDuration = (minutes) => {
   let m = minutes - h * 60;
   return `${h}h ${m}m`;
 };
+
+export const Scrolling = () => {};

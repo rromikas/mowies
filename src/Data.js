@@ -1,3 +1,6 @@
+import React from "react";
+import { Emoji } from "emoji-mart";
+
 export const OfficialMoviesGenres = [
   { id: 28, name: "Action" },
   { id: 12, name: "Adventure" },
@@ -18,6 +21,197 @@ export const OfficialMoviesGenres = [
   { id: 53, name: "Thriller" },
   { id: 10752, name: "War" },
   { id: 37, name: "Western" },
+];
+const rates = ["Excellent", "Good", "OK", "Bad"];
+
+export const Reviews = [
+  {
+    author: 1,
+    rating: "Excellent",
+    date: Date.now(),
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 2,
+    date: Date.now(),
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 2,
+    date: Date.now(),
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 2,
+    date: Date.now(),
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 2,
+    date: Date.now(),
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 2,
+    date: Date.now(),
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 2,
+    date: Date.now(),
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
 ];
 
 export const OfficialSeriesGenres = [
@@ -87,291 +281,6 @@ export const OfficialSeriesGenres = [
   },
 ];
 
-const rates = ["Excellent", "Good", "OK", "Bad"];
-
-export const Reviews = [
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 1,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 2,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 3,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 4,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 5,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 1,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 2,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 3,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 4,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 5,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 1,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 2,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 3,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 4,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 5,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 1,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 2,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 3,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 4,
-  },
-  {
-    author: {
-      photo:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      name: "Gork Roy",
-    },
-    date: Date.now(),
-    review:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a turpis blandit, aliquet metus id, imperdiet enim. Suspendisse auctor metus vitae orci dapibus hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sed egestas metus. Donec vel mattis lorem, a posuere tellus. Etiam varius auctor massa gravida tempor. Pellentesque id mauris in lectus ultricies viverra.",
-    rate: "Excellent",
-    likes: 56,
-    comments: 23,
-    movieId: 5,
-  },
-];
-
 export const Credits = {
   id: 718867,
   cast: [
@@ -432,7 +341,7 @@ export const Movie = {
     {
       id: 137625,
       logo_path: null,
-      name: "TUBA Entertainment",
+      name: "TUBA Enter py-3tainment",
       origin_country: "",
     },
   ],
@@ -474,6 +383,369 @@ export const FirstMovieTrailers = {
     },
   ],
 };
+
+export const Announcements = [
+  {
+    author: 1,
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Information",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Information",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 2,
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Information",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 2,
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Information",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 2,
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Information",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 2,
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Information",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 2,
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Information",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 2,
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Information",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Information",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Information",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Information",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Information",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Information",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Information",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Information",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Information",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Information",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+];
+
+export const Comments = [
+  {
+    author: 1,
+    date: Date.now(),
+    review_id: 1,
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    date: Date.now(),
+    review_id: 1,
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 2,
+    date: Date.now(),
+    review_id: 1,
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 2,
+    date: Date.now(),
+    review_id: 1,
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 2,
+    date: Date.now(),
+    review_id: 1,
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 2,
+    date: Date.now(),
+    review_id: 1,
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 2,
+    date: Date.now(),
+    review_id: 1,
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 2,
+    date: Date.now(),
+    review_id: 1,
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    date: Date.now(),
+    review_id: 1,
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    date: Date.now(),
+    review_id: 1,
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    date: Date.now(),
+    review_id: 1,
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    date: Date.now(),
+    review_id: 1,
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    date: Date.now(),
+    review_id: 1,
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    date: Date.now(),
+    review_id: 1,
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    date: Date.now(),
+    review_id: 1,
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    date: Date.now(),
+    review_id: 1,
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    date: Date.now(),
+    review_id: 1,
+    deleted: false,
+    movie_title: "Venom",
+    reported: false,
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+];
 
 export const TrendingMovies = {
   page: 1,
@@ -707,7 +979,7 @@ export const TrendingMovies = {
       backdrop_path: "/cOvRVxGytvrGwZ74T4RqBpbdtBd.jpg",
       adult: false,
       overview:
-        "Neeyln has always been the loyal enforcer for crime boss Harris back in London, taking care of problems and people that disrupt his illicit business. When Harris strikes a deal with an old friend -- American oilman Preston -- they find themselves in the wild hills of West Virginia. Contracts are signed and the whiskey flows in celebration, but overnight Neelyn's girlfriend disappears, last seen with Preston's wayward son Junior. Lines are drawn between family and friends, but nothing will stop Neelyn from getting answers -- and retribution.",
+        "Neeyln has always been the loyal enforcer for crime boss Harris back in London, taking care of problems and people that disrupt his illicit business. When Harris strikes a deal with an old friend -- American oilman Preston -- they find themselves in the wild hills of West Virginia. Contracts are signed and the whiskey flows in celebration, but overnight Neelyn's girlfriend disappears, last seen with Preston's wayward son Junior. Lines are Drawn between family and friends, but nothing will stop Neelyn from getting answers -- and retribution.",
       poster_path: "/34TU17zW5ggpYxk20drTN6srmqy.jpg",
       popularity: 40.956,
       media_type: "movie",
@@ -761,7 +1033,7 @@ export const TrendingMovies = {
       backdrop_path: "/yKaKpY82MhGfwaiWquTfgaBWpns.jpg",
       adult: false,
       overview:
-        "When a musical dragon with a beautiful voice hypnotizes the dragons and people of Huttsgalor, the Rescue Riders have to find a way to break the spell.",
+        "When a musical Dragon with a beautiful voice hypnotizes the Dragons and people of Huttsgalor, the Rescue Riders have to find a way to break the spell.",
       poster_path: "/7ECPZaRczTQiUgPtZzyOiHxlfbe.jpg",
       popularity: 26.578,
       media_type: "movie",
@@ -842,3 +1114,992 @@ export const TrendingMovies = {
   total_pages: 1000,
   total_results: 20000,
 };
+
+export const Promotions = [
+  {
+    author: 1,
+    rating: "Excellent",
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 2,
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    rating: "Excellent",
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 2,
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    rating: "Excellent",
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 2,
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    rating: "Excellent",
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 2,
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    rating: "Excellent",
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 2,
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    rating: "Excellent",
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 2,
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    rating: "Excellent",
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 2,
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    rating: "Excellent",
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 2,
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    rating: "Excellent",
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 1,
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    rating: "Excellent",
+    author: 2,
+    date: Date.now(),
+    status: "Sent",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    title: "Promotion",
+    movie_title: "Venom",
+    type: "review",
+    review_id: 5,
+    active_status: "Active",
+    _id: 5,
+    review:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Paused",
+    status: "Drafted",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Finished",
+    status: "Drafted",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    type: "comment",
+    active_status: "Active",
+    status: "Sent",
+    date: Date.now(),
+    comment_id: 1,
+    deleted: false,
+    title: "Promotion",
+    movie_title: "Venom",
+    _id: 5,
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+];
+
+export const PublicUsers = {
+  1: {
+    email: "sabrina@gmail.com",
+    role: "admin",
+    photo:
+      "https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+    display_name: "Sabrina",
+  },
+  2: {
+    email: "paula@gmail.com",
+    role: "user",
+    photo:
+      "https://images.pexels.com/photos/3779853/pexels-photo-3779853.png?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    display_name: "Paula",
+  },
+  3: {
+    email: "paula@gmail.com",
+    role: "user",
+    photo:
+      "https://images.pexels.com/photos/3779853/pexels-photo-3779853.png?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    display_name: "Andrew",
+  },
+  4: {
+    email: "paula@gmail.com",
+    role: "user",
+    photo:
+      "https://images.pexels.com/photos/3779853/pexels-photo-3779853.png?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    display_name: "John",
+  },
+};
+
+export const Ratings = [
+  {
+    name: "Excellent",
+    element: (
+      <div className="text-center py-3" style={{ lineHeight: "100%" }}>
+        <Emoji emoji="fire" set="facebook" size={24} />
+      </div>
+    ),
+  },
+  {
+    name: "Good",
+    element: (
+      <div className="text-center py-3" style={{ lineHeight: "100%" }}>
+        <Emoji emoji="heart" set="facebook" size={24} />
+      </div>
+    ),
+  },
+  {
+    name: "OK",
+    element: (
+      <div className="text-center py-3" style={{ lineHeight: "100%" }}>
+        <Emoji emoji="heavy_division_sign" set="facebook" size={24} />
+      </div>
+    ),
+  },
+  {
+    name: "Bad",
+    element: (
+      <div className="text-center py-3" style={{ lineHeight: "100%" }}>
+        <Emoji emoji="shit" set="facebook" size={24} />
+      </div>
+    ),
+  },
+];
+
+export const Notifications = [
+  {
+    author: 1,
+    title: "Notification title",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Email",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    title: "Notification title",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Email",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 2,
+    title: "Notification title",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Email",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 2,
+    title: "Notification title",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Email",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 2,
+    title: "Notification title",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Email",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 2,
+    title: "Notification title",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "App",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 2,
+    title: "Notification title",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "App",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 2,
+    title: "Notification title",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "App",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    title: "Notification title",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "App",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    title: "Notification title",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Email",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    title: "Notification title",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Email",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    title: "Notification title",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Email",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    title: "Notification title",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Email",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    title: "Notification title",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Email",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    title: "Notification title",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Email",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    title: "Notification title",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Email",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+  {
+    author: 1,
+    title: "Notification title",
+    start_date: Date.now(),
+    end_date: Date.now(),
+    type: "Email",
+    status: "Drafted",
+    _id: 5,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat neque in diam egestas, vel vehicula erat blandit. Nulla aliquam varius justo quis pretium. Praesent urna metus, eleifend non porta vel, blandit vitae orci. Sed blandit at dolor in imperdiet. Fusce nec nisl odio. Nullam et eros mollis enim cursus ornare ac quis purus. Aenean id sem varius, pretium sem ut, eleifend orci.",
+  },
+];

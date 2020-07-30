@@ -1,6 +1,9 @@
-const origin = "https://calm-coast-57354.herokuapp.com";
+// const origin = "https://calm-coast-57354.herokuapp.com";
+
+const origin = "http://localhost:5000";
 
 const SendPostRequest = (path, data) => {
+  data.webUrl = window.location.hostname;
   return fetch(`${origin}${path}`, {
     method: "POST",
     body: JSON.stringify(data),

@@ -2,9 +2,8 @@ import { createStore, combineReducers } from "redux";
 
 function userReducer(
   state = {
-    name: "Sabrina",
-    photo:
-      "https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+    name: "",
+    photo: "",
   },
   action
 ) {

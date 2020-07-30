@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import Popover from "./Popover";
 import { BsChevronDown } from "react-icons/bs";
+import { MdArrowDropDown } from "react-icons/md";
 import uniqid from "uniqid";
 
 const Select = ({
@@ -8,13 +9,14 @@ const Select = ({
   btnName,
   className = "",
   multipleSelect = false,
-  btnClassName = "",
+  popoverClass = "",
   onSelect = () => {},
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const opener = useRef(null);
   return (
     <Popover
+      className={popoverClass}
       arrow={false}
       onOpen={() => setIsOpen(true)}
       onHide={() => setIsOpen(false)}
@@ -45,7 +47,7 @@ const Select = ({
         }
       >
         <div className="mr-2">{btnName}</div>
-        <BsChevronDown
+        <MdArrowDropDown
           fontSize="16px"
           strokeWidth="1.5px"
           className="text-internly"
@@ -53,7 +55,7 @@ const Select = ({
             transform: `rotate(${isOpen ? "180deg" : "0deg"})`,
             transition: "transform 0.3s",
           }}
-        ></BsChevronDown>
+        ></MdArrowDropDown>
       </div>
     </Popover>
   );
