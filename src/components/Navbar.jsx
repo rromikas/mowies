@@ -41,120 +41,129 @@ const Navbar = (props) => {
       className="col-60"
       style={{
         position: "fixed",
-        zIndex: 99,
+        zIndex: 59,
         transition: "top 0.5s",
         top: direction === "up" ? "0px" : "-90px",
         left: 0,
+        right: 0,
       }}
     >
       <div
-        className={`bg-transition row no-gutters py-3 align-items-center px-3 justify-content-between${
+        className={`bg-transition row no-gutters justify-content-center${
           !scrolledToTop ? " bg-root" : ""
         }`}
       >
-        <div className="col-auto pr-5 text-white pl-3 d-none d-sm-block">
-          <div>Website Logo</div>
-          <div
-            className="btn-link font-size-14 cursor-pointer"
-            onClick={() => history.push("/admin")}
-          >
-            Admin dashboard
-          </div>
-        </div>
-        <div className="col-auto pr-5 text-white pl-3 d-block d-sm-none">
-          <div>Logo</div>
-          <div
-            className="btn-link font-size-14 cursor-pointer"
-            onClick={() => history.push("/admin")}
-          >
-            Admin
-          </div>
-        </div>
-        <div className="col pr-5 d-none d-md-block">
-          <div className="row no-gutters align-items-center">
-            <Select
-              items={categories}
-              onSelect={(index) =>
-                store.dispatch({
-                  type: "UPDATE_SEARCH",
-                  search: { category: categories[index] },
-                })
-              }
-              className="col-auto input-prepend-select"
-              btnName={search.category}
-            ></Select>
-            <div className="col position-relative">
-              <input
-                value={query}
-                onKeyUp={(e) => {
-                  if (e.keyCode === 13) {
+        <div className="col-60 content-container">
+          <div className="row no-gutters  justify-content-between px-3 py-3 align-items-center">
+            <div className="col-auto pr-5 text-white pl-3 d-none d-sm-block">
+              <div>Website Logo</div>
+              <div
+                className="btn-link font-size-14 cursor-pointer"
+                onClick={() => history.push("/admin")}
+              >
+                Admin dashboard
+              </div>
+            </div>
+            <div className="col-auto pr-5 text-white pl-3 d-block d-sm-none">
+              <div>Logo</div>
+              <div
+                className="btn-link font-size-14 cursor-pointer"
+                onClick={() => history.push("/admin")}
+              >
+                Admin
+              </div>
+            </div>
+            <div className="col pr-5 d-none d-md-block">
+              <div className="row no-gutters align-items-center">
+                <Select
+                  items={categories}
+                  onSelect={(index) =>
                     store.dispatch({
                       type: "UPDATE_SEARCH",
-                      search: { query },
-                    });
-                    history.push("/search");
+                      search: { category: categories[index] },
+                    })
                   }
-                }}
-                onChange={(e) => {
-                  e.persist();
-                  setQuery(e.target.value);
-                }}
-                type="text"
-                spellCheck={false}
-                className="w-100 input"
-              ></input>
-              <BsSearch
-                onClick={() => history.push("/search")}
-                fontSize="24px"
-                className="position-absolute text-white cursor-pointer"
-                style={{ top: 0, bottom: 0, right: "20px", margin: "auto" }}
-              ></BsSearch>
+                  className="col-auto input-prepend-select"
+                  btnName={search.category}
+                ></Select>
+                <div className="col position-relative">
+                  <input
+                    value={query}
+                    onKeyUp={(e) => {
+                      if (e.keyCode === 13) {
+                        store.dispatch({
+                          type: "UPDATE_SEARCH",
+                          search: { query },
+                        });
+                        history.push("/search");
+                      }
+                    }}
+                    onChange={(e) => {
+                      e.persist();
+                      setQuery(e.target.value);
+                    }}
+                    type="text"
+                    spellCheck={false}
+                    className="w-100 input"
+                  ></input>
+                  <BsSearch
+                    onClick={() => history.push("/search")}
+                    fontSize="24px"
+                    className="position-absolute text-white cursor-pointer"
+                    style={{ top: 0, bottom: 0, right: "20px", margin: "auto" }}
+                  ></BsSearch>
+                </div>
+              </div>
+            </div>
+            <div className="col-auto text-white">
+              {user.name ? (
+                <div className="row no-gutters align-items-center">
+                  <div
+                    className="col-auto mr-2 rounded-circle square-40 bg-image"
+                    style={{
+                      backgroundImage: `url(${user.photo})`,
+                      border: "1px solid white",
+                    }}
+                  ></div>
+                  <div className="col-auto mr-2 d-none d-sm-block">
+                    {user.name}
+                  </div>
+                  <Popover
+                    content={
+                      <div>
+                        <div className="popover-item border-bottom">
+                          My wishlist
+                        </div>
+                        <div className="popover-item border-bottom">
+                          My reviews
+                        </div>
+                        <div className="popover-item">Logout</div>
+                      </div>
+                    }
+                  >
+                    <div className="col-auto user-select-none cursor-pointer">
+                      <BsChevronDown fontSize="14px"></BsChevronDown>
+                    </div>
+                  </Popover>
+                </div>
+              ) : (
+                <div className="row no-gutters pr-3 align-items-center">
+                  <div
+                    className="col-auto cursor-pointer fb-btn"
+                    onClick={() => history.push("/login")}
+                  >
+                    Login
+                  </div>
+                  <div
+                    className="col-auto cursor-pointer fb-btn"
+                    onClick={() => history.push("/signup")}
+                  >
+                    Signup
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-        </div>
-        <div className="col-auto text-white">
-          {user.name ? (
-            <div className="row no-gutters align-items-center">
-              <div
-                className="col-auto mr-2 rounded-circle square-40 bg-image"
-                style={{
-                  backgroundImage: `url(${user.photo})`,
-                  border: "1px solid white",
-                }}
-              ></div>
-              <div className="col-auto mr-2 d-none d-sm-block">{user.name}</div>
-              <Popover
-                content={
-                  <div>
-                    <div className="popover-item border-bottom">
-                      My wishlist
-                    </div>
-                    <div className="popover-item border-bottom">My reviews</div>
-                    <div className="popover-item">Logout</div>
-                  </div>
-                }
-              >
-                <div className="col-auto user-select-none cursor-pointer">
-                  <BsChevronDown fontSize="14px"></BsChevronDown>
-                </div>
-              </Popover>
-            </div>
-          ) : (
-            <div className="row no-gutters pr-3 align-items-center">
-              <div
-                className="col-auto cursor-pointer fb-btn"
-                onClick={() => history.push("/login")}
-              >
-                Login
-              </div>
-              <div
-                className="col-auto cursor-pointer fb-btn"
-                onClick={() => history.push("/signup")}
-              >
-                Signup
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>

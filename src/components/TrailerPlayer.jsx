@@ -6,6 +6,7 @@ import "simplebar/dist/simplebar.min.css";
 import { GetTrailers } from "../server/MoviesApi";
 
 const TrailerPlayer = ({ movieId }) => {
+  console.log("MOVIE ID trailer", movieId);
   const [videoIds, setVideoIds] = useState([]);
 
   useEffect(() => {

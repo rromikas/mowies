@@ -18,7 +18,7 @@ const MoviesList = ({ movies }) => {
         >
           <div
             className="row no-gutters justify-content-end position-relative px-2 d-none d-sm-flex"
-            style={{ marginBottom: "-68px", zIndex: 5 }}
+            style={{ marginBottom: "-51px", zIndex: 5 }}
           >
             <Popover
               delay={1000}
@@ -31,7 +31,7 @@ const MoviesList = ({ movies }) => {
               }
               trigger="mouseenter"
             >
-              <div className="col-auto btn-custom btn-custom-iconic">
+              <div className="btn-custom btn-custom-iconic">
                 <MdPlaylistAdd
                   fontSize="34px"
                   style={{ marginRight: "-5px" }}
@@ -76,7 +76,7 @@ const MoviesList = ({ movies }) => {
                 </div>
               </div>
               <div className="row no-gutters d-flex d-sm-none">
-                <div className="col-auto btn-custom btn-custom-iconic">
+                <div className="btn-custom btn-custom-iconic">
                   <MdPlaylistAdd
                     fontSize="34px"
                     style={{ marginRight: "-5px" }}

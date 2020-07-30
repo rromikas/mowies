@@ -79,7 +79,7 @@ const Notifications = ({
             </div>
           </div>
           <div
-            className="col-auto btn-custom btn-custom-primary"
+            className="col-auto btn-custom btn-custom-primary btn-natural"
             onClick={() => setAddNewNotificationSection()}
           >
             Add New

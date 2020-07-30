@@ -65,7 +65,19 @@ const Home = () => {
             }}
           ></div>
           <Navbar></Navbar>
-          <div className="col-60 position-absolute" style={{ top: 0, left: 0 }}>
+          <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
+            <TrailerPlayer movieId={backgroundMovie.id}></TrailerPlayer>
+          </Modal>
+          <div
+            className="col-60 position-absolute"
+            style={{
+              top: 0,
+              left: 0,
+              right: 0,
+              maxWidth: "1200px",
+              margin: "auto",
+            }}
+          >
             <div className="position-relative">
               <img
                 className="d-block d-lg-none"
@@ -82,7 +94,8 @@ const Home = () => {
               <div
                 className="position-absolute w-100 h-100"
                 style={{
-                  background: "linear-gradient(rgba(0, 0, 0, 0.3) 90%, black)",
+                  background:
+                    "linear-gradient(rgba(0, 0, 0, 0.3) 90%, black), linear-gradient(to right, black, transparent, black)",
                   top: 0,
                   left: 0,
                 }}
@@ -90,14 +103,13 @@ const Home = () => {
             </div>
           </div>
           <div
-            className="col-60 px-md-5 px-4 py-4 position-relative mx-auto"
+            className="col-60 px-md-5 px-4 py-4 position-relative mx-auto content-container"
             style={{
               zIndex: 5,
-              maxWidth: "1500px",
             }}
           >
             <div className="row no-gutters justify-content-between position-relative">
-              <div className="col-60 col-lg-30 col-xl-20 d-flex flex-column justify-content-end text-white">
+              <div className="col-60 col-lg-30 d-flex flex-column justify-content-end text-white">
                 <div
                   className="row no-gutters mb-2"
                   style={{
@@ -121,9 +133,6 @@ const Home = () => {
                   <div className="col-auto mr-2"></div>
                   <div className="col-auto mr-2"></div>
                 </div>
-                <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
-                  <TrailerPlayer movieId={backgroundMovie.id}></TrailerPlayer>
-                </Modal>
                 <div className="row no-gutters mb-4">
                   <div
                     className="col-auto mr-3 btn-custom btn-custom-primary btn-small"
@@ -137,7 +146,7 @@ const Home = () => {
                     content={<div className="p-3">Add to wishlist</div>}
                     trigger="mouseenter"
                   >
-                    <div className="col-auto btn-custom btn-custom-iconic">
+                    <div className="btn-custom btn-custom-iconic">
                       <MdPlaylistAdd
                         fontSize="34px"
                         style={{ marginRight: "-5px" }}
@@ -189,10 +198,7 @@ const Home = () => {
           </div>
         </div>
         <div className="row no-gutters d-flex d-lg-none">
-          <div
-            className=" col-60 py-5 px-md-5 px-4"
-            style={{ maxWidth: "1500px" }}
-          >
+          <div className=" col-60 py-5 px-md-5 px-4 content-container">
             <div className="row no-gutters justify-content-end">
               <div className="col-60">
                 <div className="row no-gutters h2 text-white">
@@ -201,7 +207,7 @@ const Home = () => {
                 <div className="row no-gutters">
                   {movies.slice(1, 7).map((x, i) => (
                     <div
-                      className="col-20 pr-2 pb-2"
+                      className="col-sm-15 col-30 pr-2 pb-2"
                       key={`recommended-today-movie-${i}`}
                     >
                       <img

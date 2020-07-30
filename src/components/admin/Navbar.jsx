@@ -31,7 +31,7 @@ const Navbar = ({ setIsMenuOpened, isMenuOpened }) => {
       className="row no-gutters justify-content-between bg-dark py-4 pr-4 align-items-center w-100"
       style={{
         position: "fixed",
-        zIndex: 99,
+        zIndex: 59,
         transition: "top 0.3s",
         top: direction === "up" ? "0px" : "-110px",
         left: 0,

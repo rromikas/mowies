@@ -93,7 +93,7 @@ const Announcements = ({
             <div className="row no-gutters">Create and post announcements</div>
           </div>
           <div
-            className="col-auto btn-custom btn-custom-primary"
+            className="col-auto btn-custom btn-custom-primary btn-natural"
             onClick={() => setAddNewAnouncementSection()}
           >
             Add New

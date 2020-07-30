@@ -10,19 +10,19 @@ const Pagination = ({ count, current, setCurrent }) => {
     <React.Fragment>
       <div className="row no-gutters d-flex d-lg-none user-select-none">
         <div
-          className="col-auto input-light px-4 mr-1 cursor-pointer"
+          className="col-auto input-light px-3 mr-1 cursor-pointer"
           onClick={() => setCurrent(current - 1 >= 1 ? current - 1 : current)}
         >
           {`<`}
         </div>
         <div
           className="input-light-selected col-auto text-center mr-1"
-          style={{ width: "60px" }}
+          style={{ width: "50px" }}
         >
           {current}
         </div>
         <div
-          className="col-auto input-light px-4 cursor-pointer"
+          className="col-auto input-light px-3 cursor-pointer"
           onClick={() =>
             setCurrent(current + 1 <= count ? current + 1 : current)
           }
@@ -32,7 +32,7 @@ const Pagination = ({ count, current, setCurrent }) => {
       </div>
       <div className="row no-gutters user-select-none d-none d-lg-flex">
         <div
-          className="col-auto input-light px-4 mr-1 cursor-pointer"
+          className="col-auto input-light px-3 mr-1 cursor-pointer"
           onClick={() => setCurrent(current - 1 >= 1 ? current - 1 : current)}
         >
           Previous
@@ -40,7 +40,7 @@ const Pagination = ({ count, current, setCurrent }) => {
         {first - 1 >= 1 && (
           <div
             className="col-auto input-light text-center mr-1 cursor-pointer"
-            style={{ width: "60px" }}
+            style={{ width: "50px" }}
             onClick={() => setCurrent(first - 1 >= 1 ? first - 1 : first)}
           >
             ...
@@ -48,8 +48,8 @@ const Pagination = ({ count, current, setCurrent }) => {
         )}
         {first >= 1 && (
           <div
-            style={{ width: "60px" }}
-            className={`col-auto ${
+            style={{ width: "50px" }}
+            className={`px-0 col-auto ${
               current === first ? "input-light-selected" : "input-light"
             } text-center mr-1 cursor-pointer`}
             onClick={() => setCurrent(first)}
@@ -60,8 +60,8 @@ const Pagination = ({ count, current, setCurrent }) => {
 
         {second <= count && second >= 1 && (
           <div
-            style={{ width: "60px" }}
-            className={`col-auto ${
+            style={{ width: "50px" }}
+            className={`px-0 col-auto ${
               current === second ? "input-light-selected" : "input-light"
             } text-center mr-1 cursor-pointer`}
             onClick={() => setCurrent(second)}
@@ -71,10 +71,10 @@ const Pagination = ({ count, current, setCurrent }) => {
         )}
         {third <= count && third >= 1 && (
           <div
-            className={`col-auto ${
+            className={`px-0 col-auto ${
               current === third ? "input-light-selected" : "input-light"
             } text-center mr-1 cursor-pointer`}
-            style={{ width: "60px" }}
+            style={{ width: "50px" }}
             onClick={() => setCurrent(third)}
           >
             {third}
@@ -85,13 +85,13 @@ const Pagination = ({ count, current, setCurrent }) => {
           <div
             onClick={() => setCurrent(third + 1 <= count ? third + 1 : current)}
             className="col-auto input-light text-center mr-1 cursor-pointer"
-            style={{ width: "60px" }}
+            style={{ width: "50px" }}
           >
             ...
           </div>
         )}
         <div
-          className="col-auto input-light px-4 cursor-pointer"
+          className="col-auto input-light px-3 cursor-pointer"
           onClick={() =>
             setCurrent(current + 1 <= count ? current + 1 : current)
           }

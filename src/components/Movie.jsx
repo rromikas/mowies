@@ -45,8 +45,8 @@ const Movie = (props) => {
         data.director = director;
         data.cast = cast;
         setMovie((prev) => Object.assign({}, prev, { director, cast }));
-        let storedMovie = await FindOrCreateMovie(data);
-        console.log("Stored movie", storedMovie);
+        // let storedMovie = await FindOrCreateMovie(data);
+        // console.log("Stored movie", storedMovie);
       }
     }
     getData();
@@ -91,12 +91,12 @@ const Movie = (props) => {
           ></div>
         </div>
       </div>
-      <div className="col-60 bg-root" style={{ height: "92px" }}></div>
+      <div className="col-60 bg-root" style={{ height: "72px" }}></div>
       <Navbar></Navbar>
-      <div
-        className="col-60 text-white px-md-5 py-5 px-4"
-        style={{ maxWidth: "1500px" }}
-      >
+      <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
+        <TrailerPlayer movieId={movieId}></TrailerPlayer>
+      </Modal>
+      <div className="col-60 text-white px-md-5 py-5 px-4 content-container">
         {/* <div className="row no-gutters border-bottom py-4">
           <div className="col-60 h1">Movie Details</div>
           <div className="col-60">
@@ -208,7 +208,7 @@ const Movie = (props) => {
                     content={<div className="p-3">Add to wishlist</div>}
                     trigger="mouseenter"
                   >
-                    <div className="col-auto btn-custom btn-custom-iconic">
+                    <div className="btn-custom btn-custom-iconic">
                       <MdPlaylistAdd
                         fontSize="34px"
                         style={{ marginRight: "-5px" }}
@@ -216,9 +216,6 @@ const Movie = (props) => {
                     </div>
                   </Popover>
                 </div>
-                <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
-                  <TrailerPlayer movieId={movieId}></TrailerPlayer>
-                </Modal>
               </div>
             </div>
           </div>

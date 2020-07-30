@@ -28,7 +28,7 @@ const PopularMovies = () => {
 
   return (
     <div className="row no-gutters justify-content-center text-white">
-      <div className="col-60 py-5 px-md-5 px-4" style={{ maxWidth: "1500px" }}>
+      <div className="col-60 py-5 px-md-5 px-4 content-container">
         <div className="row no-gutters h1">Popular Movies</div>
         <div className="row no-gutters justify-content-between text-light align-items-center mb-4">
           <div className="col-auto pr-5">Most watched movies by days</div>

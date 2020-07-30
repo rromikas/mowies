@@ -79,7 +79,7 @@ const Promotions = ({
             <div className="row no-gutters">Edit, add and delete promtions</div>
           </div>
           <div
-            className="col-auto btn-custom btn-custom-primary"
+            className="col-auto btn-custom btn-custom-primary btn-natural"
             onClick={() => setAddNewPromotionSection()}
           >
             Add New
