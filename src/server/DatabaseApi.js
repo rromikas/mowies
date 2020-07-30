@@ -1,9 +1,9 @@
-// const origin = "https://calm-coast-57354.herokuapp.com";
-
-const origin = "http://localhost:5000";
+const origin =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000"
+    : "https://calm-coast-57354.herokuapp.com";
 
 const SendPostRequest = (path, data) => {
-  data.webUrl = window.location.hostname;
   return fetch(`${origin}${path}`, {
     method: "POST",
     body: JSON.stringify(data),
@@ -13,28 +13,35 @@ const SendPostRequest = (path, data) => {
   }).then((res) => res.json());
 };
 
+const SendGetRequest = (path) => {
+  return fetch(`${origin}${path}`).then((res) => res.json());
+};
+
 export const FindOrCreateMovie = (movie) => {
   return SendPostRequest("/movie/findOrCreate", movie);
 };
 
-// export const FindOrCreateSerie = (serie) => {
-//   try {
-//     return new Promise(async (resolve, reject) => {
-//       let data = await Serie.find({ id: movie.id });
-//       if (!data) {
-//         newMovie = new Movie(movie);
-//         newMovie.save((er) => {
-//           if (er) {
-//             resolve({ error: er });
-//           } else {
-//             resolve({ movie: newMovie });
-//           }
-//         });
-//       } else {
-//         resolve({ movie: data });
-//       }
-//     });
-//   } catch (er) {
-//     resolve({ error: er });
-//   }
-// };
+export const Signup = (user) => {
+  return SendPostRequest("/user/signup", user);
+};
+
+export const Login = (credentials) => {
+  return SendPostRequest("/user/login", credentials);
+};
+
+export const LoginWithToken = (token) => {
+  console.log("TOKEN ASDNA", token);
+  return SendPostRequest("/user/loginWithToken", token);
+};
+
+export const GetAllRatings = () => {
+  return SendGetRequest("/ratings/get/all");
+};
+
+export const GetAllPublicUsers = () => {
+  return SendGetRequest("/publicUsers/get/all");
+};
+
+export const RateMovie = (rate, movie, user) => {
+  return SendPostRequest("/ratings/update", { rate, movie, user });
+};

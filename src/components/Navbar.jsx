@@ -116,7 +116,7 @@ const Navbar = (props) => {
               </div>
             </div>
             <div className="col-auto text-white">
-              {user.name ? (
+              {user.display_name ? (
                 <div className="row no-gutters align-items-center">
                   <div
                     className="col-auto mr-2 rounded-circle square-40 bg-image"
@@ -126,7 +126,7 @@ const Navbar = (props) => {
                     }}
                   ></div>
                   <div className="col-auto mr-2 d-none d-sm-block">
-                    {user.name}
+                    {user.display_name}
                   </div>
                   <Popover
                     content={

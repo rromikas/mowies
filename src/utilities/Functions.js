@@ -23,5 +23,7 @@ export const FormatDuration = (minutes) => {
   let m = minutes - h * 60;
   return `${h}h ${m}m`;
 };
-
-export const Scrolling = () => {};
+export const validateEmail = (email) => {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+};

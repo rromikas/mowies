@@ -3,7 +3,7 @@ import { GetMovie, GetCredits } from "../server/MoviesApi";
 import { Movie as MovieData, Credits, Reviews } from "../Data";
 import ReactionButton from "./ReactionButton";
 import date from "date-and-time";
-import { MdPlaylistAdd } from "react-icons/md";
+import { MdPlaylistAdd, MdMovieCreation } from "react-icons/md";
 import Popover from "./utility/Popover";
 import Modal from "./utility/Modal";
 import TrailerPlayer from "./TrailerPlayer";
@@ -15,7 +15,7 @@ import { FindOrCreateMovie } from "../server/DatabaseApi";
 
 const Movie = (props) => {
   const movieId = props.match.params.movieId;
-
+  const ratings = props.ratings;
   //user will be needed to write comments on reviews and to add reviews
   const user = props.user;
 
@@ -173,21 +173,50 @@ const Movie = (props) => {
                 </div>
                 <div className="row no-gutters mb-3">
                   <ReactionButton
+                    selected={
+                      user.ratings[movie.id]
+                        ? user.ratings[movie.id].rate_type === "excellent_rate"
+                        : false
+                    }
+                    movie={movie}
                     emoji="fire"
                     className="mr-2 mb-2"
-                    value={999}
+                    value={
+                      ratings[movie.id] ? ratings[movie.id].excellent_rate : 0
+                    }
                   ></ReactionButton>
                   <ReactionButton
+                    selected={
+                      user.ratings[movie.id]
+                        ? user.ratings[movie.id].rate_type === "good_rate"
+                        : false
+                    }
+                    movie={movie}
                     emoji="heart"
                     className="mr-2 mb-2"
-                    value={195625}
+                    value={ratings[movie.id] ? ratings[movie.id].good_rate : 0}
                   ></ReactionButton>
                   <ReactionButton
+                    selected={
+                      user.ratings[movie.id]
+                        ? user.ratings[movie.id].rate_type === "ok_rate"
+                        : false
+                    }
+                    movie={movie}
                     className="mr-2 mb-2"
                     emoji="heavy_division_sign"
-                    value={1515515}
+                    value={ratings[movie.id] ? ratings[movie.id].ok_rate : 0}
                   ></ReactionButton>
-                  <ReactionButton emoji="shit" value={0}></ReactionButton>
+                  <ReactionButton
+                    emoji="shit"
+                    value={ratings[movie.id] ? ratings[movie.id].bad_rate : 0}
+                    selected={
+                      user.ratings[movie.id]
+                        ? user.ratings[movie.id].rate_type === "bad_rate"
+                        : false
+                    }
+                    movie={movie}
+                  ></ReactionButton>
                 </div>
                 <div className="row no-gutters mb-5">
                   <div className="col-auto mr-2">Release date:</div>
@@ -233,6 +262,7 @@ const Movie = (props) => {
 function mapp(state, ownProps) {
   return {
     user: state.user,
+    ratings: state.ratings,
     ...ownProps,
   };
 }

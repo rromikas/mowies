@@ -10,6 +10,7 @@ import TrailerPlayer from "./TrailerPlayer";
 import Modal from "./utility/Modal";
 import ReactionButton from "./ReactionButton";
 import { FormatDuration } from "../utilities/Functions";
+import { connect } from "react-redux";
 
 const GetClosestValidWidth = () => {
   let backdropSizes = [300, 780, 1280];
@@ -25,7 +26,7 @@ const GetClosestValidWidth = () => {
   return closestSize;
 };
 
-const Home = () => {
+const Home = ({ publicUsers, ratings, user }) => {
   const backgroundMovieId = "516486";
   const [movies, setMovies] = useState(TrendingMovies.results);
   const [openTrailer, setOpenTrailer] = useState(false);
@@ -156,21 +157,68 @@ const Home = () => {
                 </div>
                 <div className="row no-gutters">
                   <ReactionButton
+                    selected={
+                      user.ratings[backgroundMovie.id]
+                        ? user.ratings[backgroundMovie.id].rate_type ===
+                          "excellent_rate"
+                        : false
+                    }
+                    movie={backgroundMovie}
                     emoji="fire"
                     className="mr-2 mb-2"
-                    value={999}
+                    value={
+                      ratings[backgroundMovie.id]
+                        ? ratings[backgroundMovie.id].excellent_rate
+                        : 0
+                    }
                   ></ReactionButton>
                   <ReactionButton
+                    selected={
+                      user.ratings[backgroundMovie.id]
+                        ? user.ratings[backgroundMovie.id].rate_type ===
+                          "good_rate"
+                        : false
+                    }
+                    movie={backgroundMovie}
                     emoji="heart"
                     className="mr-2 mb-2"
-                    value={195625}
+                    value={
+                      ratings[backgroundMovie.id]
+                        ? ratings[backgroundMovie.id].good_rate
+                        : 0
+                    }
                   ></ReactionButton>
                   <ReactionButton
+                    selected={
+                      user.ratings[backgroundMovie.id]
+                        ? user.ratings[backgroundMovie.id].rate_type ===
+                          "ok_rate"
+                        : false
+                    }
+                    movie={backgroundMovie}
                     className="mr-2 mb-2"
                     emoji="heavy_division_sign"
-                    value={1515515}
+                    value={
+                      ratings[backgroundMovie.id]
+                        ? ratings[backgroundMovie.id].ok_rate
+                        : 0
+                    }
                   ></ReactionButton>
-                  <ReactionButton emoji="shit" value={0}></ReactionButton>
+                  <ReactionButton
+                    selected={
+                      user.ratings[backgroundMovie.id]
+                        ? user.ratings[backgroundMovie.id].rate_type ===
+                          "bad_rate"
+                        : false
+                    }
+                    movie={backgroundMovie}
+                    emoji="shit"
+                    value={
+                      ratings[backgroundMovie.id]
+                        ? ratings[backgroundMovie.id].bad_rate
+                        : 0
+                    }
+                  ></ReactionButton>
                 </div>
               </div>
 
@@ -229,4 +277,13 @@ const Home = () => {
   );
 };
 
-export default Home;
+function mapp(state, ownProps) {
+  return {
+    publicUser: state.publicUsers,
+    ratings: state.ratings,
+    user: state.user,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(Home);

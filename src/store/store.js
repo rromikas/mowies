@@ -4,12 +4,51 @@ function userReducer(
   state = {
     name: "",
     photo: "",
+    token: "",
+    email: "",
+    ratings: {},
   },
   action
 ) {
   switch (action.type) {
     case "SET_USER":
       return action.user;
+    case "UPDATE_USER":
+      return Object.assign({}, state, action.userProperty);
+    default:
+      return state;
+  }
+}
+
+function publicUsersReducer(state = {}, action) {
+  switch (action.type) {
+    case "SET_PUBLICUSERS":
+      return action.publicUsers;
+    default:
+      return state;
+  }
+}
+
+function ratingsReducer(state = {}, action) {
+  switch (action.type) {
+    case "SET_RATINGS":
+      return action.ratings;
+    case "UPDATE_RATINGS":
+      return Object.assign({}, state, action.rating);
+    default:
+      return state;
+  }
+}
+
+function notificationReducer(
+  state = { title: "", message: "", expired: true },
+  action
+) {
+  switch (action.type) {
+    case "SET_NOTIFICATION":
+      return action.notification;
+    case "UPDATE_NOTIFICATION":
+      return Object.assign({}, state, action.notification);
     default:
       return state;
   }
@@ -27,8 +66,11 @@ function searchReducer(state = { query: "", category: "Movies" }, action) {
 }
 
 const rootReducer = combineReducers({
+  publicUsers: publicUsersReducer,
+  ratings: ratingsReducer,
   user: userReducer,
   search: searchReducer,
+  notification: notificationReducer,
 });
 
 const store = createStore(

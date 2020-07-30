@@ -1,5 +1,26 @@
 import React, { useState } from "react";
 import history from "../../History";
+import { Login as LoginFunction } from "../../server/DatabaseApi";
+import store from "../../store/store";
+
+const handleSubmit = async (credentials) => {
+  let res = await LoginFunction(credentials);
+  if (res.error) {
+    store.dispatch({
+      type: "SET_NOTIFICATION",
+      notification: {
+        type: "failure",
+        title: "Error",
+        message: res.error,
+      },
+    });
+  } else {
+    localStorage.setItem("movies_user_token", res.token);
+    console.log("Res afte rlogin", res);
+    store.dispatch({ type: "SET_USER", user: res });
+    history.push("/");
+  }
+};
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -61,17 +82,18 @@ const Login = () => {
                             e.persist();
                             setPassword(e.target.value);
                           }}
+                          onKeyDown={(e) => {
+                            if (e.keyCode === 13) {
+                              handleSubmit({ email, password });
+                            }
+                          }}
                         ></input>
                       </div>
                     </div>
                     <div className="row no-gutters mb-4">
                       <div
                         className="col-60 btn-custom btn-custom-primary"
-                        onClick={() => {
-                          if (email === "admin@admin" && password === "admin") {
-                            history.push("/admin");
-                          }
-                        }}
+                        onClick={() => handleSubmit({ email, password })}
                       >
                         Login
                       </div>
@@ -82,7 +104,12 @@ const Login = () => {
                     >
                       <div className="col-auto">
                         Don't have an account?{" "}
-                        <span className="btn-link cursor-pointer">Sign up</span>
+                        <span
+                          className="btn-link cursor-pointer"
+                          onClick={() => history.push("/signup")}
+                        >
+                          Sign up
+                        </span>
                       </div>
                       <div className="col-auto btn-link cursor-pointer">
                         Forgot password
