@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import store from "../store/store";
+import store from "../../store/store";
 import { BsCheck, BsExclamation, BsX } from "react-icons/bs";
 
 const Toast = ({ notification }) => {
@@ -35,7 +35,7 @@ const Toast = ({ notification }) => {
     <div
       onMouseOver={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="container-fluid toast-pro bg-white px-0"
+      className="container-fluid toast-pro bg-over-root px-0"
       style={{
         maxWidth: "300px",
         bottom: notification.expired ? "-100%" : "50px",
@@ -69,11 +69,13 @@ const Toast = ({ notification }) => {
             })
           }
         >
-          <BsX fontSize="24px"></BsX>
+          <BsX fontSize="24px" className="text-white"></BsX>
         </div>
       </div>
 
-      <div className="row no-gutters p-3">{notification.message}</div>
+      <div className="row no-gutters p-4 text-white">
+        {notification.message}
+      </div>
     </div>
   );
 };

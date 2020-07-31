@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Navbar from "./Navbar";
 import { connect } from "react-redux";
 import { useEffect } from "react";
-import { SearchMovies, SearchSeries } from "../server/MoviesApi";
+import { SearchMovies, SearchSeries } from "../../server/MoviesApi";
 import MoviesList from "./MoviesList";
 
 const SearchResults = ({ search }) => {

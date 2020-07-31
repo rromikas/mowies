@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
-import { FirstMovieTrailers } from "../Data";
-import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
-import { GetTrailers } from "../server/MoviesApi";
+import { GetTrailers } from "../../server/MoviesApi";
 
 const TrailerPlayer = ({ movieId }) => {
   console.log("MOVIE ID trailer", movieId);

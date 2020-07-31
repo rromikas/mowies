@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
-import Popover from "./utility/Popover";
-import Select from "./utility/Select";
+import Popover from "../utility/Popover";
+import Select from "../utility/Select";
 import { BsChevronDown, BsSearch } from "react-icons/bs";
-import history from "../History";
-import store from "../store/store";
+import history from "../../History";
+import store from "../../store/store";
 
 const Navbar = (props) => {
   const user = props.user;
@@ -12,7 +12,7 @@ const Navbar = (props) => {
   const [query, setQuery] = useState("");
   const categories = ["Movies", "Series", "Reviews"];
   const [scrolledToTop, setScrolledTopTop] = useState(true);
-  const lastScroll = useRef(0);
+  const lastScroll = useRef(100);
   const [direction, setDirection] = useState("up");
   useEffect(() => {
     function handleScrolling() {
@@ -137,7 +137,25 @@ const Navbar = (props) => {
                         <div className="popover-item border-bottom">
                           My reviews
                         </div>
-                        <div className="popover-item">Logout</div>
+                        <div
+                          className="popover-item"
+                          onClick={() => {
+                            localStorage["movies_user_token"] = null;
+                            store.dispatch({
+                              type: "SET_USER",
+                              user: {
+                                display_name: "",
+                                photo: "",
+                                token: "",
+                                ratings: {},
+                                wishlist: [],
+                              },
+                            });
+                            history.push("/");
+                          }}
+                        >
+                          Logout
+                        </div>
                       </div>
                     }
                   >
@@ -150,7 +168,9 @@ const Navbar = (props) => {
                 <div className="row no-gutters pr-3 align-items-center">
                   <div
                     className="col-auto cursor-pointer fb-btn"
-                    onClick={() => history.push("/login")}
+                    onClick={() => {
+                      history.push("/login");
+                    }}
                   >
                     Login
                   </div>

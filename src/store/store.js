@@ -7,6 +7,9 @@ function userReducer(
     token: "",
     email: "",
     ratings: {},
+    reviews: [],
+    wishlist: [],
+    watched: [],
   },
   action
 ) {

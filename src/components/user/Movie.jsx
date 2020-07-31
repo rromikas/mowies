@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
-import { GetMovie, GetCredits } from "../server/MoviesApi";
-import { Movie as MovieData, Credits, Reviews } from "../Data";
+import { GetMovie, GetCredits } from "../../server/MoviesApi";
+import { Movie as MovieData, Credits, Reviews } from "../../Data";
 import ReactionButton from "./ReactionButton";
 import date from "date-and-time";
 import { MdPlaylistAdd, MdMovieCreation } from "react-icons/md";
-import Popover from "./utility/Popover";
-import Modal from "./utility/Modal";
+import Popover from "../utility/Popover";
+import Modal from "../utility/Modal";
 import TrailerPlayer from "./TrailerPlayer";
 import MovieReviews from "./MovieReviews";
 import { connect } from "react-redux";
-import { FormatDuration } from "../utilities/Functions";
+import { FormatDuration } from "../../utilities/Functions";
 import Navbar from "./Navbar";
-import { FindOrCreateMovie } from "../server/DatabaseApi";
+import { AddViewToMovie } from "../../server/DatabaseApi";
+import WishlistButton from "./WishlistButton";
 
 const Movie = (props) => {
   const movieId = props.match.params.movieId;
@@ -28,10 +29,18 @@ const Movie = (props) => {
     cast: [],
     runtime: 0,
     release_date: "",
+    id: "",
   });
 
   //boolean variable to display trailer modal or not.
   const [openTrailer, setOpenTrailer] = useState(false);
+
+  useEffect(() => {
+    //check if movie fetched from api
+    if (movie.title) {
+      AddViewToMovie(movie);
+    }
+  }, [movie.title]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -45,8 +54,6 @@ const Movie = (props) => {
         data.director = director;
         data.cast = cast;
         setMovie((prev) => Object.assign({}, prev, { director, cast }));
-        // let storedMovie = await FindOrCreateMovie(data);
-        // console.log("Stored movie", storedMovie);
       }
     }
     getData();
@@ -231,19 +238,7 @@ const Movie = (props) => {
                   >
                     Play Trailer
                   </div>
-                  <Popover
-                    theme="dark"
-                    position="top"
-                    content={<div className="p-3">Add to wishlist</div>}
-                    trigger="mouseenter"
-                  >
-                    <div className="btn-custom btn-custom-iconic">
-                      <MdPlaylistAdd
-                        fontSize="34px"
-                        style={{ marginRight: "-5px" }}
-                      ></MdPlaylistAdd>
-                    </div>
-                  </Popover>
+                  <WishlistButton movie={movie} user={user}></WishlistButton>
                 </div>
               </div>
             </div>

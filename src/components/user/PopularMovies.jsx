@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MoviesList from "./MoviesList";
-import { GetPopularMoviesByGenre } from "../server/MoviesApi";
+import { GetPopularMoviesByGenre } from "../../server/MoviesApi";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 

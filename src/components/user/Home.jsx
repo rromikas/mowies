@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { TrendingMovies, OfficialMoviesGenres } from "../Data";
-import * as API from "../server/MoviesApi";
-import history from "../History";
+import { TrendingMovies, OfficialMoviesGenres } from "../../Data";
+import * as API from "../../server/MoviesApi";
+import history from "../../History";
 import Navbar from "./Navbar";
 import PopularMovies from "./PopularMovies";
-import Popover from "./utility/Popover";
-import { MdPlaylistAdd } from "react-icons/md";
+import Popover from "../utility/Popover";
+
 import TrailerPlayer from "./TrailerPlayer";
-import Modal from "./utility/Modal";
+import Modal from "../utility/Modal";
 import ReactionButton from "./ReactionButton";
-import { FormatDuration } from "../utilities/Functions";
+import { FormatDuration } from "../../utilities/Functions";
 import { connect } from "react-redux";
+
+import store from "../../store/store";
+import WishlistButton from "./WishlistButton";
 
 const GetClosestValidWidth = () => {
   let backdropSizes = [300, 780, 1280];
@@ -141,19 +144,10 @@ const Home = ({ publicUsers, ratings, user }) => {
                   >
                     Play Trailer
                   </div>
-                  <Popover
-                    theme="dark"
-                    position="top"
-                    content={<div className="p-3">Add to wishlist</div>}
-                    trigger="mouseenter"
-                  >
-                    <div className="btn-custom btn-custom-iconic">
-                      <MdPlaylistAdd
-                        fontSize="34px"
-                        style={{ marginRight: "-5px" }}
-                      ></MdPlaylistAdd>
-                    </div>
-                  </Popover>
+                  <WishlistButton
+                    movie={backgroundMovie}
+                    user={user}
+                  ></WishlistButton>
                 </div>
                 <div className="row no-gutters">
                   <ReactionButton

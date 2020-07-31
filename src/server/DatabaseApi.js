@@ -45,3 +45,47 @@ export const GetAllPublicUsers = () => {
 export const RateMovie = (rate, movie, user) => {
   return SendPostRequest("/ratings/update", { rate, movie, user });
 };
+
+export const WriteReview = (review, movie, user) => {
+  return SendPostRequest("/reviews/update", { review, movie, user });
+};
+
+export const GetMovieReviews = (movieId) => {
+  return SendPostRequest("/reviews/get/movie", { movieId });
+};
+
+export const WriteComment = (comment, user) => {
+  return SendPostRequest("/comments/update", { user, comment });
+};
+
+export const GetReviewComments = (reviewId) => {
+  return SendPostRequest("/comments/get/review", { reviewId });
+};
+
+export const AddToWishList = (user, movie) => {
+  return SendPostRequest("/movie/addToWishlist", { user, movie });
+};
+
+export const RemoveFromWishList = (user, movieId) => {
+  return SendPostRequest("/movie/removeFromWishlist", { user, movieId });
+};
+
+export const AddViewToMovie = (movie) => {
+  return SendPostRequest("/movie/views/add", { movie });
+};
+
+export const LikeReview = (user, reviewId) => {
+  return SendPostRequest("/reviews/like", { user, reviewId });
+};
+
+export const LikeComment = (user, commentId) => {
+  return SendPostRequest("/comments/like", { user, commentId });
+};
+
+export const ReportReview = (user, reviewId) => {
+  return SendPostRequest("/reviews/report", { user, reviewId });
+};
+
+export const ReportComment = (user, commentId) => {
+  return SendPostRequest("/comments/report", { user, commentId });
+};
