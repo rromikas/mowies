@@ -51,7 +51,6 @@ const AddReview = ({ open, onClose, movie, user, refreshReviews }) => {
                 onChange={(e) => {
                   e.persist();
                   let text = e.target.value;
-                  console.log("Asdasd", text.split(" ").length);
                   if (text.split(" ").length <= 500) {
                     setNewReview((prev) =>
                       Object.assign({}, prev, { review: text })

@@ -12,13 +12,17 @@ import { BsHeart, BsEye } from "react-icons/bs";
 
 const MoviesList = ({ movies, user, ratings }) => {
   const [hovered, setHovered] = useState(-1);
-  console.log("ratings", ratings);
+
   return (
     <div className="row">
       {movies.map((x, i) => (
         <div
+          onMouseOver={() => {
+            setHovered(i);
+          }}
+          onMouseLeave={() => setHovered(-1)}
           key={`result-${i}`}
-          className="col-xl-12 col-lg-15 col-md-20 col-sm-30 col-60 p-3"
+          className="col-lg-12 col-md-15 col-sm-20 col-60 p-3 text-white"
         >
           <div
             className="row no-gutters justify-content-end position-relative px-2 d-none d-sm-flex"
@@ -31,10 +35,6 @@ const MoviesList = ({ movies, user, ratings }) => {
               <div
                 onClick={() => history.push(`/movie/${x.id}`)}
                 className="row no-gutters mb-2 position-relative movies-list-image"
-                onMouseOver={() => {
-                  setHovered(i);
-                }}
-                onMouseLeave={() => setHovered(-1)}
               >
                 <img
                   onClick={() => history.push(`/movie/${x.id}`)}
@@ -82,30 +82,25 @@ const MoviesList = ({ movies, user, ratings }) => {
               </div>
             </div>
             <div className="col-sm-60 col">
-              <div className="row no-gutters h5 mb-0">
+              <div className="row no-gutters text-title-md mb-0">
                 {x.title ? x.title : x.name}
               </div>
               <div className="row no-gutters text-muted mb-2">
                 <div className="text-truncate">
-                  <small>
-                    {x.genre_ids.length
-                      ? x.genre_ids
-                          .map((gid) =>
-                            x.title // movies have title, series - name
-                              ? OfficialMoviesGenres.find((g) => g.id === gid)
-                                  .name
-                              : OfficialSeriesGenres.find((g) => g.id === gid)
-                                  .name
-                          )
-                          .join("/")
-                      : "unknown"}
-                  </small>
+                  {x.genre_ids.length
+                    ? x.genre_ids
+                        .map((gid) =>
+                          x.title // movies have title, series - name
+                            ? OfficialMoviesGenres.find((g) => g.id === gid)
+                                .name
+                            : OfficialSeriesGenres.find((g) => g.id === gid)
+                                .name
+                        )
+                        .join("/")
+                    : "unknown"}
                 </div>
               </div>
-              <div className="row no-gutters d-flex d-sm-none">
-                <WishlistButton movie={x} user={user}></WishlistButton>
-              </div>
-              <div className="row no-gutters">
+              <div className="row no-gutters mb-2">
                 <ReactionButton
                   selected={
                     user.ratings[x.id]
@@ -149,6 +144,9 @@ const MoviesList = ({ movies, user, ratings }) => {
                   }
                   movie={x}
                 ></ReactionButton>
+              </div>
+              <div className="row no-gutters d-flex d-sm-none">
+                <WishlistButton movie={x} user={user}></WishlistButton>
               </div>
             </div>
           </div>

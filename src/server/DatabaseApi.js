@@ -30,7 +30,6 @@ export const Login = (credentials) => {
 };
 
 export const LoginWithToken = (token) => {
-  console.log("TOKEN ASDNA", token);
   return SendPostRequest("/user/loginWithToken", token);
 };
 
@@ -88,4 +87,20 @@ export const ReportReview = (user, reviewId) => {
 
 export const ReportComment = (user, commentId) => {
   return SendPostRequest("/comments/report", { user, commentId });
+};
+
+export const GetUser = (userId) => {
+  return SendPostRequest("/users/get", { userId });
+};
+
+export const GetUserReviews = (reviewIds) => {
+  return SendPostRequest("/reviews/get/user", { reviewIds });
+};
+
+export const GetUserComments = (commentIds) => {
+  return SendPostRequest("/comments/get/user", { commentIds });
+};
+
+export const EditUser = (update) => {
+  return SendPostRequest("/users/edit", { update });
 };

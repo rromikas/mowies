@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { TrendingMovies, OfficialMoviesGenres } from "../../Data";
+import { TrendingMovies, MoviesGenresMap } from "../../Data";
 import * as API from "../../server/MoviesApi";
 import history from "../../History";
 import Navbar from "./Navbar";
 import PopularMovies from "./PopularMovies";
 import Popover from "../utility/Popover";
-
+import MoviesList from "./MoviesList";
 import TrailerPlayer from "./TrailerPlayer";
 import Modal from "../utility/Modal";
 import ReactionButton from "./ReactionButton";
 import { FormatDuration } from "../../utilities/Functions";
 import { connect } from "react-redux";
-
 import store from "../../store/store";
 import WishlistButton from "./WishlistButton";
+import Recommendations from "./Recommendations";
 
 const GetClosestValidWidth = () => {
   let backdropSizes = [300, 780, 1280];
@@ -46,7 +46,6 @@ const Home = ({ publicUsers, ratings, user }) => {
   useEffect(() => {
     async function getData() {
       let data = await API.GetMovie(backgroundMovieId);
-      console.log("Data", data);
       setBackgroundMovie(data);
     }
     getData();
@@ -216,25 +215,15 @@ const Home = ({ publicUsers, ratings, user }) => {
                 </div>
               </div>
 
-              <div className="col-20 d-none d-lg-block">
-                <div className="row no-gutters h2 text-white">
+              <div className="col-25 d-none d-lg-block">
+                <div className="row no-gutters text-title-lg text-white mb-4">
                   Todays's Recommendation
                 </div>
-                <div className="row no-gutters">
-                  {movies.slice(1, 7).map((x, i) => (
-                    <div
-                      className="col-20 pr-2 pb-2"
-                      key={`recommended-today-movie-${i}`}
-                    >
-                      <img
-                        onClick={() => history.push(`/movie/${x.id}`)}
-                        width="100%"
-                        style={{ borderRadius: "13px" }}
-                        src={`https://image.tmdb.org/t/p/w154${x.poster_path}`}
-                      ></img>
-                    </div>
-                  ))}
-                </div>
+                <Recommendations
+                  movies={movies}
+                  user={user}
+                  ratings={ratings}
+                ></Recommendations>
               </div>
             </div>
           </div>
@@ -243,24 +232,10 @@ const Home = ({ publicUsers, ratings, user }) => {
           <div className=" col-60 py-5 px-md-5 px-4 content-container">
             <div className="row no-gutters justify-content-end">
               <div className="col-60">
-                <div className="row no-gutters h2 text-white">
+                <div className="row no-gutters text-title-xl text-white">
                   Todays's Recommendation
                 </div>
-                <div className="row no-gutters">
-                  {movies.slice(1, 7).map((x, i) => (
-                    <div
-                      className="col-sm-15 col-30 pr-2 pb-2"
-                      key={`recommended-today-movie-${i}`}
-                    >
-                      <img
-                        onClick={() => history.push(`/movie/${x.id}`)}
-                        width="100%"
-                        style={{ borderRadius: "13px" }}
-                        src={`https://image.tmdb.org/t/p/w154${x.poster_path}`}
-                      ></img>
-                    </div>
-                  ))}
-                </div>
+                <MoviesList movies={movies.slice(1, 7)}></MoviesList>
               </div>
             </div>
           </div>

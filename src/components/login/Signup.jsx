@@ -46,6 +46,11 @@ const Signup = () => {
             type: "success",
           },
         });
+
+        store.dispatch({
+          type: "UPDATE_PUBLICUSERS",
+          publicUser: { [res.publicUser.user_id]: res.publicUser },
+        });
         history.push("/login");
       } else {
         store.dispatch({
@@ -57,7 +62,6 @@ const Signup = () => {
           },
         });
       }
-      console.log("Response after signup", res);
     } else {
       setProblem(notValid[0].error);
     }

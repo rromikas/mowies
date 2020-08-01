@@ -131,11 +131,13 @@ const Navbar = (props) => {
                   <Popover
                     content={
                       <div>
-                        <div className="popover-item border-bottom">
-                          My wishlist
-                        </div>
-                        <div className="popover-item border-bottom">
-                          My reviews
+                        <div
+                          className="popover-item border-bottom"
+                          onClick={() => {
+                            history.push(`/profile/${user._id}`);
+                          }}
+                        >
+                          My profile
                         </div>
                         <div
                           className="popover-item"

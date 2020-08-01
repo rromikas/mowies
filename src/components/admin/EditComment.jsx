@@ -38,8 +38,6 @@ const ratings = [
 ];
 
 const EditComment = ({ currentComment }) => {
-  console.log("edit comment", currentComment);
-
   const [comment, setComment] = useState({});
 
   useEffect(() => {

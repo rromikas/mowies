@@ -7,8 +7,6 @@ import TimePicker from "react-time-picker";
 import date from "date-and-time";
 
 const EditAnnouncement = ({ currentAnnouncement }) => {
-  console.log("edit ann", currentAnnouncement);
-
   const [announcement, setAnnouncement] = useState({
     description: "",
     type: "",

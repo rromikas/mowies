@@ -59,7 +59,6 @@ const ReplyToReview = ({
                 onChange={(e) => {
                   e.persist();
                   let text = e.target.value;
-                  console.log("Asdasd", text.split(" ").length);
                   if (text.split(" ").length <= 500) {
                     setNewComment((prev) =>
                       Object.assign({}, prev, { comment: text })
@@ -99,18 +98,28 @@ const ReplyToReview = ({
                     setProblem("Type comment");
                   } else {
                     if (user.token) {
+                      setLoading(true);
                       let finalComment = Object.assign({}, newComment, {
                         author_name: user.display_name,
                         movie_title: movie.title,
                         movie_id: movie.id,
+                        movie_poster: movie.poster_path,
+                        movie_genres: movie.genres.map((x) => x.name).join("/"),
+                        movie_release_date: movie.release_date,
                         review_id: review._id,
                         review: review.review,
                         review_author: review.author,
                         notificationReceivers: review.notificationReceivers,
                       });
-                      console.log("final comment", finalComment);
+                      let finalUser = { ...user };
+                      delete finalUser["photo"];
                       setNewComment({ comment: "" });
-                      let res = await WriteComment(finalComment, user);
+                      let res = await WriteComment(
+                        finalComment,
+                        finalUser,
+                        movie
+                      );
+                      setLoading(false);
                       if (res.error) {
                         store.dispatch({
                           type: "SET_NOTIFICATION",

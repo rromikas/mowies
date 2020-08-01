@@ -32,7 +32,7 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
   );
 
   // partitioning reviews into pages (8 reviews per page)
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(-1);
   const [commentsPage, setCommentsPage] = useState(1);
 
   // reference to top of the reviews block to scroll into view after changing the page
@@ -57,7 +57,6 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
     async function getData() {
       if (reviewIdOfVisibleComments !== -1) {
         let data = await GetReviewComments(reviewIdOfVisibleComments);
-        console.log("comment data", data);
         setComments((prev) =>
           Object.assign({}, prev, { [reviewIdOfVisibleComments]: data })
         );
@@ -70,7 +69,6 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
     async function getData() {
       if (movie.id) {
         let reviews = await GetMovieReviews(movie.id);
-        console.log("REviews", reviews);
         setReviews(reviews);
       }
     }
@@ -91,17 +89,20 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
     }
   }, [page]);
 
+  //avoid scrolling on first render into view
+  const realPage = page === -1 ? 1 : page;
+
   return (
     <div className="row no-gutters">
-      <div className="col-60 h1 mb-3">
+      <div className="col-60 text-title-xl mb-3">
         Popular Reviews ({nFormatter(reviews.length, 1)})
       </div>
       <div className="col-60">
         <div className="row no-gutters mb-2" ref={topOfReviewsBlock}></div>
         {reviews
           .slice(
-            (page - 1) * reviewsPerPage,
-            (page - 1) * reviewsPerPage + reviewsPerPage
+            (realPage - 1) * reviewsPerPage,
+            (realPage - 1) * reviewsPerPage + reviewsPerPage
           )
           .map((x, i) => (
             <React.Fragment>
@@ -121,27 +122,31 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
                 </div>
                 <div className="col">
                   <div className="row no-gutters justify-content-between align-items-center mb-2">
-                    <div className="col-auto pr-4 d-block d-md-none">
-                      <div
-                        className="bg-image rounded-circle square-40"
-                        style={{
-                          backgroundImage: `url(${
-                            publicUsers[x.author]
-                              ? publicUsers[x.author].photo
-                              : ""
-                          })`,
-                        }}
-                      ></div>
-                    </div>
                     <div className="col-auto">
                       <div className="row no-gutters align-items-center">
-                        <div className="col-auto mr-3 h5 mb-0">
-                          {publicUsers[x.author]
-                            ? publicUsers[x.author].display_name
-                            : ""}
+                        <div className="col-auto pr-2 d-block d-md-none">
+                          <div
+                            className="bg-image rounded-circle square-40"
+                            style={{
+                              backgroundImage: `url(${
+                                publicUsers[x.author]
+                                  ? publicUsers[x.author].photo
+                                  : ""
+                              })`,
+                            }}
+                          ></div>
                         </div>
-                        <div className="col-auto mr-3 text-muted">
-                          {date.format(new Date(x.date), "MMM DD, YYYY")}
+                        <div className="col-auto">
+                          <div className="row no-gutters align-items-center">
+                            <div className="col-auto mr-3 text-title-md mb-0">
+                              {publicUsers[x.author]
+                                ? publicUsers[x.author].display_name
+                                : ""}
+                            </div>
+                            <div className="col-auto mr-3 text-muted">
+                              {date.format(new Date(x.date), "MMM DD, YYYY")}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -182,7 +187,8 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
                         }
                       }}
                     >
-                      Report Abuse
+                      <div className="d-block d-sm-none">Report</div>
+                      <div className="d-none d-sm-block">Report Abuse</div>
                     </div>
                   </div>
 
@@ -244,7 +250,6 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
                         <div className="col-auto mr-2">
                           <MdChatBubble
                             onClick={() => {
-                              console.log(reviewIdOfVisibleComments === x._id);
                               setReviewIdOfVisibleComments(
                                 reviewIdOfVisibleComments === x._id ? -1 : x._id
                               );
@@ -302,33 +307,38 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
                           </div>
                           <div className="col">
                             <div className="row no-gutters justify-content-between align-items-center mb-2">
-                              <div className="col-auto pr-4 d-block d-md-none">
-                                <div
-                                  className="bg-image rounded-circle square-40"
-                                  style={{
-                                    backgroundImage: `url(${
-                                      publicUsers[y.author]
-                                        ? publicUsers[y.author].photo
-                                        : ""
-                                    })`,
-                                  }}
-                                ></div>
-                              </div>
                               <div className="col-auto">
-                                <div className="row no-gutters align-items-center">
-                                  <div className="col-auto mr-3 h5 mb-0">
-                                    {publicUsers[y.author]
-                                      ? publicUsers[y.author].display_name
-                                      : ""}
+                                <div className="row no-gutters">
+                                  <div className="col-auto pr-2 d-block d-md-none">
+                                    <div
+                                      className="bg-image rounded-circle square-40"
+                                      style={{
+                                        backgroundImage: `url(${
+                                          publicUsers[y.author]
+                                            ? publicUsers[y.author].photo
+                                            : ""
+                                        })`,
+                                      }}
+                                    ></div>
                                   </div>
-                                  <div className="col-auto mr-3 text-muted">
-                                    {date.format(
-                                      new Date(y.date),
-                                      "MMM DD, YYYY"
-                                    )}
+                                  <div className="col-auto">
+                                    <div className="row no-gutters align-items-center">
+                                      <div className="col-auto mr-3 text-title-md mb-0">
+                                        {publicUsers[y.author]
+                                          ? publicUsers[y.author].display_name
+                                          : ""}
+                                      </div>
+                                      <div className="col-auto mr-3 text-muted">
+                                        {date.format(
+                                          new Date(y.date),
+                                          "MMM DD, YYYY"
+                                        )}
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
+
                               <div
                                 className="col-auto text-muted btn-tertiary"
                                 onClick={async () => {
@@ -472,7 +482,7 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
               </Collapse>
             </React.Fragment>
           ))}
-        <div className="row no-gutters justify-content-sm-between justify-content-center pt-5">
+        <div className="row no-gutters justify-content-between pt-2">
           <div className="col-auto mb-4 mr-sm-2 mr-md-0">
             <Paigination
               classNames={{
@@ -480,12 +490,12 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
                 selected: "input-dark-selected",
               }}
               count={Math.ceil(reviews.length / reviewsPerPage)}
-              current={page}
+              current={realPage}
               setCurrent={setPage}
             ></Paigination>
           </div>
           <div
-            className="col-auto btn-custom btn-custom-primary btn-small"
+            className="col-sm-auto col-60 btn-custom btn-custom-primary btn-small"
             onClick={() => {
               if (!user.token) {
                 store.dispatch({

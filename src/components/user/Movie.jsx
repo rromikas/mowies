@@ -98,7 +98,7 @@ const Movie = (props) => {
           ></div>
         </div>
       </div>
-      <div className="col-60 bg-root" style={{ height: "72px" }}></div>
+      <div className="col-60" style={{ height: "72px" }}></div>
       <Navbar></Navbar>
       <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
         <TrailerPlayer movieId={movieId}></TrailerPlayer>
@@ -124,7 +124,7 @@ const Movie = (props) => {
               style={{ zIndex: 5 }}
             >
               <div className="col-60">
-                <div className="row no-gutters h1">
+                <div className="row no-gutters text-title-xl">
                   {movie.title} ({movie.release_date.substring(0, 4)})
                 </div>
                 <div className="row no-gutters text-movie-muted mb-2">

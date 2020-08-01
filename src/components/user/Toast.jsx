@@ -74,7 +74,9 @@ const Toast = ({ notification }) => {
       </div>
 
       <div className="row no-gutters p-4 text-white">
-        {notification.message}
+        {notification.type !== "success"
+          ? JSON.stringify(notification.message).replace(/\"/g, "")
+          : notification.message}
       </div>
     </div>
   );

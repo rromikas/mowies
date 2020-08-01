@@ -13,11 +13,9 @@ const SearchResults = ({ search }) => {
       if (search.query) {
         if (search.category === "Movies") {
           let movies = await SearchMovies(search.query);
-          console.log("movis", movies);
           setResults(movies.results);
         } else if (search.category === "Series") {
           let series = await SearchSeries(search.query);
-          console.log("series", series);
           setResults(series.results);
         }
       }

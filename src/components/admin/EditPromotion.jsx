@@ -8,8 +8,6 @@ import date from "date-and-time";
 import { Ratings } from "../../Data";
 
 const EditPromotion = ({ currentPromotion }) => {
-  console.log("edit promiton", currentPromotion);
-
   const [promotion, setPromotion] = useState({
     review: "",
     comment: "",
@@ -30,8 +28,6 @@ const EditPromotion = ({ currentPromotion }) => {
 
   const types = ["Review", "Comment"];
   const statuses = ["Published", "Drafted", "Deleted"];
-
-  console.log("proptoion", promotion.type.toLowerCase());
 
   return (
     <div className="row no-gutters px-md-5 px-4 pb-4">

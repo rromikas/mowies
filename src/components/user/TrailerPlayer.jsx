@@ -4,14 +4,12 @@ import "simplebar/dist/simplebar.min.css";
 import { GetTrailers } from "../../server/MoviesApi";
 
 const TrailerPlayer = ({ movieId }) => {
-  console.log("MOVIE ID trailer", movieId);
   const [videoIds, setVideoIds] = useState([]);
 
   useEffect(() => {
     async function getData() {
       if (movieId) {
         let trailers = await GetTrailers(movieId);
-        console.log("trailers", trailers);
         setVideoIds(trailers.results.map((x) => x.key));
       }
     }

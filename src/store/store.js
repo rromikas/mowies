@@ -2,7 +2,9 @@ import { createStore, combineReducers } from "redux";
 
 function userReducer(
   state = {
-    name: "",
+    first_name: "",
+    last_name: "",
+    display_name: "",
     photo: "",
     token: "",
     email: "",
@@ -27,6 +29,8 @@ function publicUsersReducer(state = {}, action) {
   switch (action.type) {
     case "SET_PUBLICUSERS":
       return action.publicUsers;
+    case "UPDATE_PUBLICUSERS":
+      return Object.assign({}, state, action.publicUser);
     default:
       return state;
   }

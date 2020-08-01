@@ -4,8 +4,6 @@ import { Emoji } from "emoji-mart";
 import { Ratings } from "../../Data";
 
 const EditReview = ({ currentReview }) => {
-  console.log("edit review id", currentReview);
-
   const [review, setReview] = useState({});
 
   useEffect(() => {

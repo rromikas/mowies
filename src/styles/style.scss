@@ -25,7 +25,7 @@ $green: #00db54;
 $orange: #ff9d00;
 
 $main-btn-height: 44px;
-$main-btn-line-height: 42px;
+$main-btn-line-height: 40px;
 
 .bg-white-10 {
   background: rgba(255, 255, 255, 0.1);
@@ -71,12 +71,12 @@ body,
   padding: 0;
   width: 100%;
   height: 100%;
-  font-size: 14px;
 }
 
 body {
   font-family: Montserrat, Helvetica, Arial, sans-serif !important;
   background: $root;
+  font-size: 12px;
 }
 
 .bg-image {
@@ -98,6 +98,7 @@ body {
   border-radius: 12px;
   // border: 1.5px solid $primary;
   background: lighten($color: $over-root, $amount: 10);
+  color: white;
   height: 30px;
   @extend .px-2;
   transition: background 0.3s;
@@ -117,6 +118,7 @@ body {
   border-radius: 12px;
   border: 1.5px solid $primary;
   height: 30px;
+  color: white;
   background: $primary;
   @extend .px-2;
   transition: background 0.3s;
@@ -149,7 +151,7 @@ body {
 }
 
 .btn-custom {
-  line-height: $main-btn-height;
+  line-height: $main-btn-line-height;
   height: $main-btn-height;
   border-radius: 4px;
   user-select: none;
@@ -160,6 +162,7 @@ body {
 
 .btn-custom-iconic {
   background: $primary;
+  color: white;
   width: 44px;
 }
 
@@ -173,14 +176,17 @@ body {
 
 .btn-custom-primary {
   color: white;
+  border: 2px solid $primary-custom;
   background: $primary-custom;
 }
 
 .btn-custom-primary:hover {
+  border: 2px solid darken($color: $primary-custom, $amount: 10);
   background: darken($color: $primary-custom, $amount: 10);
 }
 
 .btn-custom-primary:active {
+  border: 2px solid darken($color: $primary-custom, $amount: 20);
   background: darken($color: $primary-custom, $amount: 20);
 }
 
@@ -300,6 +306,11 @@ body {
   height: 70px;
 }
 
+.square-100 {
+  width: 100px;
+  height: 100px;
+}
+
 .simplebar-scrollbar::before {
   background: white !important;
 }
@@ -311,6 +322,7 @@ body {
   top: 10px;
   right: 10px;
   width: 40px;
+  z-index: 99;
   height: 40px;
   display: flex;
   @extend .flex-center;
@@ -402,19 +414,87 @@ body {
   font-weight: 800;
 }
 
-@media only screen and (max-width: 567px) {
-  .movies-list-image {
-    width: 100px;
-  }
-}
-
 .login-rounded {
   border-radius: 4px;
+}
+
+.text-title-xl {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.text-title-lg {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.text-title-md {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.text-title-sm {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.text-lift {
+  font-size: 1.4rem;
 }
 
 @media only screen and (max-width: 567px) {
   .login-rounded {
     border-radius: 0 !important;
+  }
+  .movies-list-image {
+    width: 100px;
+  }
+}
+
+.profile-stats-title {
+  justify-content: center;
+}
+
+@media only screen and (min-width: 567px) {
+  body {
+    font-size: 14px;
+  }
+
+  .text-title-xl {
+    font-size: 28px;
+  }
+
+  .text-title-lg {
+    font-size: 18px;
+  }
+
+  .text-title-md {
+    font-size: 16px;
+  }
+  .text-lift {
+    font-size: 1.6rem;
+  }
+}
+
+.img-clickable {
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.img-clickable:hover {
+  opacity: 0.7;
+}
+
+@media only screen and (min-width: 992px) {
+  .text-title-xl {
+    font-size: 36px;
+  }
+
+  .text-title-lg {
+    font-size: 26px;
+  }
+  .text-lift {
+    font-size: 24px;
   }
 }
 
@@ -521,11 +601,17 @@ h6,
   line-height: $main-btn-line-height;
   background: $primary-custom;
   outline: none;
+  color: white;
   border-radius: 2px;
   transition: all 0.3s;
 }
 
+.input-dark[type="text"] {
+  border: 2px solid lighten($color: $over-root, $amount: 40);
+}
+
 .input-dark {
+  color: white;
   height: $main-btn-height;
   line-height: $main-btn-line-height;
   background: lighten($color: $over-root, $amount: 10);
@@ -546,6 +632,29 @@ h6,
   box-shadow: 0 0 0 3px lighten($color: $over-root, $amount: 40) !important;
 }
 
+.input-light-gray {
+  height: $main-btn-height;
+  line-height: $main-btn-line-height;
+  border: 1px solid rgb(192, 192, 203);
+  background: white;
+  outline: none;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgb(160, 160, 160) !important;
+  transition: all 0.3s;
+}
+
+.input-light-gray::placeholder {
+  color: rgb(192, 192, 203);
+}
+
+.input-light-gray:hover {
+  box-shadow: 0 0 0 1px rgb(160, 160, 160) !important;
+}
+
+.input-light-gray:focus {
+  box-shadow: 0 0 0 3px rgb(160, 160, 160) !important;
+}
+
 .input-light {
   height: $main-btn-height;
   line-height: $main-btn-line-height;
@@ -562,11 +671,11 @@ h6,
 }
 
 .input-light:hover {
-  box-shadow: 0 0 0 1px rgba($color: $primary-custom, $alpha: 0.7) !important;
+  box-shadow: 0 0 0 2px lighten($color: $primary-custom, $amount: 5) !important;
 }
 
 .input-light:focus {
-  box-shadow: 0 0 0 3px rgba($color: $primary-custom, $alpha: 0.7) !important;
+  box-shadow: 0 0 0 4px lighten($color: $primary-custom, $amount: 5) !important;
 }
 
 .input-light-selected {
@@ -785,4 +894,8 @@ input[type="number"]::-webkit-outer-spin-button {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+
+.f5 {
+  font-size: calc(0.9em + 0.4vw);
 }

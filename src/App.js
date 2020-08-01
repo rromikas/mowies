@@ -15,6 +15,7 @@ import {
   GetAllPublicUsers,
   LoginWithToken,
 } from "./server/DatabaseApi";
+import Profile from "./components/user/profile/Profile";
 
 function App() {
   useEffect(() => {
@@ -55,6 +56,7 @@ function App() {
             <Route exact path="/admin" component={AdminDashboard}></Route>
             <Route exact path="/login" component={Login}></Route>
             <Route exact path="/signup" component={Signup}></Route>
+            <Route exact path="/profile/:userId" component={Profile}></Route>
           </Switch>
           <Toast></Toast>
         </div>

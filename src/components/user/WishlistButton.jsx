@@ -13,7 +13,6 @@ const WishlistButton = ({ user, movie }) => {
       setLoading(true);
       let res = await AddToWishList(user, movie);
       setLoading(false);
-      console.log("response afte add to wishlsi", res);
       if (res.updatedUser) {
         store.dispatch({
           type: "UPDATE_USER",
@@ -60,13 +59,13 @@ const WishlistButton = ({ user, movie }) => {
         ) : currentlyAdded ? (
           <MdPlaylistAddCheck
             onClick={() => handleClick("removed from")}
-            fontSize="34px"
+            className="text-title-xl"
             style={{ marginRight: "-5px" }}
           ></MdPlaylistAddCheck>
         ) : (
           <MdPlaylistAdd
             onClick={() => handleClick("added to")}
-            fontSize="34px"
+            className="text-title-xl"
             style={{ marginRight: "-5px" }}
           ></MdPlaylistAdd>
         )}

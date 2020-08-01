@@ -15,61 +15,70 @@ const ReactionButton = (props) => {
         if (props.onClick) {
           props.onClick();
         } else {
-          if (user.token) {
-            let rate = {};
-            if (props.emoji === "fire") {
-              rate.type = "excellent_rate";
-            } else if (props.emoji === "heart") {
-              rate.type = "good_rate";
-            } else if (props.emoji === "shit") {
-              rate.type = "bad_rate";
+          if (movie) {
+            if (user.token) {
+              let rate = {};
+              if (props.emoji === "fire") {
+                rate.type = "excellent_rate";
+              } else if (props.emoji === "heart") {
+                rate.type = "good_rate";
+              } else if (props.emoji === "shit") {
+                rate.type = "bad_rate";
+              } else {
+                rate.type = "ok_rate";
+              }
+
+              let rateTypeToReduce = user.ratings[movie.id]
+                ? user.ratings[movie.id].rate_type
+                : "";
+
+              let userRatings = { ...user.ratings };
+              if (userRatings[movie.id]) {
+                userRatings[movie.id].rate_type = rate.type;
+              } else {
+                userRatings[movie.id] = {};
+                userRatings[movie.id].rate_type = rate.type;
+              }
+              store.dispatch({
+                type: "UPDATE_USER",
+                userProperty: { ratings: userRatings },
+              });
+
+              let rating = ratings[movie.id]
+                ? { ...ratings[movie.id] }
+                : {
+                    excellent_rate: 0,
+                    ok_rate: 0,
+                    bad_rate: 0,
+                    good_rate: 0,
+                    views: 0,
+                    reviews: 0,
+                  };
+              if (rateTypeToReduce) {
+                rating[rateTypeToReduce] -= 1;
+              }
+              rating[rate.type] += 1;
+              store.dispatch({
+                type: "UPDATE_RATINGS",
+                rating: { [movie.id]: rating },
+              });
+              let res = await RateMovie(rate, movie, user);
             } else {
-              rate.type = "ok_rate";
+              store.dispatch({
+                type: "SET_NOTIFICATION",
+                notification: {
+                  title: "Login required",
+                  message: "You need to login to rate movies",
+                  type: "failure",
+                },
+              });
             }
-
-            let rateTypeToReduce = user.ratings[movie.id]
-              ? user.ratings[movie.id].rate_type
-              : "";
-
-            let userRatings = { ...user.ratings };
-            if (userRatings[movie.id]) {
-              userRatings[movie.id].rate_type = rate.type;
-            } else {
-              userRatings[movie.id] = {};
-              userRatings[movie.id].rate_type = rate.type;
-            }
-            store.dispatch({
-              type: "UPDATE_USER",
-              userProperty: { ratings: userRatings },
-            });
-
-            let rating = ratings[movie.id]
-              ? { ...ratings[movie.id] }
-              : {
-                  excellent_rate: 0,
-                  ok_rate: 0,
-                  bad_rate: 0,
-                  good_rate: 0,
-                  views: 0,
-                  reviews: 0,
-                };
-            if (rateTypeToReduce) {
-              rating[rateTypeToReduce] -= 1;
-            }
-            rating[rate.type] += 1;
-            store.dispatch({
-              type: "UPDATE_RATINGS",
-              rating: { [movie.id]: rating },
-            });
-            console.log("Rating", rating);
-            let res = await RateMovie(rate, movie, user);
-            console.log("Response after rating", res);
           } else {
             store.dispatch({
               type: "SET_NOTIFICATION",
               notification: {
-                title: "Login required",
-                message: "You need to login to rate movies",
+                title: "Action not allowed",
+                message: "You can not rate movies on this page",
                 type: "failure",
               },
             });
