@@ -9,33 +9,44 @@ const WishlistButton = ({ user, movie }) => {
   const [loading, setLoading] = useState(false);
 
   const handleClick = async (message) => {
-    if (user.display_name && movie.id) {
-      setLoading(true);
-      let res = await AddToWishList(user, movie);
-      setLoading(false);
-      if (res.updatedUser) {
-        store.dispatch({
-          type: "UPDATE_USER",
-          userProperty: res.updatedUser,
-        });
-        store.dispatch({
-          type: "SET_NOTIFICATION",
-          notification: {
-            title: `Movie ${message} wishlist`,
-            message: `Movie successfully ${message} your wishlist`,
-            type: "success",
-          },
-        });
-      } else {
-        store.dispatch({
-          type: "SET_NOTIFICATION",
-          notification: {
-            title: "Error",
-            message: JSON.stringify(res.error).replace(/\"/g, ""),
-            type: "failure",
-          },
-        });
+    if (user.display_name) {
+      if (movie.id) {
+        setLoading(true);
+        let res = await AddToWishList(user, movie);
+        setLoading(false);
+        if (res.updatedUser) {
+          store.dispatch({
+            type: "UPDATE_USER",
+            userProperty: res.updatedUser,
+          });
+          store.dispatch({
+            type: "SET_NOTIFICATION",
+            notification: {
+              title: `Movie ${message} wishlist`,
+              message: `Movie successfully ${message} your wishlist`,
+              type: "success",
+            },
+          });
+        } else {
+          store.dispatch({
+            type: "SET_NOTIFICATION",
+            notification: {
+              title: "Error",
+              message: JSON.stringify(res.error).replace(/\"/g, ""),
+              type: "failure",
+            },
+          });
+        }
       }
+    } else {
+      store.dispatch({
+        type: "SET_NOTIFICATION",
+        notification: {
+          title: "Action not allowed",
+          message: "You need to login to add movie to wishlist",
+          type: "failure",
+        },
+      });
     }
   };
 
