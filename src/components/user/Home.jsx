@@ -124,7 +124,7 @@ const Home = ({ publicUsers, ratings, user }) => {
                 <div
                   className="row no-gutters mb-2"
                   style={{
-                    fontSize: "calc(1.6em + 2vw)",
+                    fontSize: "calc(1.6em + 1vw)",
                     fontWeight: "600",
                   }}
                 >
