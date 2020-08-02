@@ -103,11 +103,11 @@ const Comments = ({ reviews, publicUsers, ratings }) => {
                   {x.movie_title} ({x.movie_release_date.substring(0, 4)})
                 </div>
                 <div className="row no-gutters text-muted">
-                  {x.movie_genres}
+                  <div className="text-truncate">{x.movie_genres}</div>
                 </div>
               </div>
-              <div className="col">
-                <div className="row no-gutters justify-content-between align-items-center mb-2">
+              <div className="col d-flex flex-column">
+                <div className="row no-gutters justify-content-between align-items-center mb-2 flex-grow-0">
                   <div className="col-60 d-block d-sm-none mb-3">
                     <div className="row no-gutters mb-1">
                       <div className="col-auto pr-3">
@@ -165,18 +165,22 @@ const Comments = ({ reviews, publicUsers, ratings }) => {
                   </div>
                 </div>
 
-                <div className="row no-gutters text-light mb-3">{x.review}</div>
-                <div className="row no-gutters align-items-center text-white mb-3">
-                  <div className="col-auto">
-                    <div className="row no-gutters align-items-center mb-2">
-                      <div className="col-auto mr-2">{x.likes.length}</div>
-                      <div className="col-auto mr-2 ">
-                        <MdThumbUp
-                          fontSize="24px"
-                          className="text-green"
-                        ></MdThumbUp>
-                      </div>
-                      {/* <div className="col-auto mr-2">{x.comments.length}</div>
+                <div className="row no-gutters text-light mb-3 flex-grow-0">
+                  {x.review}
+                </div>
+                <div className="row no-gutters flex-grow-1">
+                  <div className="col-60 d-flex flex-column justify-content-end">
+                    <div className="row no-gutters align-items-center text-white mb-3">
+                      <div className="col-auto">
+                        <div className="row no-gutters align-items-center mb-2">
+                          <div className="col-auto mr-2">{x.likes.length}</div>
+                          <div className="col-auto mr-2 ">
+                            <MdThumbUp
+                              fontSize="24px"
+                              className="text-green"
+                            ></MdThumbUp>
+                          </div>
+                          {/* <div className="col-auto mr-2">{x.comments.length}</div>
                       <div className="col-auto mr-2">
                         <MdChatBubble
                           onClick={() => {
@@ -189,14 +193,16 @@ const Comments = ({ reviews, publicUsers, ratings }) => {
                           className="text-orange scale-transition cursor-pointer"
                         ></MdChatBubble>
                       </div> */}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row no-gutters text-white">
+                      <span className="mr-2">Wrote comment on</span>
+                      <span className="text-muted">
+                        {date.format(new Date(x.date), "MMM DD, YYYY")}
+                      </span>
                     </div>
                   </div>
-                </div>
-                <div className="row no-gutters text-white">
-                  <span className="mr-2">Wrote comment on</span>
-                  <span className="text-muted">
-                    {date.format(new Date(x.date), "MMM DD, YYYY")}
-                  </span>
                 </div>
               </div>
             </div>

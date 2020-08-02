@@ -16,7 +16,6 @@ const handleSubmit = async (credentials) => {
     });
   } else {
     localStorage.setItem("movies_user_token", res.token);
-    console.log("Res afte rlogin", res);
     store.dispatch({ type: "SET_USER", user: res });
     history.push("/");
   }

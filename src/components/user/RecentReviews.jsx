@@ -2,22 +2,21 @@ import React, { useEffect, useState, useRef } from "react";
 import date from "date-and-time";
 import { Emoji } from "emoji-mart";
 import { MdThumbUp, MdChatBubble } from "react-icons/md";
-import {
-  GetMovieReviews,
-  GetReviewComments,
-} from "../../../server/DatabaseApi";
+import { GetReviewComments, GetRecentReviews } from "../../server/DatabaseApi";
 import { connect } from "react-redux";
 import { Collapse } from "@material-ui/core";
-import Paigination from "../../utility/Paigination";
-import history from "../../../History";
-import { MoviesGenresMap } from "../../../Data";
-import ReactionButton from "../ReactionButton";
+import Paigination from "../utility/Paigination";
+import history from "../../History";
+import { MoviesGenresMap } from "../../Data";
+import ReactionButton from "./ReactionButton";
+import { getDataUrlFromFile } from "browser-image-compression";
 
-const Reviews = ({ reviews, publicUsers, ratings }) => {
+const RecentReviews = ({ publicUsers, ratings }) => {
   //comments object.Its property will be review id.
   const [comments, setComments] = useState({});
 
-  //
+  const [reviews, setReviews] = useState([]);
+
   const [reviewIdOfVisibleComments, setReviewIdOfVisibleComments] = useState(
     -1
   );
@@ -57,6 +56,16 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
   }, [reviewIdOfVisibleComments, refreshComments]);
 
   useEffect(() => {
+    async function getData() {
+      let res = await GetRecentReviews(10);
+      if (!res.error) {
+        setReviews(res);
+      }
+    }
+    getData();
+  }, []);
+
+  useEffect(() => {
     //to avoid scroll on first render
     if (page >= 0) {
       //100 ms for reviews to be rendered. It increases successful scrolls to top.
@@ -74,8 +83,12 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
   let realPage = page === -1 ? 1 : page;
 
   return (
-    <div className="row no-gutters">
-      <div className="col-60">
+    <div className="row no-gutters justify-content-center text-white">
+      <div className="col-60 content-container p-sm-5 p-4">
+        <div className="row no-gutters text-title-xl">Recent Reviews</div>
+        <div className="row no-gutters text-light mb-3">
+          Most recent reviews by days
+        </div>
         <div className="row no-gutters mb-2" ref={topOfReviewsBlock}></div>
         {reviews
           .slice(
@@ -94,9 +107,9 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                 >
                   <div className="row no-gutters mb-1">
                     <img
-                      onClick={() => history.push(`/movie/${x.id}`)}
+                      onClick={() => history.push(`/movie/${x.movie_id}`)}
                       width="100%"
-                      style={{ borderRadius: "13px" }}
+                      style={{ borderRadius: "13px", cursor: "pointer" }}
                       src={`https://image.tmdb.org/t/p/w154${x.movie_poster}`}
                     ></img>
                   </div>
@@ -104,7 +117,7 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                     {x.movie_title} ({x.movie_release_date.substring(0, 4)})
                   </div>
                   <div className="row no-gutters text-muted">
-                    {x.movie_genres}
+                    <div className="text-truncate">{x.movie_genres}</div>
                   </div>
                 </div>
                 <div className="col d-flex flex-column">
@@ -131,7 +144,9 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                             {x.movie_release_date.substring(0, 4)})
                           </div>
                           <div className="row no-gutters text-muted">
-                            {x.movie_genres}
+                            <div className="text-truncate">
+                              {x.movie_genres}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -165,11 +180,10 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                       </div>
                     </div>
                   </div>
-
-                  <div className="row no-gutters text-light mb-3 flex-grow-0">
+                  <div className="row no-gutters text-light font-size-14 mb-3 flex-grow-0">
                     {x.review}
                   </div>
-                  <div className="row no-gutters flex-grow-1">
+                  <div className="row no-gutters flex-grow-1 align-items-bottom">
                     <div className="col-60 d-flex flex-column justify-content-end">
                       <div className="row no-gutters justify-content-between align-items-center text-white mb-3">
                         <div className="col-auto">
@@ -393,4 +407,4 @@ function mapp(state, ownProps) {
   };
 }
 
-export default connect(mapp)(Reviews);
+export default connect(mapp)(RecentReviews);

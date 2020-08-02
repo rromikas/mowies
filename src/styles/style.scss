@@ -76,7 +76,6 @@ body,
 body {
   font-family: Montserrat, Helvetica, Arial, sans-serif !important;
   background: $root;
-  font-size: 12px;
 }
 
 .bg-image {
@@ -223,6 +222,11 @@ body {
   @extend .px-3;
 }
 
+.logo {
+  font-family: Poppins;
+  font-weight: 600;
+}
+
 .btn-tertiary {
   cursor: pointer;
   user-select: none;
@@ -235,7 +239,7 @@ body {
 }
 
 .btn-tertiary:hover {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.4);
 }
 
 .btn-tertiary-selected {
@@ -898,4 +902,17 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .f5 {
   font-size: calc(0.9em + 0.4vw);
+}
+
+.font-size-14 {
+  font-size: 14px !important;
+}
+
+.link-primary {
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.link-primary:hover {
+  color: $primary-custom;
 }

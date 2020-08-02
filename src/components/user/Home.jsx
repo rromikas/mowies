@@ -14,6 +14,10 @@ import { connect } from "react-redux";
 import store from "../../store/store";
 import WishlistButton from "./WishlistButton";
 import Recommendations from "./Recommendations";
+import PopularReviews from "./PopularReviews";
+import RecentReviews from "./RecentReviews";
+import Footer from "./Footer";
+import { GetRecommendations } from "../../server/DatabaseApi";
 
 const GetClosestValidWidth = () => {
   let backdropSizes = [300, 780, 1280];
@@ -30,8 +34,8 @@ const GetClosestValidWidth = () => {
 };
 
 const Home = ({ publicUsers, ratings, user }) => {
-  const backgroundMovieId = "516486";
-  const [movies, setMovies] = useState(TrendingMovies.results);
+  const backgroundMovieId = "300671";
+  const [recommendedMovies, setRecommendedMovies] = useState([]);
   const [openTrailer, setOpenTrailer] = useState(false);
   const [backgroundMovie, setBackgroundMovie] = useState({
     backdrop_path: "",
@@ -47,6 +51,10 @@ const Home = ({ publicUsers, ratings, user }) => {
     async function getData() {
       let data = await API.GetMovie(backgroundMovieId);
       setBackgroundMovie(data);
+      let res = await GetRecommendations(8);
+      if (!res.error) {
+        setRecommendedMovies(res);
+      }
     }
     getData();
   }, []);
@@ -215,12 +223,22 @@ const Home = ({ publicUsers, ratings, user }) => {
                 </div>
               </div>
 
-              <div className="col-25 d-none d-lg-block">
-                <div className="row no-gutters text-title-lg text-white mb-4">
-                  Todays's Recommendation
+              <div className="col-23 d-none d-lg-block">
+                <div
+                  className="row no-gutters h5 text-white"
+                  style={{
+                    padding: "10px",
+                    background:
+                      "linear-gradient(to right, #ff0037, transparent)",
+                    borderRadius: "4px 0 0 4px",
+                    // marginLeft: "10px",
+                    marginBottom: "11px",
+                  }}
+                >
+                  Today's Recommendation
                 </div>
                 <Recommendations
-                  movies={movies}
+                  movies={recommendedMovies}
                   user={user}
                   ratings={ratings}
                 ></Recommendations>
@@ -232,15 +250,32 @@ const Home = ({ publicUsers, ratings, user }) => {
           <div className=" col-60 py-5 px-md-5 px-4 content-container">
             <div className="row no-gutters justify-content-end">
               <div className="col-60">
-                <div className="row no-gutters text-title-xl text-white">
+                <div
+                  className="row no-gutters text-title-xl text-white"
+                  style={{
+                    padding: "10px",
+                    background:
+                      "linear-gradient(to right, #ff0037, transparent)",
+                    borderRadius: "4px 0 0 4px",
+                    // marginLeft: "10px",
+                    marginBottom: "18px",
+                  }}
+                >
                   Todays's Recommendation
                 </div>
-                <MoviesList movies={movies.slice(1, 7)}></MoviesList>
+                <Recommendations
+                  movies={recommendedMovies}
+                  user={user}
+                  ratings={ratings}
+                ></Recommendations>
               </div>
             </div>
           </div>
         </div>
         <PopularMovies></PopularMovies>
+        <PopularReviews></PopularReviews>
+        <RecentReviews></RecentReviews>
+        <Footer></Footer>
       </div>
     </div>
   );

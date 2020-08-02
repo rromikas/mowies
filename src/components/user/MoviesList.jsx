@@ -17,10 +17,10 @@ const MoviesList = ({ movies, user, ratings }) => {
     <div className="row">
       {movies.map((x, i) => (
         <div
-          onMouseOver={() => {
-            setHovered(i);
-          }}
-          onMouseLeave={() => setHovered(-1)}
+          // onMouseOver={() => {
+          //   setHovered(i);
+          // }}
+          // onMouseLeave={() => setHovered(-1)}
           key={`result-${i}`}
           className="col-lg-12 col-md-15 col-sm-20 col-60 p-3 text-white"
         >
@@ -40,13 +40,14 @@ const MoviesList = ({ movies, user, ratings }) => {
                   onClick={() => history.push(`/movie/${x.id}`)}
                   width="100%"
                   style={{ borderRadius: "13px" }}
+                  className="img-clickable"
                   src={
                     x.poster_path
                       ? `https://image.tmdb.org/t/p/w342${x.poster_path}`
                       : "https://critics.io/img/movies/poster-placeholder.png"
                   }
                 ></img>
-                <div
+                {/* <div
                   className="col-60 h-100 text-white d-flex flex-column justify-content-center"
                   style={{
                     left: 0,
@@ -78,7 +79,7 @@ const MoviesList = ({ movies, user, ratings }) => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="col-sm-60 col">

@@ -13,6 +13,7 @@ import { FormatDuration } from "../../utilities/Functions";
 import Navbar from "./Navbar";
 import { AddViewToMovie } from "../../server/DatabaseApi";
 import WishlistButton from "./WishlistButton";
+import Footer from "./Footer";
 
 const Movie = (props) => {
   const movieId = props.match.params.movieId;
@@ -104,12 +105,6 @@ const Movie = (props) => {
         <TrailerPlayer movieId={movieId}></TrailerPlayer>
       </Modal>
       <div className="col-60 text-white px-md-5 py-5 px-4 content-container">
-        {/* <div className="row no-gutters border-bottom py-4">
-          <div className="col-60 h1">Movie Details</div>
-          <div className="col-60">
-            Title, year, duration and all other details
-          </div>
-        </div> */}
         <div className="row no-gutters py-5 mb-5">
           <div className="col-auto pr-5 d-none d-lg-block">
             <img
@@ -249,6 +244,9 @@ const Movie = (props) => {
           movie={movie}
           user={user}
         ></MovieReviews>
+      </div>
+      <div className="col-60">
+        <Footer></Footer>
       </div>
     </div>
   );

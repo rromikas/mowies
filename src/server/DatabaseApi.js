@@ -104,3 +104,19 @@ export const GetUserComments = (commentIds) => {
 export const EditUser = (update) => {
   return SendPostRequest("/users/edit", { update });
 };
+
+export const GetPopularReviews = (limit) => {
+  return SendPostRequest("/reviews/get/popular", { limit });
+};
+
+export const GetRecentReviews = (limit) => {
+  return SendPostRequest("/reviews/get/recent", { limit });
+};
+
+export const GetRecommendations = (limit) => {
+  return SendPostRequest("/movies/get/recommended", { limit });
+};
+
+export const SearchReviews = (query) => {
+  return SendPostRequest("/reviews/search", { query });
+};

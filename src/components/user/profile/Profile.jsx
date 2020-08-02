@@ -13,6 +13,7 @@ import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 import Comments from "./Comments";
 import EditProfile from "./EditProfile";
+import Footer from "../Footer";
 
 const Profile = (props) => {
   const user = props.user;
@@ -233,6 +234,9 @@ const Profile = (props) => {
         ) : (
           ""
         )}
+      </div>
+      <div className="col-60">
+        <Footer></Footer>
       </div>
     </div>
   );

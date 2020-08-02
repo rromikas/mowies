@@ -5,6 +5,7 @@ import Select from "../utility/Select";
 import { BsChevronDown, BsSearch } from "react-icons/bs";
 import history from "../../History";
 import store from "../../store/store";
+import Logo from "../../images/Logo";
 
 const Navbar = (props) => {
   const user = props.user;
@@ -43,7 +44,7 @@ const Navbar = (props) => {
         position: "fixed",
         zIndex: 59,
         transition: "top 0.5s",
-        top: direction === "up" ? "0px" : "-90px",
+        top: direction === "up" ? "0px" : "-126px",
         left: 0,
         right: 0,
       }}
@@ -54,23 +55,27 @@ const Navbar = (props) => {
         }`}
       >
         <div className="col-60 content-container">
-          <div className="row no-gutters  justify-content-between px-3 py-3 align-items-center">
-            <div className="col-auto pr-5 text-white pl-3 d-none d-sm-block">
-              <div>Website Logo</div>
+          <div className="row no-gutters justify-content-between px-3 py-3 align-items-center flex-nowrap">
+            <div className="col-auto d-none d-sm-block pr-sm-5 pr-3 text-white pl-sm-3 pl-2">
               <div
-                className="btn-link font-size-14 cursor-pointer"
-                onClick={() => history.push("/admin")}
+                className="row no-gutters align-items-center cursor-pointer"
+                onClick={() => history.push("/")}
               >
-                Admin dashboard
+                <div className="square-70">
+                  <Logo></Logo>
+                </div>
+                <div className="col-auto logo text-title-lg">CozyPotato</div>
               </div>
             </div>
-            <div className="col-auto pr-5 text-white pl-3 d-block d-sm-none">
-              <div>Logo</div>
-              <div
-                className="btn-link font-size-14 cursor-pointer"
-                onClick={() => history.push("/admin")}
-              >
-                Admin
+            <div
+              className="d-block d-sm-none cursor-pointer"
+              onClick={() => history.push("/")}
+            >
+              <div className="square-70 mx-auto">
+                <Logo></Logo>
+              </div>
+              <div className="col-auto logo text-title-lg text-white">
+                CozyPotato
               </div>
             </div>
             <div className="col pr-5 d-none d-md-block">
@@ -167,7 +172,7 @@ const Navbar = (props) => {
                   </Popover>
                 </div>
               ) : (
-                <div className="row no-gutters pr-3 align-items-center">
+                <div className="row no-gutters pr-sm-3 pr-2 align-items-center">
                   <div
                     className="col-auto cursor-pointer fb-btn"
                     onClick={() => {

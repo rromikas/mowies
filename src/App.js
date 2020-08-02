@@ -14,6 +14,7 @@ import {
   GetAllRatings,
   GetAllPublicUsers,
   LoginWithToken,
+  GetPopularReviews,
 } from "./server/DatabaseApi";
 import Profile from "./components/user/profile/Profile";
 
@@ -25,11 +26,13 @@ function App() {
       ratingsArr.forEach((x) => {
         ratings[x.tmdb_id] = x;
       });
+      store.dispatch({ type: "SET_RATINGS", ratings });
       let publicUsers = {};
       let publicUsersArr = await GetAllPublicUsers();
       publicUsersArr.forEach((x) => {
         publicUsers[x.user_id] = x;
       });
+      store.dispatch({ type: "SET_PUBLICUSERS", publicUsers });
 
       let userToken = localStorage.getItem("movies_user_token");
       if (userToken) {
@@ -38,9 +41,6 @@ function App() {
           store.dispatch({ type: "SET_USER", user: res });
         }
       }
-
-      store.dispatch({ type: "SET_PUBLICUSERS", publicUsers });
-      store.dispatch({ type: "SET_RATINGS", ratings });
     }
     getData();
   }, []);

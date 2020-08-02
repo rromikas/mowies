@@ -121,7 +121,7 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
                   ></div>
                 </div>
                 <div className="col">
-                  <div className="row no-gutters justify-content-between align-items-center mb-2">
+                  <div className="row no-gutters justify-content-between align-items-center mb-1">
                     <div className="col-auto">
                       <div className="row no-gutters align-items-center">
                         <div className="col-auto pr-2 d-block d-md-none">
@@ -192,7 +192,7 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
                     </div>
                   </div>
 
-                  <div className="row no-gutters text-light mb-3">
+                  <div className="row no-gutters text-light text-title-md mb-3">
                     {x.review}
                   </div>
                   <div className="row no-gutters justify-content-between align-items-center">
