@@ -29,6 +29,7 @@ const LeftSideMenu = ({ section, setSection, setMenu = () => {} }) => {
         </div>
         {menuItems.map((x, i) => (
           <div
+            key={`left-menu-item-${i}`}
             className="row no-gutters px-5 mb-2"
             style={{
               borderLeft:

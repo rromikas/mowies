@@ -33,7 +33,7 @@ const GetClosestValidWidth = () => {
   return closestSize;
 };
 
-const Home = ({ publicUsers, ratings, user }) => {
+const Home = ({ publicUsers, ratings, user, settings }) => {
   const backgroundMovieId = "300671";
   const [recommendedMovies, setRecommendedMovies] = useState([]);
   const [openTrailer, setOpenTrailer] = useState(false);
@@ -49,15 +49,20 @@ const Home = ({ publicUsers, ratings, user }) => {
   });
   useEffect(() => {
     async function getData() {
-      let data = await API.GetMovie(backgroundMovieId);
-      setBackgroundMovie(data);
-      let res = await GetRecommendations(8);
-      if (!res.error) {
-        setRecommendedMovies(res);
+      if (settings.movies_api_key) {
+        let data = await API.GetMovie(
+          backgroundMovieId,
+          settings.movies_api_key
+        );
+        setBackgroundMovie(data);
+        let res = await GetRecommendations(8);
+        if (!res.error) {
+          setRecommendedMovies(res);
+        }
       }
     }
     getData();
-  }, []);
+  }, [settings]);
 
   return (
     <div className="row no-gutters">
@@ -122,10 +127,9 @@ const Home = ({ publicUsers, ratings, user }) => {
             <div className="row no-gutters justify-content-between position-relative">
               <div className="col-60 col-lg-30 d-flex flex-column justify-content-end text-white">
                 <div
-                  className="row no-gutters mb-2"
+                  className="row no-gutters mb-4 text-title-lg"
                   style={{
-                    fontSize: "calc(1.6em + 1.5vw)",
-                    fontWeight: "600",
+                    fontWeight: "700",
                   }}
                 >
                   {backgroundMovie.title}
@@ -251,7 +255,7 @@ const Home = ({ publicUsers, ratings, user }) => {
             <div className="row no-gutters justify-content-end">
               <div className="col-60">
                 <div
-                  className="row no-gutters text-title-xl text-white"
+                  className="row no-gutters h5 text-white"
                   style={{
                     padding: "10px",
                     background:
@@ -272,7 +276,7 @@ const Home = ({ publicUsers, ratings, user }) => {
             </div>
           </div>
         </div>
-        <PopularMovies></PopularMovies>
+        <PopularMovies apiKey={settings.movies_api_key}></PopularMovies>
         <PopularReviews></PopularReviews>
         <RecentReviews></RecentReviews>
         <Footer></Footer>
@@ -285,6 +289,7 @@ function mapp(state, ownProps) {
   return {
     publicUser: state.publicUsers,
     ratings: state.ratings,
+    settings: state.settings,
     user: state.user,
     ...ownProps,
   };

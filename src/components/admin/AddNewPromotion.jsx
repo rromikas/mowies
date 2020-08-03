@@ -5,67 +5,110 @@ import "react-day-picker/lib/style.css";
 import { BsCalendar, BsClock, BsSearch } from "react-icons/bs";
 import TimePicker from "react-time-picker";
 import date from "date-and-time";
-import { Reviews, Comments, PublicUsers } from "../../Data";
 import Pagination from "../utility/Paigination";
 import { Swipeable } from "react-swipeable";
 import Checkbox from "../utility/Checkbox";
 import { Emoji } from "emoji-mart";
+import {
+  GetReviews,
+  GetComments,
+  CreatePromotions,
+} from "../../server/DatabaseApi";
+import { connect } from "react-redux";
+import store from "../../store/store";
+import Loader from "../utility/Loader";
 
-const AddNewPromotion = () => {
+const AddNewPromotion = ({ publicUsers, getBack }) => {
   const [promotion, setPromotion] = useState({
+    title: "",
     start_date: Date.now(),
     end_date: Date.now(),
+    content_type: "",
+    active_status: "Active",
+    publish_status: "Published",
   });
   const [page, setPage] = useState(1);
   const [action, setAction] = useState("");
 
+  const [problem, setProblem] = useState("");
+
+  const [loading, setLoading] = useState(false);
   const [searchKey, setSearchKey] = useState("User");
   const [search, setSearch] = useState("");
   const [candidates, setCandidates] = useState([]);
   const searchKeys = ["User", "Review", "Comment", "Movie"];
   const [lastVisibleColumn, setLastVisibleColumn] = useState(0);
+  const [reviews, setReviews] = useState([]);
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    async function getData() {
+      let rev = await GetReviews();
+      if (!rev.error) {
+        setReviews(rev);
+      }
+
+      let com = await GetComments();
+      if (!com.error) {
+        setComments(com);
+      }
+    }
+
+    getData();
+  }, []);
 
   useEffect(() => {
     let arr = [];
-    if (searchKey === "User") {
-      Reviews.forEach((x) => {
-        if (PublicUsers[x.author].display_name.match(new RegExp(search, "i"))) {
-          arr.push(x);
-        }
-      });
+    if (search) {
+      if (searchKey === "User") {
+        if (Object.values(publicUsers).length) {
+          reviews.forEach((x) => {
+            if (
+              publicUsers[x.author].display_name.match(new RegExp(search, "i"))
+            ) {
+              arr.push(x);
+            }
+          });
 
-      Comments.forEach((x) => {
-        if (PublicUsers[x.author].display_name.match(new RegExp(search, "i"))) {
-          arr.push(x);
+          comments.forEach((x) => {
+            if (
+              publicUsers[x.author].display_name.match(new RegExp(search, "i"))
+            ) {
+              arr.push(x);
+            }
+          });
         }
-      });
-    } else if (searchKey === "Movie") {
-      Reviews.forEach((x) => {
-        if (x.movie_title.match(new RegExp(search, "i"))) {
-          arr.push(x);
-        }
-      });
+      } else if (searchKey === "Movie") {
+        reviews.forEach((x) => {
+          if (x.movie_title.match(new RegExp(search, "i"))) {
+            arr.push(x);
+          }
+        });
 
-      Comments.forEach((x) => {
-        if (x.movie_title.match(new RegExp(search, "i"))) {
-          arr.push(x);
-        }
-      });
-    } else if (searchKey === "Review") {
-      Reviews.forEach((x) => {
-        if (x.review.match(new RegExp(search, "i"))) {
-          arr.push(x);
-        }
-      });
-    } else if (searchKey === "Comment") {
-      Comments.forEach((x) => {
-        if (x.comment.match(new RegExp(search, "i"))) {
-          arr.push(x);
-        }
-      });
+        comments.forEach((x) => {
+          if (x.movie_title.match(new RegExp(search, "i"))) {
+            arr.push(x);
+          }
+        });
+      } else if (searchKey === "Review") {
+        reviews.forEach((x) => {
+          if (x.review.match(new RegExp(search, "i"))) {
+            arr.push(x);
+          }
+        });
+      } else if (searchKey === "Comment") {
+        comments.forEach((x) => {
+          if (x.comment.match(new RegExp(search, "i"))) {
+            arr.push(x);
+          }
+        });
+      }
+    } else {
+      arr = arr.concat([...reviews, ...comments]);
     }
+
     setCandidates(arr.map((x) => Object.assign({}, x, { selected: false })));
-  }, [search]);
+  }, [search, reviews, comments]);
 
   let boundaries = [(page - 1) * 5, (page - 1) * 5 + 5];
   if (boundaries[1] >= candidates.length) {
@@ -74,6 +117,21 @@ const AddNewPromotion = () => {
 
   const columns = ["Review or Comment", "Reported", "Movie Name", "Posted On"];
 
+  const validations = [
+    { valid: promotion.title, error: "Title is required" },
+    {
+      valid: promotion.start_date < promotion.end_date,
+      error: "Start date must be before end date",
+    },
+    {
+      valid: promotion.start_date !== promotion.end_date,
+      error: "promotion duration is 0",
+    },
+    {
+      valid: candidates.filter((x) => x.selected).length,
+      error: "No content selected",
+    },
+  ];
   return (
     <div className="row no-gutters p-sm-5 p-4">
       <div className="col-60 border-bottom mb-4">
@@ -85,33 +143,21 @@ const AddNewPromotion = () => {
         </div>
       </div>
       <div className="col-xl-40 col-md-50 col-60">
-        <div className="row no-gutters mb-3">
-          <Select
-            onSelect={(index) => setSearchKey(searchKeys[index])}
-            className="table-input-prepend-select col-auto bg-custom-primary text-white"
-            items={searchKeys}
-            btnName={`Search by ${searchKey}`}
-          ></Select>
-          <div className="col position-relative">
-            <BsSearch
-              fontSize="20px"
-              style={{
-                position: "absolute",
-                top: 0,
-                bottom: 0,
-                margin: "auto",
-                right: "18px",
-              }}
-            ></BsSearch>
-            <input
-              value={search}
-              onChange={(e) => {
-                e.persist();
-                setSearch(e.target.value);
-              }}
-              className="table-input pr-5 pl-3 w-100"
-              style={{ minWidth: "300px" }}
-            ></input>
+        <div className="row no-gutters mb-4">
+          <div className="col-xl-40 col-md-50 col-60">
+            <div className="row no-gutters mb-1">Promotion Title</div>
+            <div className="row no-gutters">
+              <input
+                className="input-light w-100 px-3"
+                value={promotion.title}
+                onChange={(e) => {
+                  e.persist();
+                  setPromotion((prev) =>
+                    Object.assign({}, prev, { title: e.target.value })
+                  );
+                }}
+              ></input>
+            </div>
           </div>
         </div>
         <div className="row no-gutters">
@@ -237,10 +283,7 @@ const AddNewPromotion = () => {
                           );
                         }
                       }}
-                      value={date.format(
-                        new Date(promotion.start_date),
-                        "hh:mm"
-                      )}
+                      value={new Date(promotion.start_date)}
                     ></TimePicker>
                   </div>
                 </div>
@@ -275,12 +318,44 @@ const AddNewPromotion = () => {
                           );
                         }
                       }}
-                      value={date.format(new Date(promotion.end_date), "hh:mm")}
+                      value={new Date(promotion.end_date)}
                     ></TimePicker>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div className="row no-gutters mb-3 h6 mt-4">
+          Select Content To Promote
+        </div>
+        <div className="row no-gutters mb-3">
+          <Select
+            onSelect={(index) => setSearchKey(searchKeys[index])}
+            className="table-input-prepend-select col-auto bg-custom-primary text-white"
+            items={searchKeys}
+            btnName={`Search by ${searchKey}`}
+          ></Select>
+          <div className="col position-relative">
+            <BsSearch
+              fontSize="20px"
+              style={{
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                margin: "auto",
+                right: "18px",
+              }}
+            ></BsSearch>
+            <input
+              value={search}
+              onChange={(e) => {
+                e.persist();
+                setSearch(e.target.value);
+              }}
+              className="table-input pr-5 pl-3 w-100"
+              style={{ minWidth: "300px" }}
+            ></input>
           </div>
         </div>
       </div>
@@ -332,7 +407,8 @@ const AddNewPromotion = () => {
                       ></Checkbox>
                     </th>
                     <th className="table-header text-truncate text-left">
-                      Title
+                      <div className="d-none d-lg-block">Posted By</div>
+                      <div className="d-block d-lg-none">By</div>
                     </th>
                     <th className="d-table-cell d-xl-none table-header text-truncate">
                       {columns[lastVisibleColumn]}
@@ -373,17 +449,23 @@ const AddNewPromotion = () => {
                                 className="square-50 rounded-circle bg-image"
                                 style={{
                                   backgroundImage: `url(${
-                                    PublicUsers[x.author].photo
+                                    Object.values(publicUsers).length
+                                      ? publicUsers[x.author].photo
+                                      : ""
                                   })`,
                                 }}
                               ></div>
                             </div>
-                            <div className="d-none d-md-inline-block align-top">
-                              <div className="h6 text-primary">
-                                {PublicUsers[x.author].display_name}
+                            {Object.values(publicUsers).length ? (
+                              <div className="d-none d-md-inline-block align-top">
+                                <div className="h6 text-primary">
+                                  {publicUsers[x.author].display_name}
+                                </div>
+                                <div>{publicUsers[x.author].email}</div>
                               </div>
-                              <div>{PublicUsers[x.author].email}</div>
-                            </div>
+                            ) : (
+                              ""
+                            )}
                           </td>
                           <td
                             className={`${
@@ -392,7 +474,7 @@ const AddNewPromotion = () => {
                                 : "d-none d-xl-table-cell"
                             }`}
                           >
-                            {x.review ? (
+                            {!x.comment ? (
                               <div>
                                 <div className="d-flex">
                                   <div className="mr-3">Rating:</div>
@@ -517,7 +599,8 @@ const AddNewPromotion = () => {
                       ></Checkbox>
                     </th>
                     <th className="table-footer text-truncate text-left">
-                      Title
+                      <div className="d-none d-lg-block">Posted By</div>
+                      <div className="d-block d-lg-none">By</div>
                     </th>
                     <th className="d-table-cell d-xl-none table-header text-truncate">
                       {columns[lastVisibleColumn]}
@@ -533,7 +616,7 @@ const AddNewPromotion = () => {
             </div>
           </Swipeable>
         </div>
-        <div className="row no-gutters justify-content-center justify-content-sm-between">
+        <div className="row no-gutters justify-content-end">
           <div className="col-auto">
             <Pagination
               count={Math.ceil(candidates.length / 5)}
@@ -542,12 +625,84 @@ const AddNewPromotion = () => {
             ></Pagination>
           </div>
         </div>
-        <div className="col-60 mt-5 px-0">
+        <div className="col-60 mt-1 px-0">
+          <div
+            style={{ height: "50px", opacity: problem ? 1 : 0 }}
+            className="row no-gutters align-items-center text-danger mb-2"
+          >
+            {problem}
+          </div>
           <div className="row no-gutters">
-            <div className="btn-custom btn-custom-secondary btn-small mr-sm-3 mb-3 col-60 col-sm-auto">
+            <div
+              className="btn-custom btn-custom-secondary btn-small mr-sm-3 mb-3 col-60 col-sm-auto"
+              onClick={() => getBack()}
+            >
               Cancel
             </div>
-            <div className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto">
+            <div
+              className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto"
+              onClick={async () => {
+                let invalid = validations.filter((x) => !x.valid);
+                if (invalid.length) {
+                  setProblem(invalid[0].error);
+                } else {
+                  let promos = candidates
+                    .filter((x) => x.selected)
+                    .map((x) =>
+                      Object.assign({}, promotion, {
+                        content_type: x.comment ? "Comment" : "Review",
+                        content: x.comment
+                          ? { comment: x.comment }
+                          : { review: x.review, rating: x.rating },
+                        content_id: x._id,
+                        content_author: x.author,
+                        movie_title: x.movie_title,
+                        movie_genres: x.movie_genres,
+                        movie_poster: x.movie_poster,
+                        movie_release_date: x.movie_release_date,
+                        movie_id: x.movie_id,
+                      })
+                    );
+                  setLoading(true);
+                  let res = await CreatePromotions(promos);
+                  setLoading(false);
+                  if (res.error) {
+                    store.dispatch({
+                      type: "SET_NOTIFICATION",
+                      notification: {
+                        title: "Error",
+                        message: res.error,
+                        type: "failure",
+                      },
+                    });
+                  } else {
+                    store.dispatch({
+                      type: "SET_NOTIFICATION",
+                      notification: {
+                        title: "Promotions created",
+                        message: "Promotions were successfully created",
+                        type: "success",
+                      },
+                    });
+                    getBack();
+                  }
+                }
+              }}
+            >
+              <Loader
+                color={"white"}
+                style={{
+                  position: "absolute",
+                  left: "10px",
+                  top: 0,
+                  bottom: 0,
+                  margin: "auto",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                loading={loading}
+                size={20}
+              ></Loader>
               Save
             </div>
           </div>
@@ -557,4 +712,11 @@ const AddNewPromotion = () => {
   );
 };
 
-export default AddNewPromotion;
+function mapp(state, ownProps) {
+  return {
+    publicUsers: state.publicUsers,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(AddNewPromotion);

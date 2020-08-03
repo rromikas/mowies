@@ -76,6 +76,7 @@ body,
 body {
   font-family: Montserrat, Helvetica, Arial, sans-serif !important;
   background: $root;
+  font-size: 14px;
 }
 
 .bg-image {
@@ -96,7 +97,7 @@ body {
   cursor: pointer;
   border-radius: 12px;
   // border: 1.5px solid $primary;
-  background: lighten($color: $over-root, $amount: 10);
+  // background: lighten($color: $over-root, $amount: 10);
   color: white;
   height: 30px;
   @extend .px-2;
@@ -367,13 +368,22 @@ body {
   @extend .text-muted;
 }
 
+.input:hover {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5) !important;
+}
+
+.input:focus {
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.5) !important;
+}
+
 .input {
   line-height: 40px;
   border-radius: 0 50px 50px 0;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.2);
   outline: none;
-  border: 2px solid white;
+  border: none;
   padding: 0 50px 0 20px;
+  transition: all 0.3s;
   color: white;
 }
 
@@ -382,8 +392,8 @@ body {
 }
 
 .input-prepend-select {
-  line-height: $main-btn-height;
-  height: $main-btn-height;
+  line-height: 40px;
+  height: 40px;
   border-radius: 50px 0 0 50px;
   background: white;
   min-width: 150px;
@@ -460,10 +470,6 @@ body {
 }
 
 @media only screen and (min-width: 567px) {
-  body {
-    font-size: 14px;
-  }
-
   .text-title-xl {
     font-size: 28px;
   }
@@ -478,6 +484,15 @@ body {
   .text-lift {
     font-size: 1.6rem;
   }
+}
+
+.img-cover {
+  background: rgba(0, 0, 0, 0.2);
+  transition: background 0.3s;
+}
+
+.img-cover:hover {
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .img-clickable {
@@ -532,6 +547,10 @@ h6,
 
 .font-size-14 {
   font-size: 14px;
+}
+
+.font-size-12 {
+  font-size: 12px;
 }
 
 .text-clamp-2 {

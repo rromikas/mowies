@@ -4,7 +4,6 @@ import { MoviesGenresMap } from "../../Data";
 
 const Recommendations = ({ movies }) => {
   const [hovered, setHovered] = useState(-1);
-  console.log("movies lenht", movies.length);
   return (
     <div className="row no-gutters">
       {movies.map((x, i) => (
@@ -24,7 +23,7 @@ const Recommendations = ({ movies }) => {
                 src={`https://image.tmdb.org/t/p/w154${x.movie_poster}`}
               ></img>
             </div>
-            <div className="col-sm-60 col">
+            <div className="col-sm-60 col d-block d-sm-none">
               <div
                 className="row no-gutters cursor-pointer"
                 onClick={() => history.push(`/movie/${x.movie_id}`)}

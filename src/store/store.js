@@ -72,12 +72,40 @@ function searchReducer(state = { query: "", category: "Movies" }, action) {
   }
 }
 
+function settingsReducer(
+  state = {
+    _id: "NonExistingID",
+    movies_api_key: "",
+    movie_data_api: "",
+    latest_movies_api: "",
+    no_popular_reviews: 5,
+    no_popular_movies: 5,
+    no_allowed_reviews: 5,
+    no_comment_characters: 400,
+    no_review_words: 80,
+    bg_image_refresh_time_days: 0,
+    bg_image_refresh_time_hours: 0,
+    bg_image_refresh_time_minutes: 0,
+  },
+  action
+) {
+  switch (action.type) {
+    case "SET_SETTINGS":
+      return action.settings;
+    case "UPDATE_SETTINGS":
+      return Object.assign({}, state, action.settings);
+    default:
+      return state;
+  }
+}
+
 const rootReducer = combineReducers({
   publicUsers: publicUsersReducer,
   ratings: ratingsReducer,
   user: userReducer,
   search: searchReducer,
   notification: notificationReducer,
+  settings: settingsReducer,
 });
 
 const store = createStore(

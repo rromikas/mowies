@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import LeftSideMenu from "./LeftSideMenu";
 import Settings from "./Settings";
-import UserManagement from "./UserManagement";
 import RightSideMenuFloating from "./RightSideMenuFloating";
 import Navbar from "./Navbar";
 import ReviewsAndComments from "./ReviewAndComments";
@@ -17,6 +16,9 @@ import AddNewPromotion from "./AddNewPromotion";
 import Notifications from "./Notifications";
 import EditNotification from "./EditNotification";
 import AddNewNotification from "./AddNewNotification";
+import Users from "./Users";
+import AddNewUser from "./AddNewUser";
+import EditUser from "./EditUser";
 
 const sections = {
   settings: 0,
@@ -33,6 +35,8 @@ const sections = {
   addNewPromotion: 11,
   editNotification: 12,
   addNewNotification: 13,
+  editUser: 14,
+  addNewUser: 15,
 };
 
 const AdminDashboard = () => {
@@ -43,6 +47,7 @@ const AdminDashboard = () => {
   const [editAnnouncement, setEditAnnouncement] = useState(null);
   const [editPromotion, setEditPromotion] = useState(null);
   const [editNotification, setEditNotification] = useState(null);
+  const [editUser, setEditUser] = useState(null);
   return (
     <div className="row no-gutters" style={{ minHeight: window.innerHeight }}>
       <div className="col-60">
@@ -97,6 +102,8 @@ const AdminDashboard = () => {
                           ? 4
                           : section === 12 || section === 13
                           ? 5
+                          : section === 14 || section === 15
+                          ? 1
                           : 0
                       )
                     }
@@ -107,7 +114,11 @@ const AdminDashboard = () => {
             {section === 0 ? (
               <Settings></Settings>
             ) : section === 1 ? (
-              <UserManagement></UserManagement>
+              <Users
+                setAddNewUserSection={() => setSection(sections["addNewUser"])}
+                setEditUser={(u) => setEditUser(u)}
+                setEditUserSection={() => setSection(sections["editUser"])}
+              ></Users>
             ) : section === 2 ? (
               <ReviewsAndComments
                 setEditReview={(rev) => setEditReview(rev)}
@@ -148,25 +159,42 @@ const AdminDashboard = () => {
                 }
               ></Notifications>
             ) : section === 6 ? (
-              <EditReview currentReview={editReview}></EditReview>
+              <EditReview
+                currentReview={editReview}
+                getBack={() => setSection(2)}
+              ></EditReview>
             ) : section === 7 ? (
-              <EditComment currentComment={editComment}></EditComment>
+              <EditComment
+                currentComment={editComment}
+                getBack={() => setSection(2)}
+              ></EditComment>
             ) : section === 8 ? (
               <EditAnnouncement
+                getBack={() => setSection(3)}
                 currentAnnouncement={editAnnouncement}
               ></EditAnnouncement>
             ) : section === 9 ? (
-              <AddNewAnnouncement />
+              <AddNewAnnouncement getBack={() => setSection(3)} />
             ) : section === 10 ? (
-              <EditPromotion currentPromotion={editPromotion}></EditPromotion>
+              <EditPromotion
+                currentPromotion={editPromotion}
+                getBack={() => setSection(4)}
+              ></EditPromotion>
             ) : section === 11 ? (
-              <AddNewPromotion></AddNewPromotion>
+              <AddNewPromotion getBack={() => setSection(4)}></AddNewPromotion>
             ) : section === 12 ? (
               <EditNotification
                 currentNotification={editNotification}
               ></EditNotification>
             ) : section === 13 ? (
               <AddNewNotification></AddNewNotification>
+            ) : section === 14 ? (
+              <EditUser
+                currentUser={editUser}
+                getBack={() => setSection(1)}
+              ></EditUser>
+            ) : section === 15 ? (
+              <AddNewUser getBack={() => setSection(1)}></AddNewUser>
             ) : (
               ""
             )}

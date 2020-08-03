@@ -1,54 +1,24 @@
 import React, { useEffect, useState } from "react";
 import Select from "../utility/Select";
-import { Emoji } from "emoji-mart";
+import { connect } from "react-redux";
+import store from "../../store/store";
+import { EditCommentForAdmin } from "../../server/DatabaseApi";
+import Loader from "../utility/Loader";
 
-const ratings = [
-  {
-    name: "Excellent",
-    element: (
-      <div className="text-center" style={{ marginBottom: "-6px" }}>
-        <Emoji emoji="fire" set="facebook" size={24} />
-      </div>
-    ),
-  },
-  {
-    name: "Good",
-    element: (
-      <div className="text-center" style={{ marginBottom: "-6px" }}>
-        <Emoji emoji="heart" set="facebook" size={24} />
-      </div>
-    ),
-  },
-  {
-    name: "OK",
-    element: (
-      <div className="text-center" style={{ marginBottom: "-6px" }}>
-        <Emoji emoji="heavy_division_sign" set="facebook" size={24} />
-      </div>
-    ),
-  },
-  {
-    name: "Bad",
-    element: (
-      <div className="text-center" style={{ marginBottom: "-6px" }}>
-        <Emoji emoji="shit" set="facebook" size={24} />
-      </div>
-    ),
-  },
-];
-
-const EditComment = ({ currentComment }) => {
+const EditComment = ({ currentComment, publicUsers, getBack }) => {
   const [comment, setComment] = useState({});
+  const [user, setUser] = useState({ display_name: "", email: "" });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setComment(currentComment);
+    if (currentComment) {
+      setComment(currentComment);
+      setUser(publicUsers[currentComment.author]);
+    }
   }, [currentComment]);
 
   return (
-    <div
-      className="row no-gutters px-md-5 px-4 pb-4"
-      style={{ maxWidth: "800px" }}
-    >
+    <div className="row no-gutters p-md-5 p-4" style={{ maxWidth: "800px" }}>
       <div className="col-60 py-3 border-bottom mb-4">
         <div className="row no-gutters h3">Reviews & Comments</div>
         <div className="row no-gutters">
@@ -59,13 +29,30 @@ const EditComment = ({ currentComment }) => {
         <div className="row no-gutters mb-4">
           <div className="col-60 mb-1">Display name</div>
           <div className="col-60">
-            <input type="text" className="input-light w-100 px-3"></input>
+            <input
+              type="text"
+              className="input-light w-100 px-3"
+              value={user.display_name}
+              onChange={(e) => {
+                e.persist();
+                setUser((prev) =>
+                  Object.assign({}, prev, { display_name: e.target.value })
+                );
+              }}
+            ></input>
           </div>
         </div>
         <div className="row no-gutters mb-4">
           <div className="col-60 mb-1">Comment</div>
           <div className="col-60">
             <textarea
+              value={comment.comment}
+              onChange={(e) => {
+                e.persist();
+                setComment((prev) =>
+                  Object.assign({}, prev, { comment: e.target.value })
+                );
+              }}
               className="textarea-light w-100"
               style={{ height: "150px" }}
             ></textarea>
@@ -94,10 +81,54 @@ const EditComment = ({ currentComment }) => {
       </div>
       <div className="col-60 mt-5">
         <div className="row no-gutters">
-          <div className="btn-custom btn-custom-secondary btn-small mr-sm-3 mb-3 col-60 col-sm-auto">
+          <div
+            className="btn-custom btn-custom-secondary btn-small mr-sm-3 mb-3 col-60 col-sm-auto"
+            onClick={() => getBack()}
+          >
             Cancel
           </div>
-          <div className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto">
+          <div
+            className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto"
+            onClick={async () => {
+              setLoading(true);
+              let res = await EditCommentForAdmin(comment, user);
+              setLoading(false);
+              if (res.error) {
+                store.dispatch({
+                  type: "SET_NOTIFICATION",
+                  notification: {
+                    title: "Error",
+                    message: res.error,
+                    type: "failure",
+                  },
+                });
+              } else {
+                store.dispatch({
+                  type: "SET_NOTIFICATION",
+                  notification: {
+                    title: "Review updated",
+                    message: "Review was successfully updated",
+                    type: "success",
+                  },
+                });
+                getBack();
+              }
+            }}
+          >
+            <Loader
+              color={"white"}
+              style={{
+                position: "absolute",
+                left: "10px",
+                top: 0,
+                bottom: 0,
+                margin: "auto",
+                display: "flex",
+                alignItems: "center",
+              }}
+              loading={loading}
+              size={20}
+            ></Loader>
             Save
           </div>
         </div>
@@ -106,4 +137,11 @@ const EditComment = ({ currentComment }) => {
   );
 };
 
-export default EditComment;
+function mapp(state, ownProps) {
+  return {
+    publicUsers: state.publicUsers,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(EditComment);

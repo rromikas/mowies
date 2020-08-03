@@ -1,54 +1,44 @@
 import React, { useState, useEffect } from "react";
 import Select from "../utility/Select";
 import Checkbox from "../utility/Checkbox";
-import { Emoji } from "emoji-mart";
 import Pagination from "../utility/Paigination";
 import { BsSearch } from "react-icons/bs";
 import date from "date-and-time";
 import { Swipeable } from "react-swipeable";
-import { connect } from "react-redux";
-import {
-  GetAnnouncements,
-  DeleteMultipleAnnouncements,
-} from "../../server/DatabaseApi";
+import { GetUsers, EditMultipleUsers } from "../../server/DatabaseApi";
+import { format as TimeAgo } from "timeago.js";
 import store from "../../store/store";
 
-const Announcements = ({
-  setEditAnnouncement,
-  setEditAnnouncementSection,
-  setAddNewAnouncementSection,
-  publicUsers,
-}) => {
+const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
   const [action, setAction] = useState("");
   const [role, setRole] = useState("");
   const [searchKey, setSearchKey] = useState("User");
   const [lastVisibleColumn, setLastVisibleColumn] = useState(0);
   const [page, setPage] = useState(1);
   const [roleFilter, setRoleFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const [search, setSearch] = useState("");
 
+  const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [refresh, setRefresh] = useState(false);
-  const [announcements, setAnnouncements] = useState([]);
-  const [filteredAnnouncements, setFilteredAnnouncements] = useState([]);
+
   useEffect(() => {
     async function getData() {
-      let res = await GetAnnouncements();
-      if (!res.error) {
-        setAnnouncements(
-          res.map((x) => Object.assign({}, x, { selected: false }))
-        );
-      }
+      let data = await GetUsers();
+      setUsers(data.map((x) => Object.assign({}, x, { selected: false })));
     }
+
     getData();
   }, [refresh]);
 
   useEffect(() => {
-    let arr = [...announcements];
-    if (announcements.length) {
+    let arr = [...users];
+    if (users.length) {
       if (search) {
         if (searchKey === "User") {
           arr = arr.filter((x) =>
-            publicUsers[x.author].display_name.match(new RegExp(search, "i"))
+            x.display_name.match(new RegExp(search, "i"))
           );
         } else if (searchKey === "Review") {
           arr = arr.filter((x) => x.review.match(new RegExp(search, "i")));
@@ -62,38 +52,46 @@ const Announcements = ({
       }
 
       if (roleFilter) {
-        arr = arr.filter(
-          (x) => publicUsers[x.author].role === roleFilter.toLowerCase()
-        );
+        arr = arr.filter((x) => x.role === roleFilter);
       }
 
-      setFilteredAnnouncements(arr);
+      if (statusFilter) {
+        arr = arr.filter((x) => x.status === statusFilter);
+      }
+
+      setFilteredUsers(arr);
     }
-  }, [search, roleFilter, announcements]);
+  }, [search, roleFilter, users, statusFilter]);
 
   //boundaries for slicing reviews array. (pagination)
   let boundaries = [(page - 1) * 5, (page - 1) * 5 + 5];
-  if (boundaries[1] >= filteredAnnouncements.length) {
-    boundaries[1] =
-      boundaries[1] - (boundaries[1] - filteredAnnouncements.length);
+  if (boundaries[1] >= filteredUsers.length) {
+    boundaries[1] = boundaries[1] - (boundaries[1] - filteredUsers.length);
   }
-
-  const statuses = ["Published", "Drafted", "Expired"];
 
   const handleApply = async (all = false) => {
     if (all) {
       setRoleFilter(role);
     }
-    if (action === "Edit") {
-      let selected = filteredAnnouncements.filter((x) => x.selected);
-      if (selected.length) {
-        setEditAnnouncement(selected[0]);
-        setEditAnnouncementSection();
-      }
-    } else if (action === "Delete") {
-      let selected = filteredAnnouncements.filter((x) => x.selected);
-      if (selected.length) {
-        let res = await DeleteMultipleAnnouncements(selected.map((x) => x._id));
+    let selected = filteredUsers.filter((x) => x.selected);
+    if (selected.length) {
+      if (action === "Edit") {
+        setEditUser(selected[0]);
+        setEditUserSection();
+      } else {
+        let update = {};
+        if (action === "Delete") {
+          //delete review
+          update["deleted"] = true;
+        } else if (action === "Inactivate") {
+          update["status"] = "Inactive";
+        } else if ("Block") {
+          update["status"] = "Blocked";
+        }
+        let res = await EditMultipleUsers(
+          selected.map((x) => x._id),
+          update
+        );
         if (res.error) {
           store.dispatch({
             type: "SET_NOTIFICATION",
@@ -107,28 +105,30 @@ const Announcements = ({
           store.dispatch({
             type: "SET_NOTIFICATION",
             notification: {
-              title: "Announcements were deleted",
-              message: "Announcements were successfully deleted",
+              title: "Comments were deleted",
+              message: "Comments were successfully deleted",
               type: "success",
             },
           });
+          setRefresh(!refresh);
         }
-        setRefresh(!refresh);
       }
     }
   };
 
+  const statuses = ["Active", "Inactive", "Blocked"];
+  const columns = ["Email", "Role", "Last login", "Activity", "Status"];
   return (
     <div className="row no-gutters p-md-5 p-4">
       <div className="col-60 border-bottom">
         <div className="row no-gutters justify-content-between">
           <div className="col-auto py-3">
-            <div className="row no-gutters h3">Announcements</div>
-            <div className="row no-gutters">Create and post announcements</div>
+            <div className="row no-gutters h3">Users</div>
+            <div className="row no-gutters">Add, edit and delete users</div>
           </div>
           <div
             className="col-auto btn-custom btn-custom-primary btn-natural"
-            onClick={() => setAddNewAnouncementSection()}
+            onClick={() => setAddNewUserSection()}
           >
             Add New
           </div>
@@ -138,12 +138,24 @@ const Announcements = ({
         <div className="row no-gutters">
           <div className="col-60 py-5">
             <div className="row no-gutters h6 mb-3">
-              <div className="col-auto">All ({announcements.length})</div>
+              <div
+                className={`col-auto ${
+                  statusFilter ? "text-dark" : "text-primary"
+                }`}
+                onClick={() => setStatusFilter("")}
+              >
+                All ({users.length})
+              </div>
               {statuses.map((x, i) => (
                 <React.Fragment key={`status-${i}`}>
                   <div className="col-auto px-2 text-muted">|</div>
-                  <div className="col-auto">
-                    {x} ({announcements.filter((y) => y.status === x).length})
+                  <div
+                    className={`col-auto cursor-pointer ${
+                      statusFilter === x ? "text-primary" : "text-dark"
+                    }`}
+                    onClick={() => setStatusFilter(x)}
+                  >
+                    {x} ({users.filter((y) => y.status === x).length})
                   </div>
                 </React.Fragment>
               ))}
@@ -156,9 +168,11 @@ const Announcements = ({
                       <Select
                         popoverClass="col-60 col-sm-auto"
                         onSelect={(index) =>
-                          setAction(["Edit", "Delete"][index])
+                          setAction(
+                            ["Edit", "Block", "Inactivate", "Delete"][index]
+                          )
                         }
-                        items={["Edit", "Delete"]}
+                        items={["Edit", "Block", "Inactivate", "Delete"]}
                         btnName={action ? action : "Select Action"}
                         className="input-light px-3 col-auto mr-sm-3"
                       ></Select>
@@ -176,9 +190,9 @@ const Announcements = ({
                       <Select
                         popoverClass="col-60 col-sm-auto"
                         onSelect={(index) =>
-                          setRole(["Admin", "Co-admin", "Copywriter"][index])
+                          setRole(["Admin", "Co-admin", "User"][index])
                         }
-                        items={["Admin", "Co-admin", "Copywriter"]}
+                        items={["Admin", "Co-admin", "User"]}
                         btnName={role ? role : "Select Role"}
                         className="input-light px-3 col-auto mr-sm-3"
                       ></Select>
@@ -294,13 +308,13 @@ const Announcements = ({
                           <Checkbox
                             color={"primary"}
                             checked={
-                              filteredAnnouncements
+                              filteredUsers
                                 .slice(boundaries[0], boundaries[1])
                                 .filter((x) => x.selected).length ===
                               boundaries[1] - boundaries[0]
                             }
                             onChange={(e) => {
-                              setFilteredAnnouncements((prev) => {
+                              setFilteredUsers((prev) => {
                                 let arr = [...prev];
                                 for (
                                   let i = boundaries[0];
@@ -315,33 +329,25 @@ const Announcements = ({
                           ></Checkbox>
                         </th>
                         <th className="table-header text-truncate text-left">
-                          <div className="d-none d-lg-block">Posted By</div>
-                          <div className="d-block d-lg-none">By</div>
+                          <div className="d-none d-lg-block">Display Name</div>
+                          <div className="d-block d-lg-none">Name</div>
                         </th>
                         <th className="d-table-cell d-xl-none table-header text-truncate">
-                          {
-                            ["Type", "Description", "Duration", "Status"][
-                              lastVisibleColumn
-                            ]
-                          }
+                          {columns[lastVisibleColumn]}
                         </th>
-                        <th className="d-none d-xl-table-cell table-header text-truncate">
-                          <div>Type</div>
-                        </th>
-                        <th className="d-none d-xl-table-cell table-header text-truncate">
-                          <div>Description</div>
-                        </th>
-                        <th className="d-none d-xl-table-cell table-header text-truncate">
-                          <div>Duration</div>
-                        </th>
-                        <th className="d-none d-xl-table-cell table-header text-truncate">
-                          <div>Status</div>
-                        </th>
+                        {columns.map((c, j) => (
+                          <th
+                            className="d-none d-xl-table-cell table-header text-truncate"
+                            key={`column-${j}`}
+                          >
+                            <div>{c}</div>
+                          </th>
+                        ))}
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredAnnouncements.length ? (
-                        filteredAnnouncements
+                      {filteredUsers.length ? (
+                        filteredUsers
                           .slice((page - 1) * 5, (page - 1) * 5 + 5)
                           .map((x, i) => (
                             <tr
@@ -353,7 +359,7 @@ const Announcements = ({
                                   color={"primary"}
                                   checked={x.selected}
                                   onChange={(e) => {
-                                    setFilteredAnnouncements((prev) => {
+                                    setFilteredUsers((prev) => {
                                       let arr = [...prev];
                                       arr[(page - 1) * 5 + i].selected =
                                         e.target.checked;
@@ -363,28 +369,7 @@ const Announcements = ({
                                 ></Checkbox>
                               </td>
                               <td style={{ whiteSpace: "nowrap" }}>
-                                {Object.values(publicUsers).length ? (
-                                  <React.Fragment>
-                                    <div className="d-inline-block mr-2">
-                                      <div
-                                        className="square-50 rounded-circle bg-image"
-                                        style={{
-                                          backgroundImage: `url(${
-                                            publicUsers[x.author].photo
-                                          })`,
-                                        }}
-                                      ></div>
-                                    </div>
-                                    <div className="d-none d-md-inline-block align-top">
-                                      <div className="h6 text-primary">
-                                        {publicUsers[x.author].display_name}
-                                      </div>
-                                      <div>{publicUsers[x.author].email}</div>
-                                    </div>
-                                  </React.Fragment>
-                                ) : (
-                                  ""
-                                )}
+                                {x.display_name}
                               </td>
                               <td
                                 className={`${
@@ -393,7 +378,7 @@ const Announcements = ({
                                     : "d-none d-xl-table-cell"
                                 }`}
                               >
-                                <div>{x.type}</div>
+                                <div>{x.email}</div>
                               </td>
                               <td
                                 className={`${
@@ -402,21 +387,7 @@ const Announcements = ({
                                     : "d-none d-xl-table-cell"
                                 }`}
                               >
-                                <div
-                                  className="text-clamp-4 cursor-pointer user-select-none"
-                                  onClick={(e) => {
-                                    let target = e.currentTarget;
-                                    if (
-                                      target.classList.contains("text-clamp-4")
-                                    ) {
-                                      target.classList.remove("text-clamp-4");
-                                    } else {
-                                      target.classList.add("text-clamp-4");
-                                    }
-                                  }}
-                                >
-                                  {x.description}
-                                </div>
+                                {x.role}
                               </td>
                               <td
                                 className={`${
@@ -425,40 +396,9 @@ const Announcements = ({
                                     : "d-none d-xl-table-cell"
                                 }`}
                               >
-                                <div className="d-flex mb-2">
-                                  <div style={{ width: "55px" }}>From:</div>
-                                  <div>
-                                    <div>
-                                      {date.format(
-                                        new Date(x.start_date),
-                                        "DD/MM/YYYY"
-                                      )}
-                                    </div>
-                                    <div>
-                                      {date.format(
-                                        new Date(x.start_date),
-                                        "@ hh:mm A"
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="d-flex">
-                                  <div style={{ width: "55px" }}>To:</div>
-                                  <div>
-                                    <div>
-                                      {date.format(
-                                        new Date(x.end_date),
-                                        "DD/MM/YYYY"
-                                      )}
-                                    </div>
-                                    <div>
-                                      {date.format(
-                                        new Date(x.end_date),
-                                        "@ hh:mm A"
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
+                                {x.last_login
+                                  ? TimeAgo(x.last_login)
+                                  : "No data"}
                               </td>
                               <td
                                 className={`${
@@ -467,7 +407,24 @@ const Announcements = ({
                                     : "d-none d-xl-table-cell"
                                 }`}
                               >
-                                {x.end_date < Date.now() ? "Expired" : x.status}
+                                {x.last_activity
+                                  ? TimeAgo(x.last_activity)
+                                  : "No data"}
+                              </td>
+                              <td
+                                className={`${
+                                  x.status === "Active"
+                                    ? "text-green"
+                                    : x.status === "Inactive"
+                                    ? "text-orange"
+                                    : "text-danger"
+                                } ${
+                                  lastVisibleColumn === 4
+                                    ? "d-table-cell"
+                                    : "d-none d-xl-table-cell"
+                                }`}
+                              >
+                                {x.status}
                               </td>
                             </tr>
                           ))
@@ -485,13 +442,13 @@ const Announcements = ({
                           <Checkbox
                             color={"primary"}
                             checked={
-                              filteredAnnouncements
+                              filteredUsers
                                 .slice(boundaries[0], boundaries[1])
                                 .filter((x) => x.selected).length ===
                               boundaries[1] - boundaries[0]
                             }
                             onChange={(e) => {
-                              setFilteredAnnouncements((prev) => {
+                              setFilteredUsers((prev) => {
                                 let arr = [...prev];
                                 for (
                                   let i = boundaries[0];
@@ -506,28 +463,20 @@ const Announcements = ({
                           ></Checkbox>
                         </th>
                         <th className="table-footer text-truncate text-left">
-                          <div className="d-none d-lg-block">Posted By</div>
-                          <div className="d-block d-lg-none">By</div>
+                          <div className="d-none d-lg-block">Display Name</div>
+                          <div className="d-block d-lg-none">Name</div>
                         </th>
                         <th className="d-table-cell d-xl-none table-header text-truncate">
-                          {
-                            ["Type", "Description", "Duration", "Status"][
-                              lastVisibleColumn
-                            ]
-                          }
+                          {columns[lastVisibleColumn]}
                         </th>
-                        <th className="d-none d-xl-table-cell table-footer text-truncate">
-                          <div>Type</div>
-                        </th>
-                        <th className="d-none d-xl-table-cell table-footer text-truncate">
-                          <div>Description</div>
-                        </th>
-                        <th className="d-none d-xl-table-cell table-footer text-truncate">
-                          <div>Duration</div>
-                        </th>
-                        <th className="d-none d-xl-table-cell table-footer text-truncate">
-                          <div>Status</div>
-                        </th>
+                        {columns.map((c, j) => (
+                          <th
+                            className="d-none d-xl-table-cell table-header text-truncate"
+                            key={`footer-column-${j}`}
+                          >
+                            <div>{c}</div>
+                          </th>
+                        ))}
                       </tr>
                     </tfoot>
                   </table>
@@ -561,7 +510,7 @@ const Announcements = ({
               </div>
               <div className="col-auto">
                 <Pagination
-                  count={Math.ceil(filteredAnnouncements.length / 5)}
+                  count={Math.ceil(filteredUsers.length / 5)}
                   current={page}
                   setCurrent={setPage}
                 ></Pagination>
@@ -574,11 +523,4 @@ const Announcements = ({
   );
 };
 
-function mapp(state, ownProps) {
-  return {
-    publicUsers: state.publicUsers,
-    ...ownProps,
-  };
-}
-
-export default connect(mapp)(Announcements);
+export default Users;

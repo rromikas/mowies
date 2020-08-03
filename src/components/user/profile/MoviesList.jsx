@@ -4,16 +4,22 @@ import history from "../../../History";
 import WishlistButton from "../WishlistButton";
 import { connect } from "react-redux";
 import ReactionButton from "../ReactionButton";
-import { BsHeart, BsEye } from "react-icons/bs";
+import { BsPlayFill } from "react-icons/bs";
 import Paigination from "../../utility/Paigination";
+import TrailerPlayer from "../TrailerPlayer";
+import Modal from "../../utility/Modal";
 
 const MoviesList = ({ movies, user, ratings }) => {
-  const [hovered, setHovered] = useState(-1);
   const [page, setPage] = useState(1);
   const maxItemsPerPage = 12;
+  const [trailerMovieId, setTrailerMovieId] = useState("");
+  const [openTrailer, setOpenTrailer] = useState(false);
 
   return (
     <React.Fragment>
+      <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
+        <TrailerPlayer movieId={trailerMovieId}></TrailerPlayer>
+      </Modal>
       <div className="row">
         {movies.map((x, i) => {
           let formatedMovie = {
@@ -38,16 +44,8 @@ const MoviesList = ({ movies, user, ratings }) => {
               </div>
               <div className="row no-gutters">
                 <div className="col-sm-60 col-auto mr-3 mr-sm-0">
-                  <div
-                    onClick={() => history.push(`/movie/${formatedMovie.id}`)}
-                    className="row no-gutters mb-2 position-relative movies-list-image"
-                    onMouseOver={() => {
-                      setHovered(i);
-                    }}
-                    onMouseLeave={() => setHovered(-1)}
-                  >
+                  <div className="row no-gutters mb-2 position-relative movies-list-image">
                     <img
-                      onClick={() => history.push(`/movie/${formatedMovie.id}`)}
                       width="100%"
                       style={{ borderRadius: "13px" }}
                       src={
@@ -57,46 +55,39 @@ const MoviesList = ({ movies, user, ratings }) => {
                       }
                     ></img>
                     <div
-                      className="col-60 h-100 text-white d-flex flex-column justify-content-center"
+                      onClick={() => {
+                        setTrailerMovieId(formatedMovie.id);
+                        setOpenTrailer(true);
+                      }}
+                      className="col-60 h-100 text-white d-flex flex-center img-cover cursor-pointer"
                       style={{
                         left: 0,
                         top: 0,
-                        background: "rgba(0, 0, 0, 0.5)",
                         position: "absolute",
-                        opacity: hovered === i ? 1 : 0,
                         zIndex: 4,
                         borderRadius: "13px",
-                        transition: "opacity 0.3s",
-                        border: "3px solid #00db54",
                       }}
                     >
-                      <div className="row no-gutters flex-grow-0 w-100 align-items-center">
-                        <div className="col-60 mb-4 text-center">
-                          <div className="row no-gutters justify-content-center">
-                            <BsEye fontSize="45px"></BsEye>
-                          </div>
-                          <div className="row no-gutters justify-content-center h2">
-                            {ratings[formatedMovie.id]
-                              ? ratings[formatedMovie.id].views
-                              : 0}
-                          </div>
-                        </div>
-                        <div className="col-60 text-center">
-                          <div className="row no-gutters justify-content-center">
-                            <BsHeart fontSize="45px"></BsHeart>
-                          </div>
-                          <div className="row no-gutters justify-content-center h2">
-                            {ratings[formatedMovie.id]
-                              ? ratings[formatedMovie.id].wishlisted
-                              : 0}
-                          </div>
-                        </div>
+                      <div
+                        className="square-70 rounded-circle d-flex flex-center"
+                        style={{ border: "3px solid white" }}
+                      >
+                        <BsPlayFill
+                          style={{
+                            fontSize: "85px",
+                            color: "white",
+                            marginRight: "-5px",
+                          }}
+                        ></BsPlayFill>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="col-sm-60 col">
-                  <div className="row no-gutters text-title-md mb-0">
+                  <div
+                    className="row no-gutters text-title-md mb-0 cursor-pointer"
+                    onClick={() => history.push(`/movie/${formatedMovie.id}`)}
+                  >
                     {formatedMovie.title}
                   </div>
                   <div className="row no-gutters text-muted mb-2">

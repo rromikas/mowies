@@ -53,6 +53,10 @@ export const GetMovieReviews = (movieId) => {
   return SendPostRequest("/reviews/get/movie", { movieId });
 };
 
+export const GetMoviePromotedReviews = (movieId) => {
+  return SendPostRequest("/reviews/getPromoted/movie", { movieId });
+};
+
 export const WriteComment = (comment, user) => {
   return SendPostRequest("/comments/update", { user, comment });
 };
@@ -119,4 +123,87 @@ export const GetRecommendations = (limit) => {
 
 export const SearchReviews = (query) => {
   return SendPostRequest("/reviews/search", { query });
+};
+
+export const UpdateOrCreateSettings = (settings) => {
+  return SendPostRequest("/settings/updateOrCreate", settings);
+};
+
+export const GetSettings = () => {
+  return SendGetRequest("/settings/get");
+};
+
+export const GetUsers = () => {
+  return SendGetRequest("/admin/users/get");
+};
+
+export const EditUserForAdmin = (update) => {
+  return SendPostRequest("/admin/users/edit", update);
+};
+
+export const CreateUserForAdmin = (user) => {
+  return SendPostRequest("/admin/users/create", user);
+};
+
+export const GetReviews = () => {
+  return SendGetRequest("/admin/reviews/get");
+};
+
+export const GetComments = () => {
+  return SendGetRequest("/admin/comments/get");
+};
+
+export const EditReviewForAdmin = (review, user) => {
+  return SendPostRequest("/admin/reviews/edit", { review, user });
+};
+export const EditCommentForAdmin = (comment, user) => {
+  return SendPostRequest("/admin/comments/edit", { comment, user });
+};
+
+export const DeleteMultipleReviews = (ids) => {
+  return SendPostRequest("/admin/reviews/delete", ids);
+};
+
+export const DeleteMultipleComments = (ids) => {
+  return SendPostRequest("/admin/comments/delete", ids);
+};
+
+export const EditMultipleUsers = (ids, update) => {
+  return SendPostRequest("/admin/users/editMultiple", { ids, update });
+};
+
+export const GetAnnouncements = () => {
+  return SendGetRequest("/admin/announcements/get");
+};
+
+export const CreateAnnouncement = (announcement) => {
+  return SendPostRequest("/admin/announcements/create", announcement);
+};
+
+export const DeleteMultipleAnnouncements = (ids) => {
+  return SendPostRequest("/admin/announcements/delete", ids);
+};
+
+export const EditAnnouncement = (announcement) => {
+  return SendPostRequest("/admin/announcements/edit", announcement);
+};
+
+export const GetActiveAnnouncements = () => {
+  return SendGetRequest("/announcements/getActive");
+};
+
+export const GetPromotions = () => {
+  return SendGetRequest("/admin/promotions/get");
+};
+
+export const CreatePromotions = (promotions) => {
+  return SendPostRequest("/admin/promotions/create", promotions);
+};
+
+export const EditPromotion = (promotion) => {
+  return SendPostRequest("/admin/promotions/edit", promotion);
+};
+
+export const DeleteMultiplePromotions = (ids, update) => {
+  return SendPostRequest("/admin/promotions/delete", { ids, update });
 };

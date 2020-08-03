@@ -4,8 +4,16 @@ import ReactionButton from "./ReactionButton";
 import { WriteReview } from "../../server/DatabaseApi";
 import store from "../../store/store";
 import Loader from "../utility/Loader";
+import { connect } from "react-redux";
 
-const AddReview = ({ open, onClose, movie, user, refreshReviews }) => {
+const AddReview = ({
+  open,
+  onClose,
+  movie,
+  user,
+  refreshReviews,
+  settings,
+}) => {
   const [newReview, setNewReview] = useState({
     review: "",
     rating: "",
@@ -15,7 +23,7 @@ const AddReview = ({ open, onClose, movie, user, refreshReviews }) => {
   return (
     <Modal open={open} onClose={onClose}>
       <div className="col-xl-42 p-4 bg-over-root-lighter rounded mx-4">
-        <div className="row no-gutters h2 mb-4">
+        <div className="row no-gutters h5 mb-4">
           Add Review - {movie.title} ({movie.release_date.substring(0, 4)})
         </div>
         <div className="row no-gutters">
@@ -35,14 +43,16 @@ const AddReview = ({ open, onClose, movie, user, refreshReviews }) => {
               </div>
               <div
                 className={`d-flex align-items-end col-auto ${
-                  newReview.review.split(" ").length <= 499
+                  newReview.review.split(" ").length <=
+                  settings.no_review_words - 1
                     ? "text-muted"
                     : "text-danger"
                 }`}
               >
                 {newReview.review
-                  ? 500 - newReview.review.split(" ").length
-                  : 500}{" "}
+                  ? settings.no_review_words -
+                    newReview.review.split(" ").length
+                  : settings.no_review_words}{" "}
                 words left
               </div>
             </div>
@@ -51,7 +61,7 @@ const AddReview = ({ open, onClose, movie, user, refreshReviews }) => {
                 onChange={(e) => {
                   e.persist();
                   let text = e.target.value;
-                  if (text.split(" ").length <= 500) {
+                  if (text.split(" ").length <= settings.no_review_words) {
                     setNewReview((prev) =>
                       Object.assign({}, prev, { review: text })
                     );
@@ -111,14 +121,16 @@ const AddReview = ({ open, onClose, movie, user, refreshReviews }) => {
               </div>
               <div
                 className={`d-none d-md-block col-auto ${
-                  newReview.review.split(" ").length <= 499
+                  newReview.review.split(" ").length <=
+                  settings.no_review_words - 1
                     ? "text-muted"
                     : "text-danger"
                 }`}
               >
                 {newReview.review
-                  ? 500 - newReview.review.split(" ").length
-                  : 500}{" "}
+                  ? settings.no_review_words -
+                    newReview.review.split(" ").length
+                  : settings.no_review_words}{" "}
                 words left
               </div>
             </div>
@@ -189,4 +201,11 @@ const AddReview = ({ open, onClose, movie, user, refreshReviews }) => {
   );
 };
 
-export default AddReview;
+function mapp(state, ownProps) {
+  return {
+    settings: state.settings,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(AddReview);

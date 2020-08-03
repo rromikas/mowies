@@ -1921,7 +1921,7 @@ export const PublicUsers = {
 
 export const Ratings = [
   {
-    name: "Excellent",
+    name: "excellent_rate",
     element: (
       <div className="text-center py-3" style={{ lineHeight: "100%" }}>
         <Emoji emoji="fire" set="facebook" size={24} />
@@ -1929,7 +1929,7 @@ export const Ratings = [
     ),
   },
   {
-    name: "Good",
+    name: "good_rate",
     element: (
       <div className="text-center py-3" style={{ lineHeight: "100%" }}>
         <Emoji emoji="heart" set="facebook" size={24} />
@@ -1937,7 +1937,7 @@ export const Ratings = [
     ),
   },
   {
-    name: "OK",
+    name: "ok_rate",
     element: (
       <div className="text-center py-3" style={{ lineHeight: "100%" }}>
         <Emoji emoji="heavy_division_sign" set="facebook" size={24} />
@@ -1945,7 +1945,7 @@ export const Ratings = [
     ),
   },
   {
-    name: "Bad",
+    name: "bad_rate",
     element: (
       <div className="text-center py-3" style={{ lineHeight: "100%" }}>
         <Emoji emoji="shit" set="facebook" size={24} />

@@ -6,37 +6,45 @@ import { BsCalendar, BsClock } from "react-icons/bs";
 import TimePicker from "react-time-picker";
 import date from "date-and-time";
 import { Ratings } from "../../Data";
+import store from "../../store/store";
+import Loader from "../utility/Loader";
+import { EditPromotion as Edit } from "../../server/DatabaseApi";
 
-const EditPromotion = ({ currentPromotion }) => {
+const EditPromotion = ({ currentPromotion, getBack }) => {
   const [promotion, setPromotion] = useState({
     review: "",
     comment: "",
     review_id: 1,
     comment_id: 1,
-    type: "review",
-    status: "Sent",
-    active_status: "Active",
+    content_type: "",
+    publish_status: "",
+    active_status: "",
     start_date: Date.now(),
     end_date: Date.now(),
-    movie_title: "Venum",
+    movie_title: "",
+    movie_id: "",
+    content: {},
     title: "",
   });
+
+  const [problem, setProblem] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setPromotion((prev) => Object.assign({}, prev, currentPromotion));
   }, [currentPromotion]);
 
   const types = ["Review", "Comment"];
-  const statuses = ["Published", "Drafted", "Deleted"];
+  const publishStatuses = ["Published", "Drafted", "Deleted"];
 
   return (
-    <div className="row no-gutters px-md-5 px-4 pb-4">
+    <div className="row no-gutters p-md-5 p-4">
       <div className="col-60 py-3 border-bottom mb-4">
-        <div className="row no-gutters h3">Announcements</div>
-        <div className="row no-gutters">Edit existing announcement</div>
+        <div className="row no-gutters h3">Edit Promotions</div>
+        <div className="row no-gutters">Edit existing promotion</div>
       </div>
       <div className="col-60">
-        <div className="row no-gutters mb-4">
+        {/* <div className="row no-gutters mb-4">
           <div className="col-60 mb-1">Type</div>
           <div className="col-xl-40 col-md-50 col-60">
             <div className="row no-gutters">
@@ -44,36 +52,62 @@ const EditPromotion = ({ currentPromotion }) => {
                 popoverClass="col-sm-30 col-60 pr-sm-3"
                 onSelect={(index) =>
                   setPromotion((prev) =>
-                    Object.assign({}, prev, { type: types[index] })
+                    Object.assign({}, prev, { content_type: types[index] })
                   )
                 }
                 className="w-100 input-light px-3"
                 items={types}
-                btnName={promotion.type ? promotion.type : "Select"}
+                btnName={
+                  promotion.content_type ? promotion.content_type : "Select"
+                }
               ></Select>
+            </div>
+          </div>
+        </div> */}
+        <div className="row no-gutters mb-4">
+          <div className="col-xl-40 col-md-50 col-60">
+            <div className="row no-gutters mb-1">Promotion Title</div>
+            <div className="row no-gutters">
+              <input
+                type="text"
+                className="input-light w-100 px-3"
+                value={promotion.title}
+                onChange={(e) => {
+                  e.persist();
+                  setPromotion((prev) =>
+                    Object.assign({}, prev, { title: e.target.value })
+                  );
+                }}
+              ></input>
             </div>
           </div>
         </div>
         <div className="row no-gutters mb-4">
-          <div className="col-60 mb-1">Description</div>
+          <div className="col-60 mb-1">{promotion.content_type}</div>
           <div className="col-60">
             <textarea
               value={
-                promotion.type.toLowerCase() === "review"
-                  ? promotion.review
-                  : promotion.comment
+                promotion.content
+                  ? promotion.content_type === "Review"
+                    ? promotion.content.review
+                    : promotion.content.comment
+                  : ""
               }
               onChange={(e) => {
                 e.persist();
                 let text = e.target.value;
                 if (text.split(" ").length <= 500) {
-                  if (promotion.type.toLowerCase() === "review") {
+                  if (promotion.content_type === "Review") {
+                    let newContent = { ...promotion.content };
+                    newContent.review = text;
                     setPromotion((prev) =>
-                      Object.assign({}, prev, { review: text })
+                      Object.assign({}, prev, { content: newContent })
                     );
                   } else {
+                    let newContent = { ...promotion.content };
+                    newContent.comment = text;
                     setPromotion((prev) =>
-                      Object.assign({}, prev, { comment: text })
+                      Object.assign({}, prev, { content: newContent })
                     );
                   }
                 }
@@ -85,26 +119,30 @@ const EditPromotion = ({ currentPromotion }) => {
 
           <div
             className={`col-60 ${
-              promotion.type.toLowerCase() === "review"
-                ? promotion.review.split(" ").length <= 499
+              promotion.content_type
+                ? promotion.content_type === "Review"
+                  ? promotion.content.review.split(" ").length <= 499
+                    ? "text-muted"
+                    : "text-danger"
+                  : promotion.content.comment.split(" ").length <= 499
                   ? "text-muted"
                   : "text-danger"
-                : promotion.comment.split(" ").length <= 499
-                ? "text-muted"
-                : "text-danger"
+                : ""
             }`}
           >
-            {promotion.type.toLowerCase() === "review"
-              ? promotion.review
-                ? 500 - promotion.review.split(" ").length
+            {promotion.content.review
+              ? promotion.content.review.length
+                ? 500 - promotion.content.review.split(" ").length
                 : 500
-              : promotion.comment
-              ? 500 - promotion.comment.split(" ").length
-              : 500}{" "}
+              : promotion.content.comment
+              ? promotion.content.comment.length
+                ? 500 - promotion.content.comment.split(" ").length
+                : 500
+              : ""}{" "}
             words left
           </div>
         </div>
-        {promotion.type.toLowerCase() === "review" && (
+        {promotion.content_type === "Review" && (
           <div className="col-xl-40 col-md-50 col-60 mb-4 px-0">
             <div className="row no-gutters">
               <div className="col-60">Rating</div>
@@ -114,13 +152,16 @@ const EditPromotion = ({ currentPromotion }) => {
                 popoverClass="col-sm-30 col-60 pr-sm-3"
                 className="input-light px-3"
                 btnName={
-                  promotion.rating
-                    ? Ratings.find((x) => x.name === promotion.rating).element
+                  promotion.content.rating
+                    ? Ratings.find((x) => x.name === promotion.content.rating)
+                        .element
                     : "Select"
                 }
                 onSelect={(index) => {
+                  let content = { ...promotion.content };
+                  content.rating = Ratings[index].name;
                   setPromotion((prev) =>
-                    Object.assign({}, prev, { rating: Ratings[index].name })
+                    Object.assign({}, prev, { content: content })
                   );
                 }}
                 items={Ratings.map((x) => x.element)}
@@ -252,10 +293,7 @@ const EditPromotion = ({ currentPromotion }) => {
                           );
                         }
                       }}
-                      value={date.format(
-                        new Date(promotion.start_date),
-                        "hh:mm"
-                      )}
+                      value={new Date(promotion.start_date)}
                     ></TimePicker>
                   </div>
                 </div>
@@ -290,7 +328,7 @@ const EditPromotion = ({ currentPromotion }) => {
                           );
                         }
                       }}
-                      value={date.format(new Date(promotion.end_date), "hh:mm")}
+                      value={new Date(promotion.end_date)}
                     ></TimePicker>
                   </div>
                 </div>
@@ -306,23 +344,75 @@ const EditPromotion = ({ currentPromotion }) => {
                 popoverClass="col-sm-30 col-60 pr-sm-3"
                 onSelect={(index) =>
                   setPromotion((prev) =>
-                    Object.assign({}, prev, { status: statuses[index] })
+                    Object.assign({}, prev, { status: publishStatuses[index] })
                   )
                 }
                 className="w-100 input-light px-3"
-                items={statuses}
-                btnName={promotion.status ? promotion.status : "Select"}
+                items={publishStatuses}
+                btnName={
+                  promotion.publish_status ? promotion.publish_status : "Select"
+                }
               ></Select>
             </div>
           </div>
         </div>
       </div>
-      <div className="col-60 mt-5">
+      <div className="col-60 mt-2">
+        <div
+          style={{ height: "50px", opacity: problem ? 1 : 0 }}
+          className="row no-gutters align-items-center text-danger mb-2"
+        >
+          {problem}
+        </div>
         <div className="row no-gutters">
-          <div className="btn-custom btn-custom-secondary btn-small mr-sm-3 mb-3 col-60 col-sm-auto">
+          <div
+            className="btn-custom btn-custom-secondary btn-small mr-sm-3 mb-3 col-60 col-sm-auto"
+            onClick={getBack}
+          >
             Cancel
           </div>
-          <div className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto">
+          <div
+            className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto"
+            onClick={async () => {
+              setLoading(true);
+              let res = await Edit(promotion);
+              setLoading(false);
+              if (res.error) {
+                store.dispatch({
+                  type: "SET_NOTIFICATION",
+                  notification: {
+                    title: "Error",
+                    message: res.error,
+                    type: "failure",
+                  },
+                });
+              } else {
+                store.dispatch({
+                  type: "SET_NOTIFICATION",
+                  notification: {
+                    title: "Promotion updated",
+                    message: "Promotion was successfully updated",
+                    type: "success",
+                  },
+                });
+                getBack();
+              }
+            }}
+          >
+            <Loader
+              color={"white"}
+              style={{
+                position: "absolute",
+                left: "10px",
+                top: 0,
+                bottom: 0,
+                margin: "auto",
+                display: "flex",
+                alignItems: "center",
+              }}
+              loading={loading}
+              size={20}
+            ></Loader>
             Save
           </div>
         </div>

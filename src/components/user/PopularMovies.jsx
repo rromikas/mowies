@@ -14,24 +14,40 @@ const genresPairs = [
   { name: "History & Documentary", genresIds: [36, 99] },
 ];
 
-const PopularMovies = () => {
+const PopularMovies = ({ apiKey }) => {
   const [genresIds, setGenresIds] = useState([]);
   const [genreName, setGenreName] = useState("All");
   const [movies, setMovies] = useState([]);
   useEffect(() => {
     async function getData() {
-      let data = await GetPopularMoviesByGenre(genresIds);
-      setMovies(data.results.slice(0, 5));
+      if (apiKey) {
+        let data = await GetPopularMoviesByGenre(genresIds, apiKey);
+        setMovies(data.results.slice(0, 5));
+      }
     }
     getData();
-  }, [genresIds]);
+  }, [genresIds, apiKey]);
 
   return (
     <div className="row no-gutters justify-content-center text-white">
       <div className="col-60 py-5 px-md-5 px-4 content-container">
-        <div className="row no-gutters text-title-xl">Popular Movies</div>
+        <div className="row no-gutters h5">
+          <div
+            className="col-auto"
+            // style={{
+            //   padding: "10px 40px 10px 10px",
+            //   background: "linear-gradient(to left, #ff0037, transparent)",
+            //   borderRadius: "0 4px 4px 0",
+            //   marginBottom: "11px",
+            // }}
+          >
+            Popular Movies
+          </div>
+        </div>
+        <div className="row no-gutters text-light">
+          Most watched movies by days
+        </div>
         <div className="row no-gutters justify-content-between text-light align-items-center mb-4">
-          <div className="col-auto pr-5">Most watched movies by days</div>
           <div className="col-md col-60">
             <SimpleBar
               style={{

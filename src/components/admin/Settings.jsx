@@ -1,17 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { UpdateOrCreateSettings } from "../../server/DatabaseApi";
+import { connect } from "react-redux";
+import store from "../../store/store";
 
-const Settings = () => {
-  const [settings, setSettings] = useState({
-    popular_movies_api: "",
-    movie_data_api: "",
-    latest_movies_api: "",
-    no_popular_reviews: 5,
-    no_popular_movies: 5,
-    no_allowed_reviews: 5,
-    no_comment_characters: 400,
-    no_title_characters: 80,
-    bg_image_refresh_time: { days: 0, hours: 15, minutes: 0 },
-  });
+const Settings = ({ settings }) => {
   return (
     <div className="row no-gutters p-md-5 p-4">
       <div className="col-60">
@@ -24,20 +16,19 @@ const Settings = () => {
             <div className="row no-gutters">
               <div className="col-60 mb-4">
                 <div className="row no-gutters mb-1">
-                  Configure API for popular movies
+                  Configure API for popular movies (main for now)
                 </div>
                 <div className="row no-gutters">
                   <input
                     type="text"
                     placeholder="Enter API key"
-                    value={settings.popular_movies_api}
+                    value={settings.movies_api_key}
                     onChange={(e) => {
                       e.persist();
-                      setSettings((prev) =>
-                        Object.assign({}, prev, {
-                          popular_movies_api: e.target.value,
-                        })
-                      );
+                      store.dispatch({
+                        type: "UPDATE_SETTINGS",
+                        settings: { movies_api_key: e.target.value },
+                      });
                     }}
                     className="px-3 input-light w-100"
                   ></input>
@@ -52,11 +43,10 @@ const Settings = () => {
                     value={settings.movie_data_api}
                     onChange={(e) => {
                       e.persist();
-                      setSettings((prev) =>
-                        Object.assign({}, prev, {
-                          movie_data_api: e.target.value,
-                        })
-                      );
+                      store.dispatch({
+                        type: "UPDATE_SETTINGS",
+                        settings: { movie_data_api: e.target.value },
+                      });
                     }}
                     type="text"
                     placeholder="Enter API key"
@@ -75,11 +65,10 @@ const Settings = () => {
                     value={settings.latest_movies_api}
                     onChange={(e) => {
                       e.persist();
-                      setSettings((prev) =>
-                        Object.assign({}, prev, {
-                          latest_movies_api: e.target.value,
-                        })
-                      );
+                      store.dispatch({
+                        type: "UPDATE_SETTINGS",
+                        settings: { latest_movies_api: e.target.value },
+                      });
                     }}
                     className="px-3 input-light w-100"
                   ></input>
@@ -96,11 +85,10 @@ const Settings = () => {
                         value={settings.no_popular_reviews}
                         onChange={(e) => {
                           e.persist();
-                          setSettings((prev) =>
-                            Object.assign({}, prev, {
-                              no_popular_reviews: e.target.value,
-                            })
-                          );
+                          store.dispatch({
+                            type: "UPDATE_SETTINGS",
+                            settings: { no_popular_reviews: e.target.value },
+                          });
                         }}
                         min={0}
                         type="number"
@@ -121,11 +109,10 @@ const Settings = () => {
                         value={settings.no_popular_movies}
                         onChange={(e) => {
                           e.persist();
-                          setSettings((prev) =>
-                            Object.assign({}, prev, {
-                              no_popular_movies: e.target.value,
-                            })
-                          );
+                          store.dispatch({
+                            type: "UPDATE_SETTINGS",
+                            settings: { no_popular_movies: e.target.value },
+                          });
                         }}
                         min={0}
                         type="number"
@@ -146,11 +133,10 @@ const Settings = () => {
                         value={settings.no_allowed_reviews}
                         onChange={(e) => {
                           e.persist();
-                          setSettings((prev) =>
-                            Object.assign({}, prev, {
-                              no_allowed_reviews: e.target.value,
-                            })
-                          );
+                          store.dispatch({
+                            type: "UPDATE_SETTINGS",
+                            settings: { no_allowed_reviews: e.target.value },
+                          });
                         }}
                         min={0}
                         type="number"
@@ -171,11 +157,10 @@ const Settings = () => {
                         value={settings.no_comment_characters}
                         onChange={(e) => {
                           e.persist();
-                          setSettings((prev) =>
-                            Object.assign({}, prev, {
-                              no_comment_characters: e.target.value,
-                            })
-                          );
+                          store.dispatch({
+                            type: "UPDATE_SETTINGS",
+                            settings: { no_comment_characters: e.target.value },
+                          });
                         }}
                         min={0}
                         type="number"
@@ -189,18 +174,17 @@ const Settings = () => {
                 <div className="row no-gutters">
                   <div className="col-lg-30 col-60 mb-4">
                     <div className="row no-gutters mb-1">
-                      Number of characters allowed in title of discussion
+                      Number of words allowed in review
                     </div>
                     <div className="row no-gutters">
                       <input
-                        value={settings.no_title_characters}
+                        value={settings.no_review_words}
                         onChange={(e) => {
                           e.persist();
-                          setSettings((prev) =>
-                            Object.assign({}, prev, {
-                              no_title_characters: e.target.value,
-                            })
-                          );
+                          store.dispatch({
+                            type: "UPDATE_SETTINGS",
+                            settings: { no_review_words: e.target.value },
+                          });
                         }}
                         min={0}
                         type="number"
@@ -216,19 +200,18 @@ const Settings = () => {
                 </div>
                 <div className="row no-gutters">
                   <div className="col-20 pr-3">
+                    <div className="row no-gutters text-muted">days</div>
                     <div className="row no-gutters">
                       <input
-                        value={settings.bg_image_refresh_time.days}
+                        value={settings.bg_image_refresh_time_days}
                         onChange={(e) => {
                           e.persist();
-                          let time = { ...settings.bg_image_refresh_time };
-                          setSettings((prev) =>
-                            Object.assign({}, prev, {
-                              bg_image_refresh_time: Object.assign({}, time, {
-                                days: e.target.value,
-                              }),
-                            })
-                          );
+                          store.dispatch({
+                            type: "UPDATE_SETTINGS",
+                            settings: {
+                              bg_image_refresh_time_days: e.target.value,
+                            },
+                          });
                         }}
                         min={0}
                         type="number"
@@ -237,19 +220,18 @@ const Settings = () => {
                     </div>
                   </div>
                   <div className="col-20 pr-3">
+                    <div className="row no-gutters text-muted">hours</div>
                     <div className="row no-gutters">
                       <input
-                        value={settings.bg_image_refresh_time.hours}
+                        value={settings.bg_image_refresh_time_hours}
                         onChange={(e) => {
                           e.persist();
-                          let time = { ...settings.bg_image_refresh_time };
-                          setSettings((prev) =>
-                            Object.assign({}, prev, {
-                              bg_image_refresh_time: Object.assign({}, time, {
-                                hours: e.target.value,
-                              }),
-                            })
-                          );
+                          store.dispatch({
+                            type: "UPDATE_SETTINGS",
+                            settings: {
+                              bg_image_refresh_time_hours: e.target.value,
+                            },
+                          });
                         }}
                         min={0}
                         type="number"
@@ -258,19 +240,18 @@ const Settings = () => {
                     </div>
                   </div>
                   <div className="col-20">
+                    <div className="row no-gutters text-muted">minutes</div>
                     <div className="row no-gutters">
                       <input
-                        value={settings.bg_image_refresh_time.minutes}
+                        value={settings.bg_image_refresh_time_minutes}
                         onChange={(e) => {
                           e.persist();
-                          let time = { ...settings.bg_image_refresh_time };
-                          setSettings((prev) =>
-                            Object.assign({}, prev, {
-                              bg_image_refresh_time: Object.assign({}, time, {
-                                minutes: e.target.value,
-                              }),
-                            })
-                          );
+                          store.dispatch({
+                            type: "UPDATE_SETTINGS",
+                            settings: {
+                              bg_image_refresh_time_minutes: e.target.value,
+                            },
+                          });
                         }}
                         min={0}
                         type="number"
@@ -285,7 +266,31 @@ const Settings = () => {
                   <div className="btn-custom btn-custom-secondary btn-small mr-sm-3 mb-3 col-60 col-sm-auto">
                     Cancel
                   </div>
-                  <div className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto">
+                  <div
+                    className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto"
+                    onClick={async () => {
+                      let res = await UpdateOrCreateSettings(settings);
+                      if (res.error) {
+                        store.dispatch({
+                          type: "SET_NOTIFICATION",
+                          notification: {
+                            title: "Error",
+                            message: "Settings were not updated",
+                            type: "failure",
+                          },
+                        });
+                      } else {
+                        store.dispatch({
+                          type: "SET_NOTIFICATION",
+                          notification: {
+                            title: "Settings updated!",
+                            message: "Settings were successfully updated",
+                            type: "success",
+                          },
+                        });
+                      }
+                    }}
+                  >
                     Save
                   </div>
                 </div>
@@ -298,4 +303,11 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+function mapp(state, ownProps) {
+  return {
+    settings: state.settings,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(Settings);

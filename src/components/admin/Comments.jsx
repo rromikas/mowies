@@ -8,38 +8,33 @@ import { BsSearch } from "react-icons/bs";
 import date from "date-and-time";
 import Popover from "../utility/Popover";
 import { Swipeable } from "react-swipeable";
+import { GetComments, DeleteMultipleComments } from "../../server/DatabaseApi";
+import { connect } from "react-redux";
+import store from "../../store/store";
 
-const Comments = ({ setEditCommentSection, setEditComment }) => {
+const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
   const [action, setAction] = useState("");
   const [role, setRole] = useState("");
   const [searchKey, setSearchKey] = useState("User");
   const [lastVisibleColumn, setLastVisibleColumn] = useState(0);
   const [page, setPage] = useState(1);
   const [roleFilter, setRoleFilter] = useState("");
+  const [mainFilter, setMainFilter] = useState({ key: "", value: "" });
   const [search, setSearch] = useState("");
-
-  const publicUsers = {
-    1: {
-      email: "sabrina@gmail.com",
-      role: "admin",
-      photo:
-        "https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-      display_name: "Sabrina",
-    },
-    2: {
-      email: "paula@gmail.com",
-      role: "user",
-      photo:
-        "https://images.pexels.com/photos/3779853/pexels-photo-3779853.png?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      display_name: "Paula",
-    },
-  };
 
   const [comments, setComments] = useState([]);
   const [filteredComments, setFilteredComments] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+
   useEffect(() => {
-    setComments(data.map((x) => Object.assign({}, x, { selected: false })));
-  }, []);
+    async function getData() {
+      let res = await GetComments();
+      if (!res.error) {
+        setComments(res.map((x) => Object.assign({}, x, { selected: false })));
+      }
+    }
+    getData();
+  }, [refresh]);
 
   useEffect(() => {
     let arr = [...comments];
@@ -61,36 +56,107 @@ const Comments = ({ setEditCommentSection, setEditComment }) => {
       }
 
       if (roleFilter) {
-        arr = arr.filter(
-          (x) => publicUsers[x.author].role === roleFilter.toLowerCase()
-        );
+        arr = arr.filter((x) => publicUsers[x.author].role === roleFilter);
+      }
+
+      if (mainFilter.key && mainFilter.value) {
+        arr = arr.filter((x) => x[mainFilter.key] === mainFilter.value);
       }
 
       setFilteredComments(arr);
     }
-  }, [search, roleFilter, comments]);
+  }, [search, roleFilter, comments, mainFilter]);
 
   //boundaries for slicing comments array. (pagination)
   let boundaries = [(page - 1) * 5, (page - 1) * 5 + 5];
   if (boundaries[1] >= filteredComments.length) {
     boundaries[1] = boundaries[1] - (boundaries[1] - filteredComments.length);
   }
+
+  const handleApply = async (all = false) => {
+    if (all) {
+      setRoleFilter(role);
+    }
+    let selected = filteredComments.filter((x) => x.selected);
+    if (selected.length) {
+      if (action === "Edit") {
+        setEditComment(selected[0]);
+        setEditCommentSection();
+      } else {
+        //delete review
+        let res = await DeleteMultipleComments(selected.map((x) => x._id));
+        if (res.error) {
+          store.dispatch({
+            type: "SET_NOTIFICATION",
+            notification: {
+              title: "Error",
+              message: res.error,
+              type: "failure",
+            },
+          });
+        } else {
+          store.dispatch({
+            type: "SET_NOTIFICATION",
+            notification: {
+              title: "Comments were deleted",
+              message: "Comments were successfully deleted",
+              type: "success",
+            },
+          });
+          setRefresh(!refresh);
+        }
+      }
+    }
+  };
+
   return (
     <div className="row no-gutters">
       <div className="col-60 py-5">
         <div className="row no-gutters h6 mb-3">
-          <div className="col-auto">All ({comments.length})</div>
+          <div
+            className={`col-auto cursor-pointer ${
+              !mainFilter.key && !roleFilter ? "text-primary" : "text-dark"
+            }`}
+            onClick={() => {
+              setMainFilter({ key: "", value: "" });
+              setRoleFilter("");
+            }}
+          >
+            All ({comments.length})
+          </div>
           <div className="col-auto px-2 text-muted">|</div>
-          <div className="col-auto">
-            By Administrators (
-            {
-              comments.filter((x) => publicUsers[x.author].role === "admin")
-                .length
+          <div
+            onClick={() =>
+              setMainFilter((prev) =>
+                Object.assign({}, prev, { key: "role", value: "Admin" })
+              )
             }
+            className={`cursor-pointer col-auto ${
+              mainFilter.key === "role" && mainFilter.value === "Admin"
+                ? "text-primary"
+                : "text-dark"
+            }`}
+          >
+            By Administrators (
+            {Object.values(publicUsers).length
+              ? comments.filter((x) => publicUsers[x.author].role === "admin")
+                  .length
+              : ""}
             )
           </div>
           <div className="col-auto px-2 text-muted">|</div>
-          <div className="col-auto">
+          <div
+            onClick={() =>
+              setMainFilter((prev) =>
+                Object.assign({}, prev, { key: "deleted", value: true })
+              )
+            }
+            className={`cursor-pointer col-auto ${
+              mainFilter.key === "deleted" && mainFilter.value === true
+                ? "text-primary"
+                : "text-dark"
+            }`}
+          >
             Deleted ({comments.filter((x) => x.deleted).length})
           </div>
         </div>
@@ -110,17 +176,7 @@ const Comments = ({ setEditCommentSection, setEditComment }) => {
               </div>
 
               <div
-                onClick={() => {
-                  if (action === "Edit") {
-                    let selected = filteredComments.filter((x) => x.selected);
-                    if (selected.length) {
-                      setEditComment(selected[0]);
-                      setEditCommentSection();
-                    }
-                  } else {
-                    //delete review
-                  }
-                }}
+                onClick={handleApply}
                 className="d-none d-xl-block btn-custom btn-custom-primary col-auto mr-3 btn-xsmall mb-3"
               >
                 Apply
@@ -144,19 +200,7 @@ const Comments = ({ setEditCommentSection, setEditComment }) => {
                 Apply
               </div>
               <div
-                onClick={() => {
-                  if (action === "Edit") {
-                    let selected = filteredComments.filter((x) => x.selected);
-                    if (selected.length) {
-                      setEditComment(selected[0]);
-                      setEditCommentSection();
-                    }
-                  } else if (action === "Delete") {
-                    //delete review
-                  } else {
-                    setRoleFilter(role);
-                  }
-                }}
+                onClick={() => handleApply(true)}
                 className="d-block d-xl-none btn-custom btn-custom-primary col-60 col-sm-auto mb-3 mr-3 btn-xsmall"
               >
                 Apply All
@@ -506,17 +550,7 @@ const Comments = ({ setEditCommentSection, setEditComment }) => {
               </div>
 
               <div
-                onClick={() => {
-                  if (action === "Edit") {
-                    let selected = filteredComments.filter((x) => x.selected);
-                    if (selected.length) {
-                      setEditComment(selected[0]);
-                      setEditCommentSection();
-                    }
-                  } else {
-                    //delete review
-                  }
-                }}
+                onClick={handleApply}
                 className="btn-custom btn-custom-primary col60 col-sm-auto mr-sm-3 btn-xsmall mb-3"
               >
                 Apply
@@ -536,4 +570,11 @@ const Comments = ({ setEditCommentSection, setEditComment }) => {
   );
 };
 
-export default Comments;
+function mapp(state, ownProps) {
+  return {
+    publicUsers: state.publicUsers,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(Comments);

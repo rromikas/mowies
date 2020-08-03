@@ -3,6 +3,7 @@ import Modal from "../utility/Modal";
 import { WriteComment } from "../../server/DatabaseApi";
 import Loader from "../utility/Loader";
 import store from "../../store/store";
+import { connect } from "react-redux";
 
 const ReplyToReview = ({
   open,
@@ -15,6 +16,7 @@ const ReplyToReview = ({
   setReviewIdOfVisibleComments,
   refreshComments,
   refreshReviews,
+  settings,
 }) => {
   const [newComment, setNewComment] = useState({ comment: "" });
   const [problem, setProblem] = useState("");
@@ -23,7 +25,7 @@ const ReplyToReview = ({
   return (
     <Modal open={open} onClose={onClose}>
       <div className="col-xl-42 p-4 bg-over-root-lighter rounded mx-4">
-        <div className="row no-gutters h2 mb-4">
+        <div className="row no-gutters h5 mb-4">
           Reply to {reviewAuthor.display_name}
         </div>
         <div className="row no-gutters">
@@ -43,15 +45,16 @@ const ReplyToReview = ({
               </div>
               <div
                 className={`col-auto d-flex align-items-end ${
-                  newComment.comment.split(" ").length <= 499
+                  newComment.comment.length <=
+                  settings.no_comment_characters - 1
                     ? "text-muted"
                     : "text-danger"
                 }`}
               >
                 {newComment.comment
-                  ? 500 - newComment.comment.split(" ").length
-                  : 500}{" "}
-                words left
+                  ? settings.no_comment_characters - newComment.comment.length
+                  : settings.no_comment_characters}{" "}
+                characters left
               </div>
             </div>
             <div className="row no-gutters mb-4" style={{ height: "150px" }}>
@@ -59,7 +62,7 @@ const ReplyToReview = ({
                 onChange={(e) => {
                   e.persist();
                   let text = e.target.value;
-                  if (text.split(" ").length <= 500) {
+                  if (text.length <= settings.no_comment_characters) {
                     setNewComment((prev) =>
                       Object.assign({}, prev, { comment: text })
                     );
@@ -81,15 +84,16 @@ const ReplyToReview = ({
             <div className="row no-gutters justify-content-md-between justify-content-center">
               <div
                 className={`col-auto d-none d-md-block ${
-                  newComment.comment.split(" ").length <= 499
+                  newComment.comment.length <=
+                  settings.no_comment_characters - 1
                     ? "text-muted"
                     : "text-danger"
                 }`}
               >
                 {newComment.comment
-                  ? 500 - newComment.comment.split(" ").length
-                  : 500}{" "}
-                words left
+                  ? settings.no_comment_characters - newComment.comment.length
+                  : settings.no_comment_characters}{" "}
+                characters left
               </div>
               <div
                 className="btn-custom btn-custom-primary btn-small"
@@ -176,4 +180,11 @@ const ReplyToReview = ({
   );
 };
 
-export default ReplyToReview;
+function mapp(state, ownProps) {
+  return {
+    settings: state.settings,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(ReplyToReview);

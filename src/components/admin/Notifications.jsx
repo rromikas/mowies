@@ -91,8 +91,8 @@ const Notifications = ({
           <div className="col-60 py-5">
             <div className="row no-gutters h6 mb-3">
               <div className="col-auto">All ({announcements.length})</div>
-              {statuses.map((x) => (
-                <React.Fragment>
+              {statuses.map((x, i) => (
+                <React.Fragment key={`status-${i}`}>
                   <div className="col-auto px-2 text-muted">|</div>
                   <div className="col-auto">
                     {x} ({announcements.filter((y) => y.status === x).length})

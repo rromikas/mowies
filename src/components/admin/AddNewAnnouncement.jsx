@@ -5,8 +5,12 @@ import "react-day-picker/lib/style.css";
 import { BsCalendar, BsClock } from "react-icons/bs";
 import TimePicker from "react-time-picker";
 import date from "date-and-time";
+import { CreateAnnouncement, GetAnnouncements } from "../../server/DatabaseApi";
+import store from "../../store/store";
+import { connect } from "react-redux";
+import Loader from "../utility/Loader";
 
-const AddNewAnnouncement = () => {
+const AddNewAnnouncement = ({ user, getBack }) => {
   const [announcement, setAnnouncement] = useState({
     description: "",
     type: "",
@@ -15,8 +19,24 @@ const AddNewAnnouncement = () => {
     status: "",
   });
 
+  const [problem, setProblem] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const types = ["Information", "Warning", "Error"];
   const statuses = ["Published", "Drafted", "Deleted"];
+
+  const validations = [
+    { valid: announcement.description, error: "Description is required" },
+    { valid: announcement.type, error: "Type is required" },
+    {
+      valid: announcement.start_date < announcement.end_date,
+      error: "Start date must be before end date",
+    },
+    {
+      valid: announcement.start_date !== announcement.end_date,
+      error: "Announcement duration is 0",
+    },
+  ];
 
   return (
     <div className="row no-gutters p-md-5 p-4">
@@ -197,10 +217,7 @@ const AddNewAnnouncement = () => {
                           );
                         }
                       }}
-                      value={date.format(
-                        new Date(announcement.start_date),
-                        "hh:mm"
-                      )}
+                      value={new Date(announcement.start_date)}
                     ></TimePicker>
                   </div>
                 </div>
@@ -235,10 +252,7 @@ const AddNewAnnouncement = () => {
                           );
                         }
                       }}
-                      value={date.format(
-                        new Date(announcement.end_date),
-                        "hh:mm"
-                      )}
+                      value={new Date(announcement.end_date)}
                     ></TimePicker>
                   </div>
                 </div>
@@ -247,7 +261,7 @@ const AddNewAnnouncement = () => {
           </div>
         </div>
         <div className="row no-gutters mb-4">
-          <div className="col-60 mb-1">Type</div>
+          <div className="col-60 mb-1">Status</div>
           <div className="col-xl-40 col-md-50 col-60">
             <div className="row no-gutters">
               <Select
@@ -266,12 +280,80 @@ const AddNewAnnouncement = () => {
         </div>
       </div>
 
-      <div className="col-60 mt-5">
-        <div className="row no-gutters">
-          <div className="btn-custom btn-custom-secondary btn-small mr-sm-3 mb-3 col-60 col-sm-auto">
+      <div className="col-60 mt-3">
+        <div
+          style={{ height: "50px", opacity: problem ? 1 : 0 }}
+          className="row no-gutters align-items-center text-danger"
+        >
+          {problem}
+        </div>
+        <div className="row no-gutters mt-2">
+          <div
+            className="btn-custom btn-custom-secondary btn-small mr-sm-3 mb-3 col-60 col-sm-auto"
+            onClick={() => getBack()}
+          >
             Cancel
           </div>
-          <div className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto">
+          <div
+            className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto"
+            onClick={async () => {
+              if (user._id) {
+                let invalid = validations.filter((x) => !x.valid);
+                if (invalid.length) {
+                  setProblem(invalid[0].error);
+                } else {
+                  setLoading(true);
+                  let res = await CreateAnnouncement(
+                    Object.assign({}, announcement, { author: user._id })
+                  );
+                  setLoading(false);
+                  if (res.error) {
+                    store.dispatch({
+                      type: "SET_NOTIFICATION",
+                      notification: {
+                        title: "Error",
+                        message: res.error,
+                        type: "failure",
+                      },
+                    });
+                  } else {
+                    store.dispatch({
+                      type: "SET_NOTIFICATION",
+                      notification: {
+                        title: "Announcement created",
+                        message: "You successfully created announcement",
+                        type: "success",
+                      },
+                    });
+                    getBack();
+                  }
+                }
+              } else {
+                store.dispatch({
+                  type: "SET_NOTIFICATION",
+                  notification: {
+                    title: "Login required",
+                    message: "You need to login to create announcements",
+                    type: "failure",
+                  },
+                });
+              }
+            }}
+          >
+            <Loader
+              color={"white"}
+              style={{
+                position: "absolute",
+                left: "10px",
+                top: 0,
+                bottom: 0,
+                margin: "auto",
+                display: "flex",
+                alignItems: "center",
+              }}
+              loading={loading}
+              size={20}
+            ></Loader>
             Save
           </div>
         </div>
@@ -280,4 +362,11 @@ const AddNewAnnouncement = () => {
   );
 };
 
-export default AddNewAnnouncement;
+function mapp(state, ownProps) {
+  return {
+    user: state.user,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(AddNewAnnouncement);

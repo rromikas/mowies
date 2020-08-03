@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Reviews as data, PublicUsers } from "../../Data";
 import Select from "../utility/Select";
 import Checkbox from "../utility/Checkbox";
 import { Emoji } from "emoji-mart";
@@ -7,8 +6,11 @@ import Pagination from "../utility/Paigination";
 import { BsSearch } from "react-icons/bs";
 import date from "date-and-time";
 import { Swipeable } from "react-swipeable";
+import { GetReviews, DeleteMultipleReviews } from "../../server/DatabaseApi";
+import { connect } from "react-redux";
+import store from "../../store/store";
 
-const Reviews = ({ setEditReviewSection, setEditReview }) => {
+const Reviews = ({ setEditReviewSection, setEditReview, publicUsers }) => {
   const [action, setAction] = useState("");
   const [role, setRole] = useState("");
   const [searchKey, setSearchKey] = useState("User");
@@ -16,12 +18,19 @@ const Reviews = ({ setEditReviewSection, setEditReview }) => {
   const [page, setPage] = useState(1);
   const [roleFilter, setRoleFilter] = useState("");
   const [search, setSearch] = useState("");
-
+  const [mainFilter, setMainFilter] = useState({ key: "", value: "" });
   const [reviews, setReviews] = useState([]);
   const [filteredReviews, setFilteredReviews] = useState([]);
+  const [refresh, setRefresh] = useState(false);
   useEffect(() => {
-    setReviews(data.map((x) => Object.assign({}, x, { selected: false })));
-  }, []);
+    async function getData() {
+      let res = await GetReviews();
+      if (!res.error) {
+        setReviews(res.map((x) => Object.assign({}, x, { selected: false })));
+      }
+    }
+    getData();
+  }, [refresh]);
 
   useEffect(() => {
     let arr = [...reviews];
@@ -29,7 +38,7 @@ const Reviews = ({ setEditReviewSection, setEditReview }) => {
       if (search) {
         if (searchKey === "User") {
           arr = arr.filter((x) =>
-            PublicUsers[x.author].display_name.match(new RegExp(search, "i"))
+            publicUsers[x.author].display_name.match(new RegExp(search, "i"))
           );
         } else if (searchKey === "Review") {
           arr = arr.filter((x) => x.review.match(new RegExp(search, "i")));
@@ -43,36 +52,109 @@ const Reviews = ({ setEditReviewSection, setEditReview }) => {
       }
 
       if (roleFilter) {
-        arr = arr.filter(
-          (x) => PublicUsers[x.author].role === roleFilter.toLowerCase()
-        );
+        arr = arr.filter((x) => publicUsers[x.author].role === roleFilter);
+      }
+
+      if (mainFilter.key && mainFilter.value) {
+        arr = arr.filter((x) => x[mainFilter.key] === mainFilter.value);
       }
 
       setFilteredReviews(arr);
     }
-  }, [search, roleFilter, reviews]);
+  }, [search, roleFilter, reviews, mainFilter]);
 
   //boundaries for slicing reviews array. (pagination)
   let boundaries = [(page - 1) * 5, (page - 1) * 5 + 5];
   if (boundaries[1] >= filteredReviews.length) {
     boundaries[1] = boundaries[1] - (boundaries[1] - filteredReviews.length);
   }
+
+  const handleApply = async (all = false) => {
+    if (all) {
+      setRoleFilter(role);
+    }
+    if (action === "Edit") {
+      let selected = filteredReviews.filter((x) => x.selected);
+      if (selected.length) {
+        setEditReview(selected[0]);
+        setEditReviewSection();
+      }
+    } else if (action === "Delete") {
+      let selected = filteredReviews.filter((x) => x.selected);
+      if (selected.length) {
+        let res = await DeleteMultipleReviews(selected.map((x) => x._id));
+        if (res.error) {
+          store.dispatch({
+            type: "SET_NOTIFICATION",
+            notification: {
+              title: "Error",
+              message: res.error,
+              type: "failure",
+            },
+          });
+        } else {
+          store.dispatch({
+            type: "SET_NOTIFICATION",
+            notification: {
+              title: "Reviews were deleted",
+              message: "Reviews were successfully deleted",
+              type: "success",
+            },
+          });
+        }
+        setRefresh(!refresh);
+      }
+    }
+  };
+
   return (
     <div className="row no-gutters">
       <div className="col-60 py-5">
         <div className="row no-gutters h6 mb-3">
-          <div className="col-auto">All ({reviews.length})</div>
+          <div
+            className={`col-auto cursor-pointer ${
+              !mainFilter.key && !roleFilter ? "text-primary" : "text-dark"
+            }`}
+            onClick={() => {
+              setMainFilter({ key: "", value: "" });
+              setRoleFilter("");
+            }}
+          >
+            All ({reviews.length})
+          </div>
           <div className="col-auto px-2 text-muted">|</div>
-          <div className="col-auto">
-            By Administrators (
-            {
-              reviews.filter((x) => PublicUsers[x.author].role === "admin")
-                .length
+          <div
+            onClick={() =>
+              setMainFilter((prev) =>
+                Object.assign({}, prev, { key: "role", value: "Admin" })
+              )
             }
+            className={`cursor-pointer col-auto ${
+              mainFilter.key === "role" && mainFilter.value === "Admin"
+                ? "text-primary"
+                : "text-dark"
+            }`}
+          >
+            By Administrators (
+            {Object.values(publicUsers).length
+              ? reviews.filter((x) => publicUsers[x.author].role === "Admin")
+                  .length
+              : ""}
             )
           </div>
           <div className="col-auto px-2 text-muted">|</div>
-          <div className="col-auto">
+          <div
+            onClick={() =>
+              setMainFilter((prev) =>
+                Object.assign({}, prev, { key: "deleted", value: true })
+              )
+            }
+            className={`cursor-pointer col-auto ${
+              mainFilter.key === "deleted" && mainFilter.value === true
+                ? "text-primary"
+                : "text-dark"
+            }`}
+          >
             Deleted ({reviews.filter((x) => x.deleted).length})
           </div>
         </div>
@@ -92,17 +174,7 @@ const Reviews = ({ setEditReviewSection, setEditReview }) => {
               </div>
 
               <div
-                onClick={() => {
-                  if (action === "Edit") {
-                    let selected = filteredReviews.filter((x) => x.selected);
-                    if (selected.length) {
-                      setEditReview(selected[0]);
-                      setEditReviewSection();
-                    }
-                  } else if (action === "Delete") {
-                    //delete review
-                  }
-                }}
+                onClick={handleApply}
                 className="d-none d-xl-block btn-custom btn-custom-primary col-auto mr-3 btn-xsmall mb-3"
               >
                 Apply
@@ -126,19 +198,7 @@ const Reviews = ({ setEditReviewSection, setEditReview }) => {
                 Apply
               </div>
               <div
-                onClick={() => {
-                  if (action === "Edit") {
-                    let selected = filteredReviews.filter((x) => x.selected);
-                    if (selected.length) {
-                      setEditReview(selected[0]);
-                      setEditReviewSection();
-                    }
-                  } else if (action === "Delete") {
-                    //delete review
-                  } else {
-                    setRoleFilter(role);
-                  }
-                }}
+                onClick={() => handleApply(true)}
                 className="d-block d-xl-none btn-custom btn-custom-primary col-60 col-sm-auto mb-3 mr-3 btn-xsmall"
               >
                 Apply All
@@ -314,16 +374,16 @@ const Reviews = ({ setEditReviewSection, setEditReview }) => {
                                 className="square-50 rounded-circle bg-image"
                                 style={{
                                   backgroundImage: `url(${
-                                    PublicUsers[x.author].photo
+                                    publicUsers[x.author].photo
                                   })`,
                                 }}
                               ></div>
                             </div>
                             <div className="d-none d-md-inline-block align-top">
                               <div className="h6 text-primary">
-                                {PublicUsers[x.author].display_name}
+                                {publicUsers[x.author].display_name}
                               </div>
-                              <div>{PublicUsers[x.author].email}</div>
+                              <div>{publicUsers[x.author].email}</div>
                             </div>
                           </td>
                           <td
@@ -339,11 +399,11 @@ const Reviews = ({ setEditReviewSection, setEditReview }) => {
                                 <div style={{ marginBottom: "-6px" }}>
                                   <Emoji
                                     emoji={
-                                      x.rating === "Excellent"
+                                      x.rating === "excellent_rate"
                                         ? "fire"
-                                        : x.rating === "Good"
+                                        : x.rating === "good_rate"
                                         ? "heart"
-                                        : x.rating === "OK"
+                                        : x.rating === "ok_rate"
                                         ? "heavy_division_sign"
                                         : "shit"
                                     }
@@ -486,17 +546,7 @@ const Reviews = ({ setEditReviewSection, setEditReview }) => {
               </div>
 
               <div
-                onClick={() => {
-                  if (action === "Edit") {
-                    let selected = filteredReviews.filter((x) => x.selected);
-                    if (selected.length) {
-                      setEditReview(selected[0]);
-                      setEditReviewSection();
-                    }
-                  } else if (action === "Delete") {
-                    //delete review
-                  }
-                }}
+                onClick={handleApply}
                 className="btn-custom btn-custom-primary col60 col-sm-auto mr-sm-3 btn-xsmall mb-3"
               >
                 Apply
@@ -516,4 +566,11 @@ const Reviews = ({ setEditReviewSection, setEditReview }) => {
   );
 };
 
-export default Reviews;
+function mapp(state, ownProps) {
+  return {
+    publicUsers: state.publicUsers,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(Reviews);

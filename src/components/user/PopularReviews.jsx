@@ -85,7 +85,19 @@ const PopularReviews = ({ publicUsers, ratings }) => {
   return (
     <div className="row no-gutters justify-content-center text-white">
       <div className="col-60 content-container p-sm-5 p-4">
-        <div className="row no-gutters text-title-xl">Popular Reviews</div>
+        <div className="row no-gutters h5">
+          <div
+            className="col-auto"
+            // style={{
+            //   padding: "10px 40px 10px 10px",
+            //   background: "linear-gradient(to left, #ff0037, transparent)",
+            //   borderRadius: "0 4px 4px 0",
+            //   marginBottom: "11px",
+            // }}
+          >
+            Popular Reviews
+          </div>
+        </div>
         <div className="row no-gutters text-light mb-3">
           Most commented reviews in last 30 days
         </div>
@@ -151,30 +163,42 @@ const PopularReviews = ({ publicUsers, ratings }) => {
                         </div>
                       </div>
                     </div>
-                    <div className="col-auto">
-                      <div className="row no-gutters">
-                        <div className="col-auto pr-2">
-                          <div
-                            className="bg-image rounded-circle square-40"
-                            style={{
-                              backgroundImage: `url(${
-                                publicUsers[x.author]
-                                  ? publicUsers[x.author].photo
-                                  : ""
-                              })`,
-                            }}
-                          ></div>
-                        </div>
-                        <div className="col-auto">
-                          <div className="row no-gutters align-items-center text-white">
-                            <div className="col-auto mr-3 h6 mb-0">
-                              {publicUsers[x.author]
-                                ? publicUsers[x.author].display_name
-                                : ""}
+                    <div className="col-60">
+                      <div className="row no-gutters justify-content-between">
+                        <div className="col-auto mb-2">
+                          <div className="row no-gutters">
+                            <div className="col-auto pr-2">
+                              <div
+                                className="bg-image rounded-circle square-40"
+                                style={{
+                                  backgroundImage: `url(${
+                                    publicUsers[x.author]
+                                      ? publicUsers[x.author].photo
+                                      : ""
+                                  })`,
+                                }}
+                              ></div>
+                            </div>
+                            <div className="col-auto">
+                              <div className="row no-gutters align-items-center text-white">
+                                <div className="col-auto mr-3 h6 mb-0">
+                                  {publicUsers[x.author]
+                                    ? publicUsers[x.author].display_name
+                                    : ""}
+                                </div>
+                              </div>
+                              <div className="row no-gutters text-muted">
+                                Reviewed by
+                              </div>
                             </div>
                           </div>
-                          <div className="row no-gutters text-muted">
-                            Reviewed by
+                        </div>
+                        <div className="col-auto">
+                          <div className="row no-gutters text-white">
+                            <span className="mr-2">Posted review on</span>
+                            <span className="text-muted">
+                              {date.format(new Date(x.date), "MMM DD, YYYY")}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -268,12 +292,6 @@ const PopularReviews = ({ publicUsers, ratings }) => {
                           </div>
                         </div>
                       </div>
-                      <div className="row no-gutters text-white">
-                        <span className="mr-2">Posted review on</span>
-                        <span className="text-muted">
-                          {date.format(new Date(x.date), "MMM DD, YYYY")}
-                        </span>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -361,7 +379,7 @@ const PopularReviews = ({ publicUsers, ratings }) => {
                         </div>
                       ))
                   : ""}
-                <div className="row no-gutters justify-content-end">
+                <div className="row no-gutters">
                   <div className="col-auto">
                     <Paigination
                       count={Math.ceil(
@@ -381,7 +399,7 @@ const PopularReviews = ({ publicUsers, ratings }) => {
               </Collapse>
             </React.Fragment>
           ))}
-        <div className="row no-gutters justify-content-sm-between justify-content-center mt-2">
+        <div className="row no-gutters justify-content-end mt-2">
           <div className="col-auto mb-4 mr-sm-2 mr-md-0">
             <Paigination
               classNames={{

@@ -15,12 +15,39 @@ import {
   GetAllPublicUsers,
   LoginWithToken,
   GetPopularReviews,
+  GetSettings,
 } from "./server/DatabaseApi";
 import Profile from "./components/user/profile/Profile";
 
 function App() {
   useEffect(() => {
     async function getData() {
+      let settings = await GetSettings();
+      if (!settings.error) {
+        if (!settings.length) {
+          store.dispatch({
+            type: "SET_NOTIFICATION",
+            notification: {
+              title: "Action required",
+              message:
+                "Settings are not set. Inform website administrator to set Api key and other settings for the website",
+              type: "failure",
+            },
+          });
+        } else {
+          store.dispatch({ type: "UPDATE_SETTINGS", settings: settings[0] });
+        }
+      } else {
+        store.dispatch({
+          type: "SET_NOTIFICATION",
+          notification: {
+            title: "Action required",
+            message:
+              "Settings are not set. Inform website administrator to set Api key and other settings for the website",
+            type: "failure",
+          },
+        });
+      }
       let ratingsArr = await GetAllRatings();
       let ratings = {};
       ratingsArr.forEach((x) => {

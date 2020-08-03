@@ -18,6 +18,7 @@ import Footer from "./Footer";
 const Movie = (props) => {
   const movieId = props.match.params.movieId;
   const ratings = props.ratings;
+  const apiKey = props.settings.movies_api_key;
   //user will be needed to write comments on reviews and to add reviews
   const user = props.user;
 
@@ -46,10 +47,10 @@ const Movie = (props) => {
   useEffect(() => {
     window.scrollTo(0, 0);
     async function getData() {
-      if (movieId) {
-        let data = await GetMovie(movieId);
+      if (movieId && apiKey) {
+        let data = await GetMovie(movieId, apiKey);
         setMovie((prev) => Object.assign({}, prev, data));
-        let credits = await GetCredits(movieId);
+        let credits = await GetCredits(movieId, apiKey);
         let director = credits.crew.find((x) => x.job === "Director").name;
         let cast = credits.cast.map((x) => x.name);
         data.director = director;
@@ -58,7 +59,7 @@ const Movie = (props) => {
       }
     }
     getData();
-  }, [movieId]);
+  }, [movieId, apiKey]);
 
   // const director = movie.credits.crew.find((x) => x.job === "Director");
 
@@ -256,6 +257,7 @@ function mapp(state, ownProps) {
   return {
     user: state.user,
     ratings: state.ratings,
+    settings: state.settings,
     ...ownProps,
   };
 }

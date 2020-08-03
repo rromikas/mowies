@@ -8,6 +8,7 @@ import ReplyToReview from "./ReplyToReview";
 import AddReview from "./AddReview";
 import {
   GetMovieReviews,
+  GetMoviePromotedReviews,
   GetReviewComments,
   LikeReview,
   LikeComment,
@@ -22,6 +23,10 @@ import store from "../../store/store";
 const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
   // local reviews object in order to be able to update it quickly instead of waiting for real changes in database
   const [reviews, setReviews] = useState([]);
+  const [promotedReviews, setPromotedReviews] = useState([]);
+
+  //admin can edit review and rating in promotions section. So promotions have edited content.
+  const [promotedContents, setPromotedContents] = useState({});
 
   //comments object.Its property will be review id.
   const [comments, setComments] = useState({});
@@ -68,8 +73,31 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
   useEffect(() => {
     async function getData() {
       if (movie.id) {
-        let reviews = await GetMovieReviews(movie.id);
-        setReviews(reviews);
+        let promoted = await GetMoviePromotedReviews(movie.id);
+        let promotedContentIds = [];
+        let promoContents = {};
+        if (!promoted.error) {
+          promoted.forEach((x) => {
+            promotedContentIds.push(x.content_id);
+            promoContents[x.content_id] = x;
+          });
+        }
+        setPromotedContents(promoContents);
+        let data = await GetMovieReviews(movie.id);
+        if (!data.error) {
+          let promReviews = [],
+            notPromotedReviews = [];
+          data.forEach((x) => {
+            if (promotedContentIds.includes(x._id)) {
+              x.promoted = true;
+              promReviews.push(x);
+            } else {
+              notPromotedReviews.push(x);
+            }
+          });
+          setPromotedReviews(promReviews);
+          setReviews(notPromotedReviews);
+        }
       }
     }
     getData();
@@ -94,394 +122,422 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
 
   return (
     <div className="row no-gutters">
-      <div className="col-60 text-title-xl mb-3">
+      <div className="col-60 h5 mb-3">
         Popular Reviews ({nFormatter(reviews.length, 1)})
       </div>
       <div className="col-60">
         <div className="row no-gutters mb-2" ref={topOfReviewsBlock}></div>
-        {reviews
+        {promotedReviews
+          .concat(reviews)
           .slice(
             (realPage - 1) * reviewsPerPage,
             (realPage - 1) * reviewsPerPage + reviewsPerPage
           )
-          .map((x, i) => (
-            <React.Fragment>
-              <div
-                key={`review-${i}`}
-                className="row no-gutters p-4 bg-over-root-lighter rounded mb-2"
-              >
-                <div className="col-auto pr-4 d-none d-md-block">
-                  <div
-                    className="bg-image rounded-circle square-70"
-                    style={{
-                      backgroundImage: `url(${
-                        publicUsers[x.author] ? publicUsers[x.author].photo : ""
-                      })`,
-                    }}
-                  ></div>
-                </div>
-                <div className="col">
-                  <div className="row no-gutters justify-content-between align-items-center mb-1">
-                    <div className="col-auto">
-                      <div className="row no-gutters align-items-center">
-                        <div className="col-auto pr-2 d-block d-md-none">
-                          <div
-                            className="bg-image rounded-circle square-40"
-                            style={{
-                              backgroundImage: `url(${
-                                publicUsers[x.author]
-                                  ? publicUsers[x.author].photo
-                                  : ""
-                              })`,
-                            }}
-                          ></div>
-                        </div>
-                        <div className="col-auto">
-                          <div className="row no-gutters align-items-center">
-                            <div className="col-auto mr-3 text-title-md mb-0">
-                              {publicUsers[x.author]
-                                ? publicUsers[x.author].display_name
-                                : ""}
-                            </div>
-                            <div className="col-auto mr-3 text-muted">
-                              {date.format(new Date(x.date), "MMM DD, YYYY")}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+          .map((x, i) => {
+            let rating = promotedContents[x._id]
+              ? promotedContents[x._id].content.rating
+              : x.rating;
+            let review = promotedContents[x._id]
+              ? promotedContents[x._id].content.review
+              : x.review;
+            return (
+              <React.Fragment>
+                <div
+                  key={`review-${i}`}
+                  className="row no-gutters p-4 bg-over-root-lighter rounded mb-2"
+                >
+                  <div className="col-auto pr-4 d-none d-md-block">
                     <div
-                      className="col-auto text-muted btn-tertiary"
-                      onClick={async () => {
-                        if (user.token) {
-                          let res = await ReportReview(user, x._id);
-                          if (res.error) {
-                            store.dispatch({
-                              type: "SET_NOTIFICATION",
-                              notification: {
-                                title: "Error",
-                                message: res.error,
-                                type: "failure",
-                              },
-                            });
-                          } else {
-                            store.dispatch({
-                              type: "SET_NOTIFICATION",
-                              notification: {
-                                title: "Review reported",
-                                message:
-                                  "Review was successfully reported. We will review it soon.",
-                                type: "success",
-                              },
-                            });
-                          }
-                        } else {
-                          store.dispatch({
-                            type: "SET_NOTIFICATION",
-                            notification: {
-                              title: "Login required",
-                              message: "You need to login to report review",
-                              type: "failure",
-                            },
-                          });
-                        }
+                      className="bg-image rounded-circle square-70"
+                      style={{
+                        backgroundImage: `url(${
+                          publicUsers[x.author ? x.author : x.content_author]
+                            ? publicUsers[
+                                x.author ? x.author : x.content_author
+                              ].photo
+                            : ""
+                        })`,
                       }}
-                    >
-                      <div className="d-block d-sm-none">Report</div>
-                      <div className="d-none d-sm-block">Report Abuse</div>
-                    </div>
+                    ></div>
                   </div>
-
-                  <div className="row no-gutters text-light text-title-md mb-3">
-                    {x.review}
-                  </div>
-                  <div className="row no-gutters justify-content-between align-items-center">
-                    <div className="col-auto">
-                      <Emoji
-                        emoji={
-                          x.rating === "excellent_rate"
-                            ? "fire"
-                            : x.rating === "good_rate"
-                            ? "heart"
-                            : x.rating === "ok_rate"
-                            ? "heavy_division_sign"
-                            : "shit"
-                        }
-                        set="facebook"
-                        size={24}
-                      />
-                    </div>
-                    <div className="col-auto">
-                      <div className="row no-gutters align-items-center">
-                        <div className="col-auto mr-2">{x.likes.length}</div>
-                        <div className="col-auto mr-2 ">
-                          <MdThumbUp
-                            onClick={async () => {
-                              if (user.token) {
-                                let res = await LikeReview(user, x._id);
-                                if (res.error) {
-                                  store.dispatch({
-                                    type: "SET_NOTIFICATION",
-                                    notification: {
-                                      title: "Error",
-                                      message: res.error,
-                                      type: "failure",
-                                    },
-                                  });
-                                } else {
-                                  setRefreshReviews(!refreshReviews);
-                                }
-                              } else {
-                                store.dispatch({
-                                  type: "SET_NOTIFICATION",
-                                  notification: {
-                                    title: "Login required",
-                                    message: "You need to login to like review",
-                                    type: "failure",
-                                  },
-                                });
-                              }
-                            }}
-                            fontSize="24px"
-                            className="text-green scale-transition cursor-pointer"
-                          ></MdThumbUp>
-                        </div>
-                        <div className="col-auto mr-2">{x.comments.length}</div>
-                        <div className="col-auto mr-2">
-                          <MdChatBubble
-                            onClick={() => {
-                              setReviewIdOfVisibleComments(
-                                reviewIdOfVisibleComments === x._id ? -1 : x._id
-                              );
-                            }}
-                            fontSize="24px"
-                            className="text-orange scale-transition cursor-pointer"
-                          ></MdChatBubble>
-                        </div>
-                        <div
-                          className="col-auto text-orange btn-tertiary"
-                          onClick={() =>
-                            setReview(
-                              Object.assign({}, x, {
-                                notificationReceivers: [publicUsers[x.author]],
-                              })
-                            )
-                          }
-                        >
-                          Reply
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <Collapse
-                in={reviewIdOfVisibleComments === x._id}
-                className="mb-3"
-              >
-                <div className="ml-4 h5 py-2">
-                  Comments ({comments[x._id] ? comments[x._id].length : 0})
-                </div>
-                {comments[x._id]
-                  ? comments[x._id]
-                      .slice(
-                        commentsPage * (commentsPage - 1),
-                        commentsPage * (commentsPage - 1) + commentsPerPage
-                      )
-                      .map((y, ind) => (
-                        <div
-                          key={`comment-${reviewIdOfVisibleComments}-${ind}`}
-                          className="row no-gutters p-4 bg-over-root-lighter rounded ml-4 mb-2"
-                        >
-                          <div className="col-auto pr-4 d-none d-md-block">
+                  <div className="col">
+                    <div className="row no-gutters justify-content-between align-items-center mb-1">
+                      <div className="col-auto">
+                        <div className="row no-gutters align-items-center">
+                          <div className="col-auto pr-2 d-block d-md-none">
                             <div
-                              className="bg-image rounded-circle square-70"
+                              className="bg-image rounded-circle square-40"
                               style={{
                                 backgroundImage: `url(${
-                                  publicUsers[y.author]
-                                    ? publicUsers[y.author].photo
+                                  publicUsers[x.author]
+                                    ? publicUsers[x.author].photo
                                     : ""
                                 })`,
                               }}
                             ></div>
                           </div>
-                          <div className="col">
-                            <div className="row no-gutters justify-content-between align-items-center mb-2">
-                              <div className="col-auto">
-                                <div className="row no-gutters">
-                                  <div className="col-auto pr-2 d-block d-md-none">
-                                    <div
-                                      className="bg-image rounded-circle square-40"
-                                      style={{
-                                        backgroundImage: `url(${
-                                          publicUsers[y.author]
-                                            ? publicUsers[y.author].photo
-                                            : ""
-                                        })`,
-                                      }}
-                                    ></div>
-                                  </div>
-                                  <div className="col-auto">
-                                    <div className="row no-gutters align-items-center">
-                                      <div className="col-auto mr-3 text-title-md mb-0">
-                                        {publicUsers[y.author]
-                                          ? publicUsers[y.author].display_name
-                                          : ""}
-                                      </div>
-                                      <div className="col-auto mr-3 text-muted">
-                                        {date.format(
-                                          new Date(y.date),
-                                          "MMM DD, YYYY"
-                                        )}
+                          <div className="col-auto">
+                            <div className="row no-gutters align-items-center">
+                              <div className="col-auto mr-3 text-title-md mb-0">
+                                {publicUsers[x.author]
+                                  ? publicUsers[x.author].display_name
+                                  : ""}
+                              </div>
+                              <div className="col-auto mr-3 text-muted">
+                                {date.format(new Date(x.date), "MMM DD, YYYY")}
+                              </div>
+                              {x.promoted && (
+                                <div className="badge badge-primary col-auto px-3 py-1 font-size-12">
+                                  Promoted
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className="col-auto text-muted btn-tertiary"
+                        onClick={async () => {
+                          if (user.token) {
+                            let res = await ReportReview(user, x._id);
+                            if (res.error) {
+                              store.dispatch({
+                                type: "SET_NOTIFICATION",
+                                notification: {
+                                  title: "Error",
+                                  message: res.error,
+                                  type: "failure",
+                                },
+                              });
+                            } else {
+                              store.dispatch({
+                                type: "SET_NOTIFICATION",
+                                notification: {
+                                  title: "Review reported",
+                                  message:
+                                    "Review was successfully reported. We will review it soon.",
+                                  type: "success",
+                                },
+                              });
+                            }
+                          } else {
+                            store.dispatch({
+                              type: "SET_NOTIFICATION",
+                              notification: {
+                                title: "Login required",
+                                message: "You need to login to report review",
+                                type: "failure",
+                              },
+                            });
+                          }
+                        }}
+                      >
+                        <div className="d-block d-sm-none">Report</div>
+                        <div className="d-none d-sm-block">Report Abuse</div>
+                      </div>
+                    </div>
+
+                    <div className="row no-gutters text-light text-title-md mb-3">
+                      {review}
+                    </div>
+                    <div className="row no-gutters justify-content-between align-items-center">
+                      <div className="col-auto">
+                        <Emoji
+                          emoji={
+                            rating === "excellent_rate"
+                              ? "fire"
+                              : rating === "good_rate"
+                              ? "heart"
+                              : rating === "ok_rate"
+                              ? "heavy_division_sign"
+                              : "shit"
+                          }
+                          set="facebook"
+                          size={24}
+                        />
+                      </div>
+                      <div className="col-auto">
+                        <div className="row no-gutters align-items-center">
+                          <div className="col-auto mr-2">{x.likes.length}</div>
+                          <div className="col-auto mr-2 ">
+                            <MdThumbUp
+                              onClick={async () => {
+                                if (user.token) {
+                                  let res = await LikeReview(user, x._id);
+                                  if (res.error) {
+                                    store.dispatch({
+                                      type: "SET_NOTIFICATION",
+                                      notification: {
+                                        title: "Error",
+                                        message: res.error,
+                                        type: "failure",
+                                      },
+                                    });
+                                  } else {
+                                    setRefreshReviews(!refreshReviews);
+                                  }
+                                } else {
+                                  store.dispatch({
+                                    type: "SET_NOTIFICATION",
+                                    notification: {
+                                      title: "Login required",
+                                      message:
+                                        "You need to login to like review",
+                                      type: "failure",
+                                    },
+                                  });
+                                }
+                              }}
+                              fontSize="24px"
+                              className="text-green scale-transition cursor-pointer"
+                            ></MdThumbUp>
+                          </div>
+                          <div className="col-auto mr-2">
+                            {x.comments.length}
+                          </div>
+                          <div className="col-auto mr-2">
+                            <MdChatBubble
+                              onClick={() => {
+                                setReviewIdOfVisibleComments(
+                                  reviewIdOfVisibleComments === x._id
+                                    ? -1
+                                    : x._id
+                                );
+                              }}
+                              fontSize="24px"
+                              className="text-orange scale-transition cursor-pointer"
+                            ></MdChatBubble>
+                          </div>
+                          <div
+                            className="col-auto text-orange btn-tertiary"
+                            onClick={() =>
+                              setReview(
+                                Object.assign({}, x, {
+                                  notificationReceivers: [
+                                    publicUsers[x.author],
+                                  ],
+                                })
+                              )
+                            }
+                          >
+                            Reply
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <Collapse
+                  in={reviewIdOfVisibleComments === x._id}
+                  className="mb-3"
+                >
+                  <div className="ml-4 h5 py-2">
+                    Comments ({comments[x._id] ? comments[x._id].length : 0})
+                  </div>
+                  {comments[x._id]
+                    ? comments[x._id]
+                        .slice(
+                          commentsPage * (commentsPage - 1),
+                          commentsPage * (commentsPage - 1) + commentsPerPage
+                        )
+                        .map((y, ind) => (
+                          <div
+                            key={`comment-${reviewIdOfVisibleComments}-${ind}`}
+                            className="row no-gutters p-4 bg-over-root-lighter rounded ml-4 mb-2"
+                          >
+                            <div className="col-auto pr-4 d-none d-md-block">
+                              <div
+                                className="bg-image rounded-circle square-70"
+                                style={{
+                                  backgroundImage: `url(${
+                                    publicUsers[y.author]
+                                      ? publicUsers[y.author].photo
+                                      : ""
+                                  })`,
+                                }}
+                              ></div>
+                            </div>
+                            <div className="col">
+                              <div className="row no-gutters justify-content-between align-items-center mb-2">
+                                <div className="col-auto">
+                                  <div className="row no-gutters">
+                                    <div className="col-auto pr-2 d-block d-md-none">
+                                      <div
+                                        className="bg-image rounded-circle square-40"
+                                        style={{
+                                          backgroundImage: `url(${
+                                            publicUsers[y.author]
+                                              ? publicUsers[y.author].photo
+                                              : ""
+                                          })`,
+                                        }}
+                                      ></div>
+                                    </div>
+                                    <div className="col-auto">
+                                      <div className="row no-gutters align-items-center">
+                                        <div className="col-auto mr-3 text-title-md mb-0">
+                                          {publicUsers[y.author]
+                                            ? publicUsers[y.author].display_name
+                                            : ""}
+                                        </div>
+                                        <div className="col-auto mr-3 text-muted">
+                                          {date.format(
+                                            new Date(y.date),
+                                            "MMM DD, YYYY"
+                                          )}
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
 
-                              <div
-                                className="col-auto text-muted btn-tertiary"
-                                onClick={async () => {
-                                  if (user.token) {
-                                    let res = await ReportComment(user, y._id);
-                                    if (res.error) {
-                                      store.dispatch({
-                                        type: "SET_NOTIFICATION",
-                                        notification: {
-                                          title: "Error",
-                                          message: res.error,
-                                          type: "failure",
-                                        },
-                                      });
+                                <div
+                                  className="col-auto text-muted btn-tertiary"
+                                  onClick={async () => {
+                                    if (user.token) {
+                                      let res = await ReportComment(
+                                        user,
+                                        y._id
+                                      );
+                                      if (res.error) {
+                                        store.dispatch({
+                                          type: "SET_NOTIFICATION",
+                                          notification: {
+                                            title: "Error",
+                                            message: res.error,
+                                            type: "failure",
+                                          },
+                                        });
+                                      } else {
+                                        store.dispatch({
+                                          type: "SET_NOTIFICATION",
+                                          notification: {
+                                            title: "Comment reported",
+                                            message:
+                                              "Comment was successfully reported. We will review it soon.",
+                                            type: "success",
+                                          },
+                                        });
+                                      }
                                     } else {
                                       store.dispatch({
                                         type: "SET_NOTIFICATION",
                                         notification: {
-                                          title: "Comment reported",
+                                          title: "Login required",
                                           message:
-                                            "Comment was successfully reported. We will review it soon.",
-                                          type: "success",
+                                            "You need to login to report comment",
+                                          type: "failure",
                                         },
                                       });
                                     }
-                                  } else {
-                                    store.dispatch({
-                                      type: "SET_NOTIFICATION",
-                                      notification: {
-                                        title: "Login required",
-                                        message:
-                                          "You need to login to report comment",
-                                        type: "failure",
-                                      },
-                                    });
-                                  }
-                                }}
-                              >
-                                Report Abuse
+                                  }}
+                                >
+                                  Report Abuse
+                                </div>
                               </div>
-                            </div>
 
-                            <div className="row no-gutters text-light mb-3">
-                              {y.comment}
-                            </div>
-                            <div className="row no-gutters justify-content-between align-items-center">
-                              <div className="col-auto">
-                                <div className="row no-gutters align-items-center">
-                                  <div className="col-auto mr-2">
-                                    {y.likes.length}
-                                  </div>
-                                  <div className="col-auto mr-2 ">
-                                    <MdThumbUp
-                                      onClick={async () => {
-                                        if (user.token) {
-                                          let res = await LikeComment(
-                                            user,
-                                            x._id
-                                          );
-                                          if (res.error) {
+                              <div className="row no-gutters text-light mb-3">
+                                {y.comment}
+                              </div>
+                              <div className="row no-gutters justify-content-between align-items-center">
+                                <div className="col-auto">
+                                  <div className="row no-gutters align-items-center">
+                                    <div className="col-auto mr-2">
+                                      {y.likes.length}
+                                    </div>
+                                    <div className="col-auto mr-2 ">
+                                      <MdThumbUp
+                                        onClick={async () => {
+                                          if (user.token) {
+                                            let res = await LikeComment(
+                                              user,
+                                              x._id
+                                            );
+                                            if (res.error) {
+                                              store.dispatch({
+                                                type: "SET_NOTIFICATION",
+                                                notification: {
+                                                  title: "Error",
+                                                  message: res.error,
+                                                  type: "failure",
+                                                },
+                                              });
+                                            } else {
+                                              setRefreshComments(
+                                                !refreshComments
+                                              );
+                                            }
+                                          } else {
                                             store.dispatch({
                                               type: "SET_NOTIFICATION",
                                               notification: {
-                                                title: "Error",
-                                                message: res.error,
+                                                title: "Login required",
+                                                message:
+                                                  "You need to login to like comment",
                                                 type: "failure",
                                               },
                                             });
-                                          } else {
-                                            setRefreshComments(
-                                              !refreshComments
-                                            );
                                           }
-                                        } else {
+                                        }}
+                                        fontSize="24px"
+                                        className="text-green scale-transition cursor-pointer"
+                                      ></MdThumbUp>
+                                    </div>
+                                    <div
+                                      className="col-auto text-orange btn-tertiary"
+                                      onClick={() => {
+                                        if (!user.token) {
                                           store.dispatch({
                                             type: "SET_NOTIFICATION",
                                             notification: {
                                               title: "Login required",
                                               message:
-                                                "You need to login to like comment",
+                                                "You need to login to write review.",
                                               type: "failure",
                                             },
                                           });
+                                        } else {
+                                          setReview(
+                                            Object.assign({}, x, {
+                                              notificationReceivers: [
+                                                publicUsers[x.author],
+                                                publicUsers[y.author],
+                                              ],
+                                            })
+                                          );
                                         }
                                       }}
-                                      fontSize="24px"
-                                      className="text-green scale-transition cursor-pointer"
-                                    ></MdThumbUp>
-                                  </div>
-                                  <div
-                                    className="col-auto text-orange btn-tertiary"
-                                    onClick={() => {
-                                      if (!user.token) {
-                                        store.dispatch({
-                                          type: "SET_NOTIFICATION",
-                                          notification: {
-                                            title: "Login required",
-                                            message:
-                                              "You need to login to write review.",
-                                            type: "failure",
-                                          },
-                                        });
-                                      } else {
-                                        setReview(
-                                          Object.assign({}, x, {
-                                            notificationReceivers: [
-                                              publicUsers[x.author],
-                                              publicUsers[y.author],
-                                            ],
-                                          })
-                                        );
-                                      }
-                                    }}
-                                  >
-                                    Reply
+                                    >
+                                      Reply
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))
-                  : ""}
-                <div className="row no-gutters justify-content-end">
-                  <div className="col-auto">
-                    <Paigination
-                      count={Math.ceil(
-                        comments[x._id]
-                          ? comments[x._id].length / commentsPerPage
-                          : 1
-                      )}
-                      current={commentsPage}
-                      setCurrent={setCommentsPage}
-                      classNames={{
-                        notSelected: "input-dark",
-                        selected: "input-dark-selected",
-                      }}
-                    ></Paigination>
+                        ))
+                    : ""}
+                  <div className="row no-gutters justify-content-end">
+                    <div className="col-auto">
+                      <Paigination
+                        count={Math.ceil(
+                          comments[x._id]
+                            ? comments[x._id].length / commentsPerPage
+                            : 1
+                        )}
+                        current={commentsPage}
+                        setCurrent={setCommentsPage}
+                        classNames={{
+                          notSelected: "input-dark",
+                          selected: "input-dark-selected",
+                        }}
+                      ></Paigination>
+                    </div>
                   </div>
-                </div>
-              </Collapse>
-            </React.Fragment>
-          ))}
+                </Collapse>
+              </React.Fragment>
+            );
+          })}
         <div className="row no-gutters justify-content-between pt-2">
           <div className="col-auto mb-4 mr-sm-2 mr-md-0">
             <Paigination

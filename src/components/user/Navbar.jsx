@@ -6,6 +6,7 @@ import { BsChevronDown, BsSearch } from "react-icons/bs";
 import history from "../../History";
 import store from "../../store/store";
 import Logo from "../../images/Logo";
+import Announcement from "./Announcement";
 
 const Navbar = (props) => {
   const user = props.user;
@@ -44,11 +45,12 @@ const Navbar = (props) => {
         position: "fixed",
         zIndex: 59,
         transition: "top 0.5s",
-        top: direction === "up" ? "0px" : "-126px",
+        top: direction === "up" ? "0px" : "-200px",
         left: 0,
         right: 0,
       }}
     >
+      <Announcement></Announcement>
       <div
         className={`bg-transition row no-gutters justify-content-center${
           !scrolledToTop ? " bg-root" : ""
@@ -109,7 +111,7 @@ const Navbar = (props) => {
                     }}
                     type="text"
                     spellCheck={false}
-                    className="w-100 input"
+                    className={`w-100 input`}
                   ></input>
                   <BsSearch
                     onClick={() => history.push("/search")}

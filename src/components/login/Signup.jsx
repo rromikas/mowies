@@ -20,7 +20,7 @@ const Signup = () => {
     },
     {
       valid: password === confirmPassword,
-      error: "Passwords dont't match",
+      error: "Passwords don't match",
     },
     {
       valid: password.length >= 6,

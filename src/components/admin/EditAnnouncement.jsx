@@ -5,8 +5,11 @@ import "react-day-picker/lib/style.css";
 import { BsCalendar, BsClock } from "react-icons/bs";
 import TimePicker from "react-time-picker";
 import date from "date-and-time";
+import Loader from "../utility/Loader";
+import store from "../../store/store";
+import { EditAnnouncement as Edit } from "../../server/DatabaseApi";
 
-const EditAnnouncement = ({ currentAnnouncement }) => {
+const EditAnnouncement = ({ currentAnnouncement, getBack }) => {
   const [announcement, setAnnouncement] = useState({
     description: "",
     type: "",
@@ -15,15 +18,19 @@ const EditAnnouncement = ({ currentAnnouncement }) => {
     status: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    setAnnouncement(currentAnnouncement);
+    if (currentAnnouncement) {
+      setAnnouncement(currentAnnouncement);
+    }
   }, [currentAnnouncement]);
 
   const types = ["Information", "Warning", "Error"];
   const statuses = ["Published", "Drafted", "Expired"];
 
   return (
-    <div className="row no-gutters px-md-5 px-4 pb-4">
+    <div className="row no-gutters p-md-5 p-4">
       <div className="col-60 py-3 border-bottom mb-4">
         <div className="row no-gutters h3">Announcements</div>
         <div className="row no-gutters">Edit existing announcement</div>
@@ -270,10 +277,54 @@ const EditAnnouncement = ({ currentAnnouncement }) => {
 
       <div className="col-60 mt-5">
         <div className="row no-gutters">
-          <div className="btn-custom btn-custom-secondary btn-small mr-sm-3 mb-3 col-60 col-sm-auto">
+          <div
+            className="btn-custom btn-custom-secondary btn-small mr-sm-3 mb-3 col-60 col-sm-auto"
+            onClick={() => getBack()}
+          >
             Cancel
           </div>
-          <div className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto">
+          <div
+            className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto"
+            onClick={async () => {
+              setLoading(true);
+              let res = await Edit(announcement);
+              setLoading(false);
+              if (res.error) {
+                store.dispatch({
+                  type: "SET_NOTIFICATION",
+                  notification: {
+                    title: "Error",
+                    message: res.error,
+                    type: "failure",
+                  },
+                });
+              } else {
+                store.dispatch({
+                  type: "SET_NOTIFICATION",
+                  notification: {
+                    title: "Announcement updated",
+                    message: "Announcement was successfully updated",
+                    type: "success",
+                  },
+                });
+                getBack();
+              }
+            }}
+          >
+            <Loader
+              color={"white"}
+              style={{
+                position: "absolute",
+                left: "10px",
+                top: 0,
+                bottom: 0,
+                margin: "auto",
+                display: "flex",
+                alignItems: "center",
+              }}
+              loading={loading}
+              size={20}
+            ></Loader>
             Save
           </div>
         </div>

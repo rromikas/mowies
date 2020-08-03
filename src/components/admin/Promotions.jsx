@@ -7,6 +7,7 @@ import Pagination from "../utility/Paigination";
 import { BsSearch } from "react-icons/bs";
 import date from "date-and-time";
 import { Swipeable } from "react-swipeable";
+import { GetPromotions } from "../../server/DatabaseApi";
 
 const Promotions = ({
   setEditPromotion,
@@ -20,14 +21,22 @@ const Promotions = ({
   const [page, setPage] = useState(1);
   const [typeFilter, setTypeFilter] = useState("");
   const [search, setSearch] = useState("");
-
-  const statuses = ["Sent", "Drafted", "Deleted"];
+  const [mainFilter, setMainFilter] = useState({ key: "", value: "" });
 
   const [promotions, setPromotions] = useState([]);
   const [filteredPromotions, setFilteredPromotions] = useState([]);
 
   useEffect(() => {
-    setPromotions(data.map((x) => Object.assign({}, x, { selected: false })));
+    async function getData() {
+      let data = await GetPromotions();
+      if (!data.error) {
+        setPromotions(
+          data.map((x) => Object.assign({}, x, { selected: false }))
+        );
+      }
+    }
+
+    getData();
   }, []);
 
   useEffect(() => {
@@ -36,13 +45,11 @@ const Promotions = ({
       if (search) {
         if (searchKey === "Title") {
           arr = arr.filter((x) => x.title.match(new RegExp(search, "i")));
-        } else if (searchKey === "Review") {
-          arr = arr.filter((x) => x.review.match(new RegExp(search, "i")));
         } else if (searchKey === "Review or Comment") {
           arr = arr.filter((x) =>
-            x.type === "review"
-              ? x.review.match(new RegExp(search, "i"))
-              : x.comment.match(new RegExp(search, "i"))
+            x.content_type === "Review"
+              ? x.content.review.match(new RegExp(search, "i"))
+              : x.content.comment.match(new RegExp(search, "i"))
           );
         } else if (searchKey === "Movie") {
           arr = arr.filter((x) => x.movie_title.match(new RegExp(search, "i")));
@@ -54,12 +61,18 @@ const Promotions = ({
       }
 
       if (typeFilter) {
-        arr = arr.filter((x) => x.type.match(new RegExp(typeFilter, "i")));
+        arr = arr.filter((x) =>
+          x.content_type.match(new RegExp(typeFilter, "i"))
+        );
+      }
+
+      if (mainFilter.key) {
+        arr = arr.filter((x) => x[mainFilter.key] === mainFilter.value);
       }
 
       setFilteredPromotions(arr);
     }
-  }, [search, typeFilter, promotions]);
+  }, [search, typeFilter, promotions, mainFilter]);
 
   //boundaries for slicing reviews array. (pagination)
   let boundaries = [(page - 1) * 5, (page - 1) * 5 + 5];
@@ -70,6 +83,7 @@ const Promotions = ({
   const columns = ["Review Or Comment", "Status", "Movie Name", "Duration"];
   const searchOptions = ["Title", "Review or Comment", "Status", "Movie"];
 
+  const publishStatuses = ["Published", "Drafted", "Deleted"];
   return (
     <div className="row no-gutters p-md-5 p-4">
       <div className="col-60 border-bottom">
@@ -90,12 +104,40 @@ const Promotions = ({
         <div className="row no-gutters">
           <div className="col-60 py-5">
             <div className="row no-gutters h6 mb-3">
-              <div className="col-auto">All ({promotions.length})</div>
-              {statuses.map((x) => (
-                <React.Fragment>
+              <div
+                className={`cursor-pointer col-auto ${
+                  mainFilter.key === "" && !typeFilter
+                    ? "text-primary"
+                    : "text-dark"
+                }`}
+                onClick={() => {
+                  setTypeFilter("");
+                  setMainFilter({ key: "", value: "" });
+                }}
+              >
+                All ({promotions.length})
+              </div>
+              {publishStatuses.map((x, i) => (
+                <React.Fragment key={`status-${i}`}>
                   <div className="col-auto px-2 text-muted">|</div>
-                  <div className="col-auto">
-                    {x} ({promotions.filter((y) => y.status === x).length})
+                  <div
+                    onClick={() =>
+                      setMainFilter((prev) =>
+                        Object.assign({}, prev, {
+                          key: "publish_status",
+                          value: x,
+                        })
+                      )
+                    }
+                    className={`cursor-pointer col-auto ${
+                      mainFilter.key === "publish_status" &&
+                      mainFilter.value === x
+                        ? "text-primary"
+                        : "text-dark"
+                    }`}
+                  >
+                    {x} (
+                    {promotions.filter((y) => y.publish_status === x).length})
                   </div>
                 </React.Fragment>
               ))}
@@ -294,8 +336,11 @@ const Promotions = ({
                         <th className="d-table-cell d-xl-none table-header text-truncate">
                           {columns[lastVisibleColumn]}
                         </th>
-                        {columns.map((c) => (
-                          <th className="d-none d-xl-table-cell table-header text-truncate">
+                        {columns.map((c, j) => (
+                          <th
+                            className="d-none d-xl-table-cell table-header text-truncate"
+                            key={`column-${j}`}
+                          >
                             <div>{c}</div>
                           </th>
                         ))}
@@ -334,18 +379,19 @@ const Promotions = ({
                                     : "d-none d-xl-table-cell"
                                 }`}
                               >
-                                {x.type === "review" ? (
+                                {x.content_type === "Review" ? (
                                   <div>
                                     <div className="d-flex">
                                       <div className="mr-3">Rating:</div>
                                       <div style={{ marginBottom: "-6px" }}>
                                         <Emoji
                                           emoji={
-                                            x.rating === "Excellent"
+                                            x.content.rating ===
+                                            "excellent_rate"
                                               ? "fire"
-                                              : x.rating === "Good"
+                                              : x.content.rating === "good_rate"
                                               ? "heart"
-                                              : x.rating === "OK"
+                                              : x.content.rating === "ok_rate"
                                               ? "heavy_division_sign"
                                               : "shit"
                                           }
@@ -371,7 +417,7 @@ const Promotions = ({
                                         }
                                       }}
                                     >
-                                      {x.review}
+                                      {x.content.review}
                                     </div>
                                   </div>
                                 ) : (
@@ -390,7 +436,7 @@ const Promotions = ({
                                       }
                                     }}
                                   >
-                                    {x.comment}
+                                    {x.content.comment}
                                   </div>
                                 )}
                               </td>
@@ -502,8 +548,11 @@ const Promotions = ({
                         <th className="d-table-cell d-xl-none table-header text-truncate">
                           {columns[lastVisibleColumn]}
                         </th>
-                        {columns.map((c) => (
-                          <th className="d-none d-xl-table-cell table-header text-truncate">
+                        {columns.map((c, j) => (
+                          <th
+                            className="d-none d-xl-table-cell table-header text-truncate"
+                            key={`footer-column-${j}`}
+                          >
                             <div>{c}</div>
                           </th>
                         ))}

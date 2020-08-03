@@ -21,7 +21,10 @@ const Select = ({
       onOpen={() => setIsOpen(true)}
       onHide={() => setIsOpen(false)}
       content={
-        <div className="bg-white">
+        <div
+          className="bg-white"
+          style={{ maxHeight: "400px", overflowY: "auto" }}
+        >
           {items.map((x, i) => (
             <div
               key={uniqid()}
