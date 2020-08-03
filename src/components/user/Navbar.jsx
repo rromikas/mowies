@@ -63,7 +63,7 @@ const Navbar = (props) => {
                 className="row no-gutters align-items-center cursor-pointer"
                 onClick={() => history.push("/")}
               >
-                <div className="square-70">
+                <div className="square-50 mr-2">
                   <Logo></Logo>
                 </div>
                 <div className="col-auto logo text-title-lg">CozyPotato</div>

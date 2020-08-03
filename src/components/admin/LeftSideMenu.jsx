@@ -40,7 +40,10 @@ const LeftSideMenu = ({ section, setSection, setMenu = () => {} }) => {
           >
             <div className="col-60">
               <div
-                onClick={() => setSection(i)}
+                onClick={() => {
+                  setSection(i);
+                  setMenu((prev) => !prev);
+                }}
                 key={`menu-item-${i}`}
                 className={`align-items-center px-3 btn-custom text-left row no-gutters${
                   section === i ? " bg-custom-primary" : ""

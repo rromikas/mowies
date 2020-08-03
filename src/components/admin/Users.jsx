@@ -105,8 +105,8 @@ const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
           store.dispatch({
             type: "SET_NOTIFICATION",
             notification: {
-              title: "Comments were deleted",
-              message: "Comments were successfully deleted",
+              title: "Users updated",
+              message: "User were successfully updated",
               type: "success",
             },
           });

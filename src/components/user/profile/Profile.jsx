@@ -73,7 +73,7 @@ const Profile = (props) => {
 
   return (
     <div className="row no-gutters">
-      <div className="col-60 bg-root" style={{ height: "72px" }}></div>
+      <div className="col-60 bg-root" style={{ height: "100px" }}></div>
       <Navbar></Navbar>
       <EditProfile
         refreshProfile={() => setRefreshProfile(!refreshProfile)}

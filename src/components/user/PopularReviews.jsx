@@ -379,8 +379,8 @@ const PopularReviews = ({ publicUsers, ratings }) => {
                         </div>
                       ))
                   : ""}
-                <div className="row no-gutters">
-                  <div className="col-auto">
+                <div className="row no-gutters mt-2">
+                  <div className="col-auto ml-4">
                     <Paigination
                       count={Math.ceil(
                         comments[x._id]

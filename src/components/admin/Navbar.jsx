@@ -2,10 +2,12 @@ import React, { useEffect, useState, useRef } from "react";
 import { MdMenu } from "react-icons/md";
 import { BsSearch, BsChevronDown } from "react-icons/bs";
 import Notifications from "../../images/Notifications";
-import { PublicUsers } from "../../Data";
 import Popover from "../utility/Popover";
+import Logo from "../../images/Logo";
+import { connect } from "react-redux";
+import history from "../../History";
 
-const Navbar = ({ setIsMenuOpened, isMenuOpened }) => {
+const Navbar = ({ setIsMenuOpened, isMenuOpened, user }) => {
   const lastScroll = useRef(100);
   const [direction, setDirection] = useState("up");
 
@@ -40,12 +42,22 @@ const Navbar = ({ setIsMenuOpened, isMenuOpened }) => {
       <div className="col">
         <div className="row no-gutters align-items-center">
           <div
-            className="col-auto text-center text-white h3 d-xl-block d-none"
+            className="col-auto text-center text-white h3 pl-5"
             style={{ width: "350px" }}
           >
-            WEBSITE LOGO
+            <div
+              className="row no-gutters align-items-center cursor-pointer"
+              onClick={() => history.push("/")}
+            >
+              <div className="square-50 mr-2">
+                <Logo></Logo>
+              </div>
+              <div className="logo text-title-lg text-white d-none d-sm-block">
+                CozyPotato
+              </div>
+            </div>
           </div>
-          <div className="col px-3 d-sm-block d-none">
+          {/* <div className="col px-3 d-sm-block d-none">
             <div className="row no-gutters position-relative w-100 align-items-center">
               <BsSearch
                 fontSize="24px"
@@ -60,7 +72,7 @@ const Navbar = ({ setIsMenuOpened, isMenuOpened }) => {
               ></BsSearch>
               <input type="text" className="input-search-admin w-100"></input>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -73,17 +85,24 @@ const Navbar = ({ setIsMenuOpened, isMenuOpened }) => {
             <div className="row no-gutters bg-dark-lighter py-2 px-4 align-items-center text-white rounded">
               <div
                 className="col-auto mr-2 square-40 bg-image rounded-circle"
-                style={{ backgroundImage: `url(${PublicUsers[1].photo})` }}
+                style={{ backgroundImage: `url(${user.photo})` }}
               ></div>
               <div className="col-auto mr-3 d-none d-md-block">
-                {PublicUsers[1].display_name}
+                {user.display_name}
               </div>
               <Popover
                 content={
                   <div>
                     <div className="popover-item">Edit profile</div>
                     <div className="popover-item">View profile</div>
-                    <div className="popover-item">Logout</div>
+                    <div
+                      className="popover-item"
+                      onClick={() => {
+                        localStorage.setItem("movies_user_token", null);
+                      }}
+                    >
+                      Logout
+                    </div>
                   </div>
                 }
               >
@@ -92,7 +111,7 @@ const Navbar = ({ setIsMenuOpened, isMenuOpened }) => {
             </div>
           </div>
           <MdMenu
-            className="text-white col-auto d-block d-lg-none"
+            className="text-white col-auto d-block d-lg-none cursor-pointer"
             fontSize="34px"
             onClick={() => setIsMenuOpened(!isMenuOpened)}
           ></MdMenu>
@@ -102,4 +121,11 @@ const Navbar = ({ setIsMenuOpened, isMenuOpened }) => {
   );
 };
 
-export default Navbar;
+function mapp(state, ownProps) {
+  return {
+    user: state.user,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(Navbar);

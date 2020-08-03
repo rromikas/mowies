@@ -18,6 +18,7 @@ import {
   GetSettings,
 } from "./server/DatabaseApi";
 import Profile from "./components/user/profile/Profile";
+import PrivateRoute from "./utilities/PrivateRoute";
 
 function App() {
   useEffect(() => {
@@ -80,7 +81,12 @@ function App() {
             <Route exact path="/movie/:movieId" component={Movie}></Route>
             <Route exact path="/movie/:movieId" component={Movie}></Route>
             <Route exact path="/search" component={SearchResults}></Route>
-            <Route exact path="/admin" component={AdminDashboard}></Route>
+            <PrivateRoute
+              exact
+              path="/admin"
+              bearerPath="/login"
+              Component={AdminDashboard}
+            ></PrivateRoute>
             <Route exact path="/login" component={Login}></Route>
             <Route exact path="/signup" component={Signup}></Route>
             <Route exact path="/profile/:userId" component={Profile}></Route>
