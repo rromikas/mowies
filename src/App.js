@@ -63,7 +63,7 @@ function App() {
       });
       store.dispatch({ type: "SET_PUBLICUSERS", publicUsers });
 
-      let userToken = localStorage.getItem("movies_user_token");
+      let userToken = localStorage["movies_user_token"];
       if (userToken) {
         let res = await LoginWithToken({ token: userToken });
         if (!res.error) {

@@ -147,7 +147,7 @@ const Navbar = (props) => {
                         <div
                           className="popover-item"
                           onClick={() => {
-                            localStorage["movies_user_token"] = null;
+                            localStorage["movies_user_token"] = "";
                             store.dispatch({
                               type: "SET_USER",
                               user: {

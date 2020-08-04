@@ -92,7 +92,7 @@ const Navbar = ({ setIsMenuOpened, isMenuOpened, user }) => {
                       <div
                         className="popover-item"
                         onClick={() => {
-                          localStorage.setItem("movies_user_token", null);
+                          localStorage.setItem("movies_user_token", "");
                         }}
                       >
                         Logout
