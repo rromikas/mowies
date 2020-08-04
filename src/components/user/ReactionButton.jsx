@@ -103,7 +103,7 @@ const ReactionButton = (props) => {
             <Emoji
               emoji={props.emoji}
               set="facebook"
-              size={size === "small" ? "14px" : "16px"}
+              size={size === "small" ? 14 : 16}
             />
           </div>
         </div>

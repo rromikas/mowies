@@ -81,35 +81,44 @@ const Navbar = ({ setIsMenuOpened, isMenuOpened, user }) => {
           <div className="col-auto mr-3">
             <Notifications fontSize="44px"></Notifications>
           </div>
-          <div className="col-auto mr-3">
-            <div className="row no-gutters bg-dark-lighter py-2 px-4 align-items-center text-white rounded">
-              <div
-                className="col-auto mr-2 square-40 bg-image rounded-circle"
-                style={{ backgroundImage: `url(${user.photo})` }}
-              ></div>
-              <div className="col-auto mr-3 d-none d-md-block">
-                {user.display_name}
-              </div>
-              <Popover
-                content={
-                  <div>
-                    <div className="popover-item">Edit profile</div>
-                    <div className="popover-item">View profile</div>
-                    <div
-                      className="popover-item"
-                      onClick={() => {
-                        localStorage.setItem("movies_user_token", null);
-                      }}
-                    >
-                      Logout
+          {user.display_name ? (
+            <div className="col-auto mr-3">
+              <div className="row no-gutters">
+                <Popover
+                  content={(w) => (
+                    <div style={{ width: `${w}px` }}>
+                      <div className="popover-item">Edit profile</div>
+                      <div className="popover-item">View profile</div>
+                      <div
+                        className="popover-item"
+                        onClick={() => {
+                          localStorage.setItem("movies_user_token", null);
+                        }}
+                      >
+                        Logout
+                      </div>
+                    </div>
+                  )}
+                >
+                  <div className="col-60 bg-dark-lighter py-2 px-4 align-items-center text-white rounded">
+                    <div className="row no-gutters align-items-center cursor-pointer">
+                      <div
+                        className="col-auto mr-2 square-40 bg-image rounded-circle"
+                        style={{ backgroundImage: `url(${user.photo})` }}
+                      ></div>
+                      <div className="col-auto mr-3 d-none d-md-block">
+                        {user.display_name}
+                      </div>
+                      <BsChevronDown className="col-auto"></BsChevronDown>
                     </div>
                   </div>
-                }
-              >
-                <BsChevronDown className="col-auto cursor-pointer"></BsChevronDown>
-              </Popover>
+                </Popover>
+              </div>
             </div>
-          </div>
+          ) : (
+            ""
+          )}
+
           <MdMenu
             className="text-white col-auto d-block d-lg-none cursor-pointer"
             fontSize="34px"

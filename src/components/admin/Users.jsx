@@ -163,7 +163,7 @@ const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
             <div className="row no-gutters justify-content-between">
               <div className="col-sm-auto col-60">
                 <div className="row no-gutters">
-                  <div className="col-60 col-sm-auto pb-3">
+                  <div className="col-60 col-sm-auto pb-3 mr-sm-3">
                     <div className="row no-gutters">
                       <Select
                         popoverClass="col-60 col-sm-auto"
@@ -174,7 +174,7 @@ const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
                         }
                         items={["Edit", "Block", "Inactivate", "Delete"]}
                         btnName={action ? action : "Select Action"}
-                        className="input-light px-3 col-auto mr-sm-3"
+                        className="input-light px-3 col-auto"
                       ></Select>
                     </div>
                   </div>
@@ -185,7 +185,7 @@ const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
                   >
                     Apply
                   </div>
-                  <div className="col-60 col-sm-auto pb-3">
+                  <div className="col-60 col-sm-auto pb-3 mr-sm-3">
                     <div className="row no-gutters">
                       <Select
                         popoverClass="col-60 col-sm-auto"
@@ -194,7 +194,7 @@ const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
                         }
                         items={["Admin", "Co-admin", "User"]}
                         btnName={role ? role : "Select Role"}
-                        className="input-light px-3 col-auto mr-sm-3"
+                        className="input-light px-3 col-auto"
                       ></Select>
                     </div>
                   </div>
@@ -486,7 +486,7 @@ const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
             <div className="row no-gutters justify-content-center justify-content-sm-between">
               <div className="col-60 col-sm-auto">
                 <div className="row no-gutters">
-                  <div className="col-60 col-sm-auto pb-3">
+                  <div className="col-60 col-sm-auto pb-3 mr-sm-3">
                     <div className="row no-gutters">
                       <Select
                         popoverClass="col-60 col-sm-auto"
@@ -495,7 +495,7 @@ const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
                         }
                         items={["Edit", "Delete"]}
                         btnName={action ? action : "Select Action"}
-                        className="input-light px-3 col-auto mr-sm-3"
+                        className="input-light px-3 col-auto"
                       ></Select>
                     </div>
                   </div>

@@ -163,14 +163,14 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
         <div className="row no-gutters justify-content-between">
           <div className="col-sm-auto col-60">
             <div className="row no-gutters">
-              <div className="col-60 col-sm-auto pb-3">
+              <div className="col-60 col-sm-auto pb-3 mr-sm-3">
                 <div className="row no-gutters">
                   <Select
                     popoverClass="col-60 col-sm-auto"
                     onSelect={(index) => setAction(["Edit", "Delete"][index])}
                     items={["Edit", "Delete"]}
                     btnName={action ? action : "Select Action"}
-                    className="input-light px-3 col-auto mr-sm-3"
+                    className="input-light px-3 col-auto"
                   ></Select>
                 </div>
               </div>
@@ -181,14 +181,14 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
               >
                 Apply
               </div>
-              <div className="col-60 col-sm-auto pb-3">
+              <div className="col-60 col-sm-auto pb-3 mr-sm-3">
                 <div className="row no-gutters">
                   <Select
                     popoverClass="col-60 col-sm-auto"
                     onSelect={(index) => setRole(["Admin", "User"][index])}
                     items={["Administrator", "User"]}
                     btnName={role ? role : "Select Role"}
-                    className="input-light px-3 col-auto mr-sm-3"
+                    className="input-light px-3 col-auto"
                   ></Select>
                 </div>
               </div>
@@ -436,11 +436,11 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
                             <div>Movie: {x.movie_title}</div>
                             <div className="d-flex">
                               <Popover
-                                content={
+                                content={(w) => (
                                   <div className="p-5">
                                     Review id: {x.review_id}
                                   </div>
-                                }
+                                )}
                               >
                                 <div
                                   className="text-primary cursor-pointer"
@@ -537,14 +537,14 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
         <div className="row no-gutters justify-content-center justify-content-sm-between">
           <div className="col-60 col-sm-auto">
             <div className="row no-gutters">
-              <div className="col-60 col-sm-auto pb-3">
+              <div className="col-60 col-sm-auto pb-3 mr-sm-3">
                 <div className="row no-gutters">
                   <Select
                     popoverClass="col-60 col-sm-auto"
                     onSelect={(index) => setAction(["Edit", "Delete"][index])}
                     items={["Edit", "Delete"]}
                     btnName={action ? action : "Select Action"}
-                    className="input-light px-3 col-auto mr-sm-3"
+                    className="input-light px-3 col-auto"
                   ></Select>
                 </div>
               </div>

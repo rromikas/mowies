@@ -148,24 +148,29 @@ const EditPromotion = ({ currentPromotion, getBack }) => {
               <div className="col-60">Rating</div>
             </div>
             <div className="row no-gutters">
-              <Select
-                popoverClass="col-sm-30 col-60 pr-sm-3"
-                className="input-light px-3"
-                btnName={
-                  promotion.content.rating
-                    ? Ratings.find((x) => x.name === promotion.content.rating)
-                        .element
-                    : "Select"
-                }
-                onSelect={(index) => {
-                  let content = { ...promotion.content };
-                  content.rating = Ratings[index].name;
-                  setPromotion((prev) =>
-                    Object.assign({}, prev, { content: content })
-                  );
-                }}
-                items={Ratings.map((x) => x.element)}
-              ></Select>
+              <div className="col-sm-30 col-60 pr-sm-3">
+                <div className="row no-gutters">
+                  <Select
+                    popoverClass="col-60"
+                    className="input-light px-3"
+                    btnName={
+                      promotion.content.rating
+                        ? Ratings.find(
+                            (x) => x.name === promotion.content.rating
+                          ).element
+                        : "Select"
+                    }
+                    onSelect={(index) => {
+                      let content = { ...promotion.content };
+                      content.rating = Ratings[index].name;
+                      setPromotion((prev) =>
+                        Object.assign({}, prev, { content: content })
+                      );
+                    }}
+                    items={Ratings.map((x) => x.element)}
+                  ></Select>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -340,19 +345,27 @@ const EditPromotion = ({ currentPromotion, getBack }) => {
           <div className="col-60 mb-1">Type</div>
           <div className="col-xl-40 col-md-50 col-60">
             <div className="row no-gutters">
-              <Select
-                popoverClass="col-sm-30 col-60 pr-sm-3"
-                onSelect={(index) =>
-                  setPromotion((prev) =>
-                    Object.assign({}, prev, { status: publishStatuses[index] })
-                  )
-                }
-                className="w-100 input-light px-3"
-                items={publishStatuses}
-                btnName={
-                  promotion.publish_status ? promotion.publish_status : "Select"
-                }
-              ></Select>
+              <div className="col-sm-30 col-60 pr-sm-3">
+                <div className="row no-gutters">
+                  <Select
+                    popoverClass="col-60"
+                    onSelect={(index) =>
+                      setPromotion((prev) =>
+                        Object.assign({}, prev, {
+                          status: publishStatuses[index],
+                        })
+                      )
+                    }
+                    className="w-100 input-light px-3"
+                    items={publishStatuses}
+                    btnName={
+                      promotion.publish_status
+                        ? promotion.publish_status
+                        : "Select"
+                    }
+                  ></Select>
+                </div>
+              </div>
             </div>
           </div>
         </div>

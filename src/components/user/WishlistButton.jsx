@@ -57,11 +57,11 @@ const WishlistButton = ({ user, movie }) => {
     <Popover
       theme="dark"
       position="top"
-      content={
+      content={(w) => (
         <div className="p-3">
           {currentlyAdded ? "Movie is in your wishlist" : "Add to wishlist"}
         </div>
-      }
+      )}
       trigger="mouseenter"
     >
       <div className="btn-custom btn-custom-iconic">

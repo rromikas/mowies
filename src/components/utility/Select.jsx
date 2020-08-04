@@ -21,16 +21,17 @@ const Select = ({
       arrow={false}
       onOpen={() => setIsOpen(true)}
       onHide={() => setIsOpen(false)}
-      content={
+      content={(w) => (
         <div
           className="bg-white"
-          style={{ maxHeight: "400px", overflowY: "auto", width: popoverWidth }}
+          style={{ maxHeight: "400px", overflowY: "auto", width: w }}
         >
           {items.map((x, i) => (
             <div
               key={uniqid()}
               className="popover-item w-100"
               onClick={() => {
+                console.log("openere", opener);
                 onSelect(i);
                 if (!multipleSelect) {
                   opener.current.click();
@@ -41,7 +42,7 @@ const Select = ({
             </div>
           ))}
         </div>
-      }
+      )}
     >
       <div
         ref={opener}

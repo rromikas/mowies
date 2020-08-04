@@ -137,7 +137,7 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                       </div>
                     </div>
                     <div className="col-auto">
-                      <div className="row no-gutters">
+                      <div className="row no-gutters align-items-center">
                         <div className="col-auto pr-2">
                           <div
                             className="bg-image rounded-circle square-40"
@@ -152,16 +152,21 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                         </div>
                         <div className="col-auto">
                           <div className="row no-gutters align-items-center text-white">
-                            <div className="col-auto mr-3 h6 mb-0">
+                            <div className="col-auto mr-3 mb-0">
                               {publicUsers[x.author]
                                 ? publicUsers[x.author].display_name
                                 : ""}
                             </div>
                           </div>
-                          <div className="row no-gutters text-muted">
-                            Reviewed by
-                          </div>
                         </div>
+                      </div>
+                    </div>
+                    <div className="col-auto">
+                      <div className="row no-gutters text-white">
+                        <span className="mr-2">Posted review on</span>
+                        <span className="text-muted">
+                          {date.format(new Date(x.date), "MMM DD, YYYY")}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -169,63 +174,32 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                   <div className="row no-gutters text-light mb-3 flex-grow-0">
                     {x.review}
                   </div>
+                  <div className="row no-gutters align-items-center">
+                    {x.rating ? (
+                      <div style={{ marginBottom: "-6px" }}>
+                        <Emoji
+                          emoji={
+                            x.rating === "excellent_rate"
+                              ? "fire"
+                              : x.rating === "good_rate"
+                              ? "heart"
+                              : x.rating === "ok_rate"
+                              ? "heavy-division-sign"
+                              : "shit"
+                          }
+                          set="facebook"
+                          size={24}
+                        />
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </div>
                   <div className="row no-gutters flex-grow-1">
                     <div className="col-60 d-flex flex-column justify-content-end">
-                      <div className="row no-gutters justify-content-between align-items-center text-white mb-3">
+                      <div className="row no-gutters justify-content-end align-items-center text-white">
                         <div className="col-auto">
                           <div className="row no-gutters align-items-center">
-                            <ReactionButton
-                              selected={
-                                x.rating ? x.rating === "excellent_rate" : false
-                              }
-                              emoji="fire"
-                              className="mr-1 mb-2"
-                              value={
-                                ratings[x.movie_id]
-                                  ? ratings[x.movie_id].excellent_rate
-                                  : 0
-                              }
-                            ></ReactionButton>
-                            <ReactionButton
-                              selected={
-                                x.rating ? x.rating === "good_rate" : false
-                              }
-                              emoji="heart"
-                              className="mr-1 mb-2"
-                              value={
-                                ratings[x.movie_id]
-                                  ? ratings[x.movie_id].good_rate
-                                  : 0
-                              }
-                            ></ReactionButton>
-                            <ReactionButton
-                              selected={
-                                x.rating ? x.rating === "ok_rate" : false
-                              }
-                              className="mr-1 mb-2"
-                              emoji="heavy_division_sign"
-                              value={
-                                ratings[x.movie_id]
-                                  ? ratings[x.movie_id].ok_rate
-                                  : 0
-                              }
-                            ></ReactionButton>
-                            <ReactionButton
-                              className="mb-2"
-                              emoji="shit"
-                              value={
-                                ratings[x.movie_id]
-                                  ? ratings[x.movie_id].bad_rate
-                                  : 0
-                              }
-                              selected={
-                                x.rating ? x.rating === "bad_rate" : false
-                              }
-                            ></ReactionButton>
-                          </div>
-                        </div>
-                        <div className="col-auto">
-                          <div className="row no-gutters align-items-center mb-2">
                             <div className="col-auto mr-2">
                               {x.likes.length}
                             </div>
@@ -253,12 +227,6 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="row no-gutters text-white">
-                        <span className="mr-2">Posted review on</span>
-                        <span className="text-muted">
-                          {date.format(new Date(x.date), "MMM DD, YYYY")}
-                        </span>
                       </div>
                     </div>
                   </div>

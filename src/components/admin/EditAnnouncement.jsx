@@ -38,10 +38,10 @@ const EditAnnouncement = ({ currentAnnouncement, getBack }) => {
       <div className="col-60">
         <div className="row no-gutters mb-4">
           <div className="col-60 mb-1">Type</div>
-          <div className="col-xl-40 col-md-50 col-60">
+          <div className="col-xl-40 col-md-50 col-60 pr-sm-3">
             <div className="row no-gutters">
               <Select
-                popoverClass="col-sm-30 col-60 pr-sm-3"
+                popoverClass="col-sm-30 col-60"
                 onSelect={(index) =>
                   setAnnouncement((prev) =>
                     Object.assign({}, prev, { type: types[index] })
@@ -257,10 +257,10 @@ const EditAnnouncement = ({ currentAnnouncement, getBack }) => {
         </div>
         <div className="row no-gutters mb-4">
           <div className="col-60 mb-1">Type</div>
-          <div className="col-xl-40 col-md-50 col-60">
+          <div className="col-xl-40 col-md-50 col-60 pr-sm-3">
             <div className="row no-gutters">
               <Select
-                popoverClass="col-sm-30 col-60 pr-sm-3"
+                popoverClass="col-sm-30 col-60"
                 onSelect={(index) =>
                   setAnnouncement((prev) =>
                     Object.assign({}, prev, { status: statuses[index] })

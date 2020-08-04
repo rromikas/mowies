@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "react-tippy/dist/tippy.css";
 import { Tooltip } from "react-tippy";
 
@@ -8,7 +8,7 @@ const Popover = ({
   position = "bottom",
   arrow = true,
   theme = "light",
-  content,
+  content = () => {},
   trigger = "click",
   delay = 0,
   animation = "scale",
@@ -17,6 +17,8 @@ const Popover = ({
   popoverWidth = "auto",
   ...rest
 }) => {
+  const [contentWidth, setContentWidth] = useState(0);
+
   useEffect(() => {
     return function cleanUp() {
       let popovers = document.getElementsByClassName("tippy-popper");
@@ -37,7 +39,7 @@ const Popover = ({
       onHide={onHide}
       delay={delay}
       hideDelay={0}
-      html={content}
+      html={content(contentWidth)}
       position={position}
       trigger={trigger}
       theme={theme}
@@ -48,7 +50,27 @@ const Popover = ({
       unmountHTMLWhenHide={true}
       className={className}
     >
-      {rest.children}
+      {React.cloneElement(
+        rest.children,
+        Object.assign({}, rest.children.props, {
+          ref: (el) => {
+            if (el) {
+              if (contentWidth === 0) {
+                setContentWidth(el.getBoundingClientRect().width);
+              }
+              if (rest.children) {
+                const { ref } = rest.children;
+                if (ref && "current" in ref) {
+                  ref.current = el;
+                }
+                if (typeof ref === "function") {
+                  ref(el);
+                }
+              }
+            }
+          },
+        })
+      )}
     </Tooltip>
   );
 };
