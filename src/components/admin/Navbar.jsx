@@ -6,6 +6,7 @@ import Popover from "../utility/Popover";
 import Logo from "../../images/Logo";
 import { connect } from "react-redux";
 import history from "../../History";
+import store from "../../store/store";
 
 const Navbar = ({ setIsMenuOpened, isMenuOpened, user }) => {
   const lastScroll = useRef(100);
@@ -93,6 +94,16 @@ const Navbar = ({ setIsMenuOpened, isMenuOpened, user }) => {
                         className="popover-item"
                         onClick={() => {
                           localStorage.setItem("movies_user_token", "");
+                          store.dispatch({
+                            type: "SET_USER",
+                            user: {
+                              display_name: "",
+                              photo: "",
+                              token: "",
+                              ratings: {},
+                              wishlist: [],
+                            },
+                          });
                           history.push("/");
                         }}
                       >
