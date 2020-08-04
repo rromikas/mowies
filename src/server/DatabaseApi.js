@@ -207,3 +207,19 @@ export const EditPromotion = (promotion) => {
 export const DeleteMultiplePromotions = (ids, update) => {
   return SendPostRequest("/admin/promotions/delete", { ids, update });
 };
+
+export const GetNotifications = () => {
+  return SendGetRequest("/admin/notifications/get");
+};
+
+export const CreateNotification = (notification) => {
+  return SendPostRequest("/admin/notifications/create", notification);
+};
+
+export const EditNotification = (notification) => {
+  return SendPostRequest("/admin/notifications/edit", notification);
+};
+
+export const DeleteMultipleNotifications = (ids, update) => {
+  return SendPostRequest("/admin/notifications/delete", { ids, update });
+};

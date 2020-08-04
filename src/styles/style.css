@@ -16889,7 +16889,6 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .input-light-resize {
-  min-height: 44px;
   border: 1px solid #dfe1e6;
   background: white;
   outline: none;
@@ -17053,5 +17052,9 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .play-btn:hover {
   background: rgba(255, 255, 255, 0.4);
+}
+
+.pg-viewer-wrapper {
+  overflow: auto !important;
 }
 /*# sourceMappingURL=style.css.map */

@@ -19,6 +19,7 @@ import {
 } from "./server/DatabaseApi";
 import Profile from "./components/user/profile/Profile";
 import PrivateRoute from "./utilities/PrivateRoute";
+import LegalDocument from "./components/user/LegalDocument";
 
 function App() {
   useEffect(() => {
@@ -77,6 +78,27 @@ function App() {
       <Router history={history}>
         <div className="container-fluid px-0">
           <Switch>
+            <Route
+              exact
+              path="/terms-and-conditions"
+              render={() => (
+                <LegalDocument type="terms-and-conditions"></LegalDocument>
+              )}
+            ></Route>
+            <Route
+              exact
+              path="/cookies-policy"
+              render={() => (
+                <LegalDocument type="cookies-policy"></LegalDocument>
+              )}
+            ></Route>
+            <Route
+              exact
+              path="/privacy-policy"
+              render={() => (
+                <LegalDocument type="privacy-policy"></LegalDocument>
+              )}
+            ></Route>
             <Route exact path="/" component={Home}></Route>
             <Route exact path="/movie/:movieId" component={Movie}></Route>
             <Route exact path="/movie/:movieId" component={Movie}></Route>

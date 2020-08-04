@@ -368,7 +368,7 @@ const RecentReviews = ({ publicUsers, ratings }) => {
               </Collapse>
             </React.Fragment>
           ))}
-        <div className="row no-gutters justify-content-end mt-2">
+        {/* <div className="row no-gutters justify-content-end mt-2">
           <div className="col-auto mr-sm-2 mr-md-0">
             <Paigination
               classNames={{
@@ -380,7 +380,7 @@ const RecentReviews = ({ publicUsers, ratings }) => {
               setCurrent={setPage}
             ></Paigination>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

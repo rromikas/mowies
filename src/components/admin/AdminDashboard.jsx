@@ -185,9 +185,12 @@ const AdminDashboard = () => {
             ) : section === 12 ? (
               <EditNotification
                 currentNotification={editNotification}
+                getBack={() => setSection(5)}
               ></EditNotification>
             ) : section === 13 ? (
-              <AddNewNotification></AddNewNotification>
+              <AddNewNotification
+                getBack={() => setSection(5)}
+              ></AddNewNotification>
             ) : section === 14 ? (
               <EditUser
                 currentUser={editUser}

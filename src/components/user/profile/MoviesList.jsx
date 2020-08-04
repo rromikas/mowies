@@ -101,8 +101,9 @@ const MoviesList = ({ movies, user, ratings }) => {
                         : "unknown"}
                     </div>
                   </div>
-                  <div className="row no-gutters mb-2">
+                  <div className="row no-gutters mb-2 justify-content-end">
                     <ReactionButton
+                      size="small"
                       selected={
                         user.ratings[formatedMovie.id]
                           ? user.ratings[formatedMovie.id].rate_type ===
@@ -119,6 +120,7 @@ const MoviesList = ({ movies, user, ratings }) => {
                       }
                     ></ReactionButton>
                     <ReactionButton
+                      size="small"
                       selected={
                         user.ratings[formatedMovie.id]
                           ? user.ratings[formatedMovie.id].rate_type ===
@@ -135,6 +137,7 @@ const MoviesList = ({ movies, user, ratings }) => {
                       }
                     ></ReactionButton>
                     <ReactionButton
+                      size="small"
                       selected={
                         user.ratings[formatedMovie.id]
                           ? user.ratings[formatedMovie.id].rate_type ===
@@ -151,6 +154,7 @@ const MoviesList = ({ movies, user, ratings }) => {
                       }
                     ></ReactionButton>
                     <ReactionButton
+                      size="small"
                       emoji="shit"
                       value={
                         ratings[formatedMovie.id]

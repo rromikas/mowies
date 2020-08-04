@@ -6,9 +6,8 @@ import { Emoji } from "emoji-mart";
 import Pagination from "../utility/Paigination";
 import { BsSearch } from "react-icons/bs";
 import date from "date-and-time";
-import Popover from "../utility/Popover";
 import { Swipeable } from "react-swipeable";
-import Announcements from "./Announcements";
+import { GetNotifications } from "../../server/DatabaseApi";
 
 const Notifications = ({
   setEditNotification,
@@ -23,17 +22,23 @@ const Notifications = ({
   const [roleFilter, setRoleFilter] = useState("");
   const [search, setSearch] = useState("");
 
-  const [announcements, setAnnouncements] = useState([]);
-  const [filteredAnnouncements, setFilteredAnnouncements] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [filteredNotifications, setFilteredNotifications] = useState([]);
   useEffect(() => {
-    setAnnouncements(
-      data.map((x) => Object.assign({}, x, { selected: false }))
-    );
+    async function getData() {
+      let data = await GetNotifications();
+      console.log("Data notifications", data);
+      if (!data.error) {
+        setNotifications(data);
+      }
+    }
+
+    getData();
   }, []);
 
   useEffect(() => {
-    let arr = [...announcements];
-    if (announcements.length) {
+    let arr = [...notifications];
+    if (notifications.length) {
       if (search) {
         if (searchKey === "User") {
           arr = arr.filter((x) =>
@@ -56,15 +61,15 @@ const Notifications = ({
         );
       }
 
-      setFilteredAnnouncements(arr);
+      setFilteredNotifications(arr);
     }
-  }, [search, roleFilter, announcements]);
+  }, [search, roleFilter, notifications]);
 
   //boundaries for slicing reviews array. (pagination)
   let boundaries = [(page - 1) * 5, (page - 1) * 5 + 5];
-  if (boundaries[1] >= filteredAnnouncements.length) {
+  if (boundaries[1] >= filteredNotifications.length) {
     boundaries[1] =
-      boundaries[1] - (boundaries[1] - filteredAnnouncements.length);
+      boundaries[1] - (boundaries[1] - filteredNotifications.length);
   }
 
   const statuses = ["Sent", "Drafted", "Deleted"];
@@ -90,12 +95,12 @@ const Notifications = ({
         <div className="row no-gutters">
           <div className="col-60 py-5">
             <div className="row no-gutters h6 mb-3">
-              <div className="col-auto">All ({announcements.length})</div>
+              <div className="col-auto">All ({notifications.length})</div>
               {statuses.map((x, i) => (
                 <React.Fragment key={`status-${i}`}>
                   <div className="col-auto px-2 text-muted">|</div>
                   <div className="col-auto">
-                    {x} ({announcements.filter((y) => y.status === x).length})
+                    {x} ({notifications.filter((y) => y.status === x).length})
                   </div>
                 </React.Fragment>
               ))}
@@ -120,7 +125,7 @@ const Notifications = ({
                   <div
                     onClick={() => {
                       if (action === "Edit") {
-                        let selected = filteredAnnouncements.filter(
+                        let selected = filteredNotifications.filter(
                           (x) => x.selected
                         );
                         if (selected.length) {
@@ -158,7 +163,7 @@ const Notifications = ({
                   <div
                     onClick={() => {
                       if (action === "Edit") {
-                        let selected = filteredAnnouncements.filter(
+                        let selected = filteredNotifications.filter(
                           (x) => x.selected
                         );
                         if (selected.length) {
@@ -272,13 +277,13 @@ const Notifications = ({
                           <Checkbox
                             color={"primary"}
                             checked={
-                              filteredAnnouncements
+                              filteredNotifications
                                 .slice(boundaries[0], boundaries[1])
                                 .filter((x) => x.selected).length ===
                               boundaries[1] - boundaries[0]
                             }
                             onChange={(e) => {
-                              setFilteredAnnouncements((prev) => {
+                              setFilteredNotifications((prev) => {
                                 let arr = [...prev];
                                 for (
                                   let i = boundaries[0];
@@ -317,8 +322,8 @@ const Notifications = ({
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredAnnouncements.length ? (
-                        filteredAnnouncements
+                      {filteredNotifications.length ? (
+                        filteredNotifications
                           .slice((page - 1) * 5, (page - 1) * 5 + 5)
                           .map((x, i) => (
                             <tr
@@ -330,7 +335,7 @@ const Notifications = ({
                                   color={"primary"}
                                   checked={x.selected}
                                   onChange={(e) => {
-                                    setFilteredAnnouncements((prev) => {
+                                    setFilteredNotifications((prev) => {
                                       let arr = [...prev];
                                       arr[(page - 1) * 5 + i].selected =
                                         e.target.checked;
@@ -441,13 +446,13 @@ const Notifications = ({
                           <Checkbox
                             color={"primary"}
                             checked={
-                              filteredAnnouncements
+                              filteredNotifications
                                 .slice(boundaries[0], boundaries[1])
                                 .filter((x) => x.selected).length ===
                               boundaries[1] - boundaries[0]
                             }
                             onChange={(e) => {
-                              setFilteredAnnouncements((prev) => {
+                              setFilteredNotifications((prev) => {
                                 let arr = [...prev];
                                 for (
                                   let i = boundaries[0];
@@ -511,7 +516,7 @@ const Notifications = ({
                     className="btn-custom btn-custom-primary col60 col-sm-auto mr-sm-3 btn-xsmall mb-3"
                     onClick={() => {
                       if (action === "Edit") {
-                        let selected = filteredAnnouncements.filter(
+                        let selected = filteredNotifications.filter(
                           (x) => x.selected
                         );
                         if (selected.length) {
@@ -529,7 +534,7 @@ const Notifications = ({
               </div>
               <div className="col-auto">
                 <Pagination
-                  count={Math.ceil(filteredAnnouncements.length / 5)}
+                  count={Math.ceil(filteredNotifications.length / 5)}
                   current={page}
                   setCurrent={setPage}
                 ></Pagination>

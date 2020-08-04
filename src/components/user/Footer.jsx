@@ -25,8 +25,9 @@ const Footer = ({ user }) => {
   ];
 
   const secodaryItems = [
-    { name: "Privacy Terms", path: "/" },
-    { name: "Copyright Policy", path: "/" },
+    { name: "Privacy policy", path: "/privacy-policy" },
+    { name: "Cookies Policy", path: "/cookies-policy" },
+    { name: "Terms And Conditions", path: "/terms-and-conditions" },
   ];
 
   return (
@@ -69,10 +70,16 @@ const Footer = ({ user }) => {
             <div className="row no-gutters">
               {secodaryItems.map((x, i) => (
                 <React.Fragment key={`footer-item-${i}`}>
-                  <div className="col-auto link-primary d-sm-block d-none">
+                  <div
+                    className="col-auto link-primary d-sm-block d-none"
+                    onClick={() => history.push(x.path)}
+                  >
                     {x.name}
                   </div>
-                  <div className="col-auto link-primary d-block d-sm-none">
+                  <div
+                    className="col-auto link-primary d-block d-sm-none"
+                    onClick={() => history.push(x.path)}
+                  >
                     {x.name.split(" ")[0]}
                   </div>
                   {i !== secodaryItems.length - 1 && (
