@@ -10,7 +10,8 @@ const PrivateRoute = ({ Component, bearerPath, user, ...rest }) => {
 
   useEffect(() => {
     async function getData() {
-      let token = localStorage["movies_user_token"];
+      let token = JSON.parse(localStorage["movies_user_token"] || null);
+      console.log("token", token);
       if (!token) {
         setValidity((prev) => Object.assign({}, prev, { ready: true }));
       } else {
