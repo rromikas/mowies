@@ -93,6 +93,7 @@ const Navbar = ({ setIsMenuOpened, isMenuOpened, user }) => {
                         className="popover-item"
                         onClick={() => {
                           localStorage.setItem("movies_user_token", "");
+                          history.push("/");
                         }}
                       >
                         Logout

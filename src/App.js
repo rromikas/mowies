@@ -63,8 +63,8 @@ function App() {
       });
       store.dispatch({ type: "SET_PUBLICUSERS", publicUsers });
 
-      let userToken = JSON.parse(localStorage["movies_user_token"] || null);
-      if (userToken) {
+      let userToken = localStorage["movies_user_token"];
+      if (userToken !== undefined && userToken.length) {
         let res = await LoginWithToken({ token: userToken });
         if (!res.error) {
           store.dispatch({ type: "SET_USER", user: res });
