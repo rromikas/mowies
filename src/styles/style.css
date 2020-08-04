@@ -13597,7 +13597,8 @@ button.bg-dark:focus {
 }
 
 .pr-1,
-.px-1 {
+.px-1,
+.btn-reaction-small {
   padding-right: 0.25rem !important;
 }
 
@@ -13607,7 +13608,8 @@ button.bg-dark:focus {
 }
 
 .pl-1,
-.px-1 {
+.px-1,
+.btn-reaction-small {
   padding-left: 0.25rem !important;
 }
 
@@ -13622,8 +13624,7 @@ button.bg-dark:focus {
 
 .pr-2,
 .px-2,
-.btn-reaction,
-.btn-reaction-selected {
+.btn-reaction-normal {
   padding-right: 0.5rem !important;
 }
 
@@ -13634,8 +13635,7 @@ button.bg-dark:focus {
 
 .pl-2,
 .px-2,
-.btn-reaction,
-.btn-reaction-selected {
+.btn-reaction-normal {
   padding-left: 0.5rem !important;
 }
 
@@ -16030,15 +16030,24 @@ body {
   color: #cacaca !important;
 }
 
+.btn-reaction-normal {
+  height: 30px;
+  border-radius: 12px;
+}
+
+.btn-reaction-small {
+  height: 20px;
+  font-size: 12px;
+  border-radius: 7px;
+}
+
 .btn-reaction {
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
   cursor: pointer;
-  border-radius: 12px;
   color: white;
-  height: 30px;
   -webkit-transition: background 0.3s;
   transition: background 0.3s;
 }
@@ -16057,9 +16066,7 @@ body {
       -ms-user-select: none;
           user-select: none;
   cursor: pointer;
-  border-radius: 12px;
   border: 1.5px solid #004ad5;
-  height: 30px;
   color: white;
   background: #004ad5;
   -webkit-transition: background 0.3s;
@@ -16256,6 +16263,16 @@ body {
           align-items: center;
 }
 
+.square-20 {
+  width: 20px;
+  height: 20px;
+}
+
+.square-30 {
+  width: 30px;
+  height: 30px;
+}
+
 .square-40 {
   width: 40px;
   height: 40px;
@@ -16264,6 +16281,11 @@ body {
 .square-50 {
   width: 50px;
   height: 50px;
+}
+
+.square-60 {
+  width: 60px;
+  height: 60px;
 }
 
 .square-64 {
@@ -16372,7 +16394,6 @@ body {
 
 .popover-item {
   line-height: 50px;
-  min-width: 222px;
   text-align: left;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
@@ -17011,5 +17032,26 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .link-primary:hover {
   color: #ff0040;
+}
+
+.cover-255-233 {
+  background: white;
+  -webkit-transition: background 0.3s;
+  transition: background 0.3s;
+}
+
+.cover-255-233:hover {
+  background: #e6e6e6;
+}
+
+.play-btn {
+  border: 1px solid white;
+  background: rgba(255, 255, 255, 0.3);
+  -webkit-transition: background 0.3s;
+  transition: background 0.3s;
+}
+
+.play-btn:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
 /*# sourceMappingURL=style.css.map */

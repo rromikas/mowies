@@ -13,13 +13,7 @@ const Footer = ({ user }) => {
     { name: "Home", path: "/" },
     { name: "My Wishlist", path: user._id ? `/profile/${user._id}` : "/login" },
     { name: "My Reviews", path: user._id ? `/profile/${user._id}` : "/login" },
-    {
-      name: "My Discussion",
-      path: user._id ? `/profile/${user._id}` : "/login",
-    },
     { name: "About Us", path: "/" },
-    { name: "Blog", path: "/" },
-    { name: "API", path: "/" },
     { name: "Contact", path: "/" },
   ];
 
@@ -33,7 +27,6 @@ const Footer = ({ user }) => {
   const secodaryItems = [
     { name: "Privacy Terms", path: "/" },
     { name: "Copyright Policy", path: "/" },
-    { name: "Contact", path: "/" },
   ];
 
   return (

@@ -6,12 +6,17 @@ import { connect } from "react-redux";
 
 const TrailerPlayer = ({ movieId, settings }) => {
   const [videoIds, setVideoIds] = useState([]);
+  const [problem, setProblem] = useState("");
 
   useEffect(() => {
     async function getData() {
       if (movieId && settings.movies_api_key) {
         let trailers = await GetTrailers(movieId, settings.movies_api_key);
-        setVideoIds(trailers.results.map((x) => x.key));
+        if (!trailers.results || !trailers.results.length) {
+          setProblem("We couldn't find trailer for this movie");
+        } else {
+          setVideoIds(trailers.results.map((x) => x.key));
+        }
       }
     }
 
@@ -21,7 +26,7 @@ const TrailerPlayer = ({ movieId, settings }) => {
   return (
     <div className="col-xl-33 col-lg-36 col-md-39 col-sm-42 col-60">
       <div className="row no-gutters">
-        {videoIds.length && (
+        {videoIds.length ? (
           <div className="col-60">
             <div className="trailer-player-wrapper">
               <ReactPlayer
@@ -34,6 +39,10 @@ const TrailerPlayer = ({ movieId, settings }) => {
               />
             </div>
           </div>
+        ) : problem ? (
+          <div className="text-white h4 m-auto">{problem}</div>
+        ) : (
+          ""
         )}
       </div>
     </div>

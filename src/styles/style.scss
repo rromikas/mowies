@@ -92,15 +92,23 @@ body {
   color: rgb(202, 202, 202) !important;
 }
 
+.btn-reaction-normal {
+  height: 30px;
+  @extend .px-2;
+  border-radius: 12px;
+}
+.btn-reaction-small {
+  height: 20px;
+  font-size: 12px;
+  @extend .px-1;
+  border-radius: 7px;
+}
+
 .btn-reaction {
   user-select: none;
   cursor: pointer;
-  border-radius: 12px;
-  // border: 1.5px solid $primary;
-  // background: lighten($color: $over-root, $amount: 10);
   color: white;
-  height: 30px;
-  @extend .px-2;
+
   transition: background 0.3s;
 }
 
@@ -115,12 +123,9 @@ body {
 .btn-reaction-selected {
   user-select: none;
   cursor: pointer;
-  border-radius: 12px;
   border: 1.5px solid $primary;
-  height: 30px;
   color: white;
   background: $primary;
-  @extend .px-2;
   transition: background 0.3s;
 }
 
@@ -291,6 +296,16 @@ body {
   align-items: center;
 }
 
+.square-20 {
+  width: 20px;
+  height: 20px;
+}
+
+.square-30 {
+  width: 30px;
+  height: 30px;
+}
+
 .square-40 {
   width: 40px;
   height: 40px;
@@ -299,6 +314,11 @@ body {
 .square-50 {
   width: 50px;
   height: 50px;
+}
+
+.square-60 {
+  width: 60px;
+  height: 60px;
 }
 
 .square-64 {
@@ -403,7 +423,6 @@ body {
 .popover-item {
   line-height: 50px;
   @extend .px-3;
-  min-width: 222px;
   text-align: left;
   transition: all 0.3s;
   user-select: none;
@@ -934,4 +953,23 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .link-primary:hover {
   color: $primary-custom;
+}
+
+.cover-255-233 {
+  background: rgb(255, 255, 255);
+  transition: background 0.3s;
+}
+
+.cover-255-233:hover {
+  background: rgb(230, 230, 230);
+}
+
+.play-btn {
+  border: 1px solid white;
+  background: rgba(255, 255, 255, 0.3);
+  transition: background 0.3s;
+}
+
+.play-btn:hover {
+  background: rgba(255, 255, 255, 0.4);
 }

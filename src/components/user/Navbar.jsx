@@ -12,7 +12,7 @@ const Navbar = (props) => {
   const user = props.user;
   const search = props.search;
   const [query, setQuery] = useState("");
-  const categories = ["Movies", "Series", "Reviews"];
+  const categories = ["All", "Movies", "Series", "Reviews"];
   const [scrolledToTop, setScrolledTopTop] = useState(true);
   const lastScroll = useRef(100);
   const [direction, setDirection] = useState("up");
@@ -57,7 +57,7 @@ const Navbar = (props) => {
         }`}
       >
         <div className="col-60 content-container">
-          <div className="row no-gutters justify-content-between px-3 py-3 align-items-center flex-nowrap">
+          <div className="row no-gutters justify-content-between px-3 py-2 align-items-center flex-nowrap">
             <div className="col-auto d-none d-sm-block pr-sm-5 pr-3 text-white pl-sm-3 pl-2">
               <div
                 className="row no-gutters align-items-center cursor-pointer"
@@ -73,7 +73,7 @@ const Navbar = (props) => {
               className="d-block d-sm-none cursor-pointer"
               onClick={() => history.push("/")}
             >
-              <div className="square-70 mx-auto">
+              <div className="square-40 mx-auto">
                 <Logo></Logo>
               </div>
               <div className="col-auto logo text-title-lg text-white">
@@ -90,6 +90,7 @@ const Navbar = (props) => {
                       search: { category: categories[index] },
                     })
                   }
+                  popoverWidth={"150px"}
                   className="col-auto input-prepend-select"
                   btnName={search.category}
                 ></Select>

@@ -125,7 +125,7 @@ const Home = ({ publicUsers, ratings, user, settings }) => {
             }}
           >
             <div className="row no-gutters justify-content-between position-relative">
-              <div className="col-60 col-lg-30 d-flex flex-column justify-content-end text-white">
+              <div className="col-60 col-sm-40 col-lg-30 d-flex flex-column justify-content-end text-white">
                 <div
                   className="row no-gutters mb-4 text-title-lg"
                   style={{
@@ -251,7 +251,7 @@ const Home = ({ publicUsers, ratings, user, settings }) => {
           </div>
         </div>
         <div className="row no-gutters d-flex d-lg-none">
-          <div className=" col-60 py-5 px-md-5 px-4 content-container">
+          <div className=" col-60 py-4 px-md-5 px-4 content-container">
             <div className="row no-gutters justify-content-end">
               <div className="col-60">
                 <div

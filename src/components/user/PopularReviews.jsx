@@ -84,7 +84,7 @@ const PopularReviews = ({ publicUsers, ratings }) => {
 
   return (
     <div className="row no-gutters justify-content-center text-white">
-      <div className="col-60 content-container p-sm-5 p-4">
+      <div className="col-60 content-container py-3 px-md-5 px-4">
         <div className="row no-gutters h5">
           <div
             className="col-auto"
@@ -166,7 +166,7 @@ const PopularReviews = ({ publicUsers, ratings }) => {
                     <div className="col-60">
                       <div className="row no-gutters justify-content-between">
                         <div className="col-auto mb-2">
-                          <div className="row no-gutters">
+                          <div className="row no-gutters align-items-center">
                             <div className="col-auto pr-2">
                               <div
                                 className="bg-image rounded-circle square-40"
@@ -181,14 +181,11 @@ const PopularReviews = ({ publicUsers, ratings }) => {
                             </div>
                             <div className="col-auto">
                               <div className="row no-gutters align-items-center text-white">
-                                <div className="col-auto mr-3 h6 mb-0">
+                                <div className="col-auto mr-3 mb-0">
                                   {publicUsers[x.author]
                                     ? publicUsers[x.author].display_name
                                     : ""}
                                 </div>
-                              </div>
-                              <div className="row no-gutters text-muted">
-                                Reviewed by
                               </div>
                             </div>
                           </div>
@@ -207,87 +204,59 @@ const PopularReviews = ({ publicUsers, ratings }) => {
                   <div className="row no-gutters text-light mb-3 font-size-14 flex-grow-0">
                     {x.review}
                   </div>
+                  <div className="row no-gutters">
+                    {x.rating ? (
+                      <div style={{ marginBottom: "-6px" }}>
+                        <Emoji
+                          emoji={
+                            x.rating === "excellent_rate"
+                              ? "fire"
+                              : x.rating === "good_rate"
+                              ? "heart"
+                              : x.rating === "ok_rate"
+                              ? "heavy-division-sign"
+                              : "shit"
+                          }
+                          set="facebook"
+                          size={24}
+                        />
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </div>
                   <div className="row no-gutters flex-grow-1 align-items-bottom">
                     <div className="col-60 d-flex flex-column justify-content-end">
-                      <div className="row no-gutters justify-content-between align-items-center text-white mb-3">
-                        <div className="col-auto">
-                          <div className="row no-gutters align-items-center">
-                            <ReactionButton
-                              selected={
-                                x.rating ? x.rating === "excellent_rate" : false
-                              }
-                              emoji="fire"
-                              className="mr-1 mb-2"
-                              value={
-                                ratings[x.movie_id]
-                                  ? ratings[x.movie_id].excellent_rate
-                                  : 0
-                              }
-                            ></ReactionButton>
-                            <ReactionButton
-                              selected={
-                                x.rating ? x.rating === "good_rate" : false
-                              }
-                              emoji="heart"
-                              className="mr-1 mb-2"
-                              value={
-                                ratings[x.movie_id]
-                                  ? ratings[x.movie_id].good_rate
-                                  : 0
-                              }
-                            ></ReactionButton>
-                            <ReactionButton
-                              selected={
-                                x.rating ? x.rating === "ok_rate" : false
-                              }
-                              className="mr-1 mb-2"
-                              emoji="heavy_division_sign"
-                              value={
-                                ratings[x.movie_id]
-                                  ? ratings[x.movie_id].ok_rate
-                                  : 0
-                              }
-                            ></ReactionButton>
-                            <ReactionButton
-                              className="mb-2"
-                              emoji="shit"
-                              value={
-                                ratings[x.movie_id]
-                                  ? ratings[x.movie_id].bad_rate
-                                  : 0
-                              }
-                              selected={
-                                x.rating ? x.rating === "bad_rate" : false
-                              }
-                            ></ReactionButton>
-                          </div>
-                        </div>
-                        <div className="col-auto">
-                          <div className="row no-gutters align-items-center mb-2">
-                            <div className="col-auto mr-2">
-                              {x.likes.length}
-                            </div>
-                            <div className="col-auto mr-2 ">
-                              <MdThumbUp
-                                fontSize="24px"
-                                className="text-green"
-                              ></MdThumbUp>
-                            </div>
-                            <div className="col-auto mr-2">
-                              {x.comments.length}
-                            </div>
-                            <div className="col-auto mr-2">
-                              <MdChatBubble
-                                onClick={() => {
-                                  setReviewIdOfVisibleComments(
-                                    reviewIdOfVisibleComments === x._id
-                                      ? -1
-                                      : x._id
-                                  );
-                                }}
-                                fontSize="24px"
-                                className="text-orange scale-transition cursor-pointer"
-                              ></MdChatBubble>
+                      <div className="row no-gutters justify-content-end align-items-center text-white">
+                        <div className="col-auto px-0">
+                          <div className="row no-gutters align-items-center"></div>
+                          <div className="col-auto px-0">
+                            <div className="row no-gutters align-items-center">
+                              <div className="col-auto mr-2">
+                                {x.likes.length}
+                              </div>
+                              <div className="col-auto mr-2 ">
+                                <MdThumbUp
+                                  fontSize="24px"
+                                  className="text-green"
+                                ></MdThumbUp>
+                              </div>
+                              <div className="col-auto mr-2">
+                                {x.comments.length}
+                              </div>
+                              <div className="col-auto">
+                                <MdChatBubble
+                                  onClick={() => {
+                                    setReviewIdOfVisibleComments(
+                                      reviewIdOfVisibleComments === x._id
+                                        ? -1
+                                        : x._id
+                                    );
+                                  }}
+                                  fontSize="24px"
+                                  className="text-orange scale-transition cursor-pointer"
+                                ></MdChatBubble>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -400,7 +369,7 @@ const PopularReviews = ({ publicUsers, ratings }) => {
             </React.Fragment>
           ))}
         <div className="row no-gutters justify-content-end mt-2">
-          <div className="col-auto mb-4 mr-sm-2 mr-md-0">
+          <div className="col-auto mr-sm-2 mr-md-0">
             <Paigination
               classNames={{
                 notSelected: "input-dark",

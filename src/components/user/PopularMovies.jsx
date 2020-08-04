@@ -30,7 +30,7 @@ const PopularMovies = ({ apiKey }) => {
 
   return (
     <div className="row no-gutters justify-content-center text-white">
-      <div className="col-60 py-5 px-md-5 px-4 content-container">
+      <div className="col-60 py-3 px-md-5 px-4 content-container">
         <div className="row no-gutters h5">
           <div
             className="col-auto"
@@ -47,8 +47,8 @@ const PopularMovies = ({ apiKey }) => {
         <div className="row no-gutters text-light">
           Most watched movies by days
         </div>
-        <div className="row no-gutters justify-content-between text-light align-items-center mb-4">
-          <div className="col-md col-60">
+        <div className="row no-gutters justify-content-end text-light align-items-center mb-4">
+          <div className="col-auto">
             <SimpleBar
               style={{
                 padding: "14px 0",

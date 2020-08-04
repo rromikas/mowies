@@ -8,30 +8,61 @@ import Footer from "./Footer";
 import Paigination from "../utility/Paigination";
 import { SearchReviews } from "../../server/DatabaseApi";
 import ReviewsList from "./ReviewsList";
+import store from "../../store/store";
 
 const maxResultsPerPage = 15;
 
-const SearchResults = ({ search }) => {
+const SearchResults = ({ search, settings }) => {
   const [results, setResults] = useState([]);
   const [page, setPage] = useState(1);
   const [reviews, setReviews] = useState([]);
 
+  const onFail = () => {
+    store.dispatch({
+      type: "SET_NOTIFICATION",
+      notification: {
+        title: "Error",
+        message: "You need to provide valid api key in admin dashboard",
+        type: "failure",
+      },
+    });
+  };
+
   useEffect(() => {
     async function getData() {
       if (search.query) {
-        if (search.category === "Movies") {
-          let movies = await SearchMovies(search.query);
-          setResults(movies.results);
-        } else if (search.category === "Series") {
-          let series = await SearchSeries(search.query);
-          setResults(series.results);
-        } else if (search.category === "Reviews") {
+        if (search.category === "Reviews") {
           let reviews = await SearchReviews(search.query);
           {
             if (!reviews.error) {
               setReviews(reviews);
             }
           }
+        } else {
+          let arr = [];
+          if (search.category === "Movies" || search.category === "All") {
+            let movies = await SearchMovies(
+              search.query,
+              settings.movies_api_key
+            );
+            if (movies.results) {
+              arr = arr.concat(movies.results);
+            } else {
+              onFail();
+            }
+          }
+          if (search.category === "Series" || search.category === "All") {
+            let series = await SearchSeries(
+              search.query,
+              settings.movies_api_key
+            );
+            if (series.results) {
+              arr = arr.concat(series.results);
+            } else {
+              onFail();
+            }
+          }
+          setResults(arr);
         }
       }
     }
@@ -44,7 +75,7 @@ const SearchResults = ({ search }) => {
     >
       <div className="col-60 d-flex flex-column">
         <div className="row no-gutters flex-grow-0">
-          <div className="col-60" style={{ height: "72px" }}></div>
+          <div className="col-60" style={{ height: "100px" }}></div>
           <Navbar></Navbar>
         </div>
         <div className="row no-gutters flex-grow-1">
@@ -52,8 +83,8 @@ const SearchResults = ({ search }) => {
             <div className="row no-gutters flex-grow-1 justify-content-center">
               <div className="col-60 p-5 text-white content-container d-flex flex-column">
                 <div className="row no-gutters flex-grow-1">
-                  <div className="col-60">
-                    <div className="row no-gutters h1">Search Results</div>
+                  <div className="col-60 mb-4">
+                    <div className="row no-gutters h5">Search Results</div>
                     <div className="row no-gutters text-muted border-bottom pb-3">
                       Showing all results
                     </div>
@@ -105,6 +136,7 @@ const SearchResults = ({ search }) => {
 
 function mapp(state, ownProps) {
   return {
+    settings: state.settings,
     search: state.search,
     ...ownProps,
   };

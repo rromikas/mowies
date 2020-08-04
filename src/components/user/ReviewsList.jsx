@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Collapse } from "@material-ui/core";
 import { connect } from "react-redux";
 import { GetReviewComments, GetPopularReviews } from "../../server/DatabaseApi";
-import ReactionButton from "./ReactionButton";
+import { Emoji } from "emoji-mart";
 import Paigination from "../utility/Paigination";
 import history from "../../History";
 import date from "date-and-time";
@@ -78,11 +78,11 @@ const ReviewsList = ({ reviews, publicUsers, ratings }) => {
                       }}
                     ></div>
                     {/* <img
-                          onClick={() => history.push(`/movie/${x.id}`)}
-                          width="100%"
-                          style={{ borderRadius: "13px" }}
-                          src={`https://image.tmdb.org/t/p/w154${x.movie_poster}`}
-                        ></img> */}
+                    onClick={() => history.push(`/movie/${x.id}`)}
+                    width="100%"
+                    style={{ borderRadius: "13px" }}
+                    src={`https://image.tmdb.org/t/p/w154${x.movie_poster}`}
+                  ></img> */}
                   </div>
                   <div className="col">
                     <div className="row no-gutters text-white h6 mb-0">
@@ -94,29 +94,40 @@ const ReviewsList = ({ reviews, publicUsers, ratings }) => {
                   </div>
                 </div>
               </div>
-              <div className="col-auto">
-                <div className="row no-gutters">
-                  <div className="col-auto pr-2">
-                    <div
-                      className="bg-image rounded-circle square-40"
-                      style={{
-                        backgroundImage: `url(${
-                          publicUsers[x.author]
-                            ? publicUsers[x.author].photo
-                            : ""
-                        })`,
-                      }}
-                    ></div>
-                  </div>
-                  <div className="col-auto">
-                    <div className="row no-gutters align-items-center text-white">
-                      <div className="col-auto mr-3 h6 mb-0">
-                        {publicUsers[x.author]
-                          ? publicUsers[x.author].display_name
-                          : ""}
+              <div className="col-60">
+                <div className="row no-gutters justify-content-between">
+                  <div className="col-auto mb-2">
+                    <div className="row no-gutters align-items-center">
+                      <div className="col-auto pr-2">
+                        <div
+                          className="bg-image rounded-circle square-40"
+                          style={{
+                            backgroundImage: `url(${
+                              publicUsers[x.author]
+                                ? publicUsers[x.author].photo
+                                : ""
+                            })`,
+                          }}
+                        ></div>
+                      </div>
+                      <div className="col-auto">
+                        <div className="row no-gutters align-items-center text-white">
+                          <div className="col-auto mr-3 mb-0">
+                            {publicUsers[x.author]
+                              ? publicUsers[x.author].display_name
+                              : ""}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div className="row no-gutters text-muted">Reviewed by</div>
+                  </div>
+                  <div className="col-auto">
+                    <div className="row no-gutters text-white">
+                      <span className="mr-2">Posted review on</span>
+                      <span className="text-muted">
+                        {date.format(new Date(x.date), "MMM DD, YYYY")}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -124,80 +135,56 @@ const ReviewsList = ({ reviews, publicUsers, ratings }) => {
             <div className="row no-gutters text-light mb-3 font-size-14 flex-grow-0">
               {x.review}
             </div>
+            <div className="row no-gutters">
+              {x.rating ? (
+                <div style={{ marginBottom: "-6px" }}>
+                  <Emoji
+                    emoji={
+                      x.rating === "excellent_rate"
+                        ? "fire"
+                        : x.rating === "good_rate"
+                        ? "heart"
+                        : x.rating === "ok_rate"
+                        ? "heavy-division-sign"
+                        : "shit"
+                    }
+                    set="facebook"
+                    size={24}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
             <div className="row no-gutters flex-grow-1 align-items-bottom">
               <div className="col-60 d-flex flex-column justify-content-end">
-                <div className="row no-gutters justify-content-between align-items-center text-white mb-3">
-                  <div className="col-auto">
-                    <div className="row no-gutters align-items-center">
-                      <ReactionButton
-                        selected={
-                          x.rating ? x.rating === "excellent_rate" : false
-                        }
-                        emoji="fire"
-                        className="mr-1 mb-2"
-                        value={
-                          ratings[x.movie_id]
-                            ? ratings[x.movie_id].excellent_rate
-                            : 0
-                        }
-                      ></ReactionButton>
-                      <ReactionButton
-                        selected={x.rating ? x.rating === "good_rate" : false}
-                        emoji="heart"
-                        className="mr-1 mb-2"
-                        value={
-                          ratings[x.movie_id]
-                            ? ratings[x.movie_id].good_rate
-                            : 0
-                        }
-                      ></ReactionButton>
-                      <ReactionButton
-                        selected={x.rating ? x.rating === "ok_rate" : false}
-                        className="mr-1 mb-2"
-                        emoji="heavy_division_sign"
-                        value={
-                          ratings[x.movie_id] ? ratings[x.movie_id].ok_rate : 0
-                        }
-                      ></ReactionButton>
-                      <ReactionButton
-                        className="mb-2"
-                        emoji="shit"
-                        value={
-                          ratings[x.movie_id] ? ratings[x.movie_id].bad_rate : 0
-                        }
-                        selected={x.rating ? x.rating === "bad_rate" : false}
-                      ></ReactionButton>
-                    </div>
-                  </div>
-                  <div className="col-auto">
-                    <div className="row no-gutters align-items-center mb-2">
-                      <div className="col-auto mr-2">{x.likes.length}</div>
-                      <div className="col-auto mr-2 ">
-                        <MdThumbUp
-                          fontSize="24px"
-                          className="text-green"
-                        ></MdThumbUp>
-                      </div>
-                      <div className="col-auto mr-2">{x.comments.length}</div>
-                      <div className="col-auto mr-2">
-                        <MdChatBubble
-                          onClick={() => {
-                            setReviewIdOfVisibleComments(
-                              reviewIdOfVisibleComments === x._id ? -1 : x._id
-                            );
-                          }}
-                          fontSize="24px"
-                          className="text-orange scale-transition cursor-pointer"
-                        ></MdChatBubble>
+                <div className="row no-gutters justify-content-end align-items-center text-white">
+                  <div className="col-auto px-0">
+                    <div className="row no-gutters align-items-center"></div>
+                    <div className="col-auto px-0">
+                      <div className="row no-gutters align-items-center">
+                        <div className="col-auto mr-2">{x.likes.length}</div>
+                        <div className="col-auto mr-2 ">
+                          <MdThumbUp
+                            fontSize="24px"
+                            className="text-green"
+                          ></MdThumbUp>
+                        </div>
+                        <div className="col-auto mr-2">{x.comments.length}</div>
+                        <div className="col-auto">
+                          <MdChatBubble
+                            onClick={() => {
+                              setReviewIdOfVisibleComments(
+                                reviewIdOfVisibleComments === x._id ? -1 : x._id
+                              );
+                            }}
+                            fontSize="24px"
+                            className="text-orange scale-transition cursor-pointer"
+                          ></MdChatBubble>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="row no-gutters text-white">
-                  <span className="mr-2">Posted review on</span>
-                  <span className="text-muted">
-                    {date.format(new Date(x.date), "MMM DD, YYYY")}
-                  </span>
                 </div>
               </div>
             </div>
@@ -280,8 +267,8 @@ const ReviewsList = ({ reviews, publicUsers, ratings }) => {
                   </div>
                 ))
             : ""}
-          <div className="row no-gutters justify-content-end">
-            <div className="col-auto">
+          <div className="row no-gutters mt-2">
+            <div className="col-auto ml-4">
               <Paigination
                 count={Math.ceil(
                   comments[x._id] ? comments[x._id].length / commentsPerPage : 1

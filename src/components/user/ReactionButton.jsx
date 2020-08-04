@@ -9,6 +9,7 @@ const ReactionButton = (props) => {
   const user = props.user;
   const movie = props.movie;
   const ratings = props.ratings;
+  const size = props.size ? props.size : "normal";
   return (
     <div
       onClick={async () => {
@@ -85,19 +86,25 @@ const ReactionButton = (props) => {
           }
         }
       }}
-      className={`col-auto ${
-        props.selected ? "btn-reaction-selected" : "btn-reaction"
+      className={`col-auto btn-reaction-${size} btn-reaction${
+        props.selected ? " btn-reaction-selected" : ""
       }${props.className ? ` ${props.className}` : ""}`}
     >
       <div className="row no-gutters align-items-center h-100 justify-content-center">
         {props.value !== undefined && props.value !== null ? (
-          <div className="col mr-2">{nFormatter(props.value, 1)}</div>
+          <div className={`col mr-${size === "normal" ? "2" : "1"}`}>
+            {nFormatter(props.value, 1)}
+          </div>
         ) : (
           ""
         )}
         <div className="col-auto">
-          <div style={{ marginBottom: "-6px" }}>
-            <Emoji emoji={props.emoji} set="facebook" size={16} />
+          <div style={{ marginBottom: size === "normal" ? "-6px" : "-2px" }}>
+            <Emoji
+              emoji={props.emoji}
+              set="facebook"
+              size={size === "small" ? "14px" : "16px"}
+            />
           </div>
         </div>
       </div>

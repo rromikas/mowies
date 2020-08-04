@@ -46,10 +46,7 @@ const MoviesList = ({ movies, user, ratings }) => {
                   }
                 ></img>
                 <div
-                  onClick={() => {
-                    setTrailerMovieId(x.id);
-                    setOpenTrailer(true);
-                  }}
+                  onClick={() => history.push(`/movie/${x.id}`)}
                   className="col-60 h-100 text-white d-flex flex-center img-cover cursor-pointer"
                   style={{
                     left: 0,
@@ -60,12 +57,16 @@ const MoviesList = ({ movies, user, ratings }) => {
                   }}
                 >
                   <div
-                    className="square-70 rounded-circle d-flex flex-center"
-                    style={{ border: "3px solid white" }}
+                    className="square-60 rounded-circle d-flex flex-center play-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setTrailerMovieId(x.id);
+                      setOpenTrailer(true);
+                    }}
                   >
                     <BsPlayFill
                       style={{
-                        fontSize: "85px",
+                        fontSize: "35px",
                         color: "white",
                         marginRight: "-5px",
                       }}
@@ -79,7 +80,9 @@ const MoviesList = ({ movies, user, ratings }) => {
                 className="row no-gutters text-title-md mb-0 cursor-pointer"
                 onClick={() => history.push(`/movie/${x.id}`)}
               >
-                {x.title ? x.title : x.name}
+                <div className="text-truncate">
+                  {x.title ? x.title : x.name}
+                </div>
               </div>
               <div className="row no-gutters text-muted mb-2">
                 <div className="text-truncate">
@@ -96,7 +99,7 @@ const MoviesList = ({ movies, user, ratings }) => {
                     : "unknown"}
                 </div>
               </div>
-              <div className="row no-gutters mb-2">
+              <div className="row no-gutters justify-content-sm-end mb-2">
                 <ReactionButton
                   selected={
                     user.ratings[x.id]
@@ -106,9 +109,11 @@ const MoviesList = ({ movies, user, ratings }) => {
                   movie={x}
                   emoji="fire"
                   className="mr-1 mb-2"
+                  size="small"
                   value={ratings[x.id] ? ratings[x.id].excellent_rate : 0}
                 ></ReactionButton>
                 <ReactionButton
+                  size="small"
                   selected={
                     user.ratings[x.id]
                       ? user.ratings[x.id].rate_type === "good_rate"
@@ -120,6 +125,7 @@ const MoviesList = ({ movies, user, ratings }) => {
                   value={ratings[x.id] ? ratings[x.id].good_rate : 0}
                 ></ReactionButton>
                 <ReactionButton
+                  size="small"
                   selected={
                     user.ratings[x.id]
                       ? user.ratings[x.id].rate_type === "ok_rate"
@@ -131,6 +137,7 @@ const MoviesList = ({ movies, user, ratings }) => {
                   value={ratings[x.id] ? ratings[x.id].ok_rate : 0}
                 ></ReactionButton>
                 <ReactionButton
+                  size="small"
                   emoji="shit"
                   value={ratings[x.id] ? ratings[x.id].bad_rate : 0}
                   selected={

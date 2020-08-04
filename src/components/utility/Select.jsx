@@ -10,6 +10,7 @@ const Select = ({
   className = "",
   multipleSelect = false,
   popoverClass = "",
+  popoverWidth = "auto",
   onSelect = () => {},
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,12 +24,12 @@ const Select = ({
       content={
         <div
           className="bg-white"
-          style={{ maxHeight: "400px", overflowY: "auto" }}
+          style={{ maxHeight: "400px", overflowY: "auto", width: popoverWidth }}
         >
           {items.map((x, i) => (
             <div
               key={uniqid()}
-              className="popover-item"
+              className="popover-item w-100"
               onClick={() => {
                 onSelect(i);
                 if (!multipleSelect) {
