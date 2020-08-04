@@ -14,6 +14,7 @@ const Popover = ({
   animation = "scale",
   open = undefined,
   onHide = () => {},
+  popoverWidth = "auto",
   ...rest
 }) => {
   useEffect(() => {

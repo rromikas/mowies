@@ -16,6 +16,8 @@ const Navbar = (props) => {
   const [scrolledToTop, setScrolledTopTop] = useState(true);
   const lastScroll = useRef(100);
   const [direction, setDirection] = useState("up");
+  const [profilePopoverWidth, setProfilePopoverWidth] = useState(0);
+
   useEffect(() => {
     function handleScrolling() {
       let scrollY = window.scrollY;
@@ -36,6 +38,11 @@ const Navbar = (props) => {
     return () => {
       window.removeEventListener("scroll", handleScrolling);
     };
+  }, []);
+
+  useEffect(() => {
+    let profileBtn = document.getElementById("profileBtn");
+    console.log("rpofile btn", profileBtn);
   }, []);
 
   return (
@@ -126,19 +133,15 @@ const Navbar = (props) => {
             <div className="col-auto text-white">
               {user.display_name ? (
                 <div className="row no-gutters align-items-center">
-                  <div
-                    className="col-auto mr-2 rounded-circle square-40 bg-image"
-                    style={{
-                      backgroundImage: `url(${user.photo})`,
-                      border: "1px solid white",
-                    }}
-                  ></div>
-                  <div className="col-auto mr-2 d-none d-sm-block">
-                    {user.display_name}
-                  </div>
                   <Popover
                     content={
-                      <div>
+                      <div
+                        style={{
+                          borderRadius: "4px",
+                          overflow: "hidden",
+                          width: `${profilePopoverWidth}px`,
+                        }}
+                      >
                         <div
                           className="popover-item border-bottom"
                           onClick={() => {
@@ -169,8 +172,33 @@ const Navbar = (props) => {
                       </div>
                     }
                   >
-                    <div className="col-auto user-select-none cursor-pointer">
-                      <BsChevronDown fontSize="14px"></BsChevronDown>
+                    <div
+                      className="col-60"
+                      id="profileBtn"
+                      ref={(el) => {
+                        if (!el) return;
+                        if (profilePopoverWidth === 0) {
+                          setProfilePopoverWidth(
+                            el.getBoundingClientRect().width
+                          );
+                        }
+                      }}
+                    >
+                      <div className="row no-gutters align-items-center cursor-pointer">
+                        <div
+                          className="col-auto mr-2 rounded-circle square-40 bg-image"
+                          style={{
+                            backgroundImage: `url(${user.photo})`,
+                            border: "1px solid white",
+                          }}
+                        ></div>
+                        <div className="col-auto mr-2 d-none d-sm-block">
+                          {user.display_name}
+                        </div>
+                        <div className="col-auto user-select-none">
+                          <BsChevronDown fontSize="14px"></BsChevronDown>
+                        </div>
+                      </div>
                     </div>
                   </Popover>
                 </div>

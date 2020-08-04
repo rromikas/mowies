@@ -3,6 +3,7 @@ import MoviesList from "./MoviesList";
 import { GetPopularMoviesByGenre } from "../../server/MoviesApi";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
+import { connect } from "react-redux";
 
 const genresPairs = [
   { name: "All", genresIds: [] },
@@ -14,19 +15,19 @@ const genresPairs = [
   { name: "History & Documentary", genresIds: [36, 99] },
 ];
 
-const PopularMovies = ({ apiKey }) => {
+const PopularMovies = ({ apiKey, settings }) => {
   const [genresIds, setGenresIds] = useState([]);
   const [genreName, setGenreName] = useState("All");
   const [movies, setMovies] = useState([]);
   useEffect(() => {
     async function getData() {
-      if (apiKey) {
+      if (apiKey && settings.no_popular_movies) {
         let data = await GetPopularMoviesByGenre(genresIds, apiKey);
-        setMovies(data.results.slice(0, 5));
+        setMovies(data.results.slice(0, settings.no_popular_movies));
       }
     }
     getData();
-  }, [genresIds, apiKey]);
+  }, [genresIds, apiKey, settings]);
 
   return (
     <div className="row no-gutters justify-content-center text-white">
@@ -85,4 +86,11 @@ const PopularMovies = ({ apiKey }) => {
   );
 };
 
-export default PopularMovies;
+function mapp(state, ownProps) {
+  return {
+    settings: state.settings,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(PopularMovies);

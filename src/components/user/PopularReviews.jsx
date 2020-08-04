@@ -7,11 +7,8 @@ import { connect } from "react-redux";
 import { Collapse } from "@material-ui/core";
 import Paigination from "../utility/Paigination";
 import history from "../../History";
-import { MoviesGenresMap } from "../../Data";
-import ReactionButton from "./ReactionButton";
-import { getDataUrlFromFile } from "browser-image-compression";
 
-const PopularReviews = ({ publicUsers, ratings }) => {
+const PopularReviews = ({ publicUsers, settings }) => {
   //comments object.Its property will be review id.
   const [comments, setComments] = useState({});
 
@@ -57,13 +54,15 @@ const PopularReviews = ({ publicUsers, ratings }) => {
 
   useEffect(() => {
     async function getData() {
-      let res = await GetPopularReviews(10);
-      if (!res.error) {
-        setReviews(res);
+      if (settings.no_popular_reviews) {
+        let res = await GetPopularReviews(settings.no_popular_reviews);
+        if (!res.error) {
+          setReviews(res);
+        }
       }
     }
     getData();
-  }, []);
+  }, [settings]);
 
   useEffect(() => {
     //to avoid scroll on first render
@@ -389,7 +388,7 @@ const PopularReviews = ({ publicUsers, ratings }) => {
 function mapp(state, ownProps) {
   return {
     publicUsers: state.publicUsers,
-    ratings: state.ratings,
+    settings: state.settings,
     ...ownProps,
   };
 }
