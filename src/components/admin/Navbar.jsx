@@ -94,7 +94,43 @@ const Navbar = ({ setIsMenuOpened, isMenuOpened, user }) => {
       <div className="col-auto">
         <div className="row no-gutters align-items-center">
           <div className="col-auto mr-3">
-            <Notifications count={notifications.length}></Notifications>
+            <div className="row no-gutters">
+              <Popover
+                content={(w) => (
+                  <div
+                    className="container-fluid rounded"
+                    style={{ maxWidth: "300px", width: "100%" }}
+                  >
+                    {notifications.map((x, i) => (
+                      <div
+                        key={`notificaiton-${i}`}
+                        className={`row no-gutters p-4${
+                          i !== notifications.length - 1 ? " border-bottom" : ""
+                        }`}
+                      >
+                        <div className="col-60 text-left mb-1 font-weight-bold">
+                          {x.subject}
+                        </div>
+                        <div className="col-60 text-left">{x.description}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              >
+                <div
+                  className="col-auto"
+                  onClick={() =>
+                    setNotifications((prev) =>
+                      prev.map((x) => Object.assign({}, x, { seen: true }))
+                    )
+                  }
+                >
+                  <Notifications
+                    count={notifications.filter((x) => !x.seen).length}
+                  ></Notifications>
+                </div>
+              </Popover>
+            </div>
           </div>
           {user.display_name ? (
             <div className="col-auto mr-3">
