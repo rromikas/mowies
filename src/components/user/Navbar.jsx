@@ -7,6 +7,8 @@ import history from "../../History";
 import store from "../../store/store";
 import Logo from "../../images/Logo";
 import Announcement from "./Announcement";
+import { GetUserNotifications } from "../../server/DatabaseApi";
+import Notifications from "../../images/Notifications";
 
 const Navbar = (props) => {
   const user = props.user;
@@ -16,7 +18,7 @@ const Navbar = (props) => {
   const [scrolledToTop, setScrolledTopTop] = useState(true);
   const lastScroll = useRef(100);
   const [direction, setDirection] = useState("up");
-
+  const [notifications, setNotifications] = useState([]);
   useEffect(() => {
     function handleScrolling() {
       let scrollY = window.scrollY;
@@ -38,6 +40,20 @@ const Navbar = (props) => {
       window.removeEventListener("scroll", handleScrolling);
     };
   }, []);
+
+  useEffect(() => {
+    async function getData() {
+      if (user.notifications && user.notifications.length) {
+        let data = await GetUserNotifications(user.notifications);
+        if (!data.error) {
+          setNotifications(
+            data.map((x) => Object.assign({}, x, { seen: false }))
+          );
+        }
+      }
+    }
+    getData();
+  }, [user]);
 
   return (
     <div
@@ -124,85 +140,138 @@ const Navbar = (props) => {
                 </div>
               </div>
             </div>
-            <div className="col-auto text-white">
-              {user.display_name ? (
-                <div className="row no-gutters align-items-center">
-                  <Popover
-                    content={(w) => (
-                      <div
-                        style={{
-                          borderRadius: "4px",
-                          overflow: "hidden",
-                          width: `${w}px`,
-                        }}
+            <div className="col-auto">
+              <div className="row no-gutters">
+                {user.display_name ? (
+                  <div className="col-auto">
+                    <div className="row no-gutters">
+                      <Popover
+                        content={(w) => (
+                          <div
+                            className="container-fluid rounded"
+                            style={{ maxWidth: "300px", width: "100%" }}
+                          >
+                            {notifications.map((x, i) => (
+                              <div
+                                key={`notificaiton-${i}`}
+                                className={`row no-gutters p-4${
+                                  i !== notifications.length - 1
+                                    ? " border-bottom"
+                                    : ""
+                                }`}
+                              >
+                                <div className="col-60 text-left mb-1 font-weight-bold">
+                                  {x.subject}
+                                </div>
+                                <div className="col-60 text-left">
+                                  {x.description}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       >
                         <div
-                          className="popover-item border-bottom"
-                          onClick={() => {
-                            history.push(`/profile/${user._id}`);
-                          }}
+                          className="col-auto"
+                          onClick={() =>
+                            setNotifications((prev) =>
+                              prev.map((x) =>
+                                Object.assign({}, x, { seen: true })
+                              )
+                            )
+                          }
                         >
-                          My profile
+                          <Notifications
+                            count={notifications.filter((x) => !x.seen).length}
+                          ></Notifications>
                         </div>
-                        <div
-                          className="popover-item"
-                          onClick={() => {
-                            localStorage["movies_user_token"] = "";
-                            store.dispatch({
-                              type: "SET_USER",
-                              user: {
-                                display_name: "",
-                                photo: "",
-                                token: "",
-                                ratings: {},
-                                wishlist: [],
-                              },
-                            });
-                            history.push("/");
-                          }}
-                        >
-                          Logout
+                      </Popover>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+                <div className="col-auto text-white">
+                  {user.display_name ? (
+                    <div className="row no-gutters align-items-center">
+                      <Popover
+                        content={(w) => (
+                          <div
+                            style={{
+                              borderRadius: "4px",
+                              overflow: "hidden",
+                              width: `${w}px`,
+                            }}
+                          >
+                            <div
+                              className="popover-item border-bottom"
+                              onClick={() => {
+                                history.push(`/profile/${user._id}`);
+                              }}
+                            >
+                              My profile
+                            </div>
+                            <div
+                              className="popover-item"
+                              onClick={() => {
+                                localStorage["movies_user_token"] = "";
+                                store.dispatch({
+                                  type: "SET_USER",
+                                  user: {
+                                    display_name: "",
+                                    photo: "",
+                                    token: "",
+                                    ratings: {},
+                                    wishlist: [],
+                                  },
+                                });
+                                history.push("/");
+                              }}
+                            >
+                              Logout
+                            </div>
+                          </div>
+                        )}
+                      >
+                        <div className="col-60">
+                          <div className="row no-gutters align-items-center cursor-pointer">
+                            <div
+                              className="col-auto mr-2 rounded-circle square-40 bg-image"
+                              style={{
+                                backgroundImage: `url(${user.photo})`,
+                                border: "1px solid white",
+                              }}
+                            ></div>
+                            <div className="col-auto mr-2 d-none d-sm-block">
+                              {user.display_name}
+                            </div>
+                            <div className="col-auto user-select-none">
+                              <BsChevronDown fontSize="14px"></BsChevronDown>
+                            </div>
+                          </div>
                         </div>
+                      </Popover>
+                    </div>
+                  ) : (
+                    <div className="row no-gutters pr-sm-3 pr-2 align-items-center">
+                      <div
+                        className="col-auto cursor-pointer fb-btn"
+                        onClick={() => {
+                          history.push("/login");
+                        }}
+                      >
+                        Login
                       </div>
-                    )}
-                  >
-                    <div className="col-60">
-                      <div className="row no-gutters align-items-center cursor-pointer">
-                        <div
-                          className="col-auto mr-2 rounded-circle square-40 bg-image"
-                          style={{
-                            backgroundImage: `url(${user.photo})`,
-                            border: "1px solid white",
-                          }}
-                        ></div>
-                        <div className="col-auto mr-2 d-none d-sm-block">
-                          {user.display_name}
-                        </div>
-                        <div className="col-auto user-select-none">
-                          <BsChevronDown fontSize="14px"></BsChevronDown>
-                        </div>
+                      <div
+                        className="col-auto cursor-pointer fb-btn"
+                        onClick={() => history.push("/signup")}
+                      >
+                        Signup
                       </div>
                     </div>
-                  </Popover>
+                  )}
                 </div>
-              ) : (
-                <div className="row no-gutters pr-sm-3 pr-2 align-items-center">
-                  <div
-                    className="col-auto cursor-pointer fb-btn"
-                    onClick={() => {
-                      history.push("/login");
-                    }}
-                  >
-                    Login
-                  </div>
-                  <div
-                    className="col-auto cursor-pointer fb-btn"
-                    onClick={() => history.push("/signup")}
-                  >
-                    Signup
-                  </div>
-                </div>
-              )}
+              </div>
             </div>
           </div>
         </div>

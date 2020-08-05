@@ -12,6 +12,7 @@ function userReducer(
     reviews: [],
     wishlist: [],
     watched: [],
+    notifications: [],
   },
   action
 ) {

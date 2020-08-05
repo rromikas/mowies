@@ -208,6 +208,10 @@ export const DeleteMultiplePromotions = (ids, update) => {
   return SendPostRequest("/admin/promotions/delete", { ids, update });
 };
 
+export const GetUserNotifications = (ids) => {
+  return SendPostRequest("/user/notifications/get/", { ids });
+};
+
 export const GetNotifications = () => {
   return SendGetRequest("/admin/notifications/get");
 };

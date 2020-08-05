@@ -20,12 +20,14 @@ const Announcements = ({
   publicUsers,
 }) => {
   const [action, setAction] = useState("");
-  const [role, setRole] = useState("");
+  const [type, setType] = useState("");
   const [searchKey, setSearchKey] = useState("User");
   const [lastVisibleColumn, setLastVisibleColumn] = useState(0);
   const [page, setPage] = useState(1);
-  const [roleFilter, setRoleFilter] = useState("");
+  const [typeFilter, setTypeFilter] = useState("");
   const [search, setSearch] = useState("");
+
+  const [mainFilter, setMainFilter] = useState({ key: "", value: "" });
 
   const [refresh, setRefresh] = useState(false);
   const [announcements, setAnnouncements] = useState([]);
@@ -50,26 +52,22 @@ const Announcements = ({
           arr = arr.filter((x) =>
             publicUsers[x.author].display_name.match(new RegExp(search, "i"))
           );
-        } else if (searchKey === "Review") {
-          arr = arr.filter((x) => x.review.match(new RegExp(search, "i")));
-        } else if (searchKey === "Date") {
-          arr = arr.filter((x) =>
-            date.format(new Date(x.date), "DD/MM/YYYY").includes(search)
-          );
-        } else if (searchKey === "Movie") {
-          arr = arr.filter((x) => x.movie_title.match(new RegExp(search, "i")));
+        } else if (searchKey === "Description") {
+          arr = arr.filter((x) => x.description.match(new RegExp(search, "i")));
         }
       }
 
-      if (roleFilter) {
-        arr = arr.filter(
-          (x) => publicUsers[x.author].role === roleFilter.toLowerCase()
-        );
+      if (typeFilter) {
+        arr = arr.filter((x) => x.type === typeFilter);
+      }
+
+      if (mainFilter.key) {
+        arr = arr.filter((x) => x[mainFilter.key] === mainFilter.value);
       }
 
       setFilteredAnnouncements(arr);
     }
-  }, [search, roleFilter, announcements]);
+  }, [search, typeFilter, announcements, mainFilter]);
 
   //boundaries for slicing reviews array. (pagination)
   let boundaries = [(page - 1) * 5, (page - 1) * 5 + 5];
@@ -82,7 +80,7 @@ const Announcements = ({
 
   const handleApply = async (all = false) => {
     if (all) {
-      setRoleFilter(role);
+      setTypeFilter(type);
     }
     if (action === "Edit") {
       let selected = filteredAnnouncements.filter((x) => x.selected);
@@ -118,6 +116,8 @@ const Announcements = ({
     }
   };
 
+  const types = ["Information", "Error", "Warning"];
+
   return (
     <div className="row no-gutters p-md-5 p-4">
       <div className="col-60 border-bottom">
@@ -138,11 +138,36 @@ const Announcements = ({
         <div className="row no-gutters">
           <div className="col-60 py-5">
             <div className="row no-gutters h6 mb-3">
-              <div className="col-auto">All ({announcements.length})</div>
+              <div
+                onClick={() => {
+                  setMainFilter({ key: "", value: "" });
+                  setType("");
+                  setTypeFilter("");
+                }}
+                className={`cursor-pointer col-auto ${
+                  !typeFilter && !mainFilter.key ? "text-primary" : "text-dark"
+                }`}
+              >
+                All ({announcements.length})
+              </div>
               {statuses.map((x, i) => (
                 <React.Fragment key={`status-${i}`}>
                   <div className="col-auto px-2 text-muted">|</div>
-                  <div className="col-auto">
+                  <div
+                    onClick={() =>
+                      setMainFilter((prev) =>
+                        Object.assign({}, prev, {
+                          key: "status",
+                          value: x,
+                        })
+                      )
+                    }
+                    className={`cursor-pointer col-auto ${
+                      mainFilter.key === "status" && mainFilter.value === x
+                        ? "text-primary"
+                        : "text-dark"
+                    }`}
+                  >
                     {x} ({announcements.filter((y) => y.status === x).length})
                   </div>
                 </React.Fragment>
@@ -175,11 +200,9 @@ const Announcements = ({
                     <div className="row no-gutters">
                       <Select
                         popoverClass="col-60 col-sm-auto"
-                        onSelect={(index) =>
-                          setRole(["Admin", "Co-admin", "Copywriter"][index])
-                        }
-                        items={["Admin", "Co-admin", "Copywriter"]}
-                        btnName={role ? role : "Select Role"}
+                        onSelect={(index) => setType(types[index])}
+                        items={types}
+                        btnName={type ? type : "Select Type"}
                         className="input-light px-3 col-auto "
                       ></Select>
                     </div>
@@ -187,7 +210,7 @@ const Announcements = ({
 
                   <div
                     className="d-none d-xl-block btn-custom btn-custom-primary col-auto mb-3 mr-3 btn-xsmall"
-                    onClick={() => setRoleFilter(role)}
+                    onClick={() => setTypeFilter(type)}
                   >
                     Apply
                   </div>
@@ -204,10 +227,10 @@ const Announcements = ({
                   <Select
                     popoverClass="w-100"
                     onSelect={(index) =>
-                      setSearchKey(["User", "Review", "Movie", "Date"][index])
+                      setSearchKey(["User", "Description"][index])
                     }
                     className="input-light col-60"
-                    items={["User", "Review", "Movie", "Date"]}
+                    items={["User", "Description"]}
                     btnName={`Search by ${searchKey}`}
                   ></Select>
                 </div>
@@ -467,7 +490,7 @@ const Announcements = ({
                                     : "d-none d-xl-table-cell"
                                 }`}
                               >
-                                {x.end_date < Date.now() ? "Expired" : x.status}
+                                {x.status}
                               </td>
                             </tr>
                           ))

@@ -14,13 +14,19 @@ import { EditNotification as Edit } from "../../server/DatabaseApi";
 const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
   const types = ["App", "Email"];
 
+  let initialDate = Date.now();
+
   const [notification, setNotification] = useState({
     type: "",
     subject: "",
-    date: Date.now(),
+    start_date: initialDate,
+    end_date: initialDate,
     receivers: [],
     description: "",
+    status: "Drafted",
   });
+
+  const statuses = ["Sent", "Drafted", "Deleted"];
 
   const [problem, setProblem] = useState("");
   const [loading, setLoading] = useState(false);
@@ -33,6 +39,17 @@ const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
       error: "Select at least one receiver",
     },
     { valid: notification.description, error: "Description is required" },
+    {
+      valid: notification.start_date <= notification.end_date,
+      error: "End date is before start date",
+    },
+    {
+      valid: !(
+        notification.start_date === notification.end_date &&
+        notification.type === "App"
+      ),
+      error: "App notification duration can't be 0",
+    },
   ];
 
   useEffect(() => {
@@ -42,8 +59,10 @@ const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
   return (
     <div className="row no-gutters p-sm-5 p-4">
       <div className="col-60 py-3 border-bottom mb-4">
-        <div className="row no-gutters h3">Edit notification</div>
-        <div className="row no-gutters">Edit existing notification</div>
+        <div className="row no-gutters h3">Add new notification</div>
+        <div className="row no-gutters">
+          Create a brand new notification and add to this site
+        </div>
       </div>
       <div className="col-60" style={{ maxWidth: "800px" }}>
         <div className="row no-gutters mb-4">
@@ -52,7 +71,7 @@ const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
             <input
               type="text"
               className="w-100 input-light px-3"
-              value={notification.value}
+              value={notification.subject}
               onChange={(e) => {
                 e.persist();
                 setNotification((prev) =>
@@ -79,12 +98,11 @@ const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
         <div className="row no-gutters mb-4">
           <div className="col-60 mb-1">Notification to</div>
           <Autocomplete
-            value={notification.receivers}
-            onChange={(e, val) =>
+            onChange={(e, val) => {
               setNotification((prev) =>
                 Object.assign({}, prev, { receivers: val })
-              )
-            }
+              );
+            }}
             placeholder={"Search by username"}
             color={"primary"}
             className="col-md-30 col-60 input-light-resize"
@@ -124,15 +142,15 @@ const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
             words left
           </div>
         </div>
-        <div className="row no-gutters mb-5">
+        <div className="row no-gutters">
           <div className="col-xl-40 col-md-50 col-60">
-            <div className="row no-gutters">
+            <div className="row no-gutters mb-4">
               <div className="col-sm-30 col-60 pr-sm-3 mb-4">
-                <div className="row no-gutters">Date</div>
+                <div className="row no-gutters">Start Date</div>
                 <div className="row no-gutters">
                   <DayPickerInput
                     value={date.format(
-                      new Date(notification.date),
+                      new Date(notification.start_date),
                       "DD/MM/YYYY"
                     )}
                     component={(props) => (
@@ -155,7 +173,7 @@ const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
                     )}
                     onDayChange={(day) => {
                       if (day) {
-                        let d = new Date(notification.date);
+                        let d = new Date(notification.start_date);
                         let fy = day.getFullYear();
                         let year = day.getFullYear();
                         let month = day.getMonth();
@@ -164,15 +182,15 @@ const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
                         d.setMonth(month);
                         d.setDate(niceDay);
                         setNotification((prev) =>
-                          Object.assign({}, prev, { date: d.getTime() })
+                          Object.assign({}, prev, { start_date: d.getTime() })
                         );
                       }
                     }}
                   />
                 </div>
               </div>
-              <div className="col-sm-30 col-60 mb-4">
-                <div className="row no-gutters">Time</div>
+              <div className="col-sm-30 col-60 mb-2">
+                <div className="row no-gutters">Start Time</div>
                 <div className="row no-gutters">
                   <div className="col-60 position-relative input-light">
                     <BsClock
@@ -191,85 +209,182 @@ const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
                       onChange={(a) => {
                         if (a) {
                           let [h, m] = a.split(":");
-                          let newTime = new Date(notification.date);
+                          let newTime = new Date(notification.start_date);
                           newTime.setHours(h);
                           newTime.setMinutes(m);
                           setNotification((prev) =>
                             Object.assign({}, prev, {
-                              date: newTime.getTime(),
+                              start_date: newTime.getTime(),
                             })
                           );
                         }
                       }}
-                      value={new Date(notification.date)}
+                      value={new Date(notification.start_date)}
                     ></TimePicker>
                   </div>
                 </div>
               </div>
             </div>
-            <div
-              style={{ height: "50px", opacity: problem ? 1 : 0 }}
-              className="row no-gutters align-items-center text-danger my-2"
-            >
-              {problem}
-            </div>
             <div className="row no-gutters">
-              <div
-                className="btn-custom btn-custom-secondary btn-small mr-sm-3 mb-3 col-60 col-sm-auto"
-                onClick={getBack}
-              >
-                Cancel
+              <div className="col-sm-30 col-60 pr-sm-3 mb-4">
+                <div className="row no-gutters">End Date</div>
+                <div className="row no-gutters">
+                  <DayPickerInput
+                    value={date.format(
+                      new Date(notification.end_date),
+                      "DD/MM/YYYY"
+                    )}
+                    component={(props) => (
+                      <div className="position-relative w-100">
+                        <BsCalendar
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            bottom: 0,
+                            margin: "auto",
+                            left: "18px",
+                          }}
+                        ></BsCalendar>
+                        <input
+                          {...props}
+                          className="input-light w-100 pl-5 pr-3"
+                          placeholder="YYYY-MM-DD"
+                        ></input>
+                      </div>
+                    )}
+                    onDayChange={(day) => {
+                      if (day) {
+                        let d = new Date(notification.end_date);
+                        let fy = day.getFullYear();
+                        let year = day.getFullYear();
+                        let month = day.getMonth();
+                        let niceDay = day.getDate();
+                        d.setFullYear(year);
+                        d.setMonth(month);
+                        d.setDate(niceDay);
+                        setNotification((prev) =>
+                          Object.assign({}, prev, { end_date: d.getTime() })
+                        );
+                      }
+                    }}
+                  />
+                </div>
               </div>
-              <div
-                className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto"
-                onClick={async () => {
-                  let invalid = validations.filter((x) => !x.valid);
-                  if (invalid.length) {
-                    setProblem(invalid[0].error);
-                  } else {
-                    setLoading(true);
-                    let res = await Edit(notification);
-                    setLoading(false);
-                    if (res.error) {
-                      store.dispatch({
-                        type: "SET_NOTIFICATION",
-                        notification: {
-                          title: "Error",
-                          message: res.error,
-                          type: "failure",
-                        },
-                      });
-                    } else {
-                      store.dispatch({
-                        type: "SET_NOTIFICATION",
-                        notification: {
-                          title: "Notification edited",
-                          message: "Notification was successfully edited",
-                          type: "success",
-                        },
-                      });
-                      getBack();
-                    }
-                  }
-                }}
-              >
-                <Loader
-                  color={"white"}
-                  style={{
-                    position: "absolute",
-                    left: "10px",
-                    top: 0,
-                    bottom: 0,
-                    margin: "auto",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                  loading={loading}
-                  size={20}
-                ></Loader>
-                Save
+              <div className="col-sm-30 col-60 mb-2">
+                <div className="row no-gutters">End Time</div>
+                <div className="row no-gutters">
+                  <div className="col-60 position-relative input-light">
+                    <BsClock
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        bottom: 0,
+                        margin: "auto",
+                        left: "18px",
+                      }}
+                    ></BsClock>
+                    <TimePicker
+                      clearIcon={null}
+                      clockIcon={null}
+                      className="w-100 pl-5"
+                      onChange={(a) => {
+                        if (a) {
+                          let [h, m] = a.split(":");
+                          let newTime = new Date(notification.end_date);
+                          newTime.setHours(h);
+                          newTime.setMinutes(m);
+                          setNotification((prev) =>
+                            Object.assign({}, prev, {
+                              end_date: newTime.getTime(),
+                            })
+                          );
+                        }
+                      }}
+                      value={new Date(notification.end_date)}
+                    ></TimePicker>
+                  </div>
+                </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div className="row no-gutters mb-4">
+          <div className="col-60 mb-1">Status</div>
+          <Select
+            popoverClass="col-sm-30 col-60"
+            className="input-light col-60"
+            btnName={
+              notification.status ? notification.status : "Select status"
+            }
+            items={statuses}
+            onSelect={(index) =>
+              setNotification((prev) =>
+                Object.assign({}, prev, { status: statuses[index] })
+              )
+            }
+          ></Select>
+        </div>
+        <div
+          style={{ height: "50px", opacity: problem ? 1 : 0 }}
+          className="row no-gutters align-items-center text-danger my-2"
+        >
+          {problem}
+        </div>
+        <div className="row no-gutters">
+          <div
+            className="btn-custom btn-custom-secondary btn-small mr-sm-3 mb-3 col-60 col-sm-auto"
+            onClick={getBack}
+          >
+            Cancel
+          </div>
+          <div
+            className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto"
+            onClick={async () => {
+              let invalid = validations.filter((x) => !x.valid);
+              if (invalid.length) {
+                setProblem(invalid[0].error);
+              } else {
+                setLoading(true);
+                let res = await Edit(notification);
+                setLoading(false);
+                if (res.error) {
+                  store.dispatch({
+                    type: "SET_NOTIFICATION",
+                    notification: {
+                      title: "Error",
+                      message: res.error,
+                      type: "failure",
+                    },
+                  });
+                } else {
+                  store.dispatch({
+                    type: "SET_NOTIFICATION",
+                    notification: {
+                      title: "Notification edited",
+                      message: "Notification was successfully edited",
+                      type: "success",
+                    },
+                  });
+                  getBack();
+                }
+              }
+            }}
+          >
+            <Loader
+              color={"white"}
+              style={{
+                position: "absolute",
+                left: "10px",
+                top: 0,
+                bottom: 0,
+                margin: "auto",
+                display: "flex",
+                alignItems: "center",
+              }}
+              loading={loading}
+              size={20}
+            ></Loader>
+            Save
           </div>
         </div>
       </div>

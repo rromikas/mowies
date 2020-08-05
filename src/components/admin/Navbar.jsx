@@ -7,10 +7,12 @@ import Logo from "../../images/Logo";
 import { connect } from "react-redux";
 import history from "../../History";
 import store from "../../store/store";
+import { GetUserNotifications } from "../../server/DatabaseApi";
 
 const Navbar = ({ setIsMenuOpened, isMenuOpened, user }) => {
   const lastScroll = useRef(100);
   const [direction, setDirection] = useState("up");
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     function handleScrolling() {
@@ -28,6 +30,18 @@ const Navbar = ({ setIsMenuOpened, isMenuOpened, user }) => {
       window.removeEventListener("scroll", handleScrolling);
     };
   }, []);
+
+  useEffect(() => {
+    async function getData() {
+      if (user.notifications && user.notifications.length) {
+        let data = await GetUserNotifications(user.notifications);
+        if (!data.error) {
+          setNotifications(data);
+        }
+      }
+    }
+    getData();
+  }, [user]);
 
   return (
     <div
@@ -80,7 +94,7 @@ const Navbar = ({ setIsMenuOpened, isMenuOpened, user }) => {
       <div className="col-auto">
         <div className="row no-gutters align-items-center">
           <div className="col-auto mr-3">
-            <Notifications fontSize="44px"></Notifications>
+            <Notifications count={notifications.length}></Notifications>
           </div>
           {user.display_name ? (
             <div className="col-auto mr-3">

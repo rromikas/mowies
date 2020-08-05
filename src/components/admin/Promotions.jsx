@@ -112,6 +112,7 @@ const Promotions = ({
                 }`}
                 onClick={() => {
                   setTypeFilter("");
+                  setType("");
                   setMainFilter({ key: "", value: "" });
                 }}
               >

@@ -7,7 +7,11 @@ import Pagination from "../utility/Paigination";
 import { BsSearch } from "react-icons/bs";
 import date from "date-and-time";
 import { Swipeable } from "react-swipeable";
-import { GetNotifications } from "../../server/DatabaseApi";
+import {
+  GetNotifications,
+  DeleteMultipleNotifications,
+} from "../../server/DatabaseApi";
+import store from "../../store/store";
 
 const Notifications = ({
   setEditNotification,
@@ -15,15 +19,17 @@ const Notifications = ({
   setAddNewNotificationSection,
 }) => {
   const [action, setAction] = useState("");
-  const [role, setRole] = useState("");
+  const [type, setType] = useState("");
   const [searchKey, setSearchKey] = useState("User");
   const [lastVisibleColumn, setLastVisibleColumn] = useState(0);
   const [page, setPage] = useState(1);
-  const [roleFilter, setRoleFilter] = useState("");
+  const [typeFilter, setTypeFilter] = useState("");
   const [search, setSearch] = useState("");
-
+  const [mainFilter, setMainFilter] = useState({ key: "", value: "" });
   const [notifications, setNotifications] = useState([]);
   const [filteredNotifications, setFilteredNotifications] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+
   useEffect(() => {
     async function getData() {
       let data = await GetNotifications();
@@ -34,7 +40,9 @@ const Notifications = ({
     }
 
     getData();
-  }, []);
+  }, [refresh]);
+
+  const types = ["App", "Email"];
 
   useEffect(() => {
     let arr = [...notifications];
@@ -50,20 +58,20 @@ const Notifications = ({
           arr = arr.filter((x) =>
             date.format(new Date(x.date), "DD/MM/YYYY").includes(search)
           );
-        } else if (searchKey === "Movie") {
-          arr = arr.filter((x) => x.movie_title.match(new RegExp(search, "i")));
         }
       }
 
-      if (roleFilter) {
-        arr = arr.filter(
-          (x) => PublicUsers[x.author].role === roleFilter.toLowerCase()
-        );
+      if (typeFilter) {
+        arr = arr.filter((x) => x.type === typeFilter);
+      }
+
+      if (mainFilter.key) {
+        arr = arr.filter((x) => x[mainFilter.key] === mainFilter.value);
       }
 
       setFilteredNotifications(arr);
     }
-  }, [search, roleFilter, notifications]);
+  }, [search, typeFilter, notifications, mainFilter]);
 
   //boundaries for slicing reviews array. (pagination)
   let boundaries = [(page - 1) * 5, (page - 1) * 5 + 5];
@@ -73,6 +81,48 @@ const Notifications = ({
   }
 
   const statuses = ["Sent", "Drafted", "Deleted"];
+
+  const handleApply = async (all = false) => {
+    if (all) {
+      setTypeFilter(type);
+    }
+    if (action === "Edit") {
+      let selected = filteredNotifications.filter((x) => x.selected);
+      if (selected.length) {
+        setEditNotification(selected[0]);
+        setEditNotificationSection();
+      }
+    } else if (action === "Delete") {
+      let selected = filteredNotifications.filter((x) => x.selected);
+      if (selected.length) {
+        let res = await DeleteMultipleNotifications(
+          selected.map((x) => x._id),
+          { status: "Deleted" }
+        );
+        if (res.error) {
+          store.dispatch({
+            type: "SET_NOTIFICATION",
+            notification: {
+              title: "Error",
+              message: res.error,
+              type: "failure",
+            },
+          });
+        } else {
+          store.dispatch({
+            type: "SET_NOTIFICATION",
+            notification: {
+              title: "Selected notifications deleted",
+              message: "Selected notifications were successfully deleted",
+              type: "success",
+            },
+          });
+        }
+        setRefresh(!refresh);
+      }
+    }
+  };
+
   return (
     <div className="row no-gutters p-md-5 p-4">
       <div className="col-60 border-bottom">
@@ -95,11 +145,33 @@ const Notifications = ({
         <div className="row no-gutters">
           <div className="col-60 py-5">
             <div className="row no-gutters h6 mb-3">
-              <div className="col-auto">All ({notifications.length})</div>
+              <div
+                onClick={() => {
+                  setTypeFilter("");
+                  setType("");
+                  setMainFilter({ key: "", value: "" });
+                }}
+                className={`col-auto cursor-pointer ${
+                  !typeFilter && !mainFilter.key ? "text-primary" : "text-dark"
+                }`}
+              >
+                All ({notifications.length})
+              </div>
               {statuses.map((x, i) => (
                 <React.Fragment key={`status-${i}`}>
                   <div className="col-auto px-2 text-muted">|</div>
-                  <div className="col-auto">
+                  <div
+                    onClick={() =>
+                      setMainFilter((prev) =>
+                        Object.assign({ key: "status", value: x })
+                      )
+                    }
+                    className={`col-auto cursor-pointer ${
+                      mainFilter.key === "status" && mainFilter.value === x
+                        ? "text-primary"
+                        : "text-dark"
+                    }`}
+                  >
                     {x} ({notifications.filter((y) => y.status === x).length})
                   </div>
                 </React.Fragment>
@@ -108,7 +180,7 @@ const Notifications = ({
             <div className="row no-gutters justify-content-between">
               <div className="col-sm-auto col-60">
                 <div className="row no-gutters">
-                  <div className="col-60 col-sm-auto pb-3">
+                  <div className="col-60 col-sm-auto pb-3 mr-sm-3">
                     <div className="row no-gutters">
                       <Select
                         popoverClass="col-60 col-sm-auto"
@@ -117,65 +189,37 @@ const Notifications = ({
                         }
                         items={["Edit", "Delete"]}
                         btnName={action ? action : "Select Action"}
-                        className="input-light px-3 col-auto mr-sm-3"
+                        className="input-light px-3 col-auto"
                       ></Select>
                     </div>
                   </div>
 
                   <div
-                    onClick={() => {
-                      if (action === "Edit") {
-                        let selected = filteredNotifications.filter(
-                          (x) => x.selected
-                        );
-                        if (selected.length) {
-                          setEditNotification(selected[0]);
-                          setEditNotificationSection();
-                        }
-                      } else if (action === "Delete") {
-                        //delete review
-                      }
-                    }}
+                    onClick={handleApply}
                     className="d-none d-xl-block btn-custom btn-custom-primary col-auto mr-3 btn-xsmall mb-3"
                   >
                     Apply
                   </div>
-                  <div className="col-60 col-sm-auto pb-3">
+                  <div className="col-60 col-sm-auto pb-3 mr-sm-3">
                     <div className="row no-gutters">
                       <Select
                         popoverClass="col-60 col-sm-auto"
-                        onSelect={(index) =>
-                          setRole(["Admin", "Co-admin", "Copywriter"][index])
-                        }
-                        items={["Admin", "Co-admin", "Copywriter"]}
-                        btnName={role ? role : "Select Role"}
-                        className="input-light px-3 col-auto mr-sm-3"
+                        onSelect={(index) => setType(types[index])}
+                        items={types}
+                        btnName={type ? type : "Select Type"}
+                        className="input-light px-3 col-auto"
                       ></Select>
                     </div>
                   </div>
 
                   <div
                     className="d-none d-xl-block btn-custom btn-custom-primary col-auto mb-3 mr-3 btn-xsmall"
-                    onClick={() => setRoleFilter(role)}
+                    onClick={() => setTypeFilter(type)}
                   >
                     Apply
                   </div>
                   <div
-                    onClick={() => {
-                      if (action === "Edit") {
-                        let selected = filteredNotifications.filter(
-                          (x) => x.selected
-                        );
-                        if (selected.length) {
-                          setEditNotification(selected[0]);
-                          setEditNotificationSection();
-                        }
-                      } else if (action === "Delete") {
-                        //delete review
-                      } else {
-                        setRoleFilter(role);
-                      }
-                    }}
+                    onClick={handleApply}
                     className="d-block d-xl-none btn-custom btn-custom-primary col-60 col-sm-auto mb-3 mr-3 btn-xsmall"
                   >
                     Apply All
@@ -298,7 +342,7 @@ const Notifications = ({
                           ></Checkbox>
                         </th>
                         <th className="table-header text-truncate text-left">
-                          Title
+                          Subject
                         </th>
                         <th className="d-table-cell d-xl-none table-header text-truncate">
                           {
@@ -345,7 +389,7 @@ const Notifications = ({
                                 ></Checkbox>
                               </td>
                               <td style={{ whiteSpace: "nowrap" }}>
-                                {x.title}
+                                {x.subject}
                               </td>
                               <td
                                 className={`${
@@ -467,8 +511,7 @@ const Notifications = ({
                           ></Checkbox>
                         </th>
                         <th className="table-footer text-truncate text-left">
-                          <div className="d-none d-lg-block">Posted By</div>
-                          <div className="d-block d-lg-none">By</div>
+                          Subject
                         </th>
                         <th className="d-table-cell d-xl-none table-header text-truncate">
                           {
@@ -498,7 +541,7 @@ const Notifications = ({
             <div className="row no-gutters justify-content-center justify-content-sm-between">
               <div className="col-60 col-sm-auto">
                 <div className="row no-gutters">
-                  <div className="col-60 col-sm-auto pb-3">
+                  <div className="col-60 col-sm-auto pb-3 mr-sm-3">
                     <div className="row no-gutters">
                       <Select
                         popoverClass="col-60 col-sm-auto"
@@ -507,26 +550,14 @@ const Notifications = ({
                         }
                         items={["Edit", "Delete"]}
                         btnName={action ? action : "Select Action"}
-                        className="input-light px-3 col-auto mr-sm-3"
+                        className="input-light px-3 col-auto"
                       ></Select>
                     </div>
                   </div>
 
                   <div
                     className="btn-custom btn-custom-primary col60 col-sm-auto mr-sm-3 btn-xsmall mb-3"
-                    onClick={() => {
-                      if (action === "Edit") {
-                        let selected = filteredNotifications.filter(
-                          (x) => x.selected
-                        );
-                        if (selected.length) {
-                          setEditNotification(selected[0]);
-                          setEditNotificationSection();
-                        }
-                      } else if (action === "Delete") {
-                        //delete review
-                      }
-                    }}
+                    onClick={handleApply}
                   >
                     Apply
                   </div>
