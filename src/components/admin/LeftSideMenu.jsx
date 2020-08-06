@@ -2,6 +2,9 @@ import React from "react";
 import { MdSettings, MdGroup, MdRateReview, MdMenu } from "react-icons/md";
 import { FaBullhorn } from "react-icons/fa";
 import { BsBellFill, BsFillTagFill } from "react-icons/bs";
+import store from "../../store/store";
+import Logo from "../../images/Logo";
+
 const menuItems = [
   { name: "Settings", icon: MdSettings },
   { name: "User Management", icon: MdGroup },
@@ -11,18 +14,28 @@ const menuItems = [
   { name: "Notifications", icon: BsBellFill },
 ];
 
-const LeftSideMenu = ({ section, setSection, setMenu = () => {} }) => {
+const LeftSideMenu = ({ section, setSection, isMenuOpened }) => {
   return (
-    <div className="row no-gutters bg-dark text-white py-5 h-100">
+    <div className="row no-gutters bg-over-root-lighter text-white h-100 admin-menu">
       <div className="col-60">
-        <div className="row no-gutters justify-content-between d-flex d-lg-none px-5 mb-4">
-          <div className="col-auto h3">Logo</div>
+        <div className="row no-gutters justify-content-between align-items-center d-flex d-lg-none px-5 mb-4">
+          <div className="col-auto h3">
+            <div className="row no-gutters align-items-center">
+              <div className="square-50 mr-2">
+                <Logo></Logo>
+              </div>
+              <div className="col-auto logo text-title-lg">CozyPotato</div>
+            </div>
+          </div>
           <div className="col-auto">
             <MdMenu
               className="cursor-pointer"
               fontSize="34px"
               onClick={() => {
-                setMenu((prev) => !prev);
+                store.dispatch({
+                  type: "SET_DASHBOARD_MENU_OPENED",
+                  isOpened: !isMenuOpened,
+                });
               }}
             ></MdMenu>
           </div>
@@ -30,7 +43,7 @@ const LeftSideMenu = ({ section, setSection, setMenu = () => {} }) => {
         {menuItems.map((x, i) => (
           <div
             key={`left-menu-item-${i}`}
-            className="row no-gutters px-5 mb-2"
+            className="row no-gutters px-4 mb-2"
             style={{
               borderLeft:
                 section === i
@@ -42,7 +55,10 @@ const LeftSideMenu = ({ section, setSection, setMenu = () => {} }) => {
               <div
                 onClick={() => {
                   setSection(i);
-                  setMenu((prev) => !prev);
+                  store.dispatch({
+                    type: "SET_DASHBOARD_MENU_OPENED",
+                    isOpened: !isMenuOpened,
+                  });
                 }}
                 key={`menu-item-${i}`}
                 className={`align-items-center px-3 btn-custom text-left row no-gutters${

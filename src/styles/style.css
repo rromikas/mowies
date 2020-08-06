@@ -357,7 +357,7 @@ template {
 }
 
 h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6 {
+.h1, .h2, .h3, .h4, .h5, .admin-screen-title, .h6 {
   margin-bottom: 0.5rem;
   font-weight: 500;
   line-height: 1.2;
@@ -379,7 +379,7 @@ h4, .h4 {
   font-size: 1.5rem;
 }
 
-h5, .h5 {
+h5, .h5, .admin-screen-title {
   font-size: 1.25rem;
 }
 
@@ -16085,12 +16085,13 @@ body {
 
 .table-btn-selected {
   border: none !important;
+  line-height: 44px !important;
   background: #ff0040 !important;
   color: white !important;
 }
 
 .table-btn {
-  line-height: 40px;
+  line-height: 42px;
   height: 44px;
   border-radius: 4px;
   border: 1px solid #111111;
@@ -16543,7 +16544,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6 {
+.h1, .h2, .h3, .h4, .h5, .admin-screen-title, .h6 {
   font-weight: 600;
 }
 
@@ -16998,12 +16999,37 @@ input[type="number"]::-webkit-outer-spin-button {
           transform: scale(1.2);
 }
 
+.loader-light,
+.loader-light:after {
+  border-radius: 50%;
+}
+
+.loader-dark,
+.loader-dark:after {
+  border-radius: 50%;
+}
+
 .loader,
 .loader:after {
   border-radius: 50%;
 }
 
-.loader {
+.loader-dark {
+  margin: 60px auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 5px solid rgba(0, 74, 213, 0.2);
+  border-right: 5px solid rgba(0, 74, 213, 0.2);
+  border-bottom: 5px solid rgba(0, 74, 213, 0.2);
+  border-left: 5px solid #004ad5;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
+}
+
+.loader-light {
   margin: 60px auto;
   font-size: 10px;
   position: relative;
@@ -17104,5 +17130,46 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .ytp-title-channel {
   display: none !important;
+}
+
+.movie-card-minified {
+  background: white;
+  -webkit-transition: background 0.3s;
+  transition: background 0.3s;
+  cursor: pointer;
+}
+
+.movie-card-minified:hover {
+  background: #e9e9e9;
+}
+
+.admin-screen {
+  padding: 30px 30px;
+}
+
+.admin-menu {
+  padding: 30px 0;
+}
+
+@media only screen and (min-width: 567px) {
+  .admin-screen {
+    padding: 40px 50px;
+  }
+  .admin-menu {
+    padding: 40px 0;
+  }
+}
+
+input[type="number"] {
+  max-width: 150px;
+}
+
+.underline-link {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.underline-link:hover {
+  text-decoration: underline;
 }
 /*# sourceMappingURL=style.css.map */

@@ -31,6 +31,10 @@ const EditUser = ({ currentUser, getBack }) => {
     }
   }, [currentUser]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const validations = [
     {
       valid: /[^\w\s]/.test(newUser.password) || /\d/.test(newUser.password),
@@ -53,7 +57,7 @@ const EditUser = ({ currentUser, getBack }) => {
     <div className="row no-gutters p-md-5 p-4">
       <div className="col-60" style={{ maxWidth: "800px" }}>
         <div className="row no-gutters border-bottom py-3 mb-5">
-          <div className="col-60 h3">Edit User</div>
+          <div className="col-60 admin-screen-title">Edit User</div>
           <div className="col-60">Edit existing user</div>
         </div>
         <div className="row no-gutters">

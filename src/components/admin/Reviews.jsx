@@ -3,7 +3,7 @@ import Select from "../utility/Select";
 import Checkbox from "../utility/Checkbox";
 import { Emoji } from "emoji-mart";
 import Pagination from "../utility/Paigination";
-import { BsSearch } from "react-icons/bs";
+import { BsSearch, BsX } from "react-icons/bs";
 import date from "date-and-time";
 import { Swipeable } from "react-swipeable";
 import { GetReviews, DeleteMultipleReviews } from "../../server/DatabaseApi";
@@ -107,6 +107,8 @@ const Reviews = ({ setEditReviewSection, setEditReview, publicUsers }) => {
     }
   };
 
+  const columns = ["Title", "Review", "Rating", "Posted on", "Reported"];
+
   return (
     <div className="row no-gutters">
       <div className="col-60 py-5">
@@ -126,19 +128,20 @@ const Reviews = ({ setEditReviewSection, setEditReview, publicUsers }) => {
           <div
             onClick={() =>
               setMainFilter((prev) =>
-                Object.assign({}, prev, { key: "role", value: "Admin" })
+                Object.assign({}, prev, { key: "role", value: "Administrator" })
               )
             }
             className={`cursor-pointer col-auto ${
-              mainFilter.key === "role" && mainFilter.value === "Admin"
+              mainFilter.key === "role" && mainFilter.value === "Administrator"
                 ? "text-primary"
                 : "text-dark"
             }`}
           >
             By Administrators (
             {Object.values(publicUsers).length
-              ? reviews.filter((x) => publicUsers[x.author].role === "Admin")
-                  .length
+              ? reviews.filter(
+                  (x) => publicUsers[x.author].role === "Administrator"
+                ).length
               : ""}
             )
           </div>
@@ -165,43 +168,31 @@ const Reviews = ({ setEditReviewSection, setEditReview, publicUsers }) => {
                 <div className="row no-gutters">
                   <Select
                     popoverClass="col-60 col-sm-auto"
-                    onSelect={(index) => setAction(["Edit", "Delete"][index])}
-                    items={["Edit", "Delete"]}
+                    onSelect={(index) => setAction(["Delete"][index])}
+                    items={["Delete"]}
                     btnName={action ? action : "Select Action"}
                     className="input-light px-3 col-auto "
                   ></Select>
                 </div>
               </div>
-
-              <div
-                onClick={handleApply}
-                className="d-none d-xl-block btn-custom btn-custom-primary col-auto mr-3 btn-xsmall mb-3"
-              >
-                Apply
-              </div>
               <div className="col-60 col-sm-auto pb-3 mr-sm-3">
                 <div className="row no-gutters">
                   <Select
                     popoverClass="col-60 col-sm-auto"
-                    onSelect={(index) => setRole(["Admin", "User"][index])}
+                    onSelect={(index) =>
+                      setRole(["Administrator", "User"][index])
+                    }
                     items={["Administrator", "User"]}
                     btnName={role ? role : "Select Role"}
                     className="input-light px-3 col-auto"
                   ></Select>
                 </div>
               </div>
-
-              <div
-                className="d-none d-xl-block btn-custom btn-custom-primary col-auto mb-3 mr-3 btn-xsmall"
-                onClick={() => setRoleFilter(role)}
-              >
-                Apply
-              </div>
               <div
                 onClick={() => handleApply(true)}
-                className="d-block d-xl-none btn-custom btn-custom-primary col-60 col-sm-auto mb-3 mr-3 btn-xsmall"
+                className="btn-custom btn-custom-primary col-60 col-sm-auto mb-3 mr-3 btn-xsmall"
               >
-                Apply All
+                Apply
               </div>
             </div>
           </div>
@@ -325,24 +316,16 @@ const Reviews = ({ setEditReviewSection, setEditReview, publicUsers }) => {
                       <div className="d-block d-lg-none">By</div>
                     </th>
                     <th className="d-table-cell d-xl-none table-header text-truncate">
-                      {
-                        ["Review", "Reported", "Movie Name", "Posted On"][
-                          lastVisibleColumn
-                        ]
-                      }
+                      {columns[lastVisibleColumn]}
                     </th>
-                    <th className="d-none d-xl-table-cell table-header text-truncate">
-                      <div>Review</div>
-                    </th>
-                    <th className="d-none d-xl-table-cell table-header text-truncate">
-                      <div>Reported</div>
-                    </th>
-                    <th className="d-none d-xl-table-cell table-header text-truncate">
-                      <div>Movie Name</div>
-                    </th>
-                    <th className="d-none d-xl-table-cell table-header text-truncate">
-                      <div>Posted On</div>
-                    </th>
+                    {columns.map((x, i) => (
+                      <th
+                        key={`header-col-${i}`}
+                        className="d-none d-xl-table-cell table-header text-truncate"
+                      >
+                        <div>{x}</div>
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>
@@ -368,23 +351,76 @@ const Reviews = ({ setEditReviewSection, setEditReview, publicUsers }) => {
                               }}
                             ></Checkbox>
                           </td>
-                          <td style={{ whiteSpace: "nowrap" }}>
-                            <div className="d-inline-block mr-2">
-                              <div
-                                className="square-50 rounded-circle bg-image"
-                                style={{
-                                  backgroundImage: `url(${
-                                    publicUsers[x.author].photo
-                                  })`,
-                                }}
-                              ></div>
-                            </div>
-                            <div className="d-none d-md-inline-block align-top">
-                              <div className="h6 text-primary">
-                                {publicUsers[x.author].display_name}
+                          <td>
+                            {publicUsers[x.author] ? (
+                              <div>
+                                <div style={{ whiteSpace: "nowrap" }}>
+                                  <div className="d-inline-block mr-2">
+                                    <div
+                                      className="square-50 rounded-circle bg-image"
+                                      style={{
+                                        backgroundImage: `url(${
+                                          publicUsers[x.author].photo
+                                        })`,
+                                      }}
+                                    ></div>
+                                  </div>
+                                  <div className="d-none d-md-inline-block align-top">
+                                    <div className="h6 text-primary">
+                                      {publicUsers[x.author].display_name}
+                                    </div>
+                                    <div className="mb-2">
+                                      {publicUsers[x.author].email}
+                                    </div>
+                                    <div className="d-flex">
+                                      <div
+                                        className="text-primary underline-link"
+                                        onClick={() => {
+                                          setEditReview(x);
+                                          setEditReviewSection();
+                                        }}
+                                      >
+                                        Edit
+                                      </div>
+                                      <div className="px-2">|</div>
+                                      <div
+                                        className="text-danger underline-link"
+                                        onClick={async () => {
+                                          let res = await DeleteMultipleReviews(
+                                            [x._id]
+                                          );
+                                          if (res.error) {
+                                            store.dispatch({
+                                              type: "SET_NOTIFICATION",
+                                              notification: {
+                                                title: "Error",
+                                                message: res.error,
+                                                type: "failure",
+                                              },
+                                            });
+                                          } else {
+                                            store.dispatch({
+                                              type: "SET_NOTIFICATION",
+                                              notification: {
+                                                title: "Review was deleted",
+                                                message:
+                                                  "Review was successfully deleted",
+                                                type: "success",
+                                              },
+                                            });
+                                          }
+                                          setRefresh(!refresh);
+                                        }}
+                                      >
+                                        Delete
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
-                              <div>{publicUsers[x.author].email}</div>
-                            </div>
+                            ) : (
+                              ""
+                            )}
                           </td>
                           <td
                             className={`${
@@ -393,26 +429,20 @@ const Reviews = ({ setEditReviewSection, setEditReview, publicUsers }) => {
                                 : "d-none d-xl-table-cell"
                             }`}
                           >
+                            <div style={{ maxWidth: "150px" }}>
+                              {x.movie_title}
+                            </div>
+                          </td>
+                          <td
+                            className={`${
+                              lastVisibleColumn === 1
+                                ? "d-table-cell"
+                                : "d-none d-xl-table-cell"
+                            }`}
+                          >
                             <div>
-                              <div className="d-flex">
-                                <div className="mr-3">Rating:</div>
-                                <div style={{ marginBottom: "-6px" }}>
-                                  <Emoji
-                                    emoji={
-                                      x.rating === "excellent_rate"
-                                        ? "fire"
-                                        : x.rating === "good_rate"
-                                        ? "heart"
-                                        : x.rating === "ok_rate"
-                                        ? "heavy_division_sign"
-                                        : "shit"
-                                    }
-                                    set="facebook"
-                                    size={24}
-                                  />
-                                </div>
-                              </div>
                               <div
+                                style={{ minWidth: "200px" }}
                                 className="text-clamp-4 cursor-pointer user-select-none"
                                 onClick={(e) => {
                                   let target = e.currentTarget;
@@ -431,7 +461,44 @@ const Reviews = ({ setEditReviewSection, setEditReview, publicUsers }) => {
                           </td>
                           <td
                             className={`${
-                              lastVisibleColumn === 1
+                              lastVisibleColumn === 2
+                                ? "d-table-cell"
+                                : "d-none d-xl-table-cell"
+                            }`}
+                          >
+                            <div style={{ marginBottom: "-6px" }}>
+                              <Emoji
+                                emoji={
+                                  x.rating === "excellent_rate"
+                                    ? "fire"
+                                    : x.rating === "good_rate"
+                                    ? "heart"
+                                    : x.rating === "ok_rate"
+                                    ? "heavy_division_sign"
+                                    : "shit"
+                                }
+                                set="facebook"
+                                size={24}
+                              />
+                            </div>
+                          </td>
+                          <td
+                            className={`${
+                              lastVisibleColumn === 3
+                                ? "d-table-cell"
+                                : "d-none d-xl-table-cell"
+                            }`}
+                          >
+                            <div style={{ whiteSpace: "nowrap" }}>
+                              {date.format(
+                                new Date(x.date),
+                                "DD/MM/YYYY @ hh:mm A"
+                              )}
+                            </div>
+                          </td>
+                          <td
+                            className={`${
+                              lastVisibleColumn === 4
                                 ? "d-table-cell"
                                 : "d-none d-xl-table-cell"
                             }`}
@@ -441,29 +508,6 @@ const Reviews = ({ setEditReviewSection, setEditReview, publicUsers }) => {
                             ) : (
                               <div className="text-success">No</div>
                             )}
-                          </td>
-                          <td
-                            className={`${
-                              lastVisibleColumn === 2
-                                ? "d-table-cell"
-                                : "d-none d-xl-table-cell"
-                            }`}
-                          >
-                            {x.movie_title}
-                          </td>
-                          <td
-                            className={`${
-                              lastVisibleColumn === 3
-                                ? "d-table-cell"
-                                : "d-none d-xl-table-cell"
-                            }`}
-                          >
-                            <div>
-                              {date.format(new Date(x.date), "DD/MM/YYYY")}
-                            </div>
-                            <div>
-                              {date.format(new Date(x.date), "@ hh:mm A")}
-                            </div>
                           </td>
                         </tr>
                       ))
@@ -475,7 +519,7 @@ const Reviews = ({ setEditReviewSection, setEditReview, publicUsers }) => {
                     </tr>
                   )}
                 </tbody>
-                <tfoot>
+                {/* <tfoot>
                   <tr>
                     <th className="text-center">
                       <Checkbox
@@ -506,53 +550,23 @@ const Reviews = ({ setEditReviewSection, setEditReview, publicUsers }) => {
                       <div className="d-block d-lg-none">By</div>
                     </th>
                     <th className="d-table-cell d-xl-none table-header text-truncate">
-                      {
-                        ["Review", "Reported", "Movie Name", "Posted On"][
-                          lastVisibleColumn
-                        ]
-                      }
+                      {columns[lastVisibleColumn]}
                     </th>
-                    <th className="d-none d-xl-table-cell table-footer text-truncate">
-                      <div>Review</div>
-                    </th>
-                    <th className="d-none d-xl-table-cell table-footer text-truncate">
-                      <div>Reported</div>
-                    </th>
-                    <th className="d-none d-xl-table-cell table-footer text-truncate">
-                      <div>Movie Name</div>
-                    </th>
-                    <th className="d-none d-xl-table-cell table-footer text-truncate">
-                      <div>Posted On</div>
-                    </th>
+                    {columns.map((x, i) => (
+                      <th
+                        key={`footer-col-${i}`}
+                        className="d-none d-xl-table-cell table-header text-truncate"
+                      >
+                        <div>{x}</div>
+                      </th>
+                    ))}
                   </tr>
-                </tfoot>
+                </tfoot> */}
               </table>
             </div>
           </Swipeable>
         </div>
-        <div className="row no-gutters justify-content-center justify-content-sm-between">
-          <div className="col-60 col-sm-auto">
-            <div className="row no-gutters">
-              <div className="col-60 col-sm-auto pb-3 mr-sm-3">
-                <div className="row no-gutters">
-                  <Select
-                    popoverClass="col-60 col-sm-auto"
-                    onSelect={(index) => setAction(["Edit", "Delete"][index])}
-                    items={["Edit", "Delete"]}
-                    btnName={action ? action : "Select Action"}
-                    className="input-light px-3 col-auto"
-                  ></Select>
-                </div>
-              </div>
-
-              <div
-                onClick={handleApply}
-                className="btn-custom btn-custom-primary col60 col-sm-auto mr-sm-3 btn-xsmall mb-3"
-              >
-                Apply
-              </div>
-            </div>
-          </div>
+        <div className="row no-gutters justify-content-center justify-content-sm-end">
           <div className="col-auto">
             <Pagination
               count={Math.ceil(filteredReviews.length / 5)}

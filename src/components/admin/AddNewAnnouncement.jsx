@@ -41,7 +41,7 @@ const AddNewAnnouncement = ({ user, getBack }) => {
   return (
     <div className="row no-gutters p-md-5 p-4">
       <div className="col-60 py-3 border-bottom mb-4">
-        <div className="row no-gutters h3">Announcements</div>
+        <div className="row no-gutters admin-screen-title">Announcements</div>
         <div className="row no-gutters">
           Creat a brand new announcement and add to this site
         </div>

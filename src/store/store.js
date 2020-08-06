@@ -62,7 +62,7 @@ function notificationReducer(
   }
 }
 
-function searchReducer(state = { query: "", category: "Movies" }, action) {
+function searchReducer(state = { query: "", category: "All" }, action) {
   switch (action.type) {
     case "SET_SEARCH":
       return action.search;
@@ -77,6 +77,15 @@ function navbarHeightReducer(state = 0, action) {
   switch (action.type) {
     case "SET_HEIGHT":
       return action.height;
+    default:
+      return state;
+  }
+}
+
+function dashboardMenuReducer(state = false, action) {
+  switch (action.type) {
+    case "SET_DASHBOARD_MENU_OPENED":
+      return action.isOpened;
     default:
       return state;
   }
@@ -117,6 +126,7 @@ const rootReducer = combineReducers({
   notification: notificationReducer,
   settings: settingsReducer,
   navbarHeight: navbarHeightReducer,
+  dashboardMenuOpened: dashboardMenuReducer,
 });
 
 const store = createStore(

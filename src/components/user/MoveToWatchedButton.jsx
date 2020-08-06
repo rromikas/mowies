@@ -19,7 +19,6 @@ const MoveToWatchedButton = ({ user, movieId, refreshProfile = () => {} }) => {
           if (movieIndex !== -1) {
             wishlist.splice(movieIndex);
           }
-          console.log("updates user", res.updatedUser);
           store.dispatch({
             type: "UPDATE_USER",
             userProperty: res.updatedUser,

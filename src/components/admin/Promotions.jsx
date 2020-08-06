@@ -7,7 +7,11 @@ import Pagination from "../utility/Paigination";
 import { BsSearch } from "react-icons/bs";
 import date from "date-and-time";
 import { Swipeable } from "react-swipeable";
-import { GetPromotions } from "../../server/DatabaseApi";
+import {
+  GetPromotions,
+  DeleteMultiplePromotions,
+} from "../../server/DatabaseApi";
+import store from "../../store/store";
 
 const Promotions = ({
   setEditPromotion,
@@ -25,6 +29,7 @@ const Promotions = ({
 
   const [promotions, setPromotions] = useState([]);
   const [filteredPromotions, setFilteredPromotions] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     async function getData() {
@@ -37,7 +42,7 @@ const Promotions = ({
     }
 
     getData();
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     let arr = [...promotions];
@@ -80,16 +85,18 @@ const Promotions = ({
     boundaries[1] = boundaries[1] - (boundaries[1] - filteredPromotions.length);
   }
 
-  const columns = ["Review Or Comment", "Status", "Movie Name", "Duration"];
+  const columns = ["Review Or Comment", "Rating", "Duration", "Status"];
   const searchOptions = ["Title", "Review or Comment", "Status", "Movie"];
 
   const publishStatuses = ["Published", "Drafted", "Deleted"];
   return (
-    <div className="row no-gutters p-md-5 p-4">
+    <div className="row no-gutters admin-screen">
       <div className="col-60 border-bottom">
-        <div className="row no-gutters justify-content-between">
-          <div className="col-auto py-3">
-            <div className="row no-gutters h3">Promotions List</div>
+        <div className="row no-gutters justify-content-between pb-3 align-items-end">
+          <div className="col-auto">
+            <div className="row no-gutters admin-screen-title">
+              Promotions List
+            </div>
             <div className="row no-gutters">Edit, add and delete promtions</div>
           </div>
           <div
@@ -150,33 +157,12 @@ const Promotions = ({
                     <div className="row no-gutters">
                       <Select
                         popoverClass="col-60 col-sm-auto"
-                        onSelect={(index) =>
-                          setAction(["Edit", "Delete"][index])
-                        }
-                        items={["Edit", "Delete"]}
+                        onSelect={(index) => setAction(["Delete"][index])}
+                        items={["Delete"]}
                         btnName={action ? action : "Select Action"}
                         className="input-light px-3 col-auto"
                       ></Select>
                     </div>
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      if (action === "Edit") {
-                        let selected = filteredPromotions.filter(
-                          (x) => x.selected
-                        );
-                        if (selected.length) {
-                          setEditPromotion(selected[0]);
-                          setEditPromotionSection();
-                        }
-                      } else if (action === "Delete") {
-                        //delete review
-                      }
-                    }}
-                    className="d-none d-xl-block btn-custom btn-custom-primary col-auto mr-3 btn-xsmall mb-3"
-                  >
-                    Apply
                   </div>
                   <div className="col-60 col-sm-auto pb-3 mr-sm-3">
                     <div className="row no-gutters">
@@ -190,13 +176,6 @@ const Promotions = ({
                         className="input-light px-3 col-auto"
                       ></Select>
                     </div>
-                  </div>
-
-                  <div
-                    className="d-none d-xl-block btn-custom btn-custom-primary col-auto mb-3 mr-3 btn-xsmall"
-                    onClick={() => setTypeFilter(type)}
-                  >
-                    Apply
                   </div>
                   <div
                     onClick={() => {
@@ -214,9 +193,9 @@ const Promotions = ({
                         setTypeFilter(type);
                       }
                     }}
-                    className="d-block d-xl-none btn-custom btn-custom-primary col-60 col-sm-auto mb-3 mr-3 btn-xsmall"
+                    className="btn-custom btn-custom-primary col-60 col-sm-auto mb-3 mr-3 btn-xsmall"
                   >
-                    Apply All
+                    Apply
                   </div>
                 </div>
               </div>
@@ -371,7 +350,51 @@ const Promotions = ({
                                 ></Checkbox>
                               </td>
                               <td style={{ whiteSpace: "nowrap" }}>
-                                {x.title}
+                                <div className="mb-2">{x.movie_title}</div>
+                                <div className="d-flex">
+                                  <div
+                                    className="text-primary underline-link"
+                                    onClick={() => {
+                                      setEditPromotion(x);
+                                      setEditPromotionSection();
+                                    }}
+                                  >
+                                    Edit
+                                  </div>
+                                  <div className="px-2">|</div>
+                                  <div
+                                    className="text-danger underline-link"
+                                    onClick={async () => {
+                                      let res = await DeleteMultiplePromotions(
+                                        [x._id],
+                                        { status: "Deleted" }
+                                      );
+                                      if (res.error) {
+                                        store.dispatch({
+                                          type: "SET_NOTIFICATION",
+                                          notification: {
+                                            title: "Error",
+                                            message: res.error,
+                                            type: "failure",
+                                          },
+                                        });
+                                      } else {
+                                        store.dispatch({
+                                          type: "SET_NOTIFICATION",
+                                          notification: {
+                                            title: "Promotion was deleted",
+                                            message:
+                                              "Promotion was successfully deleted",
+                                            type: "success",
+                                          },
+                                        });
+                                      }
+                                      setRefresh(!refresh);
+                                    }}
+                                  >
+                                    Delete
+                                  </div>
+                                </div>
                               </td>
                               <td
                                 className={`${
@@ -382,25 +405,6 @@ const Promotions = ({
                               >
                                 {x.content_type === "Review" ? (
                                   <div>
-                                    <div className="d-flex">
-                                      <div className="mr-3">Rating:</div>
-                                      <div style={{ marginBottom: "-6px" }}>
-                                        <Emoji
-                                          emoji={
-                                            x.content.rating ===
-                                            "excellent_rate"
-                                              ? "fire"
-                                              : x.content.rating === "good_rate"
-                                              ? "heart"
-                                              : x.content.rating === "ok_rate"
-                                              ? "heavy_division_sign"
-                                              : "shit"
-                                          }
-                                          set="facebook"
-                                          size={24}
-                                        />
-                                      </div>
-                                    </div>
                                     <div
                                       className="text-clamp-4 cursor-pointer user-select-none"
                                       onClick={(e) => {
@@ -443,18 +447,30 @@ const Promotions = ({
                               </td>
                               <td
                                 className={`${
-                                  x.active_status === "Active"
-                                    ? "text-green"
-                                    : x.active_status === "Paused"
-                                    ? "text-orange"
-                                    : "text-danger"
-                                } ${
                                   lastVisibleColumn === 1
                                     ? "d-table-cell"
                                     : "d-none d-xl-table-cell"
                                 }`}
                               >
-                                {x.active_status}
+                                {x.content.rating ? (
+                                  <div style={{ marginBottom: "-6px" }}>
+                                    <Emoji
+                                      emoji={
+                                        x.content.rating === "excellent_rate"
+                                          ? "fire"
+                                          : x.content.rating === "good_rate"
+                                          ? "heart"
+                                          : x.content.rating === "ok_rate"
+                                          ? "heavy_division_sign"
+                                          : "shit"
+                                      }
+                                      set="facebook"
+                                      size={24}
+                                    />
+                                  </div>
+                                ) : (
+                                  "-"
+                                )}
                               </td>
                               <td
                                 className={`${
@@ -463,49 +479,45 @@ const Promotions = ({
                                     : "d-none d-xl-table-cell"
                                 }`}
                               >
-                                {x.movie_title}
+                                <div style={{ whiteSpace: "nowrap" }}>
+                                  <div className="d-inline-block mr-2">
+                                    <div>From: </div>
+                                    <div>To: </div>
+                                  </div>
+                                  <div className="d-inline-block">
+                                    <div style={{ whiteSpace: "nowrap" }}>
+                                      {date.format(
+                                        new Date(x.start_date),
+                                        "DD/MM/YYYY @ hh:mm A"
+                                      )}
+                                      <div style={{ whiteSpace: "nowrap" }}>
+                                        {date.format(
+                                          new Date(x.end_date),
+                                          "DD/MM/YYYY @ hh:mm A"
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
                               </td>
                               <td
                                 className={`${
+                                  x.status === "Published"
+                                    ? "text-green"
+                                    : x.status === "Drafted"
+                                    ? "text-orange"
+                                    : "text-danger"
+                                } ${
                                   lastVisibleColumn === 3
                                     ? "d-table-cell"
                                     : "d-none d-xl-table-cell"
                                 }`}
                               >
-                                <div className="d-flex mb-2">
-                                  <div style={{ width: "55px" }}>From:</div>
-                                  <div>
-                                    <div>
-                                      {date.format(
-                                        new Date(x.start_date),
-                                        "DD/MM/YYYY"
-                                      )}
-                                    </div>
-                                    <div>
-                                      {date.format(
-                                        new Date(x.start_date),
-                                        "@ hh:mm A"
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="d-flex">
-                                  <div style={{ width: "55px" }}>To:</div>
-                                  <div>
-                                    <div>
-                                      {date.format(
-                                        new Date(x.end_date),
-                                        "DD/MM/YYYY"
-                                      )}
-                                    </div>
-                                    <div>
-                                      {date.format(
-                                        new Date(x.end_date),
-                                        "@ hh:mm A"
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
+                                {x.status === "Published"
+                                  ? "Active"
+                                  : x.status === "Drafted"
+                                  ? "Inactive"
+                                  : x.status}
                               </td>
                             </tr>
                           ))
@@ -517,7 +529,7 @@ const Promotions = ({
                         </tr>
                       )}
                     </tbody>
-                    <tfoot>
+                    {/* <tfoot>
                       <tr>
                         <th className="text-center">
                           <Checkbox
@@ -558,48 +570,12 @@ const Promotions = ({
                           </th>
                         ))}
                       </tr>
-                    </tfoot>
+                    </tfoot> */}
                   </table>
                 </div>
               </Swipeable>
             </div>
-            <div className="row no-gutters justify-content-center justify-content-sm-between">
-              <div className="col-60 col-sm-auto">
-                <div className="row no-gutters">
-                  <div className="col-60 col-sm-auto pb-3 mr-sm-3">
-                    <div className="row no-gutters">
-                      <Select
-                        popoverClass="col-60 col-sm-auto"
-                        onSelect={(index) =>
-                          setAction(["Edit", "Delete"][index])
-                        }
-                        items={["Edit", "Delete"]}
-                        btnName={action ? action : "Select Action"}
-                        className="input-light px-3 col-auto"
-                      ></Select>
-                    </div>
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      if (action === "Edit") {
-                        let selected = filteredPromotions.filter(
-                          (x) => x.selected
-                        );
-                        if (selected.length) {
-                          setEditPromotion(selected[0]);
-                          setEditPromotionSection();
-                        }
-                      } else if (action === "Delete") {
-                        //delete review
-                      }
-                    }}
-                    className="btn-custom btn-custom-primary col60 col-sm-auto mr-sm-3 btn-xsmall mb-3"
-                  >
-                    Apply
-                  </div>
-                </div>
-              </div>
+            <div className="row no-gutters justify-content-center justify-content-sm-end">
               <div className="col-auto">
                 <Pagination
                   count={Math.ceil(filteredPromotions.length / 5)}

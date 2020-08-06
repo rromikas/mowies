@@ -59,7 +59,6 @@ const MovieReviews = ({ movie, user, publicUsers, addReviewTrigger }) => {
   const reviewsPerPage = 8;
 
   useEffect(() => {
-    console.log("AD re vire tgire", addReviewTrigger);
     if (addReviewTrigger >= 0) {
       setAddReviewOpen(true);
     }

@@ -77,6 +77,7 @@ const Announcements = ({
   }
 
   const statuses = ["Published", "Drafted", "Expired"];
+  const actions = ["Delete"];
 
   const handleApply = async (all = false) => {
     if (all) {
@@ -119,11 +120,13 @@ const Announcements = ({
   const types = ["Information", "Error", "Warning"];
 
   return (
-    <div className="row no-gutters p-md-5 p-4">
+    <div className="row no-gutters admin-screen">
       <div className="col-60 border-bottom">
-        <div className="row no-gutters justify-content-between">
-          <div className="col-auto py-3">
-            <div className="row no-gutters h3">Announcements</div>
+        <div className="row no-gutters justify-content-between pb-3 align-items-end">
+          <div className="col-auto">
+            <div className="row no-gutters admin-screen-title">
+              Announcements
+            </div>
             <div className="row no-gutters">Create and post announcements</div>
           </div>
           <div
@@ -180,21 +183,12 @@ const Announcements = ({
                     <div className="row no-gutters">
                       <Select
                         popoverClass="col-60 col-sm-auto"
-                        onSelect={(index) =>
-                          setAction(["Edit", "Delete"][index])
-                        }
-                        items={["Edit", "Delete"]}
+                        onSelect={(index) => setAction(actions[index])}
+                        items={actions}
                         btnName={action ? action : "Select Action"}
                         className="input-light px-3 col-auto "
                       ></Select>
                     </div>
-                  </div>
-
-                  <div
-                    onClick={handleApply}
-                    className="d-none d-xl-block btn-custom btn-custom-primary col-auto mr-3 btn-xsmall mb-3"
-                  >
-                    Apply
                   </div>
                   <div className="col-60 col-sm-auto pb-3 mr-sm-3">
                     <div className="row no-gutters">
@@ -207,18 +201,11 @@ const Announcements = ({
                       ></Select>
                     </div>
                   </div>
-
-                  <div
-                    className="d-none d-xl-block btn-custom btn-custom-primary col-auto mb-3 mr-3 btn-xsmall"
-                    onClick={() => setTypeFilter(type)}
-                  >
-                    Apply
-                  </div>
                   <div
                     onClick={() => handleApply(true)}
-                    className="d-block d-xl-none btn-custom btn-custom-primary col-60 col-sm-auto mb-3 mr-3 btn-xsmall"
+                    className="btn-custom btn-custom-primary col-60 col-sm-auto mb-3 mr-3 btn-xsmall"
                   >
-                    Apply All
+                    Apply
                   </div>
                 </div>
               </div>
@@ -385,24 +372,74 @@ const Announcements = ({
                                   }}
                                 ></Checkbox>
                               </td>
-                              <td style={{ whiteSpace: "nowrap" }}>
+                              <td>
                                 {Object.values(publicUsers).length ? (
                                   <React.Fragment>
-                                    <div className="d-inline-block mr-2">
-                                      <div
-                                        className="square-50 rounded-circle bg-image"
-                                        style={{
-                                          backgroundImage: `url(${
-                                            publicUsers[x.author].photo
-                                          })`,
-                                        }}
-                                      ></div>
-                                    </div>
-                                    <div className="d-none d-md-inline-block align-top">
-                                      <div className="h6 text-primary">
-                                        {publicUsers[x.author].display_name}
+                                    <div>
+                                      <div style={{ whiteSpace: "nowrap" }}>
+                                        <div className="d-inline-block mr-2">
+                                          <div
+                                            className="square-50 rounded-circle bg-image"
+                                            style={{
+                                              backgroundImage: `url(${
+                                                publicUsers[x.author].photo
+                                              })`,
+                                            }}
+                                          ></div>
+                                        </div>
+                                        <div className="d-none d-md-inline-block align-top">
+                                          <div className="text-primary">
+                                            {publicUsers[x.author].display_name}
+                                          </div>
+                                          <div className="mb-3">
+                                            {publicUsers[x.author].email}
+                                          </div>
+                                          <div className="d-flex">
+                                            <div
+                                              className="text-primary underline-link"
+                                              onClick={() => {
+                                                setEditAnnouncement(x);
+                                                setEditAnnouncementSection();
+                                              }}
+                                            >
+                                              Edit
+                                            </div>
+                                            <div className="px-2">|</div>
+                                            <div
+                                              className="text-danger underline-link"
+                                              onClick={async () => {
+                                                let res = await DeleteMultipleAnnouncements(
+                                                  [x._id]
+                                                );
+                                                if (res.error) {
+                                                  store.dispatch({
+                                                    type: "SET_NOTIFICATION",
+                                                    notification: {
+                                                      title: "Error",
+                                                      message: res.error,
+                                                      type: "failure",
+                                                    },
+                                                  });
+                                                } else {
+                                                  store.dispatch({
+                                                    type: "SET_NOTIFICATION",
+                                                    notification: {
+                                                      title:
+                                                        "Announcement was deleted",
+                                                      message:
+                                                        "Announcement was successfully deleted",
+                                                      type: "success",
+                                                    },
+                                                  });
+                                                }
+                                                setRefresh(!refresh);
+                                              }}
+                                            >
+                                              Delete
+                                            </div>
+                                          </div>
+                                        </div>
                                       </div>
-                                      <div>{publicUsers[x.author].email}</div>
                                     </div>
                                   </React.Fragment>
                                 ) : (
@@ -411,9 +448,17 @@ const Announcements = ({
                               </td>
                               <td
                                 className={`${
+                                  x.type === "Warning"
+                                    ? "text-warning"
+                                    : x.type === "Information"
+                                    ? "text-primary"
+                                    : x.type === "Error"
+                                    ? "text-danger"
+                                    : ""
+                                }${
                                   lastVisibleColumn === 0
-                                    ? "d-table-cell"
-                                    : "d-none d-xl-table-cell"
+                                    ? " d-table-cell"
+                                    : " d-none d-xl-table-cell"
                                 }`}
                               >
                                 <div>{x.type}</div>
@@ -426,6 +471,7 @@ const Announcements = ({
                                 }`}
                               >
                                 <div
+                                  style={{ minWidth: "150px" }}
                                   className="text-clamp-4 cursor-pointer user-select-none"
                                   onClick={(e) => {
                                     let target = e.currentTarget;
@@ -448,37 +494,23 @@ const Announcements = ({
                                     : "d-none d-xl-table-cell"
                                 }`}
                               >
-                                <div className="d-flex mb-2">
-                                  <div style={{ width: "55px" }}>From:</div>
-                                  <div>
-                                    <div>
-                                      {date.format(
-                                        new Date(x.start_date),
-                                        "DD/MM/YYYY"
-                                      )}
-                                    </div>
-                                    <div>
-                                      {date.format(
-                                        new Date(x.start_date),
-                                        "@ hh:mm A"
-                                      )}
-                                    </div>
+                                <div style={{ whiteSpace: "nowrap" }}>
+                                  <div className="d-inline-block mr-2">
+                                    <div>From: </div>
+                                    <div>To: </div>
                                   </div>
-                                </div>
-                                <div className="d-flex">
-                                  <div style={{ width: "55px" }}>To:</div>
-                                  <div>
-                                    <div>
+                                  <div className="d-inline-block">
+                                    <div style={{ whiteSpace: "nowrap" }}>
                                       {date.format(
-                                        new Date(x.end_date),
-                                        "DD/MM/YYYY"
+                                        new Date(x.start_date),
+                                        "DD/MM/YYYY @ hh:mm A"
                                       )}
-                                    </div>
-                                    <div>
-                                      {date.format(
-                                        new Date(x.end_date),
-                                        "@ hh:mm A"
-                                      )}
+                                      <div style={{ whiteSpace: "nowrap" }}>
+                                        {date.format(
+                                          new Date(x.end_date),
+                                          "DD/MM/YYYY @ hh:mm A"
+                                        )}
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -502,7 +534,7 @@ const Announcements = ({
                         </tr>
                       )}
                     </tbody>
-                    <tfoot>
+                    {/* <tfoot>
                       <tr>
                         <th className="text-center">
                           <Checkbox
@@ -552,36 +584,12 @@ const Announcements = ({
                           <div>Status</div>
                         </th>
                       </tr>
-                    </tfoot>
+                    </tfoot> */}
                   </table>
                 </div>
               </Swipeable>
             </div>
-            <div className="row no-gutters justify-content-center justify-content-sm-between">
-              <div className="col-60 col-sm-auto">
-                <div className="row no-gutters">
-                  <div className="col-60 col-sm-auto pb-3">
-                    <div className="row no-gutters">
-                      <Select
-                        popoverClass="col-60 col-sm-auto"
-                        onSelect={(index) =>
-                          setAction(["Edit", "Delete"][index])
-                        }
-                        items={["Edit", "Delete"]}
-                        btnName={action ? action : "Select Action"}
-                        className="input-light px-3 col-auto mr-sm-3"
-                      ></Select>
-                    </div>
-                  </div>
-
-                  <div
-                    className="btn-custom btn-custom-primary col60 col-sm-auto mr-sm-3 btn-xsmall mb-3"
-                    onClick={handleApply}
-                  >
-                    Apply
-                  </div>
-                </div>
-              </div>
+            <div className="row no-gutters justify-content-center justify-content-sm-end">
               <div className="col-auto">
                 <Pagination
                   count={Math.ceil(filteredAnnouncements.length / 5)}

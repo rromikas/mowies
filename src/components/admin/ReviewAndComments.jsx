@@ -7,15 +7,18 @@ const ReviewsAndComments = ({
   setEditReviewSection,
   setEditCommentSection,
   setEditComment,
+  containerSpacing,
 }) => {
   const [tab, setTab] = useState(0);
 
   return (
-    <div className="row no-gutters p-md-5 p-4">
+    <div className={`row no-gutters admin-screen`}>
       <div className="col-60 border-bottom">
         <div className="row no-gutters justify-content-between">
-          <div className="col-auto py-3">
-            <div className="row no-gutters h3">Reviews & Comments</div>
+          <div className="col-auto pb-3">
+            <div className="row no-gutters admin-screen-title">
+              Reviews & Comments
+            </div>
             <div className="row no-gutters">
               Add, edit or delete reviews and comments
             </div>

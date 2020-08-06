@@ -11,17 +11,19 @@ import { GetUserNotifications } from "../../server/DatabaseApi";
 import Notifications from "../../images/Notifications";
 import { withResizeDetector } from "react-resize-detector";
 import { useLocation } from "react-router-dom";
+import SearchBox from "./SearchBox";
+import { MdMenu } from "react-icons/md";
 
 const Navbar = (props) => {
   const user = props.user;
-  const search = props.search;
+  const dashboardMenuOpened = props.dashboardMenuOpened;
   const height = props.height;
-  const [query, setQuery] = useState("");
-  const categories = ["All", "Movies", "Series", "Reviews"];
+
   const [scrolledToTop, setScrolledTopTop] = useState(true);
   const lastScroll = useRef(100);
   const [direction, setDirection] = useState("up");
   const [notifications, setNotifications] = useState([]);
+  const profilePopover = useRef(null);
 
   const location = useLocation();
 
@@ -62,15 +64,10 @@ const Navbar = (props) => {
   }, [user]);
 
   useEffect(() => {
-    console.log("hegith changed", height);
     if (height) {
       store.dispatch({ type: "SET_HEIGHT", height });
     }
   }, [height]);
-
-  useEffect(() => {
-    console.log("LCOATIONS", location);
-  }, [location]);
 
   return location.pathname !== "/login" && location.pathname !== "/signup" ? (
     <div
@@ -79,7 +76,7 @@ const Navbar = (props) => {
         position: "sticky",
         zIndex: 59,
         transition: "top 0.5s",
-        top: direction === "up" ? "0px" : "-200px",
+        top: direction === "up" ? "0px" : `-${height}px`,
         left: 0,
         right: 0,
       }}
@@ -90,7 +87,11 @@ const Navbar = (props) => {
           !scrolledToTop ? " bg-root" : ""
         }`}
       >
-        <div className="col-60 content-container">
+        <div
+          className={`col-60${
+            location.pathname !== "/admin" ? " content-container" : ""
+          }`}
+        >
           <div className="row no-gutters justify-content-between px-3 py-2 align-items-center flex-nowrap">
             <div className="col-auto d-none d-sm-block pr-sm-5 pr-3 text-white pl-sm-3 pl-2">
               <div
@@ -114,48 +115,8 @@ const Navbar = (props) => {
                 CozyPotato
               </div>
             </div>
-            <div className="col pr-5 d-none d-md-block">
-              <div className="row no-gutters align-items-center">
-                <Select
-                  items={categories}
-                  onSelect={(index) =>
-                    store.dispatch({
-                      type: "UPDATE_SEARCH",
-                      search: { category: categories[index] },
-                    })
-                  }
-                  popoverWidth={"150px"}
-                  className="col-auto input-prepend-select"
-                  btnName={search.category}
-                ></Select>
-                <div className="col position-relative">
-                  <input
-                    value={query}
-                    onKeyUp={(e) => {
-                      if (e.keyCode === 13) {
-                        store.dispatch({
-                          type: "UPDATE_SEARCH",
-                          search: { query },
-                        });
-                        history.push("/search");
-                      }
-                    }}
-                    onChange={(e) => {
-                      e.persist();
-                      setQuery(e.target.value);
-                    }}
-                    type="text"
-                    spellCheck={false}
-                    className={`w-100 input`}
-                  ></input>
-                  <BsSearch
-                    onClick={() => history.push("/search")}
-                    fontSize="24px"
-                    className="position-absolute text-white cursor-pointer"
-                    style={{ top: 0, bottom: 0, right: "20px", margin: "auto" }}
-                  ></BsSearch>
-                </div>
-              </div>
+            <div className="col pr-3 d-none d-md-block">
+              <SearchBox navbarHeight={height}></SearchBox>
             </div>
             <div className="col-auto">
               <div className="row no-gutters">
@@ -223,6 +184,7 @@ const Navbar = (props) => {
                             <div
                               className="popover-item border-bottom"
                               onClick={() => {
+                                profilePopover.current.click();
                                 history.push(`/profile/${user._id}`);
                               }}
                             >
@@ -231,6 +193,7 @@ const Navbar = (props) => {
                             <div
                               className="popover-item border-bottom"
                               onClick={() => {
+                                profilePopover.current.click();
                                 history.push(`/profile/${user._id}/2`);
                               }}
                             >
@@ -239,6 +202,7 @@ const Navbar = (props) => {
                             <div
                               className="popover-item border-bottom"
                               onClick={() => {
+                                profilePopover.current.click();
                                 history.push(`/profile/${user._id}/0`);
                               }}
                             >
@@ -247,6 +211,7 @@ const Navbar = (props) => {
                             <div
                               className="popover-item"
                               onClick={() => {
+                                profilePopover.current.click();
                                 localStorage.removeItem("movies_user_token");
                                 store.dispatch({
                                   type: "SET_USER",
@@ -266,7 +231,7 @@ const Navbar = (props) => {
                           </div>
                         )}
                       >
-                        <div className="col-60">
+                        <div className="col-60" ref={profilePopover}>
                           <div className="row no-gutters align-items-center cursor-pointer">
                             <div
                               className="col-auto mr-2 rounded-circle square-40 bg-image"
@@ -304,6 +269,20 @@ const Navbar = (props) => {
                     </div>
                   )}
                 </div>
+                {location.pathname === "/admin" ? (
+                  <MdMenu
+                    className="text-white col-auto d-block d-lg-none cursor-pointer"
+                    fontSize="34px"
+                    onClick={() =>
+                      store.dispatch({
+                        type: "SET_DASHBOARD_MENU_OPENED",
+                        isOpened: !dashboardMenuOpened,
+                      })
+                    }
+                  ></MdMenu>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>
@@ -319,6 +298,7 @@ function mapp(state, ownProps) {
   return {
     user: state.user,
     search: state.search,
+    dashboardMenuOpened: state.dashboardMenuOpened,
     ...ownProps,
   };
 }

@@ -17,10 +17,16 @@ const EditComment = ({ currentComment, publicUsers, getBack }) => {
     }
   }, [currentComment]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="row no-gutters p-md-5 p-4" style={{ maxWidth: "800px" }}>
       <div className="col-60 py-3 border-bottom mb-4">
-        <div className="row no-gutters h3">Reviews & Comments</div>
+        <div className="row no-gutters admin-screen-title">
+          Reviews & Comments
+        </div>
         <div className="row no-gutters">
           Add, edit and delete reviews and comments
         </div>

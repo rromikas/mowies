@@ -85,8 +85,10 @@ const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
           update["deleted"] = true;
         } else if (action === "Inactivate") {
           update["status"] = "Inactive";
-        } else if ("Block") {
+        } else if (action === "Block") {
           update["status"] = "Blocked";
+        } else if (action === "Activate") {
+          update["status"] = "Active";
         }
         let res = await EditMultipleUsers(
           selected.map((x) => x._id),
@@ -116,14 +118,38 @@ const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
     }
   };
 
+  const editUsers = async (update, ids) => {
+    let res = await EditMultipleUsers(ids, update);
+    if (res.error) {
+      store.dispatch({
+        type: "SET_NOTIFICATION",
+        notification: {
+          title: "Error",
+          message: res.error,
+          type: "failure",
+        },
+      });
+    } else {
+      store.dispatch({
+        type: "SET_NOTIFICATION",
+        notification: {
+          title: "Users updated",
+          message: "User were successfully updated",
+          type: "success",
+        },
+      });
+      setRefresh(!refresh);
+    }
+  };
+  const actions = ["Block", "Inactivate", "Activate", "Delete"];
   const statuses = ["Active", "Inactive", "Blocked"];
   const columns = ["Email", "Role", "Last login", "Activity", "Status"];
   return (
-    <div className="row no-gutters p-md-5 p-4">
+    <div className="row no-gutters admin-screen">
       <div className="col-60 border-bottom">
-        <div className="row no-gutters justify-content-between">
-          <div className="col-auto py-3">
-            <div className="row no-gutters h3">Users</div>
+        <div className="row no-gutters justify-content-between pb-3 align-items-end">
+          <div className="col-auto">
+            <div className="row no-gutters admin-screen-title">Users</div>
             <div className="row no-gutters">Add, edit and delete users</div>
           </div>
           <div
@@ -167,49 +193,31 @@ const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
                     <div className="row no-gutters">
                       <Select
                         popoverClass="col-60 col-sm-auto"
-                        onSelect={(index) =>
-                          setAction(
-                            ["Edit", "Block", "Inactivate", "Delete"][index]
-                          )
-                        }
-                        items={["Edit", "Block", "Inactivate", "Delete"]}
+                        onSelect={(index) => setAction(actions[index])}
+                        items={actions}
                         btnName={action ? action : "Select Action"}
                         className="input-light px-3 col-auto"
                       ></Select>
                     </div>
-                  </div>
-
-                  <div
-                    onClick={handleApply}
-                    className="d-none d-xl-block btn-custom btn-custom-primary col-auto mr-3 btn-xsmall mb-3"
-                  >
-                    Apply
                   </div>
                   <div className="col-60 col-sm-auto pb-3 mr-sm-3">
                     <div className="row no-gutters">
                       <Select
                         popoverClass="col-60 col-sm-auto"
                         onSelect={(index) =>
-                          setRole(["Admin", "Co-admin", "User"][index])
+                          setRole(["Administrator", "User"][index])
                         }
-                        items={["Admin", "Co-admin", "User"]}
+                        items={["Administrator", "User"]}
                         btnName={role ? role : "Select Role"}
                         className="input-light px-3 col-auto"
                       ></Select>
                     </div>
                   </div>
-
-                  <div
-                    className="d-none d-xl-block btn-custom btn-custom-primary col-auto mb-3 mr-3 btn-xsmall"
-                    onClick={() => setRoleFilter(role)}
-                  >
-                    Apply
-                  </div>
                   <div
                     onClick={() => handleApply(true)}
-                    className="d-block d-xl-none btn-custom btn-custom-primary col-60 col-sm-auto mb-3 mr-3 btn-xsmall"
+                    className="btn-custom btn-custom-primary col-60 col-sm-auto mb-3 mr-3 btn-xsmall"
                   >
-                    Apply All
+                    Apply
                   </div>
                 </div>
               </div>
@@ -369,7 +377,56 @@ const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
                                 ></Checkbox>
                               </td>
                               <td style={{ whiteSpace: "nowrap" }}>
-                                {x.display_name}
+                                <div>
+                                  <div style={{ whiteSpace: "nowrap" }}>
+                                    <div className="d-inline-block mr-2">
+                                      <div
+                                        className="square-50 rounded-circle bg-image"
+                                        style={{
+                                          backgroundImage: `url(${x.photo})`,
+                                        }}
+                                      ></div>
+                                    </div>
+                                    <div className="d-none d-md-inline-block align-top">
+                                      <div className="text-primary mb-2">
+                                        {x.display_name}
+                                      </div>
+                                      <div className="d-flex">
+                                        <div
+                                          className="text-primary underline-link"
+                                          onClick={() => {
+                                            setEditUser(x);
+                                            setEditUserSection();
+                                          }}
+                                        >
+                                          Edit
+                                        </div>
+                                        <div className="px-2">|</div>
+                                        <div
+                                          className="text-primary underline-link"
+                                          onClick={() =>
+                                            editUsers({ status: "Blocked" }, [
+                                              x._id,
+                                            ])
+                                          }
+                                        >
+                                          Block
+                                        </div>
+                                        <div className="px-2">|</div>
+                                        <div
+                                          className="text-danger underline-link"
+                                          onClick={() =>
+                                            editUsers({ deleted: true }, [
+                                              x._id,
+                                            ])
+                                          }
+                                        >
+                                          Delete
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
                               </td>
                               <td
                                 className={`${
@@ -490,10 +547,8 @@ const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
                     <div className="row no-gutters">
                       <Select
                         popoverClass="col-60 col-sm-auto"
-                        onSelect={(index) =>
-                          setAction(["Edit", "Delete"][index])
-                        }
-                        items={["Edit", "Delete"]}
+                        onSelect={(index) => setAction(actions[index])}
+                        items={actions}
                         btnName={action ? action : "Select Action"}
                         className="input-light px-3 col-auto"
                       ></Select>

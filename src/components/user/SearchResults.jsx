@@ -8,13 +8,17 @@ import Paigination from "../utility/Paigination";
 import { SearchReviews } from "../../server/DatabaseApi";
 import ReviewsList from "./ReviewsList";
 import store from "../../store/store";
+import { Reviews } from "../../Data";
 
 const maxResultsPerPage = 15;
 
 const SearchResults = ({ search, settings }) => {
-  const [results, setResults] = useState([]);
   const [page, setPage] = useState(1);
   const [reviews, setReviews] = useState([]);
+  const [movies, setMovies] = useState([]);
+  const [series, setSeries] = useState([]);
+
+  const category = search.category;
 
   const onFail = () => {
     store.dispatch({
@@ -30,7 +34,7 @@ const SearchResults = ({ search, settings }) => {
   useEffect(() => {
     async function getData() {
       if (search.query) {
-        if (search.category === "Reviews") {
+        if (category === "Reviews" || category === "All") {
           let reviews = await SearchReviews(search.query);
           {
             if (!reviews.error) {
@@ -38,30 +42,33 @@ const SearchResults = ({ search, settings }) => {
             }
           }
         } else {
-          let arr = [];
-          if (search.category === "Movies" || search.category === "All") {
-            let movies = await SearchMovies(
-              search.query,
-              settings.movies_api_key
-            );
-            if (movies.results) {
-              arr = arr.concat(movies.results);
-            } else {
-              onFail();
-            }
+          setReviews([]);
+        }
+        if (category === "Movies" || category === "All") {
+          let movies = await SearchMovies(
+            search.query,
+            settings.movies_api_key
+          );
+          if (movies.results) {
+            setMovies(movies.results);
+          } else {
+            onFail();
           }
-          if (search.category === "Series" || search.category === "All") {
-            let series = await SearchSeries(
-              search.query,
-              settings.movies_api_key
-            );
-            if (series.results) {
-              arr = arr.concat(series.results);
-            } else {
-              onFail();
-            }
+        } else {
+          setMovies([]);
+        }
+        if (category === "Series" || category === "All") {
+          let series = await SearchSeries(
+            search.query,
+            settings.movies_api_key
+          );
+          if (series.results) {
+            setSeries(series.results);
+          } else {
+            onFail();
           }
-          setResults(arr);
+        } else {
+          setSeries([]);
         }
       }
     }
@@ -80,40 +87,43 @@ const SearchResults = ({ search, settings }) => {
               <div className="col-60 p-5 text-white content-container d-flex flex-column">
                 <div className="row no-gutters flex-grow-1">
                   <div className="col-60 mb-4">
-                    <div className="row no-gutters h5">Search Results</div>
+                    <div className="row no-gutters h4">Search Results</div>
                     <div className="row no-gutters text-muted border-bottom pb-3">
                       Showing all results
                     </div>
                   </div>
                   <div className="col-60">
-                    {search.category === "Reviews" ? (
-                      <ReviewsList reviews={reviews}></ReviewsList>
+                    {movies.length ? (
+                      <React.Fragment>
+                        <div className="row no-gutters h5 mb-2">
+                          Movies ({movies.length})
+                        </div>
+                        <MoviesList movies={movies}></MoviesList>
+                      </React.Fragment>
                     ) : (
-                      <MoviesList
-                        movies={results.slice(
-                          (page - 1) * maxResultsPerPage,
-                          (page - 1) * maxResultsPerPage + maxResultsPerPage
-                        )}
-                      ></MoviesList>
+                      ""
                     )}
-                  </div>
-                </div>
-                <div className="row no-gutters flex-grow-0">
-                  <div className="col-60">
-                    <div className="py-2"></div>
-                    <Paigination
-                      current={page}
-                      setCurrent={setPage}
-                      count={
-                        search.category === "Reviews"
-                          ? Math.ceil(reviews.length / maxResultsPerPage)
-                          : Math.ceil(results.length / maxResultsPerPage)
-                      }
-                      classNames={{
-                        notSelected: "input-dark",
-                        selected: "input-dark-selected",
-                      }}
-                    ></Paigination>
+                    {series.length ? (
+                      <React.Fragment>
+                        <div className="row no-gutters h5 mb-2">
+                          Series ({series.length})
+                        </div>
+                        <MoviesList movies={series}></MoviesList>
+                      </React.Fragment>
+                    ) : (
+                      ""
+                    )}
+
+                    {reviews.length ? (
+                      <React.Fragment>
+                        <div className="row no-gutters h5 mb-2">
+                          Reviews ({reviews.length})
+                        </div>
+                        <ReviewsList reviews={reviews}></ReviewsList>
+                      </React.Fragment>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
               </div>

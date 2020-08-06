@@ -34,13 +34,17 @@ const EditPromotion = ({ currentPromotion, getBack }) => {
     setPromotion((prev) => Object.assign({}, prev, currentPromotion));
   }, [currentPromotion]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const types = ["Review", "Comment"];
   const publishStatuses = ["Published", "Drafted", "Deleted"];
 
   return (
     <div className="row no-gutters p-md-5 p-4">
       <div className="col-60 py-3 border-bottom mb-4">
-        <div className="row no-gutters h3">Edit Promotions</div>
+        <div className="row no-gutters admin-screen-title">Edit Promotions</div>
         <div className="row no-gutters">Edit existing promotion</div>
       </div>
       <div className="col-60">
@@ -342,7 +346,7 @@ const EditPromotion = ({ currentPromotion, getBack }) => {
           </div>
         </div>
         <div className="row no-gutters mb-4">
-          <div className="col-60 mb-1">Type</div>
+          <div className="col-60 mb-1">Status</div>
           <div className="col-xl-40 col-md-50 col-60">
             <div className="row no-gutters">
               <div className="col-sm-30 col-60 pr-sm-3">
@@ -358,11 +362,7 @@ const EditPromotion = ({ currentPromotion, getBack }) => {
                     }
                     className="w-100 input-light px-3"
                     items={publishStatuses}
-                    btnName={
-                      promotion.publish_status
-                        ? promotion.publish_status
-                        : "Select"
-                    }
+                    btnName={promotion.status ? promotion.status : "Select"}
                   ></Select>
                 </div>
               </div>

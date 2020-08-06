@@ -57,7 +57,7 @@ const ReplyToReview = ({
                 characters left
               </div>
             </div>
-            <div className="row no-gutters mb-4" style={{ height: "150px" }}>
+            <div className="row no-gutters mb-2" style={{ height: "150px" }}>
               <textarea
                 onChange={(e) => {
                   e.persist();
@@ -75,25 +75,32 @@ const ReplyToReview = ({
                 className="w-100 h-100 textarea"
               ></textarea>
             </div>
-            <div
-              className="row no-gutters align-items-center text-danger justify-content-end"
-              style={{ height: "50px", opacity: problem ? 1 : 0 }}
-            >
-              {problem}
-            </div>
-            <div className="row no-gutters justify-content-md-between justify-content-center">
-              <div
-                className={`col-auto d-none d-md-block ${
-                  newComment.comment.length <=
-                  settings.no_comment_characters - 1
-                    ? "text-muted"
-                    : "text-danger"
-                }`}
-              >
-                {newComment.comment
-                  ? settings.no_comment_characters - newComment.comment.length
-                  : settings.no_comment_characters}{" "}
-                characters left
+            <div className="row no-gutters justify-content-md-end justify-content-center">
+              <div className="col-60">
+                <div className="row no-gutters justify-content-end">
+                  <div
+                    className={`col-auto d-none d-md-block ${
+                      newComment.comment.length <=
+                      settings.no_comment_characters - 1
+                        ? "text-muted"
+                        : "text-danger"
+                    }`}
+                  >
+                    {newComment.comment
+                      ? settings.no_comment_characters -
+                        newComment.comment.length
+                      : settings.no_comment_characters}{" "}
+                    characters left
+                  </div>
+                </div>
+              </div>
+              <div className="col-60">
+                <div
+                  className="row no-gutters align-items-center text-danger justify-content-end"
+                  style={{ height: "30px", opacity: problem ? 1 : 0 }}
+                >
+                  {problem}
+                </div>
               </div>
               <div
                 className="btn-custom btn-custom-primary btn-small"

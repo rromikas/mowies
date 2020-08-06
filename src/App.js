@@ -21,6 +21,7 @@ import Profile from "./components/user/profile/Profile";
 import PrivateRoute from "./utilities/PrivateRoute";
 import LegalDocument from "./components/user/LegalDocument";
 import Navbar from "./components/user/Navbar";
+import Serie from "./components/user/Serie";
 
 function App() {
   useEffect(() => {
@@ -103,7 +104,7 @@ function App() {
             ></Route>
             <Route exact path="/" component={Home}></Route>
             <Route exact path="/movie/:movieId" component={Movie}></Route>
-            <Route exact path="/movie/:movieId" component={Movie}></Route>
+            <Route exact path="/series/:movieId" component={Serie}></Route>
             <Route exact path="/search" component={SearchResults}></Route>
             <PrivateRoute
               exact

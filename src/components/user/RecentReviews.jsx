@@ -7,11 +7,10 @@ import { connect } from "react-redux";
 import { Collapse } from "@material-ui/core";
 import Paigination from "../utility/Paigination";
 import history from "../../History";
-import { MoviesGenresMap } from "../../Data";
-import ReactionButton from "./ReactionButton";
-import { getDataUrlFromFile } from "browser-image-compression";
+import ReplyToReview from "./ReplyToReview";
+import store from "../../store/store";
 
-const RecentReviews = ({ publicUsers, ratings }) => {
+const RecentReviews = ({ publicUsers, user }) => {
   //comments object.Its property will be review id.
   const [comments, setComments] = useState({});
 
@@ -29,10 +28,15 @@ const RecentReviews = ({ publicUsers, ratings }) => {
   const topOfReviewsBlock = useRef(null);
 
   // boolean variable to display "add review" modal or not
-  const [addReviewOpen, setAddReviewOpen] = useState(false);
+  const [addReplyOpen, setAddReplyOpen] = useState(false);
 
-  // boolean variable to display "add review" modal or not
-  const [review, setReview] = useState("");
+  const [review, setReview] = useState({
+    movie_title: "",
+    movie_id: "",
+    movie_genres: "",
+    movie_release_date: "",
+    movie_poster: "",
+  });
 
   //state to refresh comments after writing it
   const [refreshComments, setRefreshComments] = useState(false);
@@ -84,7 +88,7 @@ const RecentReviews = ({ publicUsers, ratings }) => {
 
   return (
     <div className="row no-gutters justify-content-center text-white">
-      <div className="col-60 content-container pt-3 pb-5 mb-5 px-md-5 px-4">
+      <div className="col-60 content-container py-3 px-md-5 px-4">
         <div className="row no-gutters h5">
           <div
             className="col-auto"
@@ -95,7 +99,7 @@ const RecentReviews = ({ publicUsers, ratings }) => {
             //   marginBottom: "11px",
             // }}
           >
-            Recent Reviews
+            Popular Reviews
           </div>
         </div>
         <div className="row no-gutters text-light mb-3">
@@ -125,6 +129,12 @@ const RecentReviews = ({ publicUsers, ratings }) => {
                       src={`https://image.tmdb.org/t/p/w154${x.movie_poster}`}
                     ></img>
                   </div>
+                  {/* <div className="row no-gutters text-white h6 mb-0">
+                    {x.movie_title} ({x.movie_release_date.substring(0, 4)})
+                  </div>
+                  <div className="row no-gutters text-muted">
+                    <div className="text-truncate">{x.movie_genres}</div>
+                  </div> */}
                 </div>
                 <div className="col d-flex flex-column">
                   <div className="row no-gutters justify-content-between align-items-center mb-2 flex-grow-0">
@@ -143,6 +153,17 @@ const RecentReviews = ({ publicUsers, ratings }) => {
                             style={{ borderRadius: "13px" }}
                             src={`https://image.tmdb.org/t/p/w154${x.movie_poster}`}
                           ></img> */}
+                        </div>
+                        <div className="col">
+                          <div className="row no-gutters text-white mb-0">
+                            {x.movie_title} (
+                            {x.movie_release_date.substring(0, 4)})
+                          </div>
+                          {/* <div className="row no-gutters text-muted">
+                            <div className="text-truncate">
+                              {x.movie_genres}
+                            </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>
@@ -187,6 +208,7 @@ const RecentReviews = ({ publicUsers, ratings }) => {
                   <div className="row no-gutters text-light mb-3 font-size-14 flex-grow-0 font-weight-300">
                     {x.review}
                   </div>
+
                   <div className="row no-gutters flex-grow-1 align-items-bottom">
                     <div className="col-60 d-flex flex-column justify-content-end">
                       <div className="row no-gutters justify-content-between align-items-center text-white">
@@ -227,7 +249,7 @@ const RecentReviews = ({ publicUsers, ratings }) => {
                             <div className="col-auto mr-2">
                               {x.comments.length}
                             </div>
-                            <div className="col-auto">
+                            <div className="col-auto mr-2">
                               <MdChatBubble
                                 onClick={() => {
                                   setReviewIdOfVisibleComments(
@@ -239,6 +261,33 @@ const RecentReviews = ({ publicUsers, ratings }) => {
                                 fontSize="24px"
                                 className="text-orange scale-transition cursor-pointer"
                               ></MdChatBubble>
+                            </div>
+                            <div
+                              className="col-auto text-orange btn-tertiary"
+                              onClick={() => {
+                                if (!user.token) {
+                                  store.dispatch({
+                                    type: "SET_NOTIFICATION",
+                                    notification: {
+                                      title: "Login required",
+                                      message:
+                                        "You need to login to write review.",
+                                      type: "failure",
+                                    },
+                                  });
+                                } else {
+                                  setReview(
+                                    Object.assign({}, x, {
+                                      notificationReceivers: [
+                                        publicUsers[x.author],
+                                      ],
+                                    })
+                                  );
+                                  setAddReplyOpen(true);
+                                }
+                              }}
+                            >
+                              Reply
                             </div>
                           </div>
                         </div>
@@ -311,7 +360,7 @@ const RecentReviews = ({ publicUsers, ratings }) => {
                             <div className="row no-gutters text-light mb-3 font-weight-300">
                               {y.comment}
                             </div>
-                            <div className="row no-gutters justify-content-between align-items-center">
+                            <div className="row no-gutters justify-content-end align-items-center">
                               <div className="col-auto">
                                 <div className="row no-gutters align-items-center">
                                   <div className="col-auto mr-2">
@@ -322,6 +371,34 @@ const RecentReviews = ({ publicUsers, ratings }) => {
                                       fontSize="24px"
                                       className="text-green cursor-pointer"
                                     ></MdThumbUp>
+                                  </div>
+                                  <div
+                                    className="col-auto text-orange btn-tertiary"
+                                    onClick={() => {
+                                      if (!user.token) {
+                                        store.dispatch({
+                                          type: "SET_NOTIFICATION",
+                                          notification: {
+                                            title: "Login required",
+                                            message:
+                                              "You need to login to write review.",
+                                            type: "failure",
+                                          },
+                                        });
+                                      } else {
+                                        setReview(
+                                          Object.assign({}, x, {
+                                            notificationReceivers: [
+                                              publicUsers[x.author],
+                                              publicUsers[y.author],
+                                            ],
+                                          })
+                                        );
+                                        setAddReplyOpen(true);
+                                      }
+                                    }}
+                                  >
+                                    Reply
                                   </div>
                                 </div>
                               </div>
@@ -350,19 +427,32 @@ const RecentReviews = ({ publicUsers, ratings }) => {
               </Collapse>
             </React.Fragment>
           ))}
-        {/* <div className="row no-gutters justify-content-end mt-2">
-          <div className="col-auto mr-sm-2 mr-md-0">
-            <Paigination
-              classNames={{
-                notSelected: "input-dark",
-                selected: "input-dark-selected",
-              }}
-              count={Math.ceil(reviews.length / reviewsPerPage)}
-              current={realPage}
-              setCurrent={setPage}
-            ></Paigination>
-          </div>
-        </div> */}
+        <ReplyToReview
+          refreshReviews={() => setRefreshReviews(!refreshReviews)}
+          setReviewIdOfVisibleComments={setReviewIdOfVisibleComments}
+          refreshComments={() => setRefreshComments(!refreshComments)}
+          setComments={setComments}
+          movie={{
+            id: review.movie_id,
+            release_date: review.movie_release_date,
+            title: review.movie_title,
+            genres: review.movie_genres.split("/").map((x) => {
+              return {
+                name: x,
+              };
+            }),
+            poster_path: review.movie_poster,
+          }}
+          reviewAuthor={
+            publicUsers[review.author]
+              ? publicUsers[review.author]
+              : { display_name: "" }
+          }
+          review={review}
+          open={addReplyOpen}
+          onClose={() => setAddReplyOpen(false)}
+          user={user}
+        ></ReplyToReview>
       </div>
     </div>
   );
@@ -372,6 +462,7 @@ function mapp(state, ownProps) {
   return {
     publicUsers: state.publicUsers,
     ratings: state.ratings,
+    user: state.user,
     ...ownProps,
   };
 }

@@ -8,9 +8,14 @@ import { BsSearch } from "react-icons/bs";
 import date from "date-and-time";
 import Popover from "../utility/Popover";
 import { Swipeable } from "react-swipeable";
-import { GetComments, DeleteMultipleComments } from "../../server/DatabaseApi";
+import {
+  GetComments,
+  DeleteMultipleComments,
+  GetReview,
+} from "../../server/DatabaseApi";
 import { connect } from "react-redux";
 import store from "../../store/store";
+import Loader from "../utility/Loader";
 
 const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
   const [action, setAction] = useState("");
@@ -25,6 +30,10 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
   const [comments, setComments] = useState([]);
   const [filteredComments, setFilteredComments] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [reviewOfComment, setReviewOfComment] = useState({
+    _id: "",
+    review: "",
+  });
 
   useEffect(() => {
     async function getData() {
@@ -59,8 +68,14 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
         arr = arr.filter((x) => publicUsers[x.author].role === roleFilter);
       }
 
-      if (mainFilter.key && mainFilter.value) {
-        arr = arr.filter((x) => x[mainFilter.key] === mainFilter.value);
+      if (mainFilter.key === "role" && mainFilter.value) {
+        arr = arr.filter(
+          (x) => publicUsers[x.author][mainFilter.key] === mainFilter.value
+        );
+      }
+
+      if (mainFilter.key === "deleted" && mainFilter.value) {
+        arr = arr.filter((x) => x["deleted"] === mainFilter.value);
       }
 
       setFilteredComments(arr);
@@ -128,19 +143,20 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
           <div
             onClick={() =>
               setMainFilter((prev) =>
-                Object.assign({}, prev, { key: "role", value: "Admin" })
+                Object.assign({}, prev, { key: "role", value: "Administrator" })
               )
             }
             className={`cursor-pointer col-auto ${
-              mainFilter.key === "role" && mainFilter.value === "Admin"
+              mainFilter.key === "role" && mainFilter.value === "Administrator"
                 ? "text-primary"
                 : "text-dark"
             }`}
           >
             By Administrators (
             {Object.values(publicUsers).length
-              ? comments.filter((x) => publicUsers[x.author].role === "admin")
-                  .length
+              ? comments.filter(
+                  (x) => publicUsers[x.author].role === "Administrator"
+                ).length
               : ""}
             )
           </div>
@@ -167,43 +183,31 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
                 <div className="row no-gutters">
                   <Select
                     popoverClass="col-60 col-sm-auto"
-                    onSelect={(index) => setAction(["Edit", "Delete"][index])}
-                    items={["Edit", "Delete"]}
+                    onSelect={(index) => setAction(["Delete"][index])}
+                    items={["Delete"]}
                     btnName={action ? action : "Select Action"}
                     className="input-light px-3 col-auto"
                   ></Select>
                 </div>
               </div>
-
-              <div
-                onClick={handleApply}
-                className="d-none d-xl-block btn-custom btn-custom-primary col-auto mr-3 btn-xsmall mb-3"
-              >
-                Apply
-              </div>
               <div className="col-60 col-sm-auto pb-3 mr-sm-3">
                 <div className="row no-gutters">
                   <Select
                     popoverClass="col-60 col-sm-auto"
-                    onSelect={(index) => setRole(["Admin", "User"][index])}
+                    onSelect={(index) =>
+                      setRole(["Administrator", "User"][index])
+                    }
                     items={["Administrator", "User"]}
                     btnName={role ? role : "Select Role"}
                     className="input-light px-3 col-auto"
                   ></Select>
                 </div>
               </div>
-
-              <div
-                className="d-none d-xl-block btn-custom btn-custom-primary col-auto mb-3 mr-3 btn-xsmall"
-                onClick={() => setRoleFilter(role)}
-              >
-                Apply
-              </div>
               <div
                 onClick={() => handleApply(true)}
-                className="d-block d-xl-none btn-custom btn-custom-primary col-60 col-sm-auto mb-3 mr-3 btn-xsmall"
+                className="btn-custom btn-custom-primary col-60 col-sm-auto mb-3 mr-3 btn-xsmall"
               >
-                Apply All
+                Apply
               </div>
             </div>
           </div>
@@ -328,7 +332,7 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
                     </th>
                     <th className="d-table-cell d-xl-none table-header text-truncate">
                       {
-                        ["Comment", "Reported", "In Repsonse To", "Posted On"][
+                        ["Comment", "In Repsonse To", "Posted On", "Reported"][
                           lastVisibleColumn
                         ]
                       }
@@ -337,13 +341,13 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
                       <div>Comment</div>
                     </th>
                     <th className="d-none d-xl-table-cell table-header text-truncate">
-                      <div>Reported</div>
-                    </th>
-                    <th className="d-none d-xl-table-cell table-header text-truncate">
                       <div>In Response To</div>
                     </th>
                     <th className="d-none d-xl-table-cell table-header text-truncate">
                       <div>Posted On</div>
+                    </th>
+                    <th className="d-none d-xl-table-cell table-header text-truncate">
+                      <div>Reported</div>
                     </th>
                   </tr>
                 </thead>
@@ -370,22 +374,75 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
                               }}
                             ></Checkbox>
                           </td>
-                          <td style={{ whiteSpace: "nowrap" }}>
-                            <div className="d-inline-block mr-2">
-                              <div
-                                className="square-50 rounded-circle bg-image"
-                                style={{
-                                  backgroundImage: `url(${
-                                    publicUsers[x.author].photo
-                                  })`,
-                                }}
-                              ></div>
-                            </div>
-                            <div className="d-none d-md-inline-block align-top">
-                              <div className="h6 text-primary">
-                                {publicUsers[x.author].display_name}
-                              </div>
-                              <div>{publicUsers[x.author].email}</div>
+                          <td>
+                            <div>
+                              {publicUsers[x.author] ? (
+                                <div style={{ whiteSpace: "nowrap" }}>
+                                  <div className="d-inline-block mr-2">
+                                    <div
+                                      className="square-50 rounded-circle bg-image"
+                                      style={{
+                                        backgroundImage: `url(${
+                                          publicUsers[x.author].photo
+                                        })`,
+                                      }}
+                                    ></div>
+                                  </div>
+                                  <div className="d-none d-md-inline-block align-top">
+                                    <div className="text-primary">
+                                      {publicUsers[x.author].display_name}
+                                    </div>
+                                    <div className="mb-2">
+                                      {publicUsers[x.author].email}
+                                    </div>
+                                    <div className="d-flex">
+                                      <div
+                                        className="text-primary underline-link"
+                                        onClick={() => {
+                                          setEditComment(x);
+                                          setEditCommentSection();
+                                        }}
+                                      >
+                                        Edit
+                                      </div>
+                                      <div className="px-2">|</div>
+                                      <div
+                                        className="text-danger underline-link"
+                                        onClick={async () => {
+                                          let res = await DeleteMultipleComments(
+                                            [x._id]
+                                          );
+                                          if (res.error) {
+                                            store.dispatch({
+                                              type: "SET_NOTIFICATION",
+                                              notification: {
+                                                title: "Error",
+                                                message: res.error,
+                                                type: "failure",
+                                              },
+                                            });
+                                          } else {
+                                            store.dispatch({
+                                              type: "SET_NOTIFICATION",
+                                              notification: {
+                                                title: "Comment was deleted",
+                                                message:
+                                                  "Comment was successfully deleted",
+                                                type: "success",
+                                              },
+                                            });
+                                          }
+                                          setRefresh(!refresh);
+                                        }}
+                                      >
+                                        Delete
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              ) : (
+                                ""
+                              )}
                             </div>
                           </td>
                           <td
@@ -397,6 +454,7 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
                           >
                             <div>
                               <div
+                                style={{ minWidth: "200px" }}
                                 className="text-clamp-4 cursor-pointer user-select-none"
                                 onClick={(e) => {
                                   let target = e.currentTarget;
@@ -420,11 +478,45 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
                                 : "d-none d-xl-table-cell"
                             }`}
                           >
-                            {x.reported ? (
-                              <div className="text-danger">Abused</div>
-                            ) : (
-                              <div className="text-success">No</div>
-                            )}
+                            <div>Movie: {x.movie_title}</div>
+                            <div className="d-flex">
+                              <Popover
+                                content={(w) => (
+                                  <div className="p-3">
+                                    {reviewOfComment._id !== x.review_id ? (
+                                      <div className="square-50">
+                                        <Loader
+                                          theme="dark"
+                                          loading={true}
+                                        ></Loader>
+                                      </div>
+                                    ) : reviewOfComment.review ? (
+                                      reviewOfComment.review
+                                    ) : (
+                                      "Couldn't find review"
+                                    )}
+                                  </div>
+                                )}
+                              >
+                                <div
+                                  onClick={async () => {
+                                    let res = await GetReview(x.review_id);
+                                    if (!res.error) {
+                                      setReviewOfComment(res);
+                                    } else {
+                                      setReviewOfComment({
+                                        _id: x.review_id,
+                                        review: "",
+                                      });
+                                    }
+                                  }}
+                                  className="text-primary cursor-pointer"
+                                  style={{ whiteSpace: "nowrap" }}
+                                >
+                                  View Review
+                                </div>
+                              </Popover>
+                            </div>
                           </td>
                           <td
                             className={`${
@@ -433,22 +525,11 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
                                 : "d-none d-xl-table-cell"
                             }`}
                           >
-                            <div>Movie: {x.movie_title}</div>
-                            <div className="d-flex">
-                              <Popover
-                                content={(w) => (
-                                  <div className="p-5">
-                                    Review id: {x.review_id}
-                                  </div>
-                                )}
-                              >
-                                <div
-                                  className="text-primary cursor-pointer"
-                                  style={{ whiteSpace: "nowrap" }}
-                                >
-                                  View Comment
-                                </div>
-                              </Popover>
+                            <div style={{ whiteSpace: "nowrap" }}>
+                              {date.format(
+                                new Date(x.date),
+                                "DD/MM/YYYY @ hh:mm A"
+                              )}
                             </div>
                           </td>
                           <td
@@ -458,12 +539,11 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
                                 : "d-none d-xl-table-cell"
                             }`}
                           >
-                            <div>
-                              {date.format(new Date(x.date), "DD/MM/YYYY")}
-                            </div>
-                            <div>
-                              {date.format(new Date(x.date), "@ hh:mm A")}
-                            </div>
+                            {x.reported ? (
+                              <div className="text-danger">Abused</div>
+                            ) : (
+                              <div className="text-success">No</div>
+                            )}
                           </td>
                         </tr>
                       ))
@@ -475,7 +555,7 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
                     </tr>
                   )}
                 </tbody>
-                <tfoot>
+                {/* <tfoot>
                   <tr>
                     <th className="text-center">
                       <Checkbox
@@ -529,34 +609,12 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
                       <div>Posted On</div>
                     </th>
                   </tr>
-                </tfoot>
+                </tfoot> */}
               </table>
             </div>
           </Swipeable>
         </div>
-        <div className="row no-gutters justify-content-center justify-content-sm-between">
-          <div className="col-60 col-sm-auto">
-            <div className="row no-gutters">
-              <div className="col-60 col-sm-auto pb-3 mr-sm-3">
-                <div className="row no-gutters">
-                  <Select
-                    popoverClass="col-60 col-sm-auto"
-                    onSelect={(index) => setAction(["Edit", "Delete"][index])}
-                    items={["Edit", "Delete"]}
-                    btnName={action ? action : "Select Action"}
-                    className="input-light px-3 col-auto"
-                  ></Select>
-                </div>
-              </div>
-
-              <div
-                onClick={handleApply}
-                className="btn-custom btn-custom-primary col60 col-sm-auto mr-sm-3 btn-xsmall mb-3"
-              >
-                Apply
-              </div>
-            </div>
-          </div>
+        <div className="row no-gutters justify-content-center justify-content-sm-end">
           <div className="col-auto">
             <Pagination
               count={Math.ceil(filteredComments.length / 5)}

@@ -33,7 +33,6 @@ const Notifications = ({
   useEffect(() => {
     async function getData() {
       let data = await GetNotifications();
-      console.log("Data notifications", data);
       if (!data.error) {
         setNotifications(data);
       }
@@ -124,11 +123,13 @@ const Notifications = ({
   };
 
   return (
-    <div className="row no-gutters p-md-5 p-4">
+    <div className="row no-gutters admin-screen">
       <div className="col-60 border-bottom">
-        <div className="row no-gutters justify-content-between">
-          <div className="col-auto py-3">
-            <div className="row no-gutters h3">Notifications</div>
+        <div className="row no-gutters justify-content-between pb-3 align-items-end">
+          <div className="col-auto">
+            <div className="row no-gutters admin-screen-title">
+              Notifications
+            </div>
             <div className="row no-gutters">
               Create, send and manage notifications
             </div>
@@ -184,21 +185,12 @@ const Notifications = ({
                     <div className="row no-gutters">
                       <Select
                         popoverClass="col-60 col-sm-auto"
-                        onSelect={(index) =>
-                          setAction(["Edit", "Delete"][index])
-                        }
-                        items={["Edit", "Delete"]}
+                        onSelect={(index) => setAction(["Delete"][index])}
+                        items={["Delete"]}
                         btnName={action ? action : "Select Action"}
                         className="input-light px-3 col-auto"
                       ></Select>
                     </div>
-                  </div>
-
-                  <div
-                    onClick={handleApply}
-                    className="d-none d-xl-block btn-custom btn-custom-primary col-auto mr-3 btn-xsmall mb-3"
-                  >
-                    Apply
                   </div>
                   <div className="col-60 col-sm-auto pb-3 mr-sm-3">
                     <div className="row no-gutters">
@@ -211,18 +203,11 @@ const Notifications = ({
                       ></Select>
                     </div>
                   </div>
-
                   <div
-                    className="d-none d-xl-block btn-custom btn-custom-primary col-auto mb-3 mr-3 btn-xsmall"
-                    onClick={() => setTypeFilter(type)}
+                    onClick={() => handleApply(true)}
+                    className="btn-custom btn-custom-primary col-60 col-sm-auto mb-3 mr-3 btn-xsmall"
                   >
                     Apply
-                  </div>
-                  <div
-                    onClick={handleApply}
-                    className="d-block d-xl-none btn-custom btn-custom-primary col-60 col-sm-auto mb-3 mr-3 btn-xsmall"
-                  >
-                    Apply All
                   </div>
                 </div>
               </div>
@@ -389,7 +374,51 @@ const Notifications = ({
                                 ></Checkbox>
                               </td>
                               <td style={{ whiteSpace: "nowrap" }}>
-                                {x.subject}
+                                <div className="mb-2">{x.subject}</div>
+                                <div className="d-flex">
+                                  <div
+                                    className="text-primary underline-link"
+                                    onClick={() => {
+                                      setEditNotification(x);
+                                      setEditNotificationSection();
+                                    }}
+                                  >
+                                    Edit
+                                  </div>
+                                  <div className="px-2">|</div>
+                                  <div
+                                    className="text-danger underline-link"
+                                    onClick={async () => {
+                                      let res = await DeleteMultipleNotifications(
+                                        [x._id],
+                                        { status: "Deleted" }
+                                      );
+                                      if (res.error) {
+                                        store.dispatch({
+                                          type: "SET_NOTIFICATION",
+                                          notification: {
+                                            title: "Error",
+                                            message: res.error,
+                                            type: "failure",
+                                          },
+                                        });
+                                      } else {
+                                        store.dispatch({
+                                          type: "SET_NOTIFICATION",
+                                          notification: {
+                                            title: "Notification was deleted",
+                                            message:
+                                              "Notification was successfully deleted",
+                                            type: "success",
+                                          },
+                                        });
+                                      }
+                                      setRefresh(!refresh);
+                                    }}
+                                  >
+                                    Delete
+                                  </div>
+                                </div>
                               </td>
                               <td
                                 className={`${
@@ -408,6 +437,7 @@ const Notifications = ({
                                 }`}
                               >
                                 <div
+                                  style={{ minWidth: "200px" }}
                                   className="text-clamp-4 cursor-pointer user-select-none"
                                   onClick={(e) => {
                                     let target = e.currentTarget;
@@ -433,16 +463,10 @@ const Notifications = ({
                                 <div className="d-flex mb-2">
                                   <div style={{ width: "55px" }}>From:</div>
                                   <div>
-                                    <div>
+                                    <div style={{ whiteSpace: "nowrap" }}>
                                       {date.format(
                                         new Date(x.start_date),
-                                        "DD/MM/YYYY"
-                                      )}
-                                    </div>
-                                    <div>
-                                      {date.format(
-                                        new Date(x.start_date),
-                                        "@ hh:mm A"
+                                        "DD/MM/YYYY @ hh:mm A"
                                       )}
                                     </div>
                                   </div>
@@ -450,16 +474,10 @@ const Notifications = ({
                                 <div className="d-flex">
                                   <div style={{ width: "55px" }}>To:</div>
                                   <div>
-                                    <div>
+                                    <div style={{ whiteSpace: "nowrap" }}>
                                       {date.format(
                                         new Date(x.end_date),
-                                        "DD/MM/YYYY"
-                                      )}
-                                    </div>
-                                    <div>
-                                      {date.format(
-                                        new Date(x.end_date),
-                                        "@ hh:mm A"
+                                        "DD/MM/YYYY @ hh:mm A"
                                       )}
                                     </div>
                                   </div>
@@ -484,7 +502,7 @@ const Notifications = ({
                         </tr>
                       )}
                     </tbody>
-                    <tfoot>
+                    {/* <tfoot>
                       <tr>
                         <th className="text-center">
                           <Checkbox
@@ -533,36 +551,12 @@ const Notifications = ({
                           <div>Status</div>
                         </th>
                       </tr>
-                    </tfoot>
+                    </tfoot> */}
                   </table>
                 </div>
               </Swipeable>
             </div>
-            <div className="row no-gutters justify-content-center justify-content-sm-between">
-              <div className="col-60 col-sm-auto">
-                <div className="row no-gutters">
-                  <div className="col-60 col-sm-auto pb-3 mr-sm-3">
-                    <div className="row no-gutters">
-                      <Select
-                        popoverClass="col-60 col-sm-auto"
-                        onSelect={(index) =>
-                          setAction(["Edit", "Delete"][index])
-                        }
-                        items={["Edit", "Delete"]}
-                        btnName={action ? action : "Select Action"}
-                        className="input-light px-3 col-auto"
-                      ></Select>
-                    </div>
-                  </div>
-
-                  <div
-                    className="btn-custom btn-custom-primary col60 col-sm-auto mr-sm-3 btn-xsmall mb-3"
-                    onClick={handleApply}
-                  >
-                    Apply
-                  </div>
-                </div>
-              </div>
+            <div className="row no-gutters justify-content-center justify-content-sm-end">
               <div className="col-auto">
                 <Pagination
                   count={Math.ceil(filteredNotifications.length / 5)}

@@ -27,6 +27,12 @@ export const GetOfficialMoviesGenres = () => {
   return fetch(FormatRequestUrl("/genre/movie/list")).then((res) => res.json());
 };
 
+export const GetTvShow = (movieId, apiKey) => {
+  return fetch(FormatRequestUrl(`/tv/${movieId}`, [], apiKey)).then((res) =>
+    res.json()
+  );
+};
+
 export const GetMovie = (movieId, apiKey) => {
   return fetch(FormatRequestUrl(`/movie/${movieId}`, [], apiKey)).then((res) =>
     res.json()

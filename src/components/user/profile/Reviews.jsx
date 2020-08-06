@@ -100,12 +100,6 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                       src={`https://image.tmdb.org/t/p/w154${x.movie_poster}`}
                     ></img>
                   </div>
-                  <div className="row no-gutters text-white h6 mb-0">
-                    {x.movie_title} ({x.movie_release_date.substring(0, 4)})
-                  </div>
-                  <div className="row no-gutters text-muted">
-                    {x.movie_genres}
-                  </div>
                 </div>
                 <div className="col d-flex flex-column">
                   <div className="row no-gutters justify-content-between align-items-center mb-2 flex-grow-0">
@@ -126,13 +120,13 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                           ></img> */}
                         </div>
                         <div className="col">
-                          <div className="row no-gutters text-white h6 mb-0">
+                          <div className="row no-gutters text-white mb-0">
                             {x.movie_title} (
                             {x.movie_release_date.substring(0, 4)})
                           </div>
-                          <div className="row no-gutters text-muted">
+                          {/* <div className="row no-gutters text-muted">
                             {x.movie_genres}
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>
@@ -171,7 +165,7 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                     </div>
                   </div>
 
-                  <div className="row no-gutters text-light mb-3 flex-grow-0">
+                  <div className="row no-gutters text-light mb-3 flex-grow-0 font-weigt-300">
                     {x.review}
                   </div>
                   <div className="row no-gutters align-items-center">
@@ -293,7 +287,7 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                               </div>
                             </div>
 
-                            <div className="row no-gutters text-light mb-3">
+                            <div className="row no-gutters text-light mb-3 font-weight-300">
                               {y.comment}
                             </div>
                             <div className="row no-gutters justify-content-between align-items-center">
@@ -315,7 +309,7 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                         </div>
                       ))
                   : ""}
-                <div className="row no-gutters justify-content-end">
+                <div className="row no-gutters">
                   <div className="col-auto">
                     <Paigination
                       count={Math.ceil(
@@ -335,7 +329,7 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
               </Collapse>
             </React.Fragment>
           ))}
-        <div className="row no-gutters justify-content-sm-between justify-content-center mt-2">
+        <div className="row no-gutters justify-content-sm-end justify-content-center mt-2">
           <div className="col-auto mb-4 mr-sm-2 mr-md-0">
             <Paigination
               classNames={{

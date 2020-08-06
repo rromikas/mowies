@@ -26,13 +26,17 @@ const EditAnnouncement = ({ currentAnnouncement, getBack }) => {
     }
   }, [currentAnnouncement]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const types = ["Information", "Warning", "Error"];
   const statuses = ["Published", "Drafted", "Expired"];
 
   return (
     <div className="row no-gutters p-md-5 p-4">
       <div className="col-60 py-3 border-bottom mb-4">
-        <div className="row no-gutters h3">Announcements</div>
+        <div className="row no-gutters admin-screen-title">Announcements</div>
         <div className="row no-gutters">Edit existing announcement</div>
       </div>
       <div className="col-60">

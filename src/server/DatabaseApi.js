@@ -231,3 +231,7 @@ export const DeleteMultipleNotifications = (ids, update) => {
 export const MoveMovieToWatchList = (user, movieId) => {
   return SendPostRequest("/movie/moveToWatchedList", { user, movieId });
 };
+
+export const GetReview = (reviewId) => {
+  return SendPostRequest("/reviews/getOne", { reviewId });
+};

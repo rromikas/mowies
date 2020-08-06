@@ -4,7 +4,7 @@ import { BsChevronDown } from "react-icons/bs";
 import { MdArrowDropDown } from "react-icons/md";
 import uniqid from "uniqid";
 
-const Select = ({
+const AutoPopulate = ({
   items,
   btnName,
   className = "",
@@ -50,19 +50,10 @@ const Select = ({
           className
         }
       >
-        <div className="mr-2">{btnName}</div>
-        <MdArrowDropDown
-          fontSize="16px"
-          strokeWidth="1.5px"
-          className="text-internly"
-          style={{
-            transform: `rotate(${isOpen ? "180deg" : "0deg"})`,
-            transition: "transform 0.3s",
-          }}
-        ></MdArrowDropDown>
+        {btnName}
       </div>
     </Popover>
   );
 };
 
-export default Select;
+export default AutoPopulate;

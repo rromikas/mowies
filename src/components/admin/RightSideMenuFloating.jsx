@@ -1,12 +1,7 @@
 import React from "react";
 import LeftSideMenu from "./LeftSideMenu";
 
-const RightSideMenuFloating = ({
-  isMenuOpened,
-  setMenu,
-  setSection,
-  section,
-}) => {
+const RightSideMenuFloating = ({ isMenuOpened, setSection, section }) => {
   return (
     <div
       className={`d-block d-lg-none col-60 col-sm-40 col-md-30 col-lg-20 col-xl-15 vh-100 zindex-99 ${
@@ -35,7 +30,6 @@ const RightSideMenuFloating = ({
             mobile={true}
             className="text-white bg-internly-90 col-12"
             section={section}
-            setMenu={setMenu}
             isMenuOpened={isMenuOpened}
             setSection={setSection}
           ></LeftSideMenu>

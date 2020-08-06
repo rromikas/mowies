@@ -51,7 +51,9 @@ const AddNewNotification = ({ publicUsers, getBack }) => {
   return (
     <div className="row no-gutters p-sm-5 p-4">
       <div className="col-60 py-3 border-bottom mb-4">
-        <div className="row no-gutters h3">Add new notification</div>
+        <div className="row no-gutters admin-screen-title">
+          Add new notification
+        </div>
         <div className="row no-gutters">
           Create a brand new notification and add to this site
         </div>

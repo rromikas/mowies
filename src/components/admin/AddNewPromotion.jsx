@@ -24,8 +24,7 @@ const AddNewPromotion = ({ publicUsers, getBack }) => {
     start_date: Date.now(),
     end_date: Date.now(),
     content_type: "",
-    active_status: "Active",
-    publish_status: "Published",
+    status: "Published",
   });
   const [page, setPage] = useState(1);
   const [action, setAction] = useState("");
@@ -137,8 +136,12 @@ const AddNewPromotion = ({ publicUsers, getBack }) => {
       <div className="col-60 border-bottom mb-4">
         <div className="row no-gutters justify-content-between">
           <div className="col-auto py-3">
-            <div className="row no-gutters h3">Promote Content</div>
-            <div className="row no-gutters">Edit, add and delete promtions</div>
+            <div className="row no-gutters admin-screen-title">
+              Promote Content
+            </div>
+            <div className="row no-gutters">
+              Edit, add and delete promotions
+            </div>
           </div>
         </div>
       </div>

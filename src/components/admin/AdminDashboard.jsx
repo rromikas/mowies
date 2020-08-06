@@ -19,6 +19,7 @@ import AddNewNotification from "./AddNewNotification";
 import Users from "./Users";
 import AddNewUser from "./AddNewUser";
 import EditUser from "./EditUser";
+import { connect } from "react-redux";
 
 const sections = {
   settings: 0,
@@ -39,7 +40,7 @@ const sections = {
   addNewUser: 15,
 };
 
-const AdminDashboard = () => {
+const AdminDashboard = ({ dashboardMenuOpened }) => {
   const [section, setSection] = useState(0);
   const [isMenuOpened, setIsMenuOpened] = useState(false);
   const [editReview, setEditReview] = useState(null);
@@ -49,34 +50,20 @@ const AdminDashboard = () => {
   const [editNotification, setEditNotification] = useState(null);
   const [editUser, setEditUser] = useState(null);
   return (
-    <div className="row no-gutters" style={{ minHeight: window.innerHeight }}>
+    <div
+      className="row no-gutters justify-content-center"
+      style={{ minHeight: window.innerHeight }}
+    >
       <div className="col-60">
-        <div
-          style={{ height: "108px", width: "100%" }}
-          className="row no-gutters"
-        >
-          <div
-            className="col-auto d-none d-lg-block bg-dark"
-            style={{ width: "350px" }}
-          ></div>
-          <div className="col bg-light"></div>
-        </div>
-
-        <Navbar
-          setIsMenuOpened={setIsMenuOpened}
-          isMenuOpened={isMenuOpened}
-        ></Navbar>
-
         <div className="row no-gutters h-100 position-relative bg-light">
           <RightSideMenuFloating
-            isMenuOpened={isMenuOpened}
-            setMenu={setIsMenuOpened}
+            isMenuOpened={dashboardMenuOpened}
             setSection={setSection}
             section={section}
           ></RightSideMenuFloating>
           <div
             className="col-auto d-none d-lg-block"
-            style={{ width: "350px" }}
+            style={{ width: "300px" }}
           >
             <LeftSideMenu
               section={section}
@@ -208,4 +195,11 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+function mapp(state, ownProps) {
+  return {
+    dashboardMenuOpened: state.dashboardMenuOpened,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(AdminDashboard);

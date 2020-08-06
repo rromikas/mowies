@@ -5,10 +5,10 @@ import store from "../../store/store";
 
 const Settings = ({ settings }) => {
   return (
-    <div className="row no-gutters p-md-5 p-4">
+    <div className={`row no-gutters admin-screen`}>
       <div className="col-60">
-        <div className="row no-gutters border-bottom py-3 mb-5">
-          <div className="col-60 h3">Settings</div>
+        <div className="row no-gutters border-bottom pb-3 mb-5">
+          <div className="col-60 admin-screen-title">Settings</div>
           <div className="col-60">Configuration settings for admin panel</div>
         </div>
         <div className="row no-gutters">

@@ -27,6 +27,7 @@ const EditProfile = ({ user, refreshProfile, editProfileOpen, onClose }) => {
           first_name: user.first_name,
           last_name: user.last_name,
           display_name: user.display_name,
+          email: user.email,
           photo: user.photo,
           token: user.token,
         })
@@ -55,7 +56,7 @@ const EditProfile = ({ user, refreshProfile, editProfileOpen, onClose }) => {
     },
     {
       valid: update.password === update.confirm_assword,
-      error: "Passwords dont't match",
+      error: "Passwords don't match",
     },
     {
       valid: update.password.length >= 6,
@@ -65,10 +66,8 @@ const EditProfile = ({ user, refreshProfile, editProfileOpen, onClose }) => {
 
   return (
     <Modal open={editProfileOpen} onClose={onClose}>
-      <div className="col-xl-30 col-lg-40 col-md-50 col-58 bg-over-root rounded p-sm-5 p-4">
-        <div className="row no-gutters mb-3 text-title-lg">
-          Edit or update profile
-        </div>
+      <div className="col-xl-30 col-lg-40 col-md-50 col-58 bg-over-root-lighter rounded p-sm-5 p-4">
+        <div className="row no-gutters mb-3 text-title-lg">Update profile</div>
         <div className="row no-gutters justify-content-center mb-5">
           <div className="col-auto text-center">
             <div className="row no-gutters justify-content-center">
@@ -131,6 +130,18 @@ const EditProfile = ({ user, refreshProfile, editProfileOpen, onClose }) => {
           </div>
         </div>
         <div className="row no-gutters mb-3">
+          <div className="col-60 text-light">Email</div>
+          <div className="col-60">
+            <input
+              spellCheck={false}
+              type="text"
+              disabled
+              className="input-light px-3 w-100 user-select-none"
+              value={update.email}
+            ></input>
+          </div>
+        </div>
+        <div className="row no-gutters mb-3">
           <div className="col-60 text-light">Display Name</div>
           <div className="col-60">
             <input
@@ -151,8 +162,8 @@ const EditProfile = ({ user, refreshProfile, editProfileOpen, onClose }) => {
           <div className="col-60 text-light">Password</div>
           <div className="col-60">
             <input
+              type="password"
               spellCheck={false}
-              type="text"
               className="input-light px-3 w-100"
               value={update.password}
               onChange={(e) => {
@@ -169,7 +180,7 @@ const EditProfile = ({ user, refreshProfile, editProfileOpen, onClose }) => {
           <div className="col-60">
             <input
               spellCheck={false}
-              type="text"
+              type="password"
               className="input-light px-3 w-100"
               value={update.confirm_assword}
               onChange={(e) => {

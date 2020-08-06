@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { GetMovie, GetCredits } from "../../server/MoviesApi";
+import { GetMovie, GetTvShow, GetCredits } from "../../server/MoviesApi";
 import ReactionButton from "./ReactionButton";
 import date from "date-and-time";
 import Modal from "../utility/Modal";
@@ -15,7 +15,7 @@ import { FaRegPaperPlane } from "react-icons/fa";
 import history from "../../History";
 import { BsPlayFill } from "react-icons/bs";
 
-const Movie = (props) => {
+const Serie = (props) => {
   const movieId = props.match.params.movieId;
   const ratings = props.ratings;
   const apiKey = props.settings.movies_api_key;
@@ -50,8 +50,17 @@ const Movie = (props) => {
     window.scrollTo(0, 0);
     async function getData() {
       if (movieId && apiKey) {
-        let data = await GetMovie(movieId, apiKey);
-        setMovie((prev) => Object.assign({}, prev, data));
+        let data = await GetTvShow(movieId, apiKey);
+        setMovie((prev) =>
+          Object.assign(
+            {},
+            prev,
+            Object.assign({}, data, {
+              title: data.name,
+              release_date: data.first_air_date,
+            })
+          )
+        );
         let credits = await GetCredits(movieId, apiKey);
         let directorObj = credits.crew
           ? credits.crew.find((x) => x.job === "Director")
@@ -315,4 +324,4 @@ function mapp(state, ownProps) {
   };
 }
 
-export default connect(mapp)(Movie);
+export default connect(mapp)(Serie);

@@ -49,7 +49,9 @@ const MoviesList = ({ movies, user, ratings }) => {
                   }
                 ></img>
                 <div
-                  onClick={() => history.push(`/movie/${x.id}`)}
+                  onClick={() =>
+                    history.push(`/${x.name ? "series" : "movie"}/${x.id}`)
+                  }
                   className="col-60 h-100 text-white d-flex flex-center img-cover cursor-pointer"
                   style={{
                     left: 0,

@@ -7,8 +7,10 @@ import { connect } from "react-redux";
 import { Collapse } from "@material-ui/core";
 import Paigination from "../utility/Paigination";
 import history from "../../History";
+import ReplyToReview from "./ReplyToReview";
+import store from "../../store/store";
 
-const PopularReviews = ({ publicUsers, settings }) => {
+const PopularReviews = ({ publicUsers, settings, user }) => {
   //comments object.Its property will be review id.
   const [comments, setComments] = useState({});
 
@@ -28,8 +30,15 @@ const PopularReviews = ({ publicUsers, settings }) => {
   // boolean variable to display "add review" modal or not
   const [addReviewOpen, setAddReviewOpen] = useState(false);
 
-  // boolean variable to display "add review" modal or not
-  const [review, setReview] = useState("");
+  const [review, setReview] = useState({
+    movie_title: "",
+    movie_id: "",
+    movie_genres: "",
+    movie_release_date: "",
+    movie_poster: "",
+  });
+
+  const [addReplyOpen, setAddReplyOpen] = useState(false);
 
   //state to refresh comments after writing it
   const [refreshComments, setRefreshComments] = useState(false);
@@ -62,7 +71,7 @@ const PopularReviews = ({ publicUsers, settings }) => {
       }
     }
     getData();
-  }, [settings]);
+  }, [settings, refreshReviews]);
 
   useEffect(() => {
     //to avoid scroll on first render
@@ -149,17 +158,17 @@ const PopularReviews = ({ publicUsers, settings }) => {
                             src={`https://image.tmdb.org/t/p/w154${x.movie_poster}`}
                           ></img> */}
                         </div>
-                        {/* <div className="col">
-                          <div className="row no-gutters text-white h6 mb-0">
+                        <div className="col">
+                          <div className="row no-gutters text-white mb-0">
                             {x.movie_title} (
                             {x.movie_release_date.substring(0, 4)})
                           </div>
-                          <div className="row no-gutters text-muted">
+                          {/* <div className="row no-gutters text-muted">
                             <div className="text-truncate">
                               {x.movie_genres}
                             </div>
-                          </div>
-                        </div> */}
+                          </div> */}
+                        </div>
                       </div>
                     </div>
                     <div className="col-60">
@@ -244,7 +253,7 @@ const PopularReviews = ({ publicUsers, settings }) => {
                             <div className="col-auto mr-2">
                               {x.comments.length}
                             </div>
-                            <div className="col-auto">
+                            <div className="col-auto mr-2">
                               <MdChatBubble
                                 onClick={() => {
                                   setReviewIdOfVisibleComments(
@@ -256,6 +265,33 @@ const PopularReviews = ({ publicUsers, settings }) => {
                                 fontSize="24px"
                                 className="text-orange scale-transition cursor-pointer"
                               ></MdChatBubble>
+                            </div>
+                            <div
+                              className="col-auto text-orange btn-tertiary"
+                              onClick={() => {
+                                if (!user.token) {
+                                  store.dispatch({
+                                    type: "SET_NOTIFICATION",
+                                    notification: {
+                                      title: "Login required",
+                                      message:
+                                        "You need to login to write review.",
+                                      type: "failure",
+                                    },
+                                  });
+                                } else {
+                                  setReview(
+                                    Object.assign({}, x, {
+                                      notificationReceivers: [
+                                        publicUsers[x.author],
+                                      ],
+                                    })
+                                  );
+                                  setAddReplyOpen(true);
+                                }
+                              }}
+                            >
+                              Reply
                             </div>
                           </div>
                         </div>
@@ -328,7 +364,7 @@ const PopularReviews = ({ publicUsers, settings }) => {
                             <div className="row no-gutters text-light mb-3 font-weight-300">
                               {y.comment}
                             </div>
-                            <div className="row no-gutters justify-content-between align-items-center">
+                            <div className="row no-gutters justify-content-end align-items-center">
                               <div className="col-auto">
                                 <div className="row no-gutters align-items-center">
                                   <div className="col-auto mr-2">
@@ -339,6 +375,34 @@ const PopularReviews = ({ publicUsers, settings }) => {
                                       fontSize="24px"
                                       className="text-green cursor-pointer"
                                     ></MdThumbUp>
+                                  </div>
+                                  <div
+                                    className="col-auto text-orange btn-tertiary"
+                                    onClick={() => {
+                                      if (!user.token) {
+                                        store.dispatch({
+                                          type: "SET_NOTIFICATION",
+                                          notification: {
+                                            title: "Login required",
+                                            message:
+                                              "You need to login to write review.",
+                                            type: "failure",
+                                          },
+                                        });
+                                      } else {
+                                        setReview(
+                                          Object.assign({}, x, {
+                                            notificationReceivers: [
+                                              publicUsers[x.author],
+                                              publicUsers[y.author],
+                                            ],
+                                          })
+                                        );
+                                        setAddReplyOpen(true);
+                                      }
+                                    }}
+                                  >
+                                    Reply
                                   </div>
                                 </div>
                               </div>
@@ -367,19 +431,32 @@ const PopularReviews = ({ publicUsers, settings }) => {
               </Collapse>
             </React.Fragment>
           ))}
-        {/* <div className="row no-gutters justify-content-end mt-2">
-          <div className="col-auto mr-sm-2 mr-md-0">
-            <Paigination
-              classNames={{
-                notSelected: "input-dark",
-                selected: "input-dark-selected",
-              }}
-              count={Math.ceil(reviews.length / reviewsPerPage)}
-              current={realPage}
-              setCurrent={setPage}
-            ></Paigination>
-          </div>
-        </div> */}
+        <ReplyToReview
+          refreshReviews={() => setRefreshReviews(!refreshReviews)}
+          setReviewIdOfVisibleComments={setReviewIdOfVisibleComments}
+          refreshComments={() => setRefreshComments(!refreshComments)}
+          setComments={setComments}
+          movie={{
+            id: review.movie_id,
+            release_date: review.movie_release_date,
+            title: review.movie_title,
+            genres: review.movie_genres.split("/").map((x) => {
+              return {
+                name: x,
+              };
+            }),
+            poster_path: review.movie_poster,
+          }}
+          reviewAuthor={
+            publicUsers[review.author]
+              ? publicUsers[review.author]
+              : { display_name: "" }
+          }
+          review={review}
+          open={addReplyOpen}
+          onClose={() => setAddReplyOpen(false)}
+          user={user}
+        ></ReplyToReview>
       </div>
     </div>
   );
@@ -389,6 +466,7 @@ function mapp(state, ownProps) {
   return {
     publicUsers: state.publicUsers,
     settings: state.settings,
+    user: state.user,
     ...ownProps,
   };
 }
