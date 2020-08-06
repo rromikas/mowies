@@ -20,6 +20,7 @@ import {
 import Profile from "./components/user/profile/Profile";
 import PrivateRoute from "./utilities/PrivateRoute";
 import LegalDocument from "./components/user/LegalDocument";
+import Navbar from "./components/user/Navbar";
 
 function App() {
   useEffect(() => {
@@ -63,8 +64,8 @@ function App() {
       });
       store.dispatch({ type: "SET_PUBLICUSERS", publicUsers });
 
-      let userToken = localStorage["movies_user_token"];
-      if (userToken !== undefined && userToken.length) {
+      let userToken = localStorage.getItem("movies_user_token");
+      if (userToken !== null && userToken.length) {
         let res = await LoginWithToken({ token: userToken });
         if (!res.error) {
           store.dispatch({ type: "SET_USER", user: res });
@@ -77,6 +78,7 @@ function App() {
     <Provider store={store}>
       <Router history={history}>
         <div className="container-fluid px-0">
+          <Navbar></Navbar>
           <Switch>
             <Route
               exact
@@ -111,6 +113,11 @@ function App() {
             ></PrivateRoute>
             <Route exact path="/login" component={Login}></Route>
             <Route exact path="/signup" component={Signup}></Route>
+            <Route
+              exact
+              path="/profile/:userId/:section"
+              component={Profile}
+            ></Route>
             <Route exact path="/profile/:userId" component={Profile}></Route>
           </Switch>
           <Toast></Toast>

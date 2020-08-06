@@ -11,7 +11,7 @@ function userReducer(
     ratings: {},
     reviews: [],
     wishlist: [],
-    watched: [],
+    watchedlist: [],
     notifications: [],
   },
   action
@@ -73,6 +73,15 @@ function searchReducer(state = { query: "", category: "Movies" }, action) {
   }
 }
 
+function navbarHeightReducer(state = 0, action) {
+  switch (action.type) {
+    case "SET_HEIGHT":
+      return action.height;
+    default:
+      return state;
+  }
+}
+
 function settingsReducer(
   state = {
     _id: "NonExistingID",
@@ -107,6 +116,7 @@ const rootReducer = combineReducers({
   search: searchReducer,
   notification: notificationReducer,
   settings: settingsReducer,
+  navbarHeight: navbarHeightReducer,
 });
 
 const store = createStore(

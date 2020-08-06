@@ -13,6 +13,7 @@ const AddReview = ({
   user,
   refreshReviews,
   settings,
+  ratings,
 }) => {
   const [newReview, setNewReview] = useState({
     review: "",
@@ -56,7 +57,7 @@ const AddReview = ({
                 words left
               </div>
             </div>
-            <div className="row no-gutters mb-4" style={{ height: "150px" }}>
+            <div className="row no-gutters mb-2" style={{ height: "150px" }}>
               <textarea
                 onChange={(e) => {
                   e.persist();
@@ -74,7 +75,7 @@ const AddReview = ({
                 className="w-100 h-100 textarea"
               ></textarea>
             </div>
-            <div className="row no-gutters justify-content-between align-items-center mb-3">
+            <div className="row no-gutters justify-content-between mb-2">
               <div className="col-auto">
                 <div className="row no-gutters">
                   <ReactionButton
@@ -86,6 +87,9 @@ const AddReview = ({
                     selected={newReview.rating === "excellent_rate"}
                     emoji="fire"
                     className={`mr-2 mb-2`}
+                    value={
+                      ratings[movie.id] ? ratings[movie.id].excellent_rate : 0
+                    }
                   ></ReactionButton>
                   <ReactionButton
                     onClick={() =>
@@ -96,6 +100,7 @@ const AddReview = ({
                     selected={newReview.rating === "good_rate"}
                     emoji="heart"
                     className={`mr-2 mb-2`}
+                    value={ratings[movie.id] ? ratings[movie.id].good_rate : 0}
                   ></ReactionButton>
                   <ReactionButton
                     onClick={() =>
@@ -106,6 +111,7 @@ const AddReview = ({
                     selected={newReview.rating === "ok_rate"}
                     emoji="heavy_division_sign"
                     className={`mr-2 mb-2`}
+                    value={ratings[movie.id] ? ratings[movie.id].ok_rate : 0}
                   ></ReactionButton>
                   <ReactionButton
                     onClick={() =>
@@ -116,6 +122,7 @@ const AddReview = ({
                     emoji="shit"
                     selected={newReview.rating === "bad_rate"}
                     className={`mr-2`}
+                    value={ratings[movie.id] ? ratings[movie.id].bad_rate : 0}
                   ></ReactionButton>
                 </div>
               </div>
@@ -136,7 +143,7 @@ const AddReview = ({
             </div>
             <div
               className="row no-gutters align-items-center text-danger justify-content-end"
-              style={{ height: "50px", opacity: problem ? 1 : 0 }}
+              style={{ height: "30px", opacity: problem ? 1 : 0 }}
             >
               {problem}
             </div>
@@ -204,6 +211,7 @@ const AddReview = ({
 function mapp(state, ownProps) {
   return {
     settings: state.settings,
+    ratings: state.ratings,
     ...ownProps,
   };
 }

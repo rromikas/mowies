@@ -9,16 +9,22 @@ import Logo from "../../images/Logo";
 import Announcement from "./Announcement";
 import { GetUserNotifications } from "../../server/DatabaseApi";
 import Notifications from "../../images/Notifications";
+import { withResizeDetector } from "react-resize-detector";
+import { useLocation } from "react-router-dom";
 
 const Navbar = (props) => {
   const user = props.user;
   const search = props.search;
+  const height = props.height;
   const [query, setQuery] = useState("");
   const categories = ["All", "Movies", "Series", "Reviews"];
   const [scrolledToTop, setScrolledTopTop] = useState(true);
   const lastScroll = useRef(100);
   const [direction, setDirection] = useState("up");
   const [notifications, setNotifications] = useState([]);
+
+  const location = useLocation();
+
   useEffect(() => {
     function handleScrolling() {
       let scrollY = window.scrollY;
@@ -55,11 +61,22 @@ const Navbar = (props) => {
     getData();
   }, [user]);
 
-  return (
+  useEffect(() => {
+    console.log("hegith changed", height);
+    if (height) {
+      store.dispatch({ type: "SET_HEIGHT", height });
+    }
+  }, [height]);
+
+  useEffect(() => {
+    console.log("LCOATIONS", location);
+  }, [location]);
+
+  return location.pathname !== "/login" && location.pathname !== "/signup" ? (
     <div
-      className="col-60"
+      className="col-60 px-0"
       style={{
-        position: "fixed",
+        position: "sticky",
         zIndex: 59,
         transition: "top 0.5s",
         top: direction === "up" ? "0px" : "-200px",
@@ -209,12 +226,28 @@ const Navbar = (props) => {
                                 history.push(`/profile/${user._id}`);
                               }}
                             >
-                              My profile
+                              My Profile
+                            </div>
+                            <div
+                              className="popover-item border-bottom"
+                              onClick={() => {
+                                history.push(`/profile/${user._id}/2`);
+                              }}
+                            >
+                              My Reviews
+                            </div>
+                            <div
+                              className="popover-item border-bottom"
+                              onClick={() => {
+                                history.push(`/profile/${user._id}/0`);
+                              }}
+                            >
+                              My Wishlist
                             </div>
                             <div
                               className="popover-item"
                               onClick={() => {
-                                localStorage["movies_user_token"] = "";
+                                localStorage.removeItem("movies_user_token");
                                 store.dispatch({
                                   type: "SET_USER",
                                   user: {
@@ -277,6 +310,8 @@ const Navbar = (props) => {
         </div>
       </div>
     </div>
+  ) : (
+    <div></div>
   );
 };
 
@@ -288,4 +323,4 @@ function mapp(state, ownProps) {
   };
 }
 
-export default connect(mapp)(Navbar);
+export default withResizeDetector(connect(mapp)(Navbar));

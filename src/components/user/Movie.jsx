@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import { GetMovie, GetCredits } from "../../server/MoviesApi";
-import { Movie as MovieData, Credits, Reviews } from "../../Data";
 import ReactionButton from "./ReactionButton";
 import date from "date-and-time";
-import { MdPlaylistAdd, MdMovieCreation } from "react-icons/md";
-import Popover from "../utility/Popover";
 import Modal from "../utility/Modal";
 import TrailerPlayer from "./TrailerPlayer";
 import MovieReviews from "./MovieReviews";
 import { connect } from "react-redux";
 import { FormatDuration } from "../../utilities/Functions";
-import Navbar from "./Navbar";
+import store from "../../store/store";
 import { AddViewToMovie } from "../../server/DatabaseApi";
 import WishlistButton from "./WishlistButton";
 import Footer from "./Footer";
+import { FaRegPaperPlane } from "react-icons/fa";
+import history from "../../History";
+import { BsPlayFill } from "react-icons/bs";
 
 const Movie = (props) => {
   const movieId = props.match.params.movieId;
@@ -21,6 +21,8 @@ const Movie = (props) => {
   const apiKey = props.settings.movies_api_key;
   //user will be needed to write comments on reviews and to add reviews
   const user = props.user;
+
+  const [addReviewTrigger, setAddReviewTrigger] = useState(-1);
 
   const [movie, setMovie] = useState({
     poster_path: "",
@@ -100,19 +102,49 @@ const Movie = (props) => {
           ></div>
         </div>
       </div>
-      <div className="col-60" style={{ height: "72px" }}></div>
-      <Navbar></Navbar>
       <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
-        <TrailerPlayer movieId={movieId}></TrailerPlayer>
+        <TrailerPlayer
+          movieId={movieId}
+          onEnded={() => setOpenTrailer(false)}
+        ></TrailerPlayer>
       </Modal>
       <div className="col-60 text-white px-md-5 py-5 px-4 content-container">
         <div className="row no-gutters py-5 mb-5">
-          <div className="col-auto pr-5 d-none d-lg-block">
-            <img
-              style={{ borderRadius: "25px" }}
-              width="300px"
-              src={`https://image.tmdb.org/t/p/w342/${movie.poster_path}`}
-            ></img>
+          <div className="col-auto mr-5 d-none d-lg-block">
+            <div className="w-100 position-relative">
+              <img
+                style={{ borderRadius: "25px" }}
+                width="300px"
+                src={`https://image.tmdb.org/t/p/w342/${movie.poster_path}`}
+              ></img>
+              <div
+                onClick={() => history.push(`/movie/${movie.id}`)}
+                className="col-60 h-100 text-white d-flex flex-center img-cover cursor-pointer"
+                style={{
+                  left: 0,
+                  top: 0,
+                  position: "absolute",
+                  zIndex: 4,
+                  borderRadius: "13px",
+                }}
+              >
+                <div
+                  className="square-60 rounded-circle d-flex flex-center play-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpenTrailer(true);
+                  }}
+                >
+                  <BsPlayFill
+                    style={{
+                      fontSize: "35px",
+                      color: "white",
+                      marginRight: "-5px",
+                    }}
+                  ></BsPlayFill>
+                </div>
+              </div>
+            </div>
           </div>
           <div className="col position-relative">
             <div
@@ -120,7 +152,7 @@ const Movie = (props) => {
               style={{ zIndex: 5 }}
             >
               <div className="col-60">
-                <div className="row no-gutters text-title-xl">
+                <div className="row no-gutters h5">
                   {movie.title} ({movie.release_date.substring(0, 4)})
                 </div>
                 <div className="row no-gutters text-movie-muted mb-2">
@@ -230,9 +262,26 @@ const Movie = (props) => {
                 <div className="row no-gutters justify-content-center justify-content-md-start">
                   <div
                     className="col-auto mr-3 btn-custom btn-custom-primary btn-small"
-                    onClick={() => setOpenTrailer(true)}
+                    onClick={() => {
+                      if (!user.token) {
+                        store.dispatch({
+                          type: "SET_NOTIFICATION",
+                          notification: {
+                            title: "Login required",
+                            message: "You need to login to write review.",
+                            type: "failure",
+                          },
+                        });
+                      } else {
+                        setAddReviewTrigger(addReviewTrigger + 1);
+                      }
+                    }}
                   >
-                    Play Trailer
+                    Add Review
+                    <FaRegPaperPlane
+                      fontSize="20px"
+                      className="ml-2"
+                    ></FaRegPaperPlane>
                   </div>
                   <WishlistButton movie={movie} user={user}></WishlistButton>
                 </div>
@@ -241,9 +290,9 @@ const Movie = (props) => {
           </div>
         </div>
         <MovieReviews
-          initialData={Reviews}
           movie={movie}
           user={user}
+          addReviewTrigger={addReviewTrigger}
         ></MovieReviews>
       </div>
       <div className="col-60">

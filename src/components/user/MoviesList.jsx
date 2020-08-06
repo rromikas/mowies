@@ -19,7 +19,10 @@ const MoviesList = ({ movies, user, ratings }) => {
   return (
     <div className="row">
       <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
-        <TrailerPlayer movieId={trailerMovieId}></TrailerPlayer>
+        <TrailerPlayer
+          movieId={trailerMovieId}
+          onEnded={() => setOpenTrailer(false)}
+        ></TrailerPlayer>
       </Modal>
       {movies.map((x, i) => (
         <div

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "./Navbar";
 import { connect } from "react-redux";
 import { useEffect } from "react";
 import { SearchMovies, SearchSeries } from "../../server/MoviesApi";
@@ -74,10 +73,7 @@ const SearchResults = ({ search, settings }) => {
       style={{ minHeight: window.innerHeight }}
     >
       <div className="col-60 d-flex flex-column">
-        <div className="row no-gutters flex-grow-0">
-          <div className="col-60" style={{ height: "100px" }}></div>
-          <Navbar></Navbar>
-        </div>
+        <div className="row no-gutters flex-grow-0"></div>
         <div className="row no-gutters flex-grow-1">
           <div className="col-60 d-flex flex-column">
             <div className="row no-gutters flex-grow-1 justify-content-center">

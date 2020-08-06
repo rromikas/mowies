@@ -13598,7 +13598,8 @@ button.bg-dark:focus {
 
 .pr-1,
 .px-1,
-.btn-reaction-small {
+.btn-reaction-small,
+.btn-tertiary-small {
   padding-right: 0.25rem !important;
 }
 
@@ -13609,7 +13610,8 @@ button.bg-dark:focus {
 
 .pl-1,
 .px-1,
-.btn-reaction-small {
+.btn-reaction-small,
+.btn-tertiary-small {
   padding-left: 0.25rem !important;
 }
 
@@ -16177,6 +16179,24 @@ body {
   font-weight: 600;
 }
 
+.btn-tertiary-small {
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  line-height: 30px;
+  height: 30px;
+  text-align: center;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  border-radius: 4px;
+}
+
+.btn-tertiary-small:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
 .btn-tertiary {
   cursor: pointer;
   -webkit-user-select: none;
@@ -17061,5 +17081,28 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .pg-viewer-wrapper {
   overflow: auto !important;
+}
+
+.font-weight-300 {
+  font-weight: 300;
+}
+
+.square-200 {
+  width: 200px !important;
+  height: 200px !important;
+}
+
+.square-150 {
+  width: 150px !important;
+  height: 150px !important;
+}
+
+.btn-link {
+  color: #004ad5 !important;
+  cursor: pointer !important;
+}
+
+.ytp-title-channel {
+  display: none !important;
 }
 /*# sourceMappingURL=style.css.map */

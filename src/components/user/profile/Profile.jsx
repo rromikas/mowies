@@ -5,7 +5,6 @@ import {
   GetUserReviews,
   GetUserComments,
 } from "../../../server/DatabaseApi";
-import Navbar from "../Navbar";
 import Wishlist from "./Wishlist";
 import Watchedlist from "./Watchedlist";
 import Reviews from "./Reviews";
@@ -19,6 +18,7 @@ const Profile = (props) => {
   const user = props.user;
   const userId = props.match.params.userId;
   const publicUsers = props.publicUsers;
+  const sectionInUrl = props.match.params.section;
 
   const [profileData, setProfileData] = useState({
     wishlist: [],
@@ -53,8 +53,18 @@ const Profile = (props) => {
   }, [userId, refreshProfile]);
 
   useEffect(() => {
+    if (sectionInUrl !== undefined) {
+      setSection(+sectionInUrl);
+    }
+  }, [sectionInUrl]);
+
+  useEffect(() => {
     async function getData() {
-      if (section === 2 && !reviewsFetched.current) {
+      if (
+        section === 2 &&
+        !reviewsFetched.current &&
+        profileData.reviews.length
+      ) {
         reviewsFetched.current = true;
         let res = await GetUserReviews(profileData.reviews);
         if (!res.error) {
@@ -69,12 +79,10 @@ const Profile = (props) => {
       }
     }
     getData();
-  }, [section]);
+  }, [section, profileData.reviews.length]);
 
   return (
     <div className="row no-gutters">
-      <div className="col-60 bg-root" style={{ height: "100px" }}></div>
-      <Navbar></Navbar>
       <EditProfile
         refreshProfile={() => setRefreshProfile(!refreshProfile)}
         editProfileOpen={editProfileOpen}
@@ -104,7 +112,7 @@ const Profile = (props) => {
                     </div>
                   </div>
                 ) : (
-                  <div className="row no-gutters text-title-lg justify-content-md-start justify-content-center">
+                  <div className="row no-gutters h5 justify-content-md-start justify-content-center">
                     Full name is empty
                   </div>
                 )}
@@ -125,6 +133,22 @@ const Profile = (props) => {
           </div>
           <div className="col-sm-auto col-60">
             <div className="row no-gutters justify-content-center h-100 align-items-center">
+              <div className="col-sm-auto col mr-sm-4">
+                <div className="row no-gutters mb-3 profile-stats-title">
+                  Wishlist
+                </div>
+                <div className="row no-gutters text-lift justify-content-center">
+                  {profileData.wishlist.length}
+                </div>
+              </div>
+              <div className="col-sm-auto col mr-sm-4 mr-0">
+                <div className="row no-gutters mb-3 profile-stats-title">
+                  Watched
+                </div>
+                <div className="row no-gutters text-lift justify-content-center">
+                  {profileData.watchedlist.length}
+                </div>
+              </div>
               <div className="col-sm-auto col mr-sm-4 mr-0">
                 <div className="row no-gutters mb-3 profile-stats-title">
                   Reviews
@@ -133,34 +157,12 @@ const Profile = (props) => {
                   {profileData.reviews.length}
                 </div>
               </div>
-              <div className="col-sm-auto col mr-sm-4 mr-0">
+              <div className="col-sm-auto col">
                 <div className="row no-gutters mb-3 profile-stats-title">
                   Comments
                 </div>
                 <div className="row no-gutters text-lift justify-content-center">
                   {profileData.comments.length}
-                </div>
-              </div>
-              <div className="col-sm-auto col mr-sm-4 mr-0">
-                <div className="row no-gutters d-flex d-md-none mb-3 profile-stats-title">
-                  Watched
-                </div>
-                <div className="row no-gutters mb-3 d-none d-md-flex profile-stats-title">
-                  Watchlist movies
-                </div>
-                <div className="row no-gutters text-lift justify-content-center">
-                  {profileData.watchedlist.length}
-                </div>
-              </div>
-              <div className="col-sm-auto col">
-                <div className="row no-gutters d-flex d-md-none mb-3 profile-stats-title">
-                  Wished
-                </div>
-                <div className="row no-gutters mb-3 d-none d-md-flex profile-stats-title">
-                  Wishlist movies
-                </div>
-                <div className="row no-gutters text-lift justify-content-center">
-                  {profileData.wishlist.length}
                 </div>
               </div>
             </div>
@@ -181,7 +183,9 @@ const Profile = (props) => {
                 style={{
                   borderTop: "3px solid transparent",
                   borderBottom:
-                    section === 0 ? "3px solid white" : "3px solid transparent",
+                    section === 0
+                      ? "3px solid rgb(255, 0, 64)"
+                      : "3px solid transparent",
                 }}
                 onClick={() => setSection(0)}
               >
@@ -191,7 +195,9 @@ const Profile = (props) => {
                 style={{
                   borderTop: "3px solid transparent",
                   borderBottom:
-                    section === 1 ? "3px solid white" : "3px solid transparent",
+                    section === 1
+                      ? "3px solid rgb(255, 0, 64)"
+                      : "3px solid transparent",
                 }}
                 className="d-inline-block p-sm-4 p-3 cursor-pointer mr-4 text-title-md mb-0 user-select-none"
                 onClick={() => setSection(1)}
@@ -202,7 +208,9 @@ const Profile = (props) => {
                 style={{
                   borderTop: "3px solid transparent",
                   borderBottom:
-                    section === 2 ? "3px solid white" : "3px solid transparent",
+                    section === 2
+                      ? "3px solid rgb(255, 0, 64)"
+                      : "3px solid transparent",
                 }}
                 className="d-inline-block p-sm-4 p-3 cursor-pointer mr-4 text-title-md mb-0 user-select-none"
                 onClick={() => setSection(2)}
@@ -213,7 +221,9 @@ const Profile = (props) => {
                 style={{
                   borderTop: "3px solid transparent",
                   borderBottom:
-                    section === 3 ? "3px solid white" : "3px solid transparent",
+                    section === 3
+                      ? "3px solid rgb(255, 0, 64)"
+                      : "3px solid transparent",
                 }}
                 className="d-inline-block p-sm-4 p-3 cursor-pointer mr-4 text-title-md mb-0 user-select-none"
                 onClick={() => setSection(3)}
@@ -224,7 +234,11 @@ const Profile = (props) => {
           </div>
         </div>
         {section === 0 ? (
-          <Wishlist movies={profileData.wishlist}></Wishlist>
+          <Wishlist
+            refreshProfile={() => setRefreshProfile(!refreshProfile)}
+            movies={profileData.wishlist}
+            owner={user._id === profileData._id}
+          ></Wishlist>
         ) : section === 1 ? (
           <Watchedlist movies={profileData.watchedlist}></Watchedlist>
         ) : section === 2 ? (

@@ -33,7 +33,7 @@ const GetClosestValidWidth = () => {
   return closestSize;
 };
 
-const Home = ({ publicUsers, ratings, user, settings }) => {
+const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
   const backgroundMovieId = "300671";
   const [recommendedMovies, setRecommendedMovies] = useState([]);
   const [openTrailer, setOpenTrailer] = useState(false);
@@ -65,7 +65,7 @@ const Home = ({ publicUsers, ratings, user, settings }) => {
   }, [settings]);
 
   return (
-    <div className="row no-gutters">
+    <div className="row no-gutters" style={{ marginTop: `-${navbarHeight}px` }}>
       <div className="col-60">
         <div
           className="row no-gutters align-items-end position-relative overflow-hidden"
@@ -80,7 +80,6 @@ const Home = ({ publicUsers, ratings, user, settings }) => {
               background: `linear-gradient(180deg, rgba(0, 0, 0, 0.3) 72%, black)`,
             }}
           ></div>
-          <Navbar></Navbar>
           <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
             <TrailerPlayer movieId={backgroundMovie.id}></TrailerPlayer>
           </Modal>
@@ -291,6 +290,7 @@ function mapp(state, ownProps) {
     ratings: state.ratings,
     settings: state.settings,
     user: state.user,
+    navbarHeight: state.navbarHeight,
     ...ownProps,
   };
 }

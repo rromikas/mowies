@@ -132,7 +132,7 @@ const ReviewsList = ({ reviews, publicUsers, ratings }) => {
                 </div>
               </div>
             </div>
-            <div className="row no-gutters text-light mb-3 font-size-14 flex-grow-0">
+            <div className="row no-gutters text-light mb-3 font-size-14 flex-grow-0 font-weight-300">
               {x.review}
             </div>
             <div className="row no-gutters">

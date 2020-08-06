@@ -5,7 +5,7 @@ import MoviesList from "./MoviesList";
 import { MoviesGenresMap } from "../../../Data";
 
 const extractGenres = (movies) => {
-  let genres = [];
+  let genres = ["All"];
   movies.forEach((x) => {
     x.movie_genres.forEach((g) => {
       if (g.name) {
@@ -27,40 +27,47 @@ const Wishlist = ({ movies }) => {
   const genres = extractGenres(movies);
   return (
     <div className="col-60">
-      <div className="row no-gutters justify-content-between text-light align-items-center mb-4">
-        <div className="col-md col-60">
-          <SimpleBar
-            style={{
-              padding: "14px 0",
-              maxWidth: "100%",
-              overflowX: "auto",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {genres.map((x, i) => (
-              <div
-                onClick={() => {
-                  setSelectedGenre(i);
-                }}
-                style={{ display: "inline-block" }}
-                key={`genre-for-popular-movie-${i}`}
-                className={`px-4 ${
-                  selectedGenre === i
-                    ? "btn-tertiary-selected text-white"
-                    : "btn-tertiary text-light-white"
-                }`}
-              >
-                {x}
-              </div>
-            ))}
-          </SimpleBar>
+      <div className="row no-gutters justify-content-end text-light align-items-center mb-4">
+        <div className="col-auto">
+          {genres.length > 1 ? (
+            <SimpleBar
+              style={{
+                padding: "14px 0",
+                maxWidth: "100%",
+                overflowX: "auto",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {genres.map((x, i) => (
+                <div
+                  onClick={() => {
+                    setSelectedGenre(i);
+                  }}
+                  style={{ display: "inline-block" }}
+                  key={`genre-for-popular-movie-${i}`}
+                  className={`px-4 ${
+                    selectedGenre === i
+                      ? "btn-tertiary-selected text-white"
+                      : "btn-tertiary text-light-white"
+                  }`}
+                >
+                  {x}
+                </div>
+              ))}
+            </SimpleBar>
+          ) : (
+            ""
+          )}
         </div>
       </div>
       <MoviesList
-        movies={movies.filter((x) =>
-          x.movie_genres
-            .map((x) => MoviesGenresMap[x.id ? x.id : x])
-            .includes(genres[selectedGenre])
+        listType="watchedlist"
+        movies={movies.filter(
+          (x) =>
+            x.movie_genres
+              .map((x) => MoviesGenresMap[x.id ? x.id : x])
+              .includes(genres[selectedGenre]) ||
+            genres[selectedGenre] === "All"
         )}
       ></MoviesList>
     </div>

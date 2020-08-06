@@ -124,12 +124,12 @@ const PopularReviews = ({ publicUsers, settings }) => {
                       src={`https://image.tmdb.org/t/p/w154${x.movie_poster}`}
                     ></img>
                   </div>
-                  <div className="row no-gutters text-white h6 mb-0">
+                  {/* <div className="row no-gutters text-white h6 mb-0">
                     {x.movie_title} ({x.movie_release_date.substring(0, 4)})
                   </div>
                   <div className="row no-gutters text-muted">
                     <div className="text-truncate">{x.movie_genres}</div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="col d-flex flex-column">
                   <div className="row no-gutters justify-content-between align-items-center mb-2 flex-grow-0">
@@ -149,7 +149,7 @@ const PopularReviews = ({ publicUsers, settings }) => {
                             src={`https://image.tmdb.org/t/p/w154${x.movie_poster}`}
                           ></img> */}
                         </div>
-                        <div className="col">
+                        {/* <div className="col">
                           <div className="row no-gutters text-white h6 mb-0">
                             {x.movie_title} (
                             {x.movie_release_date.substring(0, 4)})
@@ -159,7 +159,7 @@ const PopularReviews = ({ publicUsers, settings }) => {
                               {x.movie_genres}
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                     <div className="col-60">
@@ -200,62 +200,62 @@ const PopularReviews = ({ publicUsers, settings }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="row no-gutters text-light mb-3 font-size-14 flex-grow-0">
+                  <div className="row no-gutters text-light mb-3 font-size-14 flex-grow-0 font-weight-300">
                     {x.review}
                   </div>
-                  <div className="row no-gutters">
-                    {x.rating ? (
-                      <div style={{ marginBottom: "-6px" }}>
-                        <Emoji
-                          emoji={
-                            x.rating === "excellent_rate"
-                              ? "fire"
-                              : x.rating === "good_rate"
-                              ? "heart"
-                              : x.rating === "ok_rate"
-                              ? "heavy-division-sign"
-                              : "shit"
-                          }
-                          set="facebook"
-                          size={24}
-                        />
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
+
                   <div className="row no-gutters flex-grow-1 align-items-bottom">
                     <div className="col-60 d-flex flex-column justify-content-end">
-                      <div className="row no-gutters justify-content-end align-items-center text-white">
+                      <div className="row no-gutters justify-content-between align-items-center text-white">
+                        <div className="col-auto">
+                          <div className="row no-gutters">
+                            {x.rating ? (
+                              <div style={{ marginBottom: "-6px" }}>
+                                <Emoji
+                                  emoji={
+                                    x.rating === "excellent_rate"
+                                      ? "fire"
+                                      : x.rating === "good_rate"
+                                      ? "heart"
+                                      : x.rating === "ok_rate"
+                                      ? "heavy-division-sign"
+                                      : "shit"
+                                  }
+                                  set="facebook"
+                                  size={24}
+                                />
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        </div>
                         <div className="col-auto px-0">
-                          <div className="row no-gutters align-items-center"></div>
-                          <div className="col-auto px-0">
-                            <div className="row no-gutters align-items-center">
-                              <div className="col-auto mr-2">
-                                {x.likes.length}
-                              </div>
-                              <div className="col-auto mr-2 ">
-                                <MdThumbUp
-                                  fontSize="24px"
-                                  className="text-green"
-                                ></MdThumbUp>
-                              </div>
-                              <div className="col-auto mr-2">
-                                {x.comments.length}
-                              </div>
-                              <div className="col-auto">
-                                <MdChatBubble
-                                  onClick={() => {
-                                    setReviewIdOfVisibleComments(
-                                      reviewIdOfVisibleComments === x._id
-                                        ? -1
-                                        : x._id
-                                    );
-                                  }}
-                                  fontSize="24px"
-                                  className="text-orange scale-transition cursor-pointer"
-                                ></MdChatBubble>
-                              </div>
+                          <div className="row no-gutters align-items-center">
+                            <div className="col-auto mr-2">
+                              {x.likes.length}
+                            </div>
+                            <div className="col-auto mr-2 ">
+                              <MdThumbUp
+                                fontSize="24px"
+                                className="text-green"
+                              ></MdThumbUp>
+                            </div>
+                            <div className="col-auto mr-2">
+                              {x.comments.length}
+                            </div>
+                            <div className="col-auto">
+                              <MdChatBubble
+                                onClick={() => {
+                                  setReviewIdOfVisibleComments(
+                                    reviewIdOfVisibleComments === x._id
+                                      ? -1
+                                      : x._id
+                                  );
+                                }}
+                                fontSize="24px"
+                                className="text-orange scale-transition cursor-pointer"
+                              ></MdChatBubble>
                             </div>
                           </div>
                         </div>
@@ -325,7 +325,7 @@ const PopularReviews = ({ publicUsers, settings }) => {
                               </div>
                             </div>
 
-                            <div className="row no-gutters text-light mb-3">
+                            <div className="row no-gutters text-light mb-3 font-weight-300">
                               {y.comment}
                             </div>
                             <div className="row no-gutters justify-content-between align-items-center">

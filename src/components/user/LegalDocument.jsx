@@ -8,10 +8,7 @@ import Navbar from "./Navbar";
 const LegalDocument = ({ type }) => {
   return (
     <div className="row no-gutters px-0">
-      <div className="col-60 px-0" style={{ height: "100px" }}></div>
-      <Navbar></Navbar>
-
-      <div className="col-60 py-5">
+      <div className="col-60 py-5 text-dark">
         <FileViewer
           fileType={"docx"}
           filePath={

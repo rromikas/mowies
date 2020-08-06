@@ -8,6 +8,20 @@ const Announcement = () => {
     description: "",
   });
 
+  // localStorage.removeItem("movies_announcement_closed_by_user");
+
+  let haveUserClosedThisAnnouncement = false;
+  let closedAnnouncements = localStorage.getItem(
+    "movies_announcement_closed_by_user"
+  );
+
+  closedAnnouncements = closedAnnouncements ? closedAnnouncements : [];
+
+  if (closedAnnouncements !== undefined) {
+    if (closedAnnouncements.includes(announcement.description)) {
+      haveUserClosedThisAnnouncement = true;
+    }
+  }
   const [closed, setClosed] = useState(false);
 
   useEffect(() => {
@@ -26,7 +40,7 @@ const Announcement = () => {
   const type = announcement.type;
   const description = announcement.description;
 
-  return description && !closed ? (
+  return description && !closed && !haveUserClosedThisAnnouncement ? (
     <div
       className={`row p-2 position-relative no-gutters justify-content-center ${
         type === "Warning"
@@ -39,7 +53,15 @@ const Announcement = () => {
       }`}
     >
       <div
-        onClick={() => setClosed(true)}
+        onClick={() => {
+          setClosed(true);
+          closedAnnouncements.push(announcement.description);
+
+          localStorage.setItem(
+            "movies_announcement_closed_by_user",
+            closedAnnouncements
+          );
+        }}
         className="square-20 rounded-circle d-flex flex-center bg-white cursor-pointer scale-transition position-absolute"
         style={{ right: "10px", top: 0, bottom: 0, margin: "auto", zIndex: 5 }}
       >

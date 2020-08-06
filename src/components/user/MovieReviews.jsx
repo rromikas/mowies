@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import date from "date-and-time";
 import { nFormatter } from "../../utilities/Functions";
 import { Emoji } from "emoji-mart";
-import { MdThumbUp, MdChatBubble } from "react-icons/md";
+import { MdThumbUp, MdChatBubble, MdFlag } from "react-icons/md";
 import { FaRegPaperPlane } from "react-icons/fa";
 import ReplyToReview from "./ReplyToReview";
 import AddReview from "./AddReview";
@@ -20,7 +20,7 @@ import { Collapse } from "@material-ui/core";
 import Paigination from "../utility/Paigination";
 import store from "../../store/store";
 
-const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
+const MovieReviews = ({ movie, user, publicUsers, addReviewTrigger }) => {
   // local reviews object in order to be able to update it quickly instead of waiting for real changes in database
   const [reviews, setReviews] = useState([]);
   const [promotedReviews, setPromotedReviews] = useState([]);
@@ -57,6 +57,13 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
 
   const commentsPerPage = 5;
   const reviewsPerPage = 8;
+
+  useEffect(() => {
+    console.log("AD re vire tgire", addReviewTrigger);
+    if (addReviewTrigger >= 0) {
+      setAddReviewOpen(true);
+    }
+  }, [addReviewTrigger]);
 
   useEffect(() => {
     async function getData() {
@@ -123,7 +130,7 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
   return (
     <div className="row no-gutters">
       <div className="col-60 h5 mb-3">
-        Popular Reviews ({nFormatter(reviews.length, 1)})
+        Reviews ({nFormatter(reviews.length, 1)})
       </div>
       <div className="col-60">
         <div className="row no-gutters mb-2" ref={topOfReviewsBlock}></div>
@@ -196,7 +203,7 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
                         </div>
                       </div>
                       <div
-                        className="col-auto text-muted btn-tertiary"
+                        className="col-auto text-muted btn-tertiary-small"
                         onClick={async () => {
                           if (user.token) {
                             let res = await ReportReview(user, x._id);
@@ -232,12 +239,11 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
                           }
                         }}
                       >
-                        <div className="d-block d-sm-none">Report</div>
-                        <div className="d-none d-sm-block">Report Abuse</div>
+                        <MdFlag fontSize="24px"></MdFlag>
                       </div>
                     </div>
 
-                    <div className="row no-gutters text-light text-title-md mb-3">
+                    <div className="row no-gutters text-light text-title-md mb-3 font-weight-300">
                       {review}
                     </div>
                     <div className="row no-gutters justify-content-between align-items-center">
@@ -436,7 +442,7 @@ const MovieReviews = ({ initialData, movie, user, publicUsers }) => {
                                 </div>
                               </div>
 
-                              <div className="row no-gutters text-light mb-3">
+                              <div className="row no-gutters text-light mb-3 font-weight-300">
                                 {y.comment}
                               </div>
                               <div className="row no-gutters justify-content-between align-items-center">

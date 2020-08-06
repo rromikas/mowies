@@ -143,7 +143,7 @@ const Navbar = ({ setIsMenuOpened, isMenuOpened, user }) => {
                       <div
                         className="popover-item"
                         onClick={() => {
-                          localStorage.setItem("movies_user_token", "");
+                          localStorage.removeItem("movies_user_token");
                           store.dispatch({
                             type: "SET_USER",
                             user: {

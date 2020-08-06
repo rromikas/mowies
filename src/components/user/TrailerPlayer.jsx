@@ -4,7 +4,7 @@ import "simplebar/dist/simplebar.min.css";
 import { GetTrailers } from "../../server/MoviesApi";
 import { connect } from "react-redux";
 
-const TrailerPlayer = ({ movieId, settings }) => {
+const TrailerPlayer = ({ movieId, settings, onEnded }) => {
   const [videoIds, setVideoIds] = useState([]);
   const [problem, setProblem] = useState("");
 
@@ -30,6 +30,12 @@ const TrailerPlayer = ({ movieId, settings }) => {
           <div className="col-60">
             <div className="trailer-player-wrapper">
               <ReactPlayer
+                onEnded={onEnded}
+                config={{
+                  youtube: {
+                    playerVars: { showinfo: 0, iv_load_policy: 3 },
+                  },
+                }}
                 playing
                 className="trailer-player"
                 controls

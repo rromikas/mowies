@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 import MoviesList from "./MoviesList";
@@ -22,41 +22,50 @@ const extractGenres = (movies) => {
   return genres;
 };
 
-const Wishlist = ({ movies }) => {
+const Wishlist = ({ movies, owner, refreshProfile }) => {
+  const horizontalMenu = useRef();
   const [selectedGenre, setSelectedGenre] = useState(0);
   const genres = extractGenres(movies);
+
   return (
     <div className="col-60 px-0">
-      <div className="row no-gutters justify-content-between text-light align-items-center mb-4">
-        <div className="col-md col-60">
-          <SimpleBar
-            style={{
-              padding: "14px 0",
-              maxWidth: "100%",
-              overflowX: "auto",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {genres.map((x, i) => (
-              <div
-                onClick={() => {
-                  setSelectedGenre(i);
-                }}
-                style={{ display: "inline-block" }}
-                key={`genre-for-popular-movie-${i}`}
-                className={`px-4 ${
-                  selectedGenre === i
-                    ? "btn-tertiary-selected text-white"
-                    : "btn-tertiary text-light-white"
-                }`}
-              >
-                {x}
-              </div>
-            ))}
-          </SimpleBar>
+      <div className="row no-gutters justify-content-end text-light align-items-center mb-4">
+        <div className="col-auto">
+          {genres.length > 1 ? (
+            <SimpleBar
+              style={{
+                padding: "14px 0",
+                width: "100%",
+                overflowX: "auto",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {genres.map((x, i) => (
+                <div
+                  onClick={() => {
+                    setSelectedGenre(i);
+                  }}
+                  style={{ display: "inline-block" }}
+                  key={`genre-for-popular-movie-${i}`}
+                  className={`px-4 ${
+                    selectedGenre === i
+                      ? "btn-tertiary-selected text-white"
+                      : "btn-tertiary text-light-white"
+                  }`}
+                >
+                  {x}
+                </div>
+              ))}
+            </SimpleBar>
+          ) : (
+            ""
+          )}
         </div>
       </div>
       <MoviesList
+        refreshProfile={refreshProfile}
+        owner={owner}
+        listType="wishlist"
         movies={movies.filter(
           (x) =>
             x.movie_genres

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import MoviesList from "./MoviesList";
 import { GetPopularMoviesByGenre } from "../../server/MoviesApi";
 import SimpleBar from "simplebar-react";
@@ -16,6 +16,8 @@ const genresPairs = [
 ];
 
 const PopularMovies = ({ apiKey, settings }) => {
+  const horizontalMenu = useRef();
+
   const [genresIds, setGenresIds] = useState([]);
   const [genreName, setGenreName] = useState("All");
   const [movies, setMovies] = useState([]);
@@ -28,6 +30,10 @@ const PopularMovies = ({ apiKey, settings }) => {
     }
     getData();
   }, [genresIds, apiKey, settings]);
+
+  useEffect(() => {
+    horizontalMenu.current.recalculate();
+  }, [movies]);
 
   return (
     <div className="row no-gutters justify-content-center text-white">
@@ -51,6 +57,7 @@ const PopularMovies = ({ apiKey, settings }) => {
         <div className="row no-gutters justify-content-end text-light align-items-center mb-4">
           <div className="col-auto">
             <SimpleBar
+              ref={horizontalMenu}
               style={{
                 padding: "14px 0",
                 maxWidth: "100%",

@@ -227,3 +227,7 @@ export const EditNotification = (notification) => {
 export const DeleteMultipleNotifications = (ids, update) => {
   return SendPostRequest("/admin/notifications/delete", { ids, update });
 };
+
+export const MoveMovieToWatchList = (user, movieId) => {
+  return SendPostRequest("/movie/moveToWatchedList", { user, movieId });
+};
