@@ -1110,3 +1110,20 @@ input[type="number"] {
 .input-light-disabled::placeholder {
   color: rgb(192, 192, 203);
 }
+
+.fading-shadow {
+  animation-name: fade-shadow;
+  animation-delay: 0.5s;
+  animation-duration: 1.2s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fade-shadow {
+  from {
+    box-shadow: 0 0 0 7px $primary-custom;
+  }
+
+  to {
+    box-shadow: 0 0 0 2px $primary-custom;
+  }
+}

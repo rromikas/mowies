@@ -9,6 +9,7 @@ import { Swipeable } from "react-swipeable";
 import { GetReviews, DeleteMultipleReviews } from "../../server/DatabaseApi";
 import { connect } from "react-redux";
 import store from "../../store/store";
+import history from "../../History";
 
 const Reviews = ({
   setEditReviewSection,
@@ -450,16 +451,9 @@ const Reviews = ({
                             <div>
                               <div
                                 style={{ minWidth: "200px" }}
-                                className="text-clamp-4 cursor-pointer user-select-none"
+                                className="cursor-pointer user-select-none btn-link"
                                 onClick={(e) => {
-                                  let target = e.currentTarget;
-                                  if (
-                                    target.classList.contains("text-clamp-4")
-                                  ) {
-                                    target.classList.remove("text-clamp-4");
-                                  } else {
-                                    target.classList.add("text-clamp-4");
-                                  }
+                                  history.push(`/movie/${x.movie_id}/${x._id}`);
                                 }}
                               >
                                 {x.review}

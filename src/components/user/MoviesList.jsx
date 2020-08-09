@@ -93,13 +93,13 @@ const MoviesList = ({ movies, user, ratings }) => {
                 <div className="text-truncate">
                   {x.genre_ids.length
                     ? x.genre_ids
-                        .map((gid) =>
-                          x.title // movies have title, series - name
+                        .map((gid) => {
+                          let genre = x.title // movies have title, series - name
                             ? OfficialMoviesGenres.find((g) => g.id === gid)
-                                .name
-                            : OfficialSeriesGenres.find((g) => g.id === gid)
-                                .name
-                        )
+                            : OfficialSeriesGenres.find((g) => g.id === gid);
+
+                          return genre ? genre.name : "unknown";
+                        })
                         .join("/")
                     : "unknown"}
                 </div>

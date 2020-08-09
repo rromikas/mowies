@@ -21,10 +21,17 @@ import Paigination from "../utility/Paigination";
 import store from "../../store/store";
 import Loader from "../utility/Loader";
 
-const MovieReviews = ({ movie, user, publicUsers, addReviewTrigger }) => {
+const MovieReviews = ({
+  movie,
+  user,
+  publicUsers,
+  addReviewTrigger,
+  seekReviewId,
+}) => {
   // local reviews object in order to be able to update it quickly instead of waiting for real changes in database
   const [reviews, setReviews] = useState([]);
   const [promotedReviews, setPromotedReviews] = useState([]);
+  const reviewToSeek = useRef(null);
 
   const [loadingComment, setLoadingComment] = useState(-1);
   const [loadingReview, setLoadingReview] = useState(-1);
@@ -98,7 +105,9 @@ const MovieReviews = ({ movie, user, publicUsers, addReviewTrigger }) => {
           let promReviews = [],
             notPromotedReviews = [];
           data.forEach((x) => {
-            if (promotedContentIds.includes(x._id)) {
+            if (x._id === seekReviewId) {
+              promReviews.unshift(x);
+            } else if (promotedContentIds.includes(x._id)) {
               x.promoted = true;
               promReviews.push(x);
             } else {
@@ -153,8 +162,17 @@ const MovieReviews = ({ movie, user, publicUsers, addReviewTrigger }) => {
             return (
               <React.Fragment>
                 <div
+                  ref={(el) => {
+                    console.log("A");
+                    if (x._id === seekReviewId && el) {
+                      el.scrollIntoView({ behavior: "smooth" });
+                      // reviewToSeek.current = el;
+                    }
+                  }}
                   key={`review-${i}`}
-                  className="row no-gutters p-4 bg-over-root-lighter rounded mb-2"
+                  className={`row no-gutters p-4 bg-over-root-lighter rounded mb-2${
+                    x._id === seekReviewId ? " fading-shadow" : ""
+                  }`}
                 >
                   <div className="col-auto pr-4 d-none d-md-block">
                     <div

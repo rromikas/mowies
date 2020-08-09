@@ -19,6 +19,8 @@ const Movie = (props) => {
   const movieId = props.match.params.movieId;
   const ratings = props.ratings;
   const apiKey = props.settings.movies_api_key;
+  const seekReviewId = props.match.params.reviewId;
+  console.log("seek rev", seekReviewId);
   //user will be needed to write comments on reviews and to add reviews
   const user = props.user;
 
@@ -294,6 +296,7 @@ const Movie = (props) => {
           </div>
         </div>
         <MovieReviews
+          seekReviewId={seekReviewId}
           movie={movie}
           user={user}
           addReviewTrigger={addReviewTrigger}

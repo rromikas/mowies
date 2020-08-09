@@ -17206,4 +17206,37 @@ input[type="number"] {
 .input-light-disabled::placeholder {
   color: #c0c0cb;
 }
+
+.fading-shadow {
+  -webkit-animation-name: fade-shadow;
+          animation-name: fade-shadow;
+  -webkit-animation-delay: 0.5s;
+          animation-delay: 0.5s;
+  -webkit-animation-duration: 1.2s;
+          animation-duration: 1.2s;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes fade-shadow {
+  from {
+    -webkit-box-shadow: 0 0 0 7px #ff0040;
+            box-shadow: 0 0 0 7px #ff0040;
+  }
+  to {
+    -webkit-box-shadow: 0 0 0 2px #ff0040;
+            box-shadow: 0 0 0 2px #ff0040;
+  }
+}
+
+@keyframes fade-shadow {
+  from {
+    -webkit-box-shadow: 0 0 0 7px #ff0040;
+            box-shadow: 0 0 0 7px #ff0040;
+  }
+  to {
+    -webkit-box-shadow: 0 0 0 2px #ff0040;
+            box-shadow: 0 0 0 2px #ff0040;
+  }
+}
 /*# sourceMappingURL=style.css.map */

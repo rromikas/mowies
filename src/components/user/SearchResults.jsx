@@ -9,15 +9,39 @@ import { SearchReviews } from "../../server/DatabaseApi";
 import ReviewsList from "./ReviewsList";
 import store from "../../store/store";
 import { Reviews } from "../../Data";
+import SimpleBar from "simplebar-react";
+import "simplebar/dist/simplebar.min.css";
+import {
+  TrendingMovies,
+  OfficialMoviesGenres,
+  OfficialSeriesGenres,
+} from "../../Data";
 
-const maxResultsPerPage = 15;
+const extractGenres = (movies) => {
+  let genres = { 0: "All" };
+  movies.forEach((x) => {
+    x.genre_ids.forEach((gid) => {
+      let genre = x.title // movies have title, series - name
+        ? OfficialMoviesGenres.find((g) => g.id === gid)
+        : OfficialSeriesGenres.find((g) => g.id === gid);
+      if (genre && genre.name) {
+        if (!(gid in genres)) {
+          genres[gid] = genre.name;
+        }
+      } else {
+      }
+    });
+  });
+  return genres;
+};
 
 const SearchResults = ({ search, settings }) => {
   const [page, setPage] = useState(1);
   const [reviews, setReviews] = useState([]);
   const [movies, setMovies] = useState([]);
   const [series, setSeries] = useState([]);
-
+  const [selectedMovieGenre, setSelectedMovieGenre] = useState(0);
+  const [selectedSerieGenre, setSelectedSerieGenre] = useState(0);
   const category = search.category;
 
   const onFail = () => {
@@ -74,6 +98,12 @@ const SearchResults = ({ search, settings }) => {
     }
     getData();
   }, [search]);
+
+  console.log("movies", movies);
+
+  const moviesGenres = extractGenres(movies);
+  const seriesGenres = extractGenres(series);
+  console.log("series genrs", seriesGenres);
   return (
     <div
       className="row no-gutters justify-content-center bg-over-root"
@@ -94,26 +124,123 @@ const SearchResults = ({ search, settings }) => {
                   </div>
                   <div className="col-60">
                     {movies.length ? (
+                      <div className="row no-gutters h5 mb-2">
+                        Movies ({movies.length})
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                    <div className="row no-gutters justify-content-end text-light align-items-center mb-4">
+                      <div className="col-auto">
+                        {Object.keys(moviesGenres).length > 1 ? (
+                          <SimpleBar
+                            style={{
+                              padding: "14px 0",
+                              width: "100%",
+                              overflowX: "auto",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {Object.keys(moviesGenres).map((x, i) => (
+                              <div
+                                onClick={() => {
+                                  console.log("X0", x);
+                                  setSelectedMovieGenre(x);
+                                }}
+                                style={{ display: "inline-block" }}
+                                key={`genre-for-popular-movie-${i}`}
+                                className={`px-4 ${
+                                  +selectedMovieGenre === +x
+                                    ? "btn-tertiary-selected text-white"
+                                    : "btn-tertiary text-light-white"
+                                }`}
+                              >
+                                {moviesGenres[x]}
+                              </div>
+                            ))}
+                          </SimpleBar>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-60">
+                    {movies.length ? (
                       <React.Fragment>
-                        <div className="row no-gutters h5 mb-2">
-                          Movies ({movies.length})
-                        </div>
-                        <MoviesList movies={movies}></MoviesList>
+                        <MoviesList
+                          movies={movies.filter((x) => {
+                            return (
+                              x.genre_ids.includes(+selectedMovieGenre) ||
+                              +selectedMovieGenre === 0
+                            );
+                          })}
+                        ></MoviesList>
                       </React.Fragment>
                     ) : (
                       ""
                     )}
+                    <div className="py-2 row no-gutters"></div>
+                    <div className="row no-gutters">
+                      <div className="col-60">
+                        {series.length ? (
+                          <div className="row no-gutters h5 mb-2">
+                            Series ({series.length})
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                        <div className="row no-gutters justify-content-end text-light align-items-center mb-4">
+                          <div className="col-auto">
+                            {Object.keys(seriesGenres).length > 1 ? (
+                              <SimpleBar
+                                style={{
+                                  padding: "14px 0",
+                                  width: "100%",
+                                  overflowX: "auto",
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
+                                {Object.keys(seriesGenres).map((x, i) => (
+                                  <div
+                                    onClick={() => {
+                                      console.log("X0", x);
+                                      setSelectedSerieGenre(x);
+                                    }}
+                                    style={{ display: "inline-block" }}
+                                    key={`genre-for-popular-movie-${i}`}
+                                    className={`px-4 ${
+                                      +selectedSerieGenre === +x
+                                        ? "btn-tertiary-selected text-white"
+                                        : "btn-tertiary text-light-white"
+                                    }`}
+                                  >
+                                    {seriesGenres[x]}
+                                  </div>
+                                ))}
+                              </SimpleBar>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     {series.length ? (
                       <React.Fragment>
-                        <div className="row no-gutters h5 mb-2">
-                          Series ({series.length})
-                        </div>
-                        <MoviesList movies={series}></MoviesList>
+                        <MoviesList
+                          movies={series.filter((x) => {
+                            return (
+                              x.genre_ids.includes(+selectedSerieGenre) ||
+                              +selectedSerieGenre === 0
+                            );
+                          })}
+                        ></MoviesList>
                       </React.Fragment>
                     ) : (
                       ""
                     )}
-
+                    <div className="py-2 row no-gutters"></div>
                     {reviews.length ? (
                       <React.Fragment>
                         <div className="row no-gutters h5 mb-2">

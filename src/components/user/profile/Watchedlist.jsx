@@ -14,8 +14,8 @@ const extractGenres = (movies, ratings) => {
             genres.push(g.name);
           }
         } else {
-          if (!genres.includes(MoviesGenresMap[g])) {
-            genres.push(MoviesGenresMap[g]);
+          if (!genres.includes(g)) {
+            genres.push(g);
           }
         }
       });
@@ -67,9 +67,9 @@ const Wishlist = ({ movies, ratings }) => {
         movies={movies.filter(
           (x) =>
             (ratings[x.movie_id] &&
-              ratings[x.movie_id].movie_genres
-                .map((x) => MoviesGenresMap[x.id ? x.id : x])
-                .includes(genres[selectedGenre])) ||
+              ratings[x.movie_id].movie_genres.includes(
+                genres[selectedGenre]
+              )) ||
             genres[selectedGenre] === "All"
         )}
       ></MoviesList>

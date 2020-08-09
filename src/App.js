@@ -103,6 +103,11 @@ function App() {
               component={PrivacyPolicy}
             ></Route>
             <Route exact path="/" component={Home}></Route>
+            <Route
+              exact
+              path="/movie/:movieId/:reviewId"
+              component={Movie}
+            ></Route>
             <Route exact path="/movie/:movieId" component={Movie}></Route>
             <Route exact path="/series/:movieId" component={Serie}></Route>
             <Route exact path="/search" component={SearchResults}></Route>
