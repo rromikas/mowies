@@ -79,6 +79,7 @@ const AddReview = ({
               <div className="col-auto">
                 <div className="row no-gutters">
                   <ReactionButton
+                    allowRate={true}
                     onClick={() =>
                       setNewReview((prev) =>
                         Object.assign({}, prev, { rating: "excellent_rate" })
@@ -92,6 +93,7 @@ const AddReview = ({
                     }
                   ></ReactionButton>
                   <ReactionButton
+                    allowRate={true}
                     onClick={() =>
                       setNewReview((prev) =>
                         Object.assign({}, prev, { rating: "good_rate" })
@@ -103,6 +105,7 @@ const AddReview = ({
                     value={ratings[movie.id] ? ratings[movie.id].good_rate : 0}
                   ></ReactionButton>
                   <ReactionButton
+                    allowRate={true}
                     onClick={() =>
                       setNewReview((prev) =>
                         Object.assign({}, prev, { rating: "ok_rate" })
@@ -114,6 +117,7 @@ const AddReview = ({
                     value={ratings[movie.id] ? ratings[movie.id].ok_rate : 0}
                   ></ReactionButton>
                   <ReactionButton
+                    allowRate={true}
                     onClick={() =>
                       setNewReview((prev) =>
                         Object.assign({}, prev, { rating: "bad_rate" })
@@ -157,7 +161,12 @@ const AddReview = ({
                     setProblem("Review is empty");
                   } else {
                     setLoading(true);
-                    let res = await WriteReview(newReview, movie, user);
+                    let res = await WriteReview(
+                      newReview,
+                      movie.id,
+                      user,
+                      settings.movies_api_key
+                    );
                     setLoading(false);
                     setNewReview({ review: "", rating: "" });
                     if (res.error) {

@@ -41,12 +41,12 @@ export const GetAllPublicUsers = () => {
   return SendGetRequest("/publicUsers/get/all");
 };
 
-export const RateMovie = (rate, movie, user) => {
-  return SendPostRequest("/ratings/update", { rate, movie, user });
+export const RateMovie = (rate, movieId, user, apiKey) => {
+  return SendPostRequest("/ratings/update", { rate, movieId, user, apiKey });
 };
 
-export const WriteReview = (review, movie, user) => {
-  return SendPostRequest("/reviews/update", { review, movie, user });
+export const WriteReview = (review, movieId, user, apiKey) => {
+  return SendPostRequest("/reviews/update", { review, movieId, user, apiKey });
 };
 
 export const GetMovieReviews = (movieId) => {
@@ -65,16 +65,16 @@ export const GetReviewComments = (reviewId) => {
   return SendPostRequest("/comments/get/review", { reviewId });
 };
 
-export const AddToWishList = (user, movie) => {
-  return SendPostRequest("/movie/addToWishlist", { user, movie });
+export const AddToWishList = (user, movieId, apiKey) => {
+  return SendPostRequest("/movie/addToWishlist", { user, movieId, apiKey });
 };
 
 export const RemoveFromWishList = (user, movieId) => {
   return SendPostRequest("/movie/removeFromWishlist", { user, movieId });
 };
 
-export const AddViewToMovie = (movie) => {
-  return SendPostRequest("/movie/views/add", { movie });
+export const AddViewToMovie = (movieId, apiKey) => {
+  return SendPostRequest("/movie/views/add", { movieId, apiKey });
 };
 
 export const LikeReview = (user, reviewId) => {
@@ -234,4 +234,8 @@ export const MoveMovieToWatchList = (user, movieId) => {
 
 export const GetReview = (reviewId) => {
   return SendPostRequest("/reviews/getOne", { reviewId });
+};
+
+export const ChangeBackgroundMovie = (apiKey) => {
+  return SendPostRequest("/changeBackgroundMovie", { apiKey });
 };

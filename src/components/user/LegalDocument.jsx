@@ -3,7 +3,6 @@ import FileViewer from "react-file-viewer";
 import TermsAndConditions from "../../documents/TermsAndConditions.docx";
 import PrivacyPolicy from "../../documents/PrivacyPolicy.docx";
 import CookiePolicy from "../../documents/CookiesPolicy.docx";
-import Navbar from "./Navbar";
 
 const LegalDocument = ({ type }) => {
   return (

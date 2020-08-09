@@ -49,12 +49,8 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
   });
   useEffect(() => {
     async function getData() {
+      setBackgroundMovie(settings.current_bg_movie);
       if (settings.movies_api_key) {
-        let data = await API.GetMovie(
-          backgroundMovieId,
-          settings.movies_api_key
-        );
-        setBackgroundMovie(data);
         let res = await GetRecommendations(8);
         if (!res.error) {
           setRecommendedMovies(res);
@@ -278,7 +274,6 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
         <PopularMovies apiKey={settings.movies_api_key}></PopularMovies>
         <PopularReviews></PopularReviews>
         <RecentReviews></RecentReviews>
-        <Footer></Footer>
       </div>
     </div>
   );

@@ -14,7 +14,12 @@ const menuItems = [
   { name: "Notifications", icon: BsBellFill },
 ];
 
-const LeftSideMenu = ({ section, setSection, isMenuOpened }) => {
+const LeftSideMenu = ({
+  section,
+  setSection,
+  isMenuOpened,
+  mobile = false,
+}) => {
   return (
     <div className="row no-gutters bg-over-root-lighter text-white h-100 admin-menu">
       <div className="col-60">
@@ -55,10 +60,12 @@ const LeftSideMenu = ({ section, setSection, isMenuOpened }) => {
               <div
                 onClick={() => {
                   setSection(i);
-                  store.dispatch({
-                    type: "SET_DASHBOARD_MENU_OPENED",
-                    isOpened: !isMenuOpened,
-                  });
+                  if (mobile) {
+                    store.dispatch({
+                      type: "SET_DASHBOARD_MENU_OPENED",
+                      isOpened: !isMenuOpened,
+                    });
+                  }
                 }}
                 key={`menu-item-${i}`}
                 className={`align-items-center px-3 btn-custom text-left row no-gutters${

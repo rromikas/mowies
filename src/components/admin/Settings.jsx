@@ -1,9 +1,42 @@
-import React, { useState, useEffect, useRef } from "react";
-import { UpdateOrCreateSettings } from "../../server/DatabaseApi";
+import React, { useState } from "react";
+import {
+  UpdateOrCreateSettings,
+  ChangeBackgroundMovie,
+} from "../../server/DatabaseApi";
 import { connect } from "react-redux";
 import store from "../../store/store";
+import date from "date-and-time";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedinIn,
+  FaTwitter,
+} from "react-icons/fa";
+import Loader from "../utility/Loader";
+
+const socialIcons = [
+  { icon: FaFacebookF, name: "Facebook" },
+  { icon: FaInstagram, name: "Instagram" },
+  { icon: FaLinkedinIn, name: "Linkedin" },
+  { icon: FaTwitter, name: "Twitter" },
+];
 
 const Settings = ({ settings }) => {
+  const [problem, setProblem] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const validations = [
+    {
+      valid:
+        (/^http/.test(settings.FacebookLink) || settings.FacebookLink === "") &&
+        (/^http/.test(settings.TwitterLink) || settings.TwitterLink === "") &&
+        (/^http/.test(settings.LinkedinLinks) ||
+          settings.LinkedinLink === "") &&
+        (/^http/.test(settings.InstagramLink) || settings.InstagramLink === ""),
+
+      error: "Social link must start with http:// or https://",
+    },
+  ];
   return (
     <div className={`row no-gutters admin-screen`}>
       <div className="col-60">
@@ -194,7 +227,7 @@ const Settings = ({ settings }) => {
                   </div>
                 </div>
               </div>
-              <div className="col-xl-40 col-60">
+              <div className="col-xl-40 col-60 mb-4">
                 <div className="row no-gutters mb-1">
                   Background image refresh time (days, hours, minutes)
                 </div>
@@ -239,7 +272,7 @@ const Settings = ({ settings }) => {
                       ></input>
                     </div>
                   </div>
-                  <div className="col-20">
+                  <div className="col-20 ">
                     <div className="row no-gutters text-muted">minutes</div>
                     <div className="row no-gutters">
                       <input
@@ -261,7 +294,130 @@ const Settings = ({ settings }) => {
                   </div>
                 </div>
               </div>
-              <div className="col-60 mt-5">
+              <div className="col-60 mb-4">
+                <div className="row no-gutters mb-1">
+                  Current background movie
+                </div>
+                <div className="row no-gutters mb-3">
+                  <img
+                    style={{ maxWidth: "500px" }}
+                    width="100%"
+                    src={`https://image.tmdb.org/t/p/w500${settings.current_bg_movie.backdrop_path}`}
+                  ></img>
+                </div>
+                <div className="row no-gutters mb-1">Title</div>
+                <div className="row no-gutters mb-3">
+                  <input
+                    disabled
+                    className="input-light-disabled w-100 px-3"
+                    value={settings.current_bg_movie.title}
+                  ></input>
+                </div>
+                <div className="row no-gutters mb-3">
+                  <div className="col-auto mr-4">
+                    <div className="row no-gutters mb-1">Set Date</div>
+                    <div className="row no-gutters">
+                      <input
+                        disabled
+                        className="input-light-disabled px-3"
+                        value={date.format(
+                          new Date(settings.current_bg_movie.date_set),
+                          "YYYY-MM-DD @ hh:mm A"
+                        )}
+                      ></input>
+                    </div>
+                  </div>
+                  <div className="col-auto">
+                    <div className="row no-gutters mb-1">Refresh Date</div>
+                    <div className="row no-gutters">
+                      <input
+                        disabled
+                        className="input-light-disabled px-3"
+                        value={date.format(
+                          new Date(
+                            settings.current_bg_movie.date_set +
+                              settings.bg_image_refresh_time_minutes * 60000 +
+                              settings.bg_image_refresh_time_hours * 3600000 +
+                              settings.bg_image_refresh_time_days * 86400000
+                          ),
+                          "YYYY-MM-DD @ hh:mm A"
+                        )}
+                      ></input>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="row no-gutters">
+                  <div
+                    className="col-auto btn-custom btn-custom-primary btn-small"
+                    onClick={async () => {
+                      setLoading(true);
+                      let res = await ChangeBackgroundMovie(
+                        settings.movies_api_key
+                      );
+                      setLoading(false);
+                      store.dispatch({
+                        type: "UPDATE_SETTINGS",
+                        settings: { current_bg_movie: res },
+                      });
+                    }}
+                  >
+                    {loading ? (
+                      <Loader
+                        color={"white"}
+                        style={{
+                          position: "absolute",
+                          left: "10px",
+                          top: 0,
+                          bottom: 0,
+                          margin: "auto",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                        loading={loading}
+                        size={20}
+                      ></Loader>
+                    ) : (
+                      "Refresh"
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="col-60">
+                <div className="row no-gutters mb-1">Set social links</div>
+                {socialIcons.map((x) => (
+                  <div className="row no-gutters mb-2">
+                    <div className="col-auto mr-2">
+                      <div className="square-40 rounded-circle bg-white d-flex flex-center">
+                        <x.icon fontSize="24px" className="text-dark"></x.icon>
+                      </div>
+                    </div>
+                    <div className="col">
+                      <input
+                        spellCheck={false}
+                        type="text"
+                        placeholder={`Paste ${x.name} link`}
+                        value={settings[`${x.name}Link`]}
+                        onChange={(e) => {
+                          e.persist();
+                          store.dispatch({
+                            type: "UPDATE_SETTINGS",
+                            settings: { [`${x.name}Link`]: e.target.value },
+                          });
+                        }}
+                        className="px-3 input-light w-100"
+                      ></input>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="col-60 mt-3">
+                <div
+                  style={{ height: "30px", opacity: problem ? 1 : 0 }}
+                  className="row no-gutters align-items-center text-danger"
+                >
+                  {problem}
+                </div>
                 <div className="row no-gutters">
                   <div className="btn-custom btn-custom-secondary btn-small mr-sm-3 mb-3 col-60 col-sm-auto">
                     Cancel
@@ -269,25 +425,31 @@ const Settings = ({ settings }) => {
                   <div
                     className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto"
                     onClick={async () => {
-                      let res = await UpdateOrCreateSettings(settings);
-                      if (res.error) {
-                        store.dispatch({
-                          type: "SET_NOTIFICATION",
-                          notification: {
-                            title: "Error",
-                            message: "Settings were not updated",
-                            type: "failure",
-                          },
-                        });
+                      let invalid = validations.filter((x) => !x.valid);
+                      if (invalid.length) {
+                        setProblem(invalid[0].error);
                       } else {
-                        store.dispatch({
-                          type: "SET_NOTIFICATION",
-                          notification: {
-                            title: "Settings updated!",
-                            message: "Settings were successfully updated",
-                            type: "success",
-                          },
-                        });
+                        setProblem("");
+                        let res = await UpdateOrCreateSettings(settings);
+                        if (res.error) {
+                          store.dispatch({
+                            type: "SET_NOTIFICATION",
+                            notification: {
+                              title: "Error",
+                              message: "Settings were not updated",
+                              type: "failure",
+                            },
+                          });
+                        } else {
+                          store.dispatch({
+                            type: "SET_NOTIFICATION",
+                            notification: {
+                              title: "Settings updated!",
+                              message: "Settings were successfully updated",
+                              type: "success",
+                            },
+                          });
+                        }
                       }
                     }}
                   >

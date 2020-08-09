@@ -70,25 +70,27 @@ const EditPromotion = ({ currentPromotion, getBack }) => {
         </div> */}
         <div className="row no-gutters mb-4">
           <div className="col-xl-40 col-md-50 col-60">
-            <div className="row no-gutters mb-1">Promotion Title</div>
+            <div className="row no-gutters mb-1">Description</div>
             <div className="row no-gutters">
-              <input
-                type="text"
-                className="input-light w-100 px-3"
-                value={promotion.title}
+              <textarea
+                value={promotion.description ? promotion.description : ""}
                 onChange={(e) => {
                   e.persist();
                   setPromotion((prev) =>
-                    Object.assign({}, prev, { title: e.target.value })
+                    Object.assign({}, prev, { description: e.target.value })
                   );
                 }}
-              ></input>
+                className="textarea-light w-100"
+                style={{ height: "150px" }}
+              ></textarea>
             </div>
           </div>
         </div>
         <div className="row no-gutters mb-4">
-          <div className="col-60 mb-1">{promotion.content_type}</div>
-          <div className="col-60">
+          <div className="col-xl-40 col-md-50 col-60 mb-1">
+            {promotion.content_type}
+          </div>
+          <div className="col-xl-40 col-md-50 col-60">
             <textarea
               value={
                 promotion.content

@@ -10,7 +10,12 @@ import { GetReviews, DeleteMultipleReviews } from "../../server/DatabaseApi";
 import { connect } from "react-redux";
 import store from "../../store/store";
 
-const Reviews = ({ setEditReviewSection, setEditReview, publicUsers }) => {
+const Reviews = ({
+  setEditReviewSection,
+  setEditReview,
+  publicUsers,
+  ratings,
+}) => {
   const [action, setAction] = useState("");
   const [role, setRole] = useState("");
   const [searchKey, setSearchKey] = useState("User");
@@ -430,7 +435,9 @@ const Reviews = ({ setEditReviewSection, setEditReview, publicUsers }) => {
                             }`}
                           >
                             <div style={{ maxWidth: "150px" }}>
-                              {x.movie_title}
+                              {ratings[x.movie_id]
+                                ? ratings[x.movie_id].movie_title
+                                : ""}
                             </div>
                           </td>
                           <td
@@ -583,6 +590,7 @@ const Reviews = ({ setEditReviewSection, setEditReview, publicUsers }) => {
 function mapp(state, ownProps) {
   return {
     publicUsers: state.publicUsers,
+    ratings: state.ratings,
     ...ownProps,
   };
 }

@@ -17029,6 +17029,11 @@ input[type="number"]::-webkit-outer-spin-button {
   animation: load8 1.1s infinite linear;
 }
 
+.square-20 {
+  width: 20px !important;
+  height: 20px !important;
+}
+
 .loader-light {
   margin: 60px auto;
   font-size: 10px;
@@ -17171,5 +17176,34 @@ input[type="number"] {
 
 .underline-link:hover {
   text-decoration: underline;
+}
+
+.input-light-disabled {
+  height: 44px;
+  line-height: 40px;
+  border: 1px solid #dfe1e6;
+  background: white;
+  outline: none;
+  border-radius: 2px;
+  -webkit-box-shadow: 0 0 0 1px #dfe1e6 !important;
+          box-shadow: 0 0 0 1px #dfe1e6 !important;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.input-light-disabled::-webkit-input-placeholder {
+  color: #c0c0cb;
+}
+
+.input-light-disabled:-ms-input-placeholder {
+  color: #c0c0cb;
+}
+
+.input-light-disabled::-ms-input-placeholder {
+  color: #c0c0cb;
+}
+
+.input-light-disabled::placeholder {
+  color: #c0c0cb;
 }
 /*# sourceMappingURL=style.css.map */

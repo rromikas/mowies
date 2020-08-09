@@ -948,6 +948,11 @@ input[type="number"]::-webkit-outer-spin-button {
   animation: load8 1.1s infinite linear;
 }
 
+.square-20 {
+  width: 20px !important;
+  height: 20px !important;
+}
+
 .loader-light {
   margin: 60px auto;
   font-size: 10px;
@@ -1089,4 +1094,19 @@ input[type="number"] {
 
 .admin-screen-title {
   @extend .h5;
+}
+
+.input-light-disabled {
+  height: $main-btn-height;
+  line-height: $main-btn-line-height;
+  border: 1px solid rgb(223, 225, 230);
+  background: white;
+  outline: none;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgb(223, 225, 230) !important;
+  transition: all 0.3s;
+}
+
+.input-light-disabled::placeholder {
+  color: rgb(192, 192, 203);
 }

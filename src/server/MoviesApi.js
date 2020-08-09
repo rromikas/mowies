@@ -7,6 +7,16 @@ const FormatRequestUrl = (path, params = [], apiKey) => {
     .join("&")}`;
 };
 
+export const GetTrendingMovies = () => {
+  return fetch(
+    FormatRequestUrl(
+      "/trending/movie/week",
+      [],
+      "3a194d2f01cf050ac9ff97073d4a009c"
+    )
+  ).then((res) => res.json());
+};
+
 export const GetPopularMoviesByGenre = (genres, apiKey) => {
   return fetch(
     FormatRequestUrl(

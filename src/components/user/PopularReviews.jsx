@@ -2,15 +2,21 @@ import React, { useEffect, useState, useRef } from "react";
 import date from "date-and-time";
 import { Emoji } from "emoji-mart";
 import { MdThumbUp, MdChatBubble } from "react-icons/md";
-import { GetReviewComments, GetPopularReviews } from "../../server/DatabaseApi";
+import {
+  GetReviewComments,
+  GetPopularReviews,
+  LikeReview,
+  LikeComment,
+} from "../../server/DatabaseApi";
 import { connect } from "react-redux";
 import { Collapse } from "@material-ui/core";
 import Paigination from "../utility/Paigination";
 import history from "../../History";
 import ReplyToReview from "./ReplyToReview";
 import store from "../../store/store";
+import Loader from "../utility/Loader";
 
-const PopularReviews = ({ publicUsers, settings, user }) => {
+const PopularReviews = ({ publicUsers, settings, user, ratings }) => {
   //comments object.Its property will be review id.
   const [comments, setComments] = useState({});
 
@@ -19,6 +25,9 @@ const PopularReviews = ({ publicUsers, settings, user }) => {
   const [reviewIdOfVisibleComments, setReviewIdOfVisibleComments] = useState(
     -1
   );
+
+  const [loadingComment, setLoadingComment] = useState(-1);
+  const [loadingReview, setLoadingReview] = useState(-1);
 
   // partitioning reviews into pages (8 reviews per page)
   const [page, setPage] = useState(-1);
@@ -53,6 +62,7 @@ const PopularReviews = ({ publicUsers, settings, user }) => {
     async function getData() {
       if (reviewIdOfVisibleComments !== -1) {
         let data = await GetReviewComments(reviewIdOfVisibleComments);
+
         setComments((prev) =>
           Object.assign({}, prev, { [reviewIdOfVisibleComments]: data })
         );
@@ -130,7 +140,11 @@ const PopularReviews = ({ publicUsers, settings, user }) => {
                       onClick={() => history.push(`/movie/${x.movie_id}`)}
                       width="100%"
                       style={{ borderRadius: "13px", cursor: "pointer" }}
-                      src={`https://image.tmdb.org/t/p/w154${x.movie_poster}`}
+                      src={`https://image.tmdb.org/t/p/w154${
+                        ratings[x.movie_id]
+                          ? ratings[x.movie_id].movie_poster
+                          : "https://critics.io/img/movies/poster-placeholder.png"
+                      }`}
                     ></img>
                   </div>
                   {/* <div className="row no-gutters text-white h6 mb-0">
@@ -148,7 +162,11 @@ const PopularReviews = ({ publicUsers, settings, user }) => {
                           <div
                             className="square-70 rounded bg-image"
                             style={{
-                              backgroundImage: `url(https://image.tmdb.org/t/p/w154${x.movie_poster})`,
+                              backgroundImage: `url(https://image.tmdb.org/t/p/w154${
+                                ratings[x.movie_id]
+                                  ? ratings[x.movie_id].movie_poster
+                                  : "https://critics.io/img/movies/poster-placeholder.png"
+                              })`,
                             }}
                           ></div>
                           {/* <img
@@ -160,8 +178,16 @@ const PopularReviews = ({ publicUsers, settings, user }) => {
                         </div>
                         <div className="col">
                           <div className="row no-gutters text-white mb-0">
-                            {x.movie_title} (
-                            {x.movie_release_date.substring(0, 4)})
+                            {ratings[x.movie_id]
+                              ? ratings[x.movie_id].movie_title
+                              : ""}{" "}
+                            (
+                            {ratings[x.movie_id]
+                              ? ratings[
+                                  x.movie_id
+                                ].movie_release_date.substring(0, 4)
+                              : ""}
+                            )
                           </div>
                           {/* <div className="row no-gutters text-muted">
                             <div className="text-truncate">
@@ -245,10 +271,58 @@ const PopularReviews = ({ publicUsers, settings, user }) => {
                               {x.likes.length}
                             </div>
                             <div className="col-auto mr-2 ">
-                              <MdThumbUp
-                                fontSize="24px"
-                                className="text-green"
-                              ></MdThumbUp>
+                              {loadingReview === i ? (
+                                <div className="square-20">
+                                  <Loader
+                                    color={"white"}
+                                    style={{
+                                      position: "absolute",
+                                      left: "10px",
+                                      top: 0,
+                                      bottom: 0,
+                                      margin: "auto",
+                                      display: "flex",
+                                      alignItems: "center",
+                                    }}
+                                    loading={loadingReview === i}
+                                    size={20}
+                                  ></Loader>
+                                </div>
+                              ) : (
+                                <MdThumbUp
+                                  onClick={async () => {
+                                    if (user.token) {
+                                      setLoadingReview(i);
+                                      let res = await LikeReview(user, x._id);
+                                      setLoadingReview(-1);
+                                      if (res.error) {
+                                        store.dispatch({
+                                          type: "SET_NOTIFICATION",
+                                          notification: {
+                                            title: "Error",
+                                            message: res.error,
+                                            type: "failure",
+                                          },
+                                        });
+                                      } else {
+                                        setRefreshReviews(!refreshReviews);
+                                      }
+                                    } else {
+                                      store.dispatch({
+                                        type: "SET_NOTIFICATION",
+                                        notification: {
+                                          title: "Login required",
+                                          message:
+                                            "You need to login to like review",
+                                          type: "failure",
+                                        },
+                                      });
+                                    }
+                                  }}
+                                  fontSize="24px"
+                                  className="text-green scale-transition cursor-pointer"
+                                ></MdThumbUp>
+                              )}
                             </div>
                             <div className="col-auto mr-2">
                               {x.comments.length}
@@ -370,11 +444,64 @@ const PopularReviews = ({ publicUsers, settings, user }) => {
                                   <div className="col-auto mr-2">
                                     {y.likes.length}
                                   </div>
-                                  <div className="col-auto mr-2 ">
-                                    <MdThumbUp
-                                      fontSize="24px"
-                                      className="text-green cursor-pointer"
-                                    ></MdThumbUp>
+                                  <div className="col-auto mr-2">
+                                    {loadingComment === ind ? (
+                                      <div className="square-20">
+                                        <Loader
+                                          color={"white"}
+                                          style={{
+                                            position: "absolute",
+                                            left: "10px",
+                                            top: 0,
+                                            bottom: 0,
+                                            margin: "auto",
+                                            display: "flex",
+                                            alignItems: "center",
+                                          }}
+                                          loading={loadingComment === ind}
+                                          size={20}
+                                        ></Loader>
+                                      </div>
+                                    ) : (
+                                      <MdThumbUp
+                                        onClick={async () => {
+                                          if (user.token) {
+                                            setLoadingComment(ind);
+                                            let res = await LikeComment(
+                                              user,
+                                              y._id
+                                            );
+                                            setLoadingComment(-1);
+                                            if (res.error) {
+                                              store.dispatch({
+                                                type: "SET_NOTIFICATION",
+                                                notification: {
+                                                  title: "Error",
+                                                  message: res.error,
+                                                  type: "failure",
+                                                },
+                                              });
+                                            } else {
+                                              setRefreshComments(
+                                                !refreshComments
+                                              );
+                                            }
+                                          } else {
+                                            store.dispatch({
+                                              type: "SET_NOTIFICATION",
+                                              notification: {
+                                                title: "Login required",
+                                                message:
+                                                  "You need to login to like review",
+                                                type: "failure",
+                                              },
+                                            });
+                                          }
+                                        }}
+                                        fontSize="24px"
+                                        className="text-green scale-transition cursor-pointer"
+                                      ></MdThumbUp>
+                                    )}
                                   </div>
                                   <div
                                     className="col-auto text-orange btn-tertiary"
@@ -411,7 +538,7 @@ const PopularReviews = ({ publicUsers, settings, user }) => {
                         </div>
                       ))
                   : ""}
-                <div className="row no-gutters mt-2">
+                <div className="row no-gutters justify-content-end mt-2">
                   <div className="col-auto ml-4">
                     <Paigination
                       count={Math.ceil(
@@ -438,14 +565,6 @@ const PopularReviews = ({ publicUsers, settings, user }) => {
           setComments={setComments}
           movie={{
             id: review.movie_id,
-            release_date: review.movie_release_date,
-            title: review.movie_title,
-            genres: review.movie_genres.split("/").map((x) => {
-              return {
-                name: x,
-              };
-            }),
-            poster_path: review.movie_poster,
           }}
           reviewAuthor={
             publicUsers[review.author]
@@ -466,6 +585,7 @@ function mapp(state, ownProps) {
   return {
     publicUsers: state.publicUsers,
     settings: state.settings,
+    ratings: state.ratings,
     user: state.user,
     ...ownProps,
   };

@@ -18,6 +18,7 @@ const Profile = (props) => {
   const user = props.user;
   const userId = props.match.params.userId;
   const publicUsers = props.publicUsers;
+  const ratings = props.ratings;
   const sectionInUrl = props.match.params.section;
 
   const [profileData, setProfileData] = useState({
@@ -82,7 +83,7 @@ const Profile = (props) => {
   }, [section, profileData.reviews.length]);
 
   return (
-    <div className="row no-gutters">
+    <div className="row no-gutters" style={{ minHeight: "800px" }}>
       <EditProfile
         refreshProfile={() => setRefreshProfile(!refreshProfile)}
         editProfileOpen={editProfileOpen}
@@ -235,22 +236,23 @@ const Profile = (props) => {
         </div>
         {section === 0 ? (
           <Wishlist
+            ratings={ratings}
             refreshProfile={() => setRefreshProfile(!refreshProfile)}
             movies={profileData.wishlist}
             owner={user._id === profileData._id}
           ></Wishlist>
         ) : section === 1 ? (
-          <Watchedlist movies={profileData.watchedlist}></Watchedlist>
+          <Watchedlist
+            ratings={ratings}
+            movies={profileData.watchedlist}
+          ></Watchedlist>
         ) : section === 2 ? (
-          <Reviews reviews={reviews}></Reviews>
+          <Reviews ratings={ratings} reviews={reviews}></Reviews>
         ) : section === 3 ? (
-          <Comments reviews={comments}></Comments>
+          <Comments ratings={ratings} reviews={comments}></Comments>
         ) : (
           ""
         )}
-      </div>
-      <div className="col-60">
-        <Footer></Footer>
       </div>
     </div>
   );
@@ -259,6 +261,7 @@ const Profile = (props) => {
 function mapp(state, ownProps) {
   return {
     user: state.user,
+    ratings: state.ratings,
     publicUsers: state.publicUsers,
     ...ownProps,
   };

@@ -42,7 +42,7 @@ const Movie = (props) => {
   useEffect(() => {
     //check if movie fetched from api
     if (movie.title) {
-      AddViewToMovie(movie);
+      AddViewToMovie(movie.id, apiKey);
     }
   }, [movie.title]);
 
@@ -298,9 +298,6 @@ const Movie = (props) => {
           user={user}
           addReviewTrigger={addReviewTrigger}
         ></MovieReviews>
-      </div>
-      <div className="col-60">
-        <Footer></Footer>
       </div>
     </div>
   );

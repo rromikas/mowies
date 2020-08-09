@@ -102,9 +102,29 @@ function settingsReducer(
     no_allowed_reviews: 5,
     no_comment_characters: 400,
     no_review_words: 80,
-    bg_image_refresh_time_days: 0,
+    bg_image_refresh_time_days: 1,
     bg_image_refresh_time_hours: 0,
     bg_image_refresh_time_minutes: 0,
+    FacebookLink: "",
+    InstagramLink: "",
+    TwitterLink: "",
+    LinkedinLink: "",
+    current_bg_movie: {
+      date_set: Date.now(),
+      id: "300671",
+      poster_path: "/4qnEeVPM8Yn5dIVC4k4yyjrUXeR.jpg",
+      backdrop_path: "/ayDMYGUNVvXS76wQgFwTiUIDNb5.jpg",
+      release_date: "2016-01-13",
+      overview:
+        "An American Ambassador is killed during an attack at a U.S. compound in Libya as a security team struggles to make sense out of the chaos.",
+      title: "13 Hours: The Secret Soldiers of Benghazi",
+      genres: [
+        { id: 28, name: "Action" },
+        { id: 36, name: "History" },
+        { id: 53, name: "Thriller" },
+      ],
+      runtime: 144,
+    },
   },
   action
 ) {

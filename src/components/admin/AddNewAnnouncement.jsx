@@ -97,100 +97,54 @@ const AddNewAnnouncement = ({ user, getBack }) => {
         <div className="row no-gutters">
           <div className="col-xl-40 col-md-50 col-60">
             <div className="row no-gutters">
-              <div className="col-sm-30 col-60 pr-sm-3 mb-4">
+              <div className="col-60 pr-sm-3 mb-4">
                 <div className="row no-gutters">Start Date</div>
                 <div className="row no-gutters">
-                  <DayPickerInput
-                    value={date.format(
-                      new Date(announcement.start_date),
-                      "DD/MM/YYYY"
-                    )}
-                    component={(props) => (
-                      <div className="position-relative w-100">
-                        <BsCalendar
-                          style={{
-                            position: "absolute",
-                            top: 0,
-                            bottom: 0,
-                            margin: "auto",
-                            left: "18px",
-                          }}
-                        ></BsCalendar>
-                        <input
-                          {...props}
-                          className="input-light w-100 pl-5 pr-3"
-                          placeholder="YYYY-MM-DD"
-                        ></input>
-                      </div>
-                    )}
-                    onDayChange={(day) => {
-                      if (day) {
-                        let d = new Date(announcement.start_date);
-                        let fy = day.getFullYear();
-                        let year = day.getFullYear();
-                        let month = day.getMonth();
-                        let niceDay = day.getDate();
-                        d.setFullYear(year);
-                        d.setMonth(month);
-                        d.setDate(niceDay);
-                        setAnnouncement((prev) =>
-                          Object.assign({}, prev, { start_date: d.getTime() })
-                        );
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="col-sm-30 col-60 mb-4">
-                <div className="row no-gutters">End Date</div>
-                <div className="row no-gutters">
-                  <DayPickerInput
-                    value={date.format(
-                      new Date(announcement.end_date),
-                      "DD/MM/YYYY"
-                    )}
-                    component={(props) => (
-                      <div className="position-relative w-100">
-                        <BsCalendar
-                          style={{
-                            position: "absolute",
-                            top: 0,
-                            bottom: 0,
-                            margin: "auto",
-                            left: "18px",
-                          }}
-                        ></BsCalendar>
-                        <input
-                          {...props}
-                          className="input-light w-100 pl-5 pr-3"
-                          placeholder="YYYY-MM-DD"
-                        ></input>
-                      </div>
-                    )}
-                    onDayChange={(day) => {
-                      if (day) {
-                        let d = new Date(announcement.end_date);
-                        let fy = day.getFullYear();
-                        let year = day.getFullYear();
-                        let month = day.getMonth();
-                        let niceDay = day.getDate();
-                        d.setFullYear(year);
-                        d.setMonth(month);
-                        d.setDate(niceDay);
-                        setAnnouncement((prev) =>
-                          Object.assign({}, prev, { end_date: d.getTime() })
-                        );
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="row no-gutters">
-              <div className="col-sm-30 pr-sm-3 col-60 mb-4">
-                <div className="row no-gutters">Start Time</div>
-                <div className="row no-gutters">
-                  <div className="col-60 position-relative input-light">
+                  <div className="col-auto mr-2" style={{ width: "182px" }}>
+                    <DayPickerInput
+                      value={date.format(
+                        new Date(announcement.start_date),
+                        "DD/MM/YYYY"
+                      )}
+                      component={(props) => (
+                        <div className="position-relative">
+                          <BsCalendar
+                            style={{
+                              position: "absolute",
+                              top: 0,
+                              bottom: 0,
+                              margin: "auto",
+                              left: "18px",
+                            }}
+                          ></BsCalendar>
+                          <input
+                            {...props}
+                            className="input-light w-100 pl-5 pr-3"
+                            placeholder="YYYY-MM-DD"
+                          ></input>
+                        </div>
+                      )}
+                      onDayChange={(day) => {
+                        if (day) {
+                          let d = new Date(announcement.start_date);
+                          let fy = day.getFullYear();
+                          let year = day.getFullYear();
+                          let month = day.getMonth();
+                          let niceDay = day.getDate();
+                          d.setFullYear(year);
+                          d.setMonth(month);
+                          d.setDate(niceDay);
+                          setAnnouncement((prev) =>
+                            Object.assign({}, prev, { start_date: d.getTime() })
+                          );
+                        }
+                      }}
+                    />
+                  </div>
+                  <div
+                    className="col-auto position-relative input-light"
+                    style={{ width: "150px" }}
+                  >
                     <BsClock
                       style={{
                         position: "absolute",
@@ -222,10 +176,56 @@ const AddNewAnnouncement = ({ user, getBack }) => {
                   </div>
                 </div>
               </div>
-              <div className="col-sm-30 col-60 mb-4">
-                <div className="row no-gutters">End Time</div>
+            </div>
+            <div className="row no-gutters">
+              <div className="col-60 mb-4">
+                <div className="row no-gutters">End Date</div>
                 <div className="row no-gutters">
-                  <div className="col-60 position-relative input-light">
+                  <div className="col-auto mr-2" style={{ width: "182px" }}>
+                    <DayPickerInput
+                      value={date.format(
+                        new Date(announcement.end_date),
+                        "DD/MM/YYYY"
+                      )}
+                      component={(props) => (
+                        <div className="position-relative">
+                          <BsCalendar
+                            style={{
+                              position: "absolute",
+                              top: 0,
+                              bottom: 0,
+                              margin: "auto",
+                              left: "18px",
+                            }}
+                          ></BsCalendar>
+                          <input
+                            {...props}
+                            className="input-light w-100 pl-5 pr-3"
+                            placeholder="YYYY-MM-DD"
+                          ></input>
+                        </div>
+                      )}
+                      onDayChange={(day) => {
+                        if (day) {
+                          let d = new Date(announcement.end_date);
+                          let fy = day.getFullYear();
+                          let year = day.getFullYear();
+                          let month = day.getMonth();
+                          let niceDay = day.getDate();
+                          d.setFullYear(year);
+                          d.setMonth(month);
+                          d.setDate(niceDay);
+                          setAnnouncement((prev) =>
+                            Object.assign({}, prev, { end_date: d.getTime() })
+                          );
+                        }
+                      }}
+                    />
+                  </div>
+                  <div
+                    className="col-auto position-relative input-light"
+                    style={{ width: "150px" }}
+                  >
                     <BsClock
                       style={{
                         position: "absolute",

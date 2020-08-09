@@ -128,11 +128,6 @@ const SearchResults = ({ search, settings }) => {
                 </div>
               </div>
             </div>
-            <div className="row no-gutters flex-grow-0 align-items-end">
-              <div className="col-60">
-                <Footer></Footer>
-              </div>
-            </div>
           </div>
         </div>
       </div>

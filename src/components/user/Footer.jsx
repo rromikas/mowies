@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import history from "../../History";
+import { useLocation } from "react-router-dom";
 import {
   FaTwitter,
   FaFacebookF,
@@ -8,20 +9,26 @@ import {
   FaLinkedinIn,
 } from "react-icons/fa";
 
-const Footer = ({ user }) => {
+const Footer = ({ user, settings }) => {
   const menuItems = [
     { name: "Home", path: "/" },
-    { name: "My Wishlist", path: user._id ? `/profile/${user._id}` : "/login" },
-    { name: "My Reviews", path: user._id ? `/profile/${user._id}` : "/login" },
+    {
+      name: "My Wishlist",
+      path: user._id ? `/profile/${user._id}/0` : "/login",
+    },
+    {
+      name: "My Reviews",
+      path: user._id ? `/profile/${user._id}/2` : "/login",
+    },
     { name: "About Us", path: "/" },
     { name: "Contact", path: "/" },
   ];
 
   const socialIcons = [
-    { icon: FaFacebookF, path: "https://facebook.com" },
-    { icon: FaInstagram, path: "https://instagram.com" },
-    { icon: FaLinkedinIn, path: "https://linkedin.com" },
-    { icon: FaTwitter, path: "https://twitter.com" },
+    { icon: FaFacebookF, path: settings.FacebookLink },
+    { icon: FaInstagram, path: settings.InstagramLink },
+    { icon: FaLinkedinIn, path: settings.LinkedinLink },
+    { icon: FaTwitter, path: settings.TwitterLink },
   ];
 
   const secodaryItems = [
@@ -30,9 +37,15 @@ const Footer = ({ user }) => {
     { name: "Terms And Conditions", path: "/terms-and-conditions" },
   ];
 
-  return (
+  const location = useLocation();
+
+  return location.pathname !== "/login" && location.pathname !== "/signup" ? (
     <div className="row no-gutters justify-content-center bg-over-root-lighter text-white">
-      <div className="col-60 p-sm-5 p-4" style={{ maxWidth: "1200px" }}>
+      <div
+        className={`p-sm-5 p-4 col-60${
+          location.pathname !== "/admin" ? " content-container" : ""
+        }`}
+      >
         <div className="row no-gutters justify-content-between align-items-center">
           <div className="col-auto mb-4">
             <div className="row no-gutters">
@@ -56,7 +69,12 @@ const Footer = ({ user }) => {
                     i === socialIcons.length - 1 ? "0" : "2"
                   }`}
                 >
-                  <div className="square-40 rounded-circle bg-white d-flex flex-center">
+                  <div
+                    className="square-40 rounded-circle bg-white d-flex flex-center"
+                    onClick={() => {
+                      window.open(x.path);
+                    }}
+                  >
                     <x.icon fontSize="24px" className="text-dark"></x.icon>
                   </div>
                 </div>
@@ -92,12 +110,15 @@ const Footer = ({ user }) => {
         </div>
       </div>
     </div>
+  ) : (
+    ""
   );
 };
 
 function mapp(state, ownProps) {
   return {
     user: state.user,
+    settings: state.settings,
     ...ownProps,
   };
 }

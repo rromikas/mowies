@@ -19,11 +19,15 @@ import { connect } from "react-redux";
 import { Collapse } from "@material-ui/core";
 import Paigination from "../utility/Paigination";
 import store from "../../store/store";
+import Loader from "../utility/Loader";
 
 const MovieReviews = ({ movie, user, publicUsers, addReviewTrigger }) => {
   // local reviews object in order to be able to update it quickly instead of waiting for real changes in database
   const [reviews, setReviews] = useState([]);
   const [promotedReviews, setPromotedReviews] = useState([]);
+
+  const [loadingComment, setLoadingComment] = useState(-1);
+  const [loadingReview, setLoadingReview] = useState(-1);
 
   //admin can edit review and rating in promotions section. So promotions have edited content.
   const [promotedContents, setPromotedContents] = useState({});
@@ -265,37 +269,58 @@ const MovieReviews = ({ movie, user, publicUsers, addReviewTrigger }) => {
                         <div className="row no-gutters align-items-center">
                           <div className="col-auto mr-2">{x.likes.length}</div>
                           <div className="col-auto mr-2 ">
-                            <MdThumbUp
-                              onClick={async () => {
-                                if (user.token) {
-                                  let res = await LikeReview(user, x._id);
-                                  if (res.error) {
+                            {loadingReview === i ? (
+                              <div className="square-20">
+                                <Loader
+                                  color={"white"}
+                                  style={{
+                                    position: "absolute",
+                                    left: "10px",
+                                    top: 0,
+                                    bottom: 0,
+                                    margin: "auto",
+                                    display: "flex",
+                                    alignItems: "center",
+                                  }}
+                                  loading={loadingReview === i}
+                                  size={20}
+                                ></Loader>
+                              </div>
+                            ) : (
+                              <MdThumbUp
+                                onClick={async () => {
+                                  if (user.token) {
+                                    setLoadingReview(i);
+                                    let res = await LikeReview(user, x._id);
+                                    setLoadingReview(-1);
+                                    if (res.error) {
+                                      store.dispatch({
+                                        type: "SET_NOTIFICATION",
+                                        notification: {
+                                          title: "Error",
+                                          message: res.error,
+                                          type: "failure",
+                                        },
+                                      });
+                                    } else {
+                                      setRefreshReviews(!refreshReviews);
+                                    }
+                                  } else {
                                     store.dispatch({
                                       type: "SET_NOTIFICATION",
                                       notification: {
-                                        title: "Error",
-                                        message: res.error,
+                                        title: "Login required",
+                                        message:
+                                          "You need to login to like review",
                                         type: "failure",
                                       },
                                     });
-                                  } else {
-                                    setRefreshReviews(!refreshReviews);
                                   }
-                                } else {
-                                  store.dispatch({
-                                    type: "SET_NOTIFICATION",
-                                    notification: {
-                                      title: "Login required",
-                                      message:
-                                        "You need to login to like review",
-                                      type: "failure",
-                                    },
-                                  });
-                                }
-                              }}
-                              fontSize="24px"
-                              className="text-green scale-transition cursor-pointer"
-                            ></MdThumbUp>
+                                }}
+                                fontSize="24px"
+                                className="text-green scale-transition cursor-pointer"
+                              ></MdThumbUp>
+                            )}
                           </div>
                           <div className="col-auto mr-2">
                             {x.comments.length}
@@ -397,7 +422,7 @@ const MovieReviews = ({ movie, user, publicUsers, addReviewTrigger }) => {
                                 </div>
 
                                 <div
-                                  className="col-auto text-muted btn-tertiary"
+                                  className="col-auto text-muted btn-tertiary-small"
                                   onClick={async () => {
                                     if (user.token) {
                                       let res = await ReportComment(
@@ -437,56 +462,77 @@ const MovieReviews = ({ movie, user, publicUsers, addReviewTrigger }) => {
                                     }
                                   }}
                                 >
-                                  Report Abuse
+                                  <MdFlag fontSize="24px"></MdFlag>
                                 </div>
                               </div>
 
                               <div className="row no-gutters text-light mb-3 font-weight-300">
                                 {y.comment}
                               </div>
-                              <div className="row no-gutters justify-content-between align-items-center">
+                              <div className="row no-gutters justify-content-end align-items-center">
                                 <div className="col-auto">
                                   <div className="row no-gutters align-items-center">
                                     <div className="col-auto mr-2">
                                       {y.likes.length}
                                     </div>
                                     <div className="col-auto mr-2 ">
-                                      <MdThumbUp
-                                        onClick={async () => {
-                                          if (user.token) {
-                                            let res = await LikeComment(
-                                              user,
-                                              x._id
-                                            );
-                                            if (res.error) {
+                                      {loadingComment === ind ? (
+                                        <div className="square-20">
+                                          <Loader
+                                            color={"white"}
+                                            style={{
+                                              position: "absolute",
+                                              left: "10px",
+                                              top: 0,
+                                              bottom: 0,
+                                              margin: "auto",
+                                              display: "flex",
+                                              alignItems: "center",
+                                            }}
+                                            loading={loadingComment === ind}
+                                            size={20}
+                                          ></Loader>
+                                        </div>
+                                      ) : (
+                                        <MdThumbUp
+                                          onClick={async () => {
+                                            if (user.token) {
+                                              setLoadingComment(ind);
+                                              let res = await LikeComment(
+                                                user,
+                                                y._id
+                                              );
+                                              setLoadingComment(-1);
+                                              if (res.error) {
+                                                store.dispatch({
+                                                  type: "SET_NOTIFICATION",
+                                                  notification: {
+                                                    title: "Error",
+                                                    message: res.error,
+                                                    type: "failure",
+                                                  },
+                                                });
+                                              } else {
+                                                setRefreshComments(
+                                                  !refreshComments
+                                                );
+                                              }
+                                            } else {
                                               store.dispatch({
                                                 type: "SET_NOTIFICATION",
                                                 notification: {
-                                                  title: "Error",
-                                                  message: res.error,
+                                                  title: "Login required",
+                                                  message:
+                                                    "You need to login to like review",
                                                   type: "failure",
                                                 },
                                               });
-                                            } else {
-                                              setRefreshComments(
-                                                !refreshComments
-                                              );
                                             }
-                                          } else {
-                                            store.dispatch({
-                                              type: "SET_NOTIFICATION",
-                                              notification: {
-                                                title: "Login required",
-                                                message:
-                                                  "You need to login to like comment",
-                                                type: "failure",
-                                              },
-                                            });
-                                          }
-                                        }}
-                                        fontSize="24px"
-                                        className="text-green scale-transition cursor-pointer"
-                                      ></MdThumbUp>
+                                          }}
+                                          fontSize="24px"
+                                          className="text-green scale-transition cursor-pointer"
+                                        ></MdThumbUp>
+                                      )}
                                     </div>
                                     <div
                                       className="col-auto text-orange btn-tertiary"
@@ -543,8 +589,8 @@ const MovieReviews = ({ movie, user, publicUsers, addReviewTrigger }) => {
               </React.Fragment>
             );
           })}
-        <div className="row no-gutters justify-content-between pt-2">
-          <div className="col-auto mb-4 mr-sm-2 mr-md-0">
+        <div className="row no-gutters justify-content-end pt-2">
+          <div className="col-auto">
             <Paigination
               classNames={{
                 notSelected: "input-dark",
@@ -554,26 +600,6 @@ const MovieReviews = ({ movie, user, publicUsers, addReviewTrigger }) => {
               current={realPage}
               setCurrent={setPage}
             ></Paigination>
-          </div>
-          <div
-            className="col-sm-auto col-60 btn-custom btn-custom-primary btn-small"
-            onClick={() => {
-              if (!user.token) {
-                store.dispatch({
-                  type: "SET_NOTIFICATION",
-                  notification: {
-                    title: "Login required",
-                    message: "You need to login to write review.",
-                    type: "failure",
-                  },
-                });
-              } else {
-                setAddReviewOpen(true);
-              }
-            }}
-          >
-            Add Review
-            <FaRegPaperPlane fontSize="20px" className="ml-2"></FaRegPaperPlane>
           </div>
           <AddReview
             open={addReviewOpen}

@@ -493,76 +493,11 @@ const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
                         </tr>
                       )}
                     </tbody>
-                    <tfoot>
-                      <tr>
-                        <th className="text-center">
-                          <Checkbox
-                            color={"primary"}
-                            checked={
-                              filteredUsers
-                                .slice(boundaries[0], boundaries[1])
-                                .filter((x) => x.selected).length ===
-                              boundaries[1] - boundaries[0]
-                            }
-                            onChange={(e) => {
-                              setFilteredUsers((prev) => {
-                                let arr = [...prev];
-                                for (
-                                  let i = boundaries[0];
-                                  i < boundaries[1];
-                                  i++
-                                ) {
-                                  arr[i].selected = e.target.checked;
-                                }
-                                return arr;
-                              });
-                            }}
-                          ></Checkbox>
-                        </th>
-                        <th className="table-footer text-truncate text-left">
-                          <div className="d-none d-lg-block">Display Name</div>
-                          <div className="d-block d-lg-none">Name</div>
-                        </th>
-                        <th className="d-table-cell d-xl-none table-header text-truncate">
-                          {columns[lastVisibleColumn]}
-                        </th>
-                        {columns.map((c, j) => (
-                          <th
-                            className="d-none d-xl-table-cell table-header text-truncate"
-                            key={`footer-column-${j}`}
-                          >
-                            <div>{c}</div>
-                          </th>
-                        ))}
-                      </tr>
-                    </tfoot>
                   </table>
                 </div>
               </Swipeable>
             </div>
-            <div className="row no-gutters justify-content-center justify-content-sm-between">
-              <div className="col-60 col-sm-auto">
-                <div className="row no-gutters">
-                  <div className="col-60 col-sm-auto pb-3 mr-sm-3">
-                    <div className="row no-gutters">
-                      <Select
-                        popoverClass="col-60 col-sm-auto"
-                        onSelect={(index) => setAction(actions[index])}
-                        items={actions}
-                        btnName={action ? action : "Select Action"}
-                        className="input-light px-3 col-auto"
-                      ></Select>
-                    </div>
-                  </div>
-
-                  <div
-                    className="btn-custom btn-custom-primary col60 col-sm-auto mr-sm-3 btn-xsmall mb-3"
-                    onClick={handleApply}
-                  >
-                    Apply
-                  </div>
-                </div>
-              </div>
+            <div className="row no-gutters justify-content-center justify-content-sm-end">
               <div className="col-auto">
                 <Pagination
                   count={Math.ceil(filteredUsers.length / 5)}

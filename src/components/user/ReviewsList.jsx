@@ -56,7 +56,9 @@ const ReviewsList = ({ reviews, publicUsers, ratings }) => {
                 onClick={() => history.push(`/movie/${x.movie_id}`)}
                 width="100%"
                 style={{ borderRadius: "13px", cursor: "pointer" }}
-                src={`https://image.tmdb.org/t/p/w154${x.movie_poster}`}
+                src={`https://image.tmdb.org/t/p/w154${
+                  ratings[x.movie_id].movie_poster
+                }`}
               ></img>
             </div>
           </div>
@@ -68,7 +70,9 @@ const ReviewsList = ({ reviews, publicUsers, ratings }) => {
                     <div
                       className="square-70 rounded bg-image"
                       style={{
-                        backgroundImage: `url(https://image.tmdb.org/t/p/w154${x.movie_poster})`,
+                        backgroundImage: `url(https://image.tmdb.org/t/p/w154${
+                          ratings[x.movie_id].movie_poster
+                        })`,
                       }}
                     ></div>
                     {/* <img
@@ -80,7 +84,8 @@ const ReviewsList = ({ reviews, publicUsers, ratings }) => {
                   </div>
                   <div className="col">
                     <div className="row no-gutters text-white h6 mb-0">
-                      {x.movie_title} ({x.movie_release_date.substring(0, 4)})
+                      {ratings[x.movie_id].movie_title} (
+                      {ratings[x.movie_id].movie_release_date.substring(0, 4)}
                     </div>
                     <div className="row no-gutters text-muted">
                       <div className="text-truncate">{x.movie_genres}</div>
@@ -261,7 +266,7 @@ const ReviewsList = ({ reviews, publicUsers, ratings }) => {
                   </div>
                 ))
             : ""}
-          <div className="row no-gutters mt-2">
+          <div className="row no-gutters mt-2 justify-content-end">
             <div className="col-auto ml-4">
               <Paigination
                 count={Math.ceil(

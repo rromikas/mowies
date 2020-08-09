@@ -17,15 +17,21 @@ import {
   GetPopularReviews,
   GetSettings,
 } from "./server/DatabaseApi";
+import { GetTrendingMovies } from "./server/MoviesApi";
 import Profile from "./components/user/profile/Profile";
 import PrivateRoute from "./utilities/PrivateRoute";
 import LegalDocument from "./components/user/LegalDocument";
 import Navbar from "./components/user/Navbar";
 import Serie from "./components/user/Serie";
+import Footer from "./components/user/Footer";
+import CookiesPolicy from "./components/user/CookiesPolicy";
+import TermsAndConditions from "./components/user/TermsAndConditions";
+import PrivacyPolicy from "./components/user/PrivacyPolicy";
 
 function App() {
   useEffect(() => {
     async function getData() {
+      let trending = await GetTrendingMovies();
       let settings = await GetSettings();
       if (!settings.error) {
         if (!settings.length) {
@@ -84,23 +90,17 @@ function App() {
             <Route
               exact
               path="/terms-and-conditions"
-              render={() => (
-                <LegalDocument type="terms-and-conditions"></LegalDocument>
-              )}
+              component={TermsAndConditions}
             ></Route>
             <Route
               exact
               path="/cookies-policy"
-              render={() => (
-                <LegalDocument type="cookies-policy"></LegalDocument>
-              )}
+              component={CookiesPolicy}
             ></Route>
             <Route
               exact
               path="/privacy-policy"
-              render={() => (
-                <LegalDocument type="privacy-policy"></LegalDocument>
-              )}
+              component={PrivacyPolicy}
             ></Route>
             <Route exact path="/" component={Home}></Route>
             <Route exact path="/movie/:movieId" component={Movie}></Route>
@@ -121,6 +121,7 @@ function App() {
             ></Route>
             <Route exact path="/profile/:userId" component={Profile}></Route>
           </Switch>
+          <Footer></Footer>
           <Toast></Toast>
         </div>
       </Router>

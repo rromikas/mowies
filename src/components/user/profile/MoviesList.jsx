@@ -33,12 +33,14 @@ const MoviesList = ({
       </Modal>
       <div className="row">
         {movies.map((x, i) => {
-          let formatedMovie = {
-            id: x.movie_id,
-            title: x.movie_title,
-            poster_path: x.movie_poster,
-            genres: x.movie_genres,
-          };
+          let formatedMovie = ratings[x.movie_id]
+            ? {
+                id: x.movie_id,
+                title: ratings[x.movie_id].movie_title,
+                poster_path: ratings[x.movie_id].movie_poster,
+                genres: ratings[x.movie_id].movie_genres,
+              }
+            : { id: x.movie_id, title: "", poster_path: "", genres: [] };
           return (
             <div
               key={`result-${i}`}
@@ -123,11 +125,7 @@ const MoviesList = ({
                   <div className="row no-gutters text-muted mb-2">
                     <div className="text-truncate">
                       {formatedMovie.genres.length
-                        ? formatedMovie.genres
-                            .map(
-                              (gid) => MoviesGenresMap[gid.id ? gid.id : gid]
-                            )
-                            .join("/")
+                        ? formatedMovie.genres.join("/")
                         : "unknown"}
                     </div>
                   </div>
@@ -230,15 +228,19 @@ const MoviesList = ({
           );
         })}
       </div>
-      <Paigination
-        classNames={{
-          notSelected: "input-dark",
-          selected: "input-dark-selected",
-        }}
-        count={Math.ceil(movies.length / maxItemsPerPage)}
-        current={page}
-        setCurrent={setPage}
-      ></Paigination>
+      <div className="row no-gutters justify-content-end">
+        <div className="col-auto">
+          <Paigination
+            classNames={{
+              notSelected: "input-dark",
+              selected: "input-dark-selected",
+            }}
+            count={Math.ceil(movies.length / maxItemsPerPage)}
+            current={page}
+            setCurrent={setPage}
+          ></Paigination>
+        </div>
+      </div>
     </React.Fragment>
   );
 };

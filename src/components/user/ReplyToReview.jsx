@@ -70,7 +70,7 @@ const ReplyToReview = ({
                 }}
                 value={newComment.comment}
                 spellCheck={false}
-                placeholder="Add your review..."
+                placeholder="Add your comment..."
                 style={{ resize: "none" }}
                 className="w-100 h-100 textarea"
               ></textarea>
@@ -112,11 +112,7 @@ const ReplyToReview = ({
                       setLoading(true);
                       let finalComment = Object.assign({}, newComment, {
                         author_name: user.display_name,
-                        movie_title: movie.title,
                         movie_id: movie.id,
-                        movie_poster: movie.poster_path,
-                        movie_genres: movie.genres.map((x) => x.name).join("/"),
-                        movie_release_date: movie.release_date,
                         review_id: review._id,
                         review: review.review,
                         review_author: review.author,

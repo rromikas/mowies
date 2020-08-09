@@ -17,7 +17,12 @@ import { connect } from "react-redux";
 import store from "../../store/store";
 import Loader from "../utility/Loader";
 
-const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
+const Comments = ({
+  setEditCommentSection,
+  setEditComment,
+  publicUsers,
+  ratings,
+}) => {
   const [action, setAction] = useState("");
   const [role, setRole] = useState("");
   const [searchKey, setSearchKey] = useState("User");
@@ -478,7 +483,12 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
                                 : "d-none d-xl-table-cell"
                             }`}
                           >
-                            <div>Movie: {x.movie_title}</div>
+                            <div>
+                              Movie:{" "}
+                              {ratings[x.movie_id]
+                                ? ratings[x.movie_id].movie_title
+                                : ""}
+                            </div>
                             <div className="d-flex">
                               <Popover
                                 content={(w) => (
@@ -631,6 +641,7 @@ const Comments = ({ setEditCommentSection, setEditComment, publicUsers }) => {
 function mapp(state, ownProps) {
   return {
     publicUsers: state.publicUsers,
+    ratings: state.ratings,
     ...ownProps,
   };
 }

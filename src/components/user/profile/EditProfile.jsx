@@ -133,10 +133,11 @@ const EditProfile = ({ user, refreshProfile, editProfileOpen, onClose }) => {
           <div className="col-60 text-light">Email</div>
           <div className="col-60">
             <input
+              disabled
               spellCheck={false}
               type="text"
               disabled
-              className="input-light px-3 w-100 user-select-none"
+              className="input-light-disabled px-3 w-100 user-select-none"
               value={update.email}
             ></input>
           </div>

@@ -12,11 +12,13 @@ import {
   DeleteMultiplePromotions,
 } from "../../server/DatabaseApi";
 import store from "../../store/store";
+import { connect } from "react-redux";
 
 const Promotions = ({
   setEditPromotion,
   setAddNewPromotionSection,
   setEditPromotionSection,
+  ratings,
 }) => {
   const [action, setAction] = useState("");
   const [type, setType] = useState("");
@@ -85,8 +87,8 @@ const Promotions = ({
     boundaries[1] = boundaries[1] - (boundaries[1] - filteredPromotions.length);
   }
 
-  const columns = ["Review Or Comment", "Rating", "Duration", "Status"];
-  const searchOptions = ["Title", "Review or Comment", "Status", "Movie"];
+  const columns = ["Review", "Rating", "Duration", "Status"];
+  const searchOptions = ["Title", "Status", "Movie"];
 
   const publishStatuses = ["Published", "Drafted", "Deleted"];
   return (
@@ -311,7 +313,7 @@ const Promotions = ({
                           ></Checkbox>
                         </th>
                         <th className="table-header text-truncate text-left">
-                          Title
+                          Description
                         </th>
                         <th className="d-table-cell d-xl-none table-header text-truncate">
                           {columns[lastVisibleColumn]}
@@ -350,7 +352,12 @@ const Promotions = ({
                                 ></Checkbox>
                               </td>
                               <td style={{ whiteSpace: "nowrap" }}>
-                                <div className="mb-2">{x.movie_title}</div>
+                                <div
+                                  className="mb-2"
+                                  style={{ minWidth: "150px" }}
+                                >
+                                  {x.description}
+                                </div>
                                 <div className="d-flex">
                                   <div
                                     className="text-primary underline-link"
@@ -404,7 +411,7 @@ const Promotions = ({
                                 }`}
                               >
                                 {x.content_type === "Review" ? (
-                                  <div>
+                                  <div style={{ minWidth: "150px" }}>
                                     <div
                                       className="text-clamp-4 cursor-pointer user-select-none"
                                       onClick={(e) => {
@@ -591,4 +598,11 @@ const Promotions = ({
   );
 };
 
-export default Promotions;
+function mapp(state, ownProps) {
+  return {
+    ratings: state.ratings,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(Promotions);

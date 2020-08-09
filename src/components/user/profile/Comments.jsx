@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import date from "date-and-time";
 import { Emoji } from "emoji-mart";
-import { MdThumbUp, MdChatBubble } from "react-icons/md";
+import { MdThumbUp } from "react-icons/md";
 import {
   GetMovieReviews,
   GetReviewComments,
@@ -9,8 +9,6 @@ import {
 import { connect } from "react-redux";
 import Paigination from "../../utility/Paigination";
 import history from "../../../History";
-import { MoviesGenresMap } from "../../../Data";
-import ReactionButton from "../ReactionButton";
 
 const Comments = ({ reviews, publicUsers, ratings }) => {
   //comments object.Its property will be review id.
@@ -47,7 +45,6 @@ const Comments = ({ reviews, publicUsers, ratings }) => {
     async function getData() {
       if (reviewIdOfVisibleComments !== -1) {
         let data = await GetReviewComments(reviewIdOfVisibleComments);
-        console.log("comment data", data);
         setComments((prev) =>
           Object.assign({}, prev, { [reviewIdOfVisibleComments]: data })
         );
@@ -96,7 +93,9 @@ const Comments = ({ reviews, publicUsers, ratings }) => {
                     onClick={() => history.push(`/movie/${x.id}`)}
                     width="100%"
                     style={{ borderRadius: "13px" }}
-                    src={`https://image.tmdb.org/t/p/w154${x.movie_poster}`}
+                    src={`https://image.tmdb.org/t/p/w154${
+                      ratings[x.movie_id].movie_poster
+                    }`}
                   ></img>
                 </div>
               </div>
@@ -108,7 +107,9 @@ const Comments = ({ reviews, publicUsers, ratings }) => {
                         <div
                           className="square-70 rounded bg-image"
                           style={{
-                            backgroundImage: `url(https://image.tmdb.org/t/p/w154${x.movie_poster})`,
+                            backgroundImage: `url(https://image.tmdb.org/t/p/w154${
+                              ratings[x.movie_id].movie_poster
+                            })`,
                           }}
                         ></div>
                         {/* <img
@@ -120,8 +121,11 @@ const Comments = ({ reviews, publicUsers, ratings }) => {
                       </div>
                       <div className="col">
                         <div className="row no-gutters text-white mb-0">
-                          {x.movie_title} (
-                          {x.movie_release_date.substring(0, 4)})
+                          {ratings[x.movie_id].movie_title} (
+                          {ratings[x.movie_id].movie_release_date.substring(
+                            0,
+                            4
+                          )}
                         </div>
                       </div>
                     </div>
