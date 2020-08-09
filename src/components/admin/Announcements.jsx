@@ -50,10 +50,14 @@ const Announcements = ({
       if (search) {
         if (searchKey === "User") {
           arr = arr.filter((x) =>
-            publicUsers[x.author].display_name.match(new RegExp(search, "i"))
+            publicUsers[x.author].display_name
+              .toLowerCase()
+              .includes(search.toLowerCase())
           );
         } else if (searchKey === "Description") {
-          arr = arr.filter((x) => x.description.match(new RegExp(search, "i")));
+          arr = arr.filter((x) =>
+            x.description.toLowerCase().includes(search.toLowerCase())
+          );
         }
       }
 
@@ -248,10 +252,10 @@ const Announcements = ({
                 <div className="row no-gutters">
                   <Select
                     onSelect={(index) =>
-                      setSearchKey(["User", "Review", "Movie", "Date"][index])
+                      setSearchKey(["User", "Description"][index])
                     }
                     className="table-input-prepend-select col-auto"
-                    items={["User", "Review", "Movie", "Date"]}
+                    items={["User", "Description"]}
                     btnName={`Search by ${searchKey}`}
                   ></Select>
                   <div className="col position-relative">

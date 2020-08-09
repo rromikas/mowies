@@ -63,7 +63,9 @@ const AddNewPromotion = ({ publicUsers, getBack, ratings }) => {
         if (Object.values(publicUsers).length) {
           reviews.forEach((x) => {
             if (
-              publicUsers[x.author].display_name.match(new RegExp(search, "i"))
+              publicUsers[x.author].display_name
+                .toLowerCase()
+                .includes(search.toLowerCase())
             ) {
               arr.push(x);
             }
@@ -81,7 +83,9 @@ const AddNewPromotion = ({ publicUsers, getBack, ratings }) => {
         reviews.forEach((x) => {
           if (
             ratings[x.movie_id] &&
-            ratings[x.movie_id].movie_title.match(new RegExp(search, "i"))
+            ratings[x.movie_id].movie_title
+              .toLowerCase()
+              .includes(search.toLowerCase())
           ) {
             arr.push(x);
           }

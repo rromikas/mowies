@@ -44,16 +44,22 @@ const Reviews = ({
       if (search) {
         if (searchKey === "User") {
           arr = arr.filter((x) =>
-            publicUsers[x.author].display_name.match(new RegExp(search, "i"))
+            publicUsers[x.author].display_name
+              .toLowerCase()
+              .includes(search.toLowerCase())
           );
         } else if (searchKey === "Review") {
-          arr = arr.filter((x) => x.review.match(new RegExp(search, "i")));
-        } else if (searchKey === "Date") {
           arr = arr.filter((x) =>
-            date.format(new Date(x.date), "DD/MM/YYYY").includes(search)
+            x.review.toLowerCase().includes(search.toLowerCase())
           );
         } else if (searchKey === "Movie") {
-          arr = arr.filter((x) => x.movie_title.match(new RegExp(search, "i")));
+          arr = arr.filter(
+            (x) =>
+              ratings[x.movie_id] &&
+              ratings[x.movie_id].movie_title
+                .toLowerCase()
+                .includes(search.toLowerCase())
+          );
         }
       }
 
@@ -207,10 +213,10 @@ const Reviews = ({
               <Select
                 popoverClass="w-100"
                 onSelect={(index) =>
-                  setSearchKey(["User", "Review", "Movie", "Date"][index])
+                  setSearchKey(["User", "Review", "Movie"][index])
                 }
                 className="input-light col-60"
-                items={["User", "Review", "Movie", "Date"]}
+                items={["User", "Review", "Movie"]}
                 btnName={`Search by ${searchKey}`}
               ></Select>
             </div>
@@ -241,10 +247,10 @@ const Reviews = ({
             <div className="row no-gutters">
               <Select
                 onSelect={(index) =>
-                  setSearchKey(["User", "Review", "Movie", "Date"][index])
+                  setSearchKey(["User", "Review", "Movie"][index])
                 }
                 className="table-input-prepend-select col-auto"
-                items={["User", "Review", "Movie", "Date"]}
+                items={["User", "Review", "Movie"]}
                 btnName={`Search by ${searchKey}`}
               ></Select>
               <div className="col position-relative">

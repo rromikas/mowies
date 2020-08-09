@@ -8,8 +8,14 @@ import { Swipeable } from "react-swipeable";
 import { GetUsers, EditMultipleUsers } from "../../server/DatabaseApi";
 import { format as TimeAgo } from "timeago.js";
 import store from "../../store/store";
+import { connect } from "react-redux";
 
-const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
+const Users = ({
+  setEditUser,
+  setEditUserSection,
+  setAddNewUserSection,
+  ratings,
+}) => {
   const [action, setAction] = useState("");
   const [role, setRole] = useState("");
   const [searchKey, setSearchKey] = useState("User");
@@ -38,16 +44,12 @@ const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
       if (search) {
         if (searchKey === "User") {
           arr = arr.filter((x) =>
-            x.display_name.match(new RegExp(search, "i"))
+            x.display_name.toLowerCase().includes(search.toLowerCase())
           );
-        } else if (searchKey === "Review") {
-          arr = arr.filter((x) => x.review.match(new RegExp(search, "i")));
-        } else if (searchKey === "Date") {
+        } else if (searchKey === "Email") {
           arr = arr.filter((x) =>
-            date.format(new Date(x.date), "DD/MM/YYYY").includes(search)
+            x.email.toLowerCase().includes(search.toLowerCase())
           );
-        } else if (searchKey === "Movie") {
-          arr = arr.filter((x) => x.movie_title.match(new RegExp(search, "i")));
         }
       }
 
@@ -225,11 +227,9 @@ const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
                 <div className="row no-gutters mb-3">
                   <Select
                     popoverClass="w-100"
-                    onSelect={(index) =>
-                      setSearchKey(["User", "Review", "Movie", "Date"][index])
-                    }
+                    onSelect={(index) => setSearchKey(["User", "Email"][index])}
                     className="input-light col-60"
-                    items={["User", "Review", "Movie", "Date"]}
+                    items={["User", "Email"]}
                     btnName={`Search by ${searchKey}`}
                   ></Select>
                 </div>
@@ -259,11 +259,9 @@ const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
               <div className="col-auto mb-3 d-none d-sm-block">
                 <div className="row no-gutters">
                   <Select
-                    onSelect={(index) =>
-                      setSearchKey(["User", "Review", "Movie", "Date"][index])
-                    }
+                    onSelect={(index) => setSearchKey(["User", "Email"][index])}
                     className="table-input-prepend-select col-auto"
-                    items={["User", "Review", "Movie", "Date"]}
+                    items={["User", "Email"]}
                     btnName={`Search by ${searchKey}`}
                   ></Select>
                   <div className="col position-relative">
@@ -513,4 +511,11 @@ const Users = ({ setEditUser, setEditUserSection, setAddNewUserSection }) => {
   );
 };
 
-export default Users;
+function mapp(state, ownProps) {
+  return {
+    ratings: state.ratings,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(Users);

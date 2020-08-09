@@ -20,7 +20,7 @@ const Notifications = ({
 }) => {
   const [action, setAction] = useState("");
   const [type, setType] = useState("");
-  const [searchKey, setSearchKey] = useState("User");
+  const [searchKey, setSearchKey] = useState("Subject");
   const [lastVisibleColumn, setLastVisibleColumn] = useState(0);
   const [page, setPage] = useState(1);
   const [typeFilter, setTypeFilter] = useState("");
@@ -47,15 +47,13 @@ const Notifications = ({
     let arr = [...notifications];
     if (notifications.length) {
       if (search) {
-        if (searchKey === "User") {
+        if (searchKey === "Subject") {
           arr = arr.filter((x) =>
-            PublicUsers[x.author].display_name.match(new RegExp(search, "i"))
+            x.subject.toLowerCase().includes(search.toLowerCase())
           );
-        } else if (searchKey === "Review") {
-          arr = arr.filter((x) => x.review.match(new RegExp(search, "i")));
-        } else if (searchKey === "Date") {
+        } else if (searchKey === "Description") {
           arr = arr.filter((x) =>
-            date.format(new Date(x.date), "DD/MM/YYYY").includes(search)
+            x.description.toLowerCase().includes(search.toLowerCase())
           );
         }
       }
@@ -216,10 +214,10 @@ const Notifications = ({
                   <Select
                     popoverClass="w-100"
                     onSelect={(index) =>
-                      setSearchKey(["User", "Review", "Movie", "Date"][index])
+                      setSearchKey(["Subject", "Description"][index])
                     }
                     className="input-light col-60"
-                    items={["User", "Review", "Movie", "Date"]}
+                    items={["Subject", "Description"]}
                     btnName={`Search by ${searchKey}`}
                   ></Select>
                 </div>
@@ -250,10 +248,10 @@ const Notifications = ({
                 <div className="row no-gutters">
                   <Select
                     onSelect={(index) =>
-                      setSearchKey(["User", "Review", "Movie", "Date"][index])
+                      setSearchKey(["Subject", "Description"][index])
                     }
                     className="table-input-prepend-select col-auto"
-                    items={["User", "Review", "Movie", "Date"]}
+                    items={["Subject", "Description"]}
                     btnName={`Search by ${searchKey}`}
                   ></Select>
                   <div className="col position-relative">

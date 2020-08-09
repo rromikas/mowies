@@ -61,10 +61,8 @@ const Comments = ({
               .includes(search.toLowerCase())
           );
         } else if (searchKey === "Comment") {
-          arr = arr.filter((x) => x.comment.includes(search));
-        } else if (searchKey === "Date") {
           arr = arr.filter((x) =>
-            date.format(new Date(x.date), "DD/MM/YYYY").includes(search)
+            x.comment.toLowerCase().includes(search.toLowerCase())
           );
         }
       }
@@ -220,11 +218,9 @@ const Comments = ({
             <div className="row no-gutters mb-3">
               <Select
                 popoverClass="w-100"
-                onSelect={(index) =>
-                  setSearchKey(["User", "Comment", "Date"][index])
-                }
+                onSelect={(index) => setSearchKey(["User", "Comment"][index])}
                 className="input-light col-60"
-                items={["User", "Comment", "Date"]}
+                items={["User", "Comment"]}
                 btnName={`Search by ${searchKey}`}
               ></Select>
             </div>
@@ -254,11 +250,9 @@ const Comments = ({
           <div className="col-auto mb-3 d-none d-sm-block">
             <div className="row no-gutters">
               <Select
-                onSelect={(index) =>
-                  setSearchKey(["User", "Comment", "Date"][index])
-                }
+                onSelect={(index) => setSearchKey(["User", "Comment"][index])}
                 className="table-input-prepend-select col-auto"
-                items={["User", "Comment", "Date"]}
+                items={["User", "Comment"]}
                 btnName={`Search by ${searchKey}`}
               ></Select>
               <div className="col position-relative">

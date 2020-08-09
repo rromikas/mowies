@@ -22,7 +22,7 @@ const Promotions = ({
 }) => {
   const [action, setAction] = useState("");
   const [type, setType] = useState("");
-  const [searchKey, setSearchKey] = useState("Title");
+  const [searchKey, setSearchKey] = useState("Description");
   const [lastVisibleColumn, setLastVisibleColumn] = useState(0);
   const [page, setPage] = useState(1);
   const [typeFilter, setTypeFilter] = useState("");
@@ -50,19 +50,15 @@ const Promotions = ({
     let arr = [...promotions];
     if (promotions.length) {
       if (search) {
-        if (searchKey === "Title") {
-          arr = arr.filter((x) => x.title.match(new RegExp(search, "i")));
-        } else if (searchKey === "Review or Comment") {
+        if (searchKey === "Description") {
           arr = arr.filter((x) =>
-            x.content_type === "Review"
-              ? x.content.review.match(new RegExp(search, "i"))
-              : x.content.comment.match(new RegExp(search, "i"))
+            x.description.toLowerCase().includes(search.toLowerCase())
           );
-        } else if (searchKey === "Movie") {
-          arr = arr.filter((x) => x.movie_title.match(new RegExp(search, "i")));
-        } else if (searchKey === "Status") {
-          arr = arr.filter((x) =>
-            x.active_status.match(new RegExp(search, "i"))
+        } else if (searchKey === "Review") {
+          arr = arr.filter(
+            (x) =>
+              x.content_type === "Review" &&
+              x.content.review.toLowerCase().includes(search.toLowerCase())
           );
         }
       }
@@ -88,7 +84,7 @@ const Promotions = ({
   }
 
   const columns = ["Review", "Rating", "Duration", "Status"];
-  const searchOptions = ["Title", "Status", "Movie"];
+  const searchOptions = ["Description", "Review"];
 
   const publishStatuses = ["Published", "Drafted", "Deleted"];
   return (
