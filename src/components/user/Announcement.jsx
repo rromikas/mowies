@@ -10,9 +10,7 @@ const Announcement = () => {
 
   let haveUserClosedThisAnnouncement = false;
 
-  let closedAnnouncements = localStorage.getItem(
-    "movies_announcement_closed_by_user"
-  );
+  let closedAnnouncements = localStorage.getItem("closed_movies_announcements");
 
   if (closedAnnouncements) {
     closedAnnouncements = JSON.parse(closedAnnouncements);
@@ -59,7 +57,7 @@ const Announcement = () => {
           closedAnnouncements.push(announcement.description);
 
           localStorage.setItem(
-            "movies_announcement_closed_by_user",
+            "closed_movies_announcements",
             JSON.stringify(closedAnnouncements)
           );
         }}
