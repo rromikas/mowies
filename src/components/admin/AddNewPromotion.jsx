@@ -35,7 +35,7 @@ const AddNewPromotion = ({ publicUsers, getBack, ratings }) => {
   const [searchKey, setSearchKey] = useState("User");
   const [search, setSearch] = useState("");
   const [candidates, setCandidates] = useState([]);
-  const searchKeys = ["User", "Movie"];
+  const searchKeys = ["User", "Movie", "Review"];
   const [lastVisibleColumn, setLastVisibleColumn] = useState(0);
   const [reviews, setReviews] = useState([]);
   const [comments, setComments] = useState([]);
@@ -70,14 +70,6 @@ const AddNewPromotion = ({ publicUsers, getBack, ratings }) => {
               arr.push(x);
             }
           });
-
-          // comments.forEach((x) => {
-          //   if (
-          //     publicUsers[x.author].display_name.match(new RegExp(search, "i"))
-          //   ) {
-          //     arr.push(x);
-          //   }
-          // });
         }
       } else if (searchKey === "Movie") {
         reviews.forEach((x) => {
@@ -90,26 +82,13 @@ const AddNewPromotion = ({ publicUsers, getBack, ratings }) => {
             arr.push(x);
           }
         });
-
-        // comments.forEach((x) => {
-        //   if (x.movie_title.match(new RegExp(search, "i"))) {
-        //     arr.push(x);
-        //   }
-        // });
       } else if (searchKey === "Review") {
         reviews.forEach((x) => {
-          if (x.review.match(new RegExp(search, "i"))) {
+          if (x.review.toLowerCase().includes(search.toLowerCase())) {
             arr.push(x);
           }
         });
       }
-      // else if (searchKey === "Comment") {
-      //   comments.forEach((x) => {
-      //     if (x.comment.match(new RegExp(search, "i"))) {
-      //       arr.push(x);
-      //     }
-      //   });
-      // }
     } else {
       arr = arr.concat([...reviews]);
     }

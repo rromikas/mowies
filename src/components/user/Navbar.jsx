@@ -95,13 +95,21 @@ const Navbar = (props) => {
           <div className="row no-gutters justify-content-between px-3 py-2 align-items-center flex-nowrap">
             <div className="col-auto d-none d-sm-block pr-sm-5 pr-3 text-white pl-sm-3 pl-2">
               <div
-                className="row no-gutters align-items-center cursor-pointer"
+                className="row no-gutters align-items-end cursor-pointer"
                 onClick={() => history.push("/")}
               >
                 <div className="square-50 mr-2">
                   <Logo></Logo>
                 </div>
-                <div className="col-auto logo text-title-lg">CozyPotato</div>
+                <div className="col-auto">
+                  <div className="row no-gutters h4 logo">CozyPotato</div>
+                  <div
+                    className="row no-gutters justify-content-end text-light"
+                    style={{ fontSize: "12px", marginTop: "-14px" }}
+                  >
+                    Community
+                  </div>
+                </div>
               </div>
             </div>
             <div
@@ -111,8 +119,14 @@ const Navbar = (props) => {
               <div className="square-40 mx-auto">
                 <Logo></Logo>
               </div>
-              <div className="col-auto logo text-title-lg text-white">
-                CozyPotato
+              <div className="col-auto text-white">
+                <div className="row no-gutters logo h5">CozyPotato</div>
+                <div
+                  className="row no-gutters justify-content-end text-light"
+                  style={{ fontSize: "10px", marginTop: "-10px" }}
+                >
+                  Community
+                </div>
               </div>
             </div>
             <div className="col pr-3 d-none d-md-block">

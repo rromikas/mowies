@@ -42,12 +42,12 @@ const Footer = ({ user, settings }) => {
   return location.pathname !== "/login" && location.pathname !== "/signup" ? (
     <div className="row no-gutters justify-content-center bg-over-root-lighter text-white">
       <div
-        className={`p-sm-5 p-4 col-60${
+        className={`px-sm-5 px-4 py-4 col-60${
           location.pathname !== "/admin" ? " content-container" : ""
         }`}
       >
         <div className="row no-gutters justify-content-between align-items-center">
-          <div className="col-auto mb-4">
+          <div className="col-auto mb-2">
             <div className="row no-gutters">
               {menuItems.map((x, i) => (
                 <div
@@ -60,7 +60,7 @@ const Footer = ({ user, settings }) => {
               ))}
             </div>
           </div>
-          <div className="col-md-auto col-60 px-3 mb-4">
+          <div className="col-md-auto col-60 px-3 mb-2">
             <div className="row no-gutters justify-content-center justify-content-md-start">
               {socialIcons.map((x, i) => (
                 <div
