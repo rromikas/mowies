@@ -180,19 +180,6 @@ const Comments = ({ reviews, publicUsers, ratings }) => {
                               className="text-green"
                             ></MdThumbUp>
                           </div>
-                          {/* <div className="col-auto mr-2">{x.comments.length}</div>
-                      <div className="col-auto mr-2">
-                        <MdChatBubble
-                          onClick={() => {
-                            console.log(reviewIdOfVisibleComments === x._id);
-                            setReviewIdOfVisibleComments(
-                              reviewIdOfVisibleComments === x._id ? -1 : x._id
-                            );
-                          }}
-                          fontSize="24px"
-                          className="text-orange scale-transition cursor-pointer"
-                        ></MdChatBubble>
-                      </div> */}
                         </div>
                       </div>
                     </div>
