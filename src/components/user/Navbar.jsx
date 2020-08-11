@@ -105,7 +105,7 @@ const Navbar = (props) => {
                   <div className="row no-gutters h4 logo">CozyPotato</div>
                   <div
                     className="row no-gutters justify-content-end text-light"
-                    style={{ fontSize: "12px", marginTop: "-14px" }}
+                    style={{ fontSize: "13px", marginTop: "-14px" }}
                   >
                     Community
                   </div>
