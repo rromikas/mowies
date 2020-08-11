@@ -40,7 +40,7 @@ const SearchBox = (props) => {
           {
             if (!reviews.error) {
               if (!queryCleaned.current) {
-                setReviews(reviews);
+                setReviews(reviews.slice(0, 5));
               }
             }
           }
@@ -53,7 +53,7 @@ const SearchBox = (props) => {
 
           if (movies.results) {
             if (!queryCleaned.current) {
-              setMovies(movies.results);
+              setMovies(movies.results.slice(0, 10));
             }
           } else {
             onFail();
@@ -65,7 +65,7 @@ const SearchBox = (props) => {
           let series = await SearchSeries(query, settings.movies_api_key);
           if (series.results) {
             if (!queryCleaned.current) {
-              setSeries(series.results);
+              setSeries(series.results.slice(0, 10));
             }
           } else {
             onFail();

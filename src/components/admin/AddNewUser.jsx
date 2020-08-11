@@ -3,8 +3,10 @@ import Select from "../utility/Select";
 import { CreateUserForAdmin } from "../../server/DatabaseApi";
 import store from "../../store/store";
 import Loader from "../utility/Loader";
+import { connect } from "react-redux";
+import { validateEmail } from "../../utilities/Functions";
 
-const AddNewUser = ({ getBack }) => {
+const AddNewUser = ({ getBack, publicUsers }) => {
   const [newUser, setNewUser] = useState({
     first_name: "",
     last_name: "",
@@ -27,6 +29,10 @@ const AddNewUser = ({ getBack }) => {
       error: "Email is required",
     },
     {
+      valid: validateEmail(newUser.email),
+      error: "Email is not valid",
+    },
+    {
       valid: newUser.password,
       error: "Password is required",
     },
@@ -41,6 +47,13 @@ const AddNewUser = ({ getBack }) => {
     {
       valid: newUser.password.length >= 6,
       error: "Password must contain at least 6 characters",
+    },
+
+    {
+      valid: !Object.values(publicUsers)
+        .map((x) => x.email)
+        .includes(newUser.email),
+      error: "This email address is taken",
     },
   ];
 
@@ -171,7 +184,7 @@ const AddNewUser = ({ getBack }) => {
                   })
                 );
               }}
-              type="text"
+              type="password"
               className="px-3 input-light w-100"
             ></input>
           </div>
@@ -194,7 +207,7 @@ const AddNewUser = ({ getBack }) => {
                   })
                 );
               }}
-              type="text"
+              type="password"
               className="px-3 input-light w-100"
             ></input>
           </div>
@@ -276,9 +289,18 @@ const AddNewUser = ({ getBack }) => {
                   store.dispatch({
                     type: "SET_NOTIFICATION",
                     notification: {
-                      title: "User updated",
-                      message: "User was successfully updated",
+                      title: "User created",
+                      message: "User was successfully created",
                       type: "success",
+                    },
+                  });
+                  store.dispatch({
+                    type: "UPDATE_PUBLICUSERS",
+                    publicUser: {
+                      [res.id]: Object.assign({}, newUser, {
+                        user_id: res.id,
+                        _id: res.pid,
+                      }),
                     },
                   });
                   getBack();
@@ -308,4 +330,11 @@ const AddNewUser = ({ getBack }) => {
   );
 };
 
-export default AddNewUser;
+function mapp(state, ownProps) {
+  return {
+    publicUsers: state.publicUsers,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(AddNewUser);

@@ -41,12 +41,12 @@ const PopularMovies = ({ apiKey, settings }) => {
         <div className="row no-gutters h5">
           <div
             className="col-auto"
-            // style={{
-            //   padding: "10px 40px 10px 10px",
-            //   background: "linear-gradient(to left, #ff0037, transparent)",
-            //   borderRadius: "0 4px 4px 0",
-            //   marginBottom: "11px",
-            // }}
+            style={{
+              padding: "6px 40px 6px 10px",
+              background: "linear-gradient(to left, #ff0037, transparent)",
+              borderRadius: "0 4px 4px 0",
+              marginBottom: "11px",
+            }}
           >
             Popular Movies
           </div>

@@ -17,7 +17,7 @@ const MoviesList = ({ movies, user, ratings }) => {
   const [trailerMovieId, setTrailerMovieId] = useState("");
   const [openTrailer, setOpenTrailer] = useState(false);
   return (
-    <div className="row">
+    <div className="row justify-content-end">
       <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
         <TrailerPlayer
           movieId={trailerMovieId}
@@ -62,7 +62,7 @@ const MoviesList = ({ movies, user, ratings }) => {
                   }}
                 >
                   <div
-                    className="square-60 rounded-circle d-flex flex-center play-btn"
+                    className="square-50 rounded-circle d-flex flex-center play-btn"
                     onClick={(e) => {
                       e.stopPropagation();
                       setTrailerMovieId(x.id);
@@ -71,7 +71,7 @@ const MoviesList = ({ movies, user, ratings }) => {
                   >
                     <BsPlayFill
                       style={{
-                        fontSize: "35px",
+                        fontSize: "30px",
                         color: "white",
                         marginRight: "-5px",
                       }}

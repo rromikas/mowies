@@ -226,7 +226,7 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
                 <div
                   className="row no-gutters h5 text-white"
                   style={{
-                    padding: "10px",
+                    padding: "6px 10px",
                     background:
                       "linear-gradient(to right, #ff0037, transparent)",
                     borderRadius: "4px 0 0 4px",
@@ -252,7 +252,7 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
                 <div
                   className="row no-gutters h5 text-white"
                   style={{
-                    padding: "10px",
+                    padding: "6px 10px",
                     background:
                       "linear-gradient(to right, #ff0037, transparent)",
                     borderRadius: "4px 0 0 4px",

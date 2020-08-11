@@ -74,7 +74,7 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
   let realPage = page === -1 ? 1 : page;
 
   return (
-    <div className="row no-gutters">
+    <div className="row no-gutters text-white">
       <div className="col-60">
         <div className="row no-gutters mb-2" ref={topOfReviewsBlock}></div>
         {reviews

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Select from "../utility/Select";
 import Autocomplete from "../utility/Autocomplete";
 import DayPickerInput from "react-day-picker/DayPickerInput";
@@ -21,8 +21,10 @@ const AddNewNotification = ({ publicUsers, getBack }) => {
     start_date: initialDate,
     end_date: initialDate,
     description: "",
-    status: "Drafted",
+    status: "Sent",
   });
+
+  const [selectedType, setSelectedType] = useState(false);
 
   const [problem, setProblem] = useState("");
   const [loading, setLoading] = useState(false);
@@ -47,6 +49,14 @@ const AddNewNotification = ({ publicUsers, getBack }) => {
       error: "App notification duration can't be 0",
     },
   ];
+
+  const autocompleteOptions = {
+    All: "All",
+    "All users": "User",
+    "All admins": "Administrator",
+    "Inactive users": "Inactive",
+    "Active users": "Active",
+  };
 
   return (
     <div className="row no-gutters p-sm-5 p-4">
@@ -79,7 +89,7 @@ const AddNewNotification = ({ publicUsers, getBack }) => {
           <div className="col-60 mb-1">Type</div>
           <Select
             popoverClass="col-sm-30 col-60"
-            className="input-light col-60"
+            className="input-light col-60 w-100"
             btnName={notification.type ? notification.type : "Select"}
             items={types}
             onSelect={(index) =>
@@ -91,17 +101,37 @@ const AddNewNotification = ({ publicUsers, getBack }) => {
         </div>
         <div className="row no-gutters mb-4">
           <div className="col-60 mb-1">Notification to</div>
+
           <Autocomplete
+            disableCloseOnSelect={selectedType ? false : true}
+            onBlur={() => setSelectedType("")}
+            value={notification.receivers}
             onChange={(e, val) => {
-              setNotification((prev) =>
-                Object.assign({}, prev, { receivers: val })
-              );
+              e.preventDefault();
+              if (Object.keys(autocompleteOptions).includes(val[0])) {
+                setSelectedType(val[0]);
+              } else {
+                setNotification((prev) =>
+                  Object.assign({}, prev, { receivers: val })
+                );
+              }
             }}
             placeholder={"Search by username"}
             color={"primary"}
             className="col-md-30 col-60 input-light-resize"
-            options={Object.values(publicUsers)}
-            getOptionLabel={(option) => option.display_name}
+            options={
+              selectedType
+                ? Object.values(publicUsers).filter(
+                    (x) =>
+                      x.status === autocompleteOptions[selectedType] ||
+                      x.role === autocompleteOptions[selectedType] ||
+                      autocompleteOptions[selectedType] === "All"
+                  )
+                : Object.keys(autocompleteOptions)
+            }
+            getOptionLabel={(option) =>
+              option.display_name ? option.display_name : option
+            }
           ></Autocomplete>
         </div>
         <div className="row no-gutters mb-4">

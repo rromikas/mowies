@@ -17208,6 +17208,8 @@ input[type="number"] {
 }
 
 .fading-shadow {
+  -webkit-box-shadow: 0 0 0 7px #ff0040;
+          box-shadow: 0 0 0 7px #ff0040;
   -webkit-animation-name: fade-shadow;
           animation-name: fade-shadow;
   -webkit-animation-delay: 0.5s;

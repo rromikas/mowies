@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MdPlaylistAdd, MdPlaylistAddCheck } from "react-icons/md";
+import { MdPlaylistAdd, MdPlaylistAddCheck, MdDelete } from "react-icons/md";
 import store from "../../store/store";
 import { AddToWishList, GetAllRatings } from "../../server/DatabaseApi";
 import Popover from "../utility/Popover";
@@ -66,7 +66,7 @@ const WishlistButton = ({ user, movie, apiKey }) => {
       position="top"
       content={(w) => (
         <div className="p-3">
-          {currentlyAdded ? "Movie is in your wishlist" : "Add to wishlist"}
+          {currentlyAdded ? "Remove from wishlist" : "Add to wishlist"}
         </div>
       )}
       trigger="mouseenter"
@@ -75,11 +75,10 @@ const WishlistButton = ({ user, movie, apiKey }) => {
         {loading ? (
           <Loader size={30} loading={loading} color={"white"}></Loader>
         ) : currentlyAdded ? (
-          <MdPlaylistAddCheck
+          <MdDelete
             onClick={() => handleClick("removed from")}
-            className="text-title-xl"
-            style={{ marginRight: "-5px" }}
-          ></MdPlaylistAddCheck>
+            fontSize="24px"
+          ></MdDelete>
         ) : (
           <MdPlaylistAdd
             onClick={() => handleClick("added to")}

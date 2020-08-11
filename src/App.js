@@ -105,6 +105,11 @@ function App() {
             <Route exact path="/" component={Home}></Route>
             <Route
               exact
+              path="/movie/:movieId/:reviewId/:commentId"
+              component={Movie}
+            ></Route>
+            <Route
+              exact
               path="/movie/:movieId/:reviewId"
               component={Movie}
             ></Route>

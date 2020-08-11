@@ -5,7 +5,11 @@ import Pagination from "../utility/Paigination";
 import { BsSearch } from "react-icons/bs";
 import date from "date-and-time";
 import { Swipeable } from "react-swipeable";
-import { GetUsers, EditMultipleUsers } from "../../server/DatabaseApi";
+import {
+  GetUsers,
+  EditMultipleUsers,
+  DeleteMultipleUsers,
+} from "../../server/DatabaseApi";
 import { format as TimeAgo } from "timeago.js";
 import store from "../../store/store";
 import { connect } from "react-redux";
@@ -14,6 +18,7 @@ const Users = ({
   setEditUser,
   setEditUserSection,
   setAddNewUserSection,
+  publicUsers,
   ratings,
 }) => {
   const [action, setAction] = useState("");
@@ -60,9 +65,8 @@ const Users = ({
       if (statusFilter) {
         arr = arr.filter((x) => x.status === statusFilter);
       }
-
-      setFilteredUsers(arr);
     }
+    setFilteredUsers(arr);
   }, [search, roleFilter, users, statusFilter]);
 
   //boundaries for slicing reviews array. (pagination)
@@ -73,9 +77,10 @@ const Users = ({
 
   const handleApply = async (all = false) => {
     if (all) {
-      setRoleFilter(role);
+      setRoleFilter(role === "All" ? "" : role);
     }
     let selected = filteredUsers.filter((x) => x.selected);
+
     if (selected.length) {
       if (action === "Edit") {
         setEditUser(selected[0]);
@@ -83,8 +88,7 @@ const Users = ({
       } else {
         let update = {};
         if (action === "Delete") {
-          //delete review
-          update["deleted"] = true;
+          update["status"] = "Deleted";
         } else if (action === "Inactivate") {
           update["status"] = "Inactive";
         } else if (action === "Block") {
@@ -94,8 +98,10 @@ const Users = ({
         }
         let res = await EditMultipleUsers(
           selected.map((x) => x._id),
+          selected.map((x) => publicUsers[x._id]._id),
           update
         );
+
         if (res.error) {
           store.dispatch({
             type: "SET_NOTIFICATION",
@@ -115,13 +121,21 @@ const Users = ({
             },
           });
           setRefresh(!refresh);
+          let newPublicUsers = { ...publicUsers };
+          selected.forEach((x) => {
+            newPublicUsers[x._id].status = update["status"];
+          });
+          store.dispatch({
+            type: "SET_PUBLICUSERS",
+            publicUsers: newPublicUsers,
+          });
         }
       }
     }
   };
 
-  const editUsers = async (update, ids) => {
-    let res = await EditMultipleUsers(ids, update);
+  const editUsers = async (update, ids, pids) => {
+    let res = await EditMultipleUsers(ids, pids, update);
     if (res.error) {
       store.dispatch({
         type: "SET_NOTIFICATION",
@@ -207,9 +221,9 @@ const Users = ({
                       <Select
                         popoverClass="col-60 col-sm-auto"
                         onSelect={(index) =>
-                          setRole(["Administrator", "User"][index])
+                          setRole(["All", "Administrator", "User"][index])
                         }
-                        items={["Administrator", "User"]}
+                        items={["All", "Administrator", "User"]}
                         btnName={role ? role : "Select Role"}
                         className="input-light px-3 col-auto"
                       ></Select>
@@ -402,22 +416,56 @@ const Users = ({
                                         <div className="px-2">|</div>
                                         <div
                                           className="text-primary underline-link"
-                                          onClick={() =>
-                                            editUsers({ status: "Blocked" }, [
-                                              x._id,
-                                            ])
-                                          }
+                                          onClick={() => {
+                                            editUsers(
+                                              { status: "Blocked" },
+                                              [x._id],
+                                              [publicUsers[x._id]._id]
+                                            );
+                                          }}
                                         >
                                           Block
                                         </div>
                                         <div className="px-2">|</div>
                                         <div
                                           className="text-danger underline-link"
-                                          onClick={() =>
-                                            editUsers({ deleted: true }, [
-                                              x._id,
-                                            ])
-                                          }
+                                          onClick={async () => {
+                                            let res = await DeleteMultipleUsers(
+                                              [x._id],
+                                              [publicUsers[x._id]._id]
+                                            );
+                                            if (res.error) {
+                                              store.dispatch({
+                                                type: "SET_NOTIFICATION",
+                                                notification: {
+                                                  title: "Error",
+                                                  message: res.error,
+                                                  type: "failure",
+                                                },
+                                              });
+                                            } else {
+                                              store.dispatch({
+                                                type: "SET_NOTIFICATION",
+                                                notification: {
+                                                  title: "Users deleted",
+                                                  message:
+                                                    "User were successfully deleted",
+                                                  type: "success",
+                                                },
+                                              });
+                                              setRefresh(!refresh);
+                                              let newPublicUsers = {
+                                                ...publicUsers,
+                                              };
+                                              newPublicUsers[x._id].status =
+                                                "Deleted";
+
+                                              store.dispatch({
+                                                type: "SET_PUBLICUSERS",
+                                                publicUsers: newPublicUsers,
+                                              });
+                                            }
+                                          }}
                                         >
                                           Delete
                                         </div>
@@ -485,7 +533,7 @@ const Users = ({
                           ))
                       ) : (
                         <tr>
-                          <td colSpan={3} className=" text-center py-5">
+                          <td colSpan={7} className=" text-center py-5">
                             0 results found
                           </td>
                         </tr>
@@ -514,6 +562,7 @@ const Users = ({
 function mapp(state, ownProps) {
   return {
     ratings: state.ratings,
+    publicUsers: state.publicUsers,
     ...ownProps,
   };
 }

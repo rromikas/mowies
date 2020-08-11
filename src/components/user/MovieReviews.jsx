@@ -27,6 +27,7 @@ const MovieReviews = ({
   publicUsers,
   addReviewTrigger,
   seekReviewId,
+  seekCommentId,
 }) => {
   // local reviews object in order to be able to update it quickly instead of waiting for real changes in database
   const [reviews, setReviews] = useState([]);
@@ -44,7 +45,7 @@ const MovieReviews = ({
 
   //
   const [reviewIdOfVisibleComments, setReviewIdOfVisibleComments] = useState(
-    -1
+    seekCommentId ? seekReviewId : -1
   );
 
   // partitioning reviews into pages (8 reviews per page)
@@ -68,6 +69,8 @@ const MovieReviews = ({
 
   const commentsPerPage = 5;
   const reviewsPerPage = 8;
+
+  const [scrolledOnce, setScrolledOnce] = useState(false);
 
   useEffect(() => {
     if (addReviewTrigger >= 0) {
@@ -163,15 +166,19 @@ const MovieReviews = ({
               <React.Fragment>
                 <div
                   ref={(el) => {
-                    console.log("A");
-                    if (x._id === seekReviewId && el) {
-                      el.scrollIntoView({ behavior: "smooth" });
-                      // reviewToSeek.current = el;
+                    if (!seekCommentId) {
+                      if (x._id === seekReviewId && el && !scrolledOnce) {
+                        setScrolledOnce(true);
+                        el.scrollIntoView({ behavior: "smooth" });
+                        // reviewToSeek.current = el;
+                      }
                     }
                   }}
                   key={`review-${i}`}
                   className={`row no-gutters p-4 bg-over-root-lighter rounded mb-2${
-                    x._id === seekReviewId ? " fading-shadow" : ""
+                    x._id === seekReviewId && !seekCommentId
+                      ? " fading-shadow"
+                      : ""
                   }`}
                 >
                   <div className="col-auto pr-4 d-none d-md-block">
@@ -214,11 +221,6 @@ const MovieReviews = ({
                               <div className="col-auto mr-3 text-muted">
                                 {date.format(new Date(x.date), "MMM DD, YYYY")}
                               </div>
-                              {x.promoted && (
-                                <div className="badge badge-primary col-auto px-3 py-1 font-size-12">
-                                  Promoted
-                                </div>
-                              )}
                             </div>
                           </div>
                         </div>
@@ -308,20 +310,32 @@ const MovieReviews = ({
                               <MdThumbUp
                                 onClick={async () => {
                                   if (user.token) {
-                                    setLoadingReview(i);
-                                    let res = await LikeReview(user, x._id);
-                                    setLoadingReview(-1);
-                                    if (res.error) {
+                                    if (user._id !== x.author) {
+                                      setLoadingReview(i);
+                                      let res = await LikeReview(user, x._id);
+                                      setLoadingReview(-1);
+                                      if (res.error) {
+                                        store.dispatch({
+                                          type: "SET_NOTIFICATION",
+                                          notification: {
+                                            title: "Error",
+                                            message: res.error,
+                                            type: "failure",
+                                          },
+                                        });
+                                      } else {
+                                        setRefreshReviews(!refreshReviews);
+                                      }
+                                    } else {
                                       store.dispatch({
                                         type: "SET_NOTIFICATION",
                                         notification: {
-                                          title: "Error",
-                                          message: res.error,
+                                          title: "Action not allowed",
+                                          message:
+                                            "You can not like you own review",
                                           type: "failure",
                                         },
                                       });
-                                    } else {
-                                      setRefreshReviews(!refreshReviews);
                                     }
                                   } else {
                                     store.dispatch({
@@ -390,8 +404,21 @@ const MovieReviews = ({
                         )
                         .map((y, ind) => (
                           <div
+                            ref={(el) => {
+                              if (
+                                y._id === seekCommentId &&
+                                el &&
+                                !scrolledOnce
+                              ) {
+                                setScrolledOnce(true);
+                                el.scrollIntoView({ behavior: "smooth" });
+                                // reviewToSeek.current = el;
+                              }
+                            }}
                             key={`comment-${reviewIdOfVisibleComments}-${ind}`}
-                            className="row no-gutters p-4 bg-over-root-lighter rounded ml-4 mb-2"
+                            className={`row no-gutters p-4 bg-over-root-lighter rounded ml-4 mb-2${
+                              y._id === seekCommentId ? " fading-shadow" : ""
+                            }`}
                           >
                             <div className="col-auto pr-4 d-none d-md-block">
                               <div
@@ -515,25 +542,37 @@ const MovieReviews = ({
                                         <MdThumbUp
                                           onClick={async () => {
                                             if (user.token) {
-                                              setLoadingComment(ind);
-                                              let res = await LikeComment(
-                                                user,
-                                                y._id
-                                              );
-                                              setLoadingComment(-1);
-                                              if (res.error) {
+                                              if (user._id !== y.author) {
+                                                setLoadingComment(ind);
+                                                let res = await LikeComment(
+                                                  user,
+                                                  y._id
+                                                );
+                                                setLoadingComment(-1);
+                                                if (res.error) {
+                                                  store.dispatch({
+                                                    type: "SET_NOTIFICATION",
+                                                    notification: {
+                                                      title: "Error",
+                                                      message: res.error,
+                                                      type: "failure",
+                                                    },
+                                                  });
+                                                } else {
+                                                  setRefreshComments(
+                                                    !refreshComments
+                                                  );
+                                                }
+                                              } else {
                                                 store.dispatch({
                                                   type: "SET_NOTIFICATION",
                                                   notification: {
-                                                    title: "Error",
-                                                    message: res.error,
+                                                    title: "Action not allowed",
+                                                    message:
+                                                      "You can not like your own comment",
                                                     type: "failure",
                                                   },
                                                 });
-                                              } else {
-                                                setRefreshComments(
-                                                  !refreshComments
-                                                );
                                               }
                                             } else {
                                               store.dispatch({

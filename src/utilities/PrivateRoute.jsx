@@ -17,8 +17,8 @@ const PrivateRoute = ({ Component, bearerPath, user, ...rest }) => {
         let data = await LoginWithToken({
           token,
         });
-
         if (!data.error) {
+          console.log("Data", data);
           if (data.role === "Administrator") {
             setValidity((prev) =>
               Object.assign({}, prev, { ready: true, valid: true })
@@ -34,6 +34,16 @@ const PrivateRoute = ({ Component, bearerPath, user, ...rest }) => {
             });
             history.push("/");
           }
+        } else {
+          history.push("/");
+          store.dispatch({
+            type: "SET_NOTIFICATION",
+            notification: {
+              title: "Your role is not admin",
+              message: "Only website admins can access this page",
+              type: "failure",
+            },
+          });
         }
       }
     }

@@ -1,7 +1,6 @@
-const origin =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:5000"
-    : "https://calm-coast-57354.herokuapp.com";
+import { ServerUrl } from "../Settings";
+
+const origin = ServerUrl;
 
 const SendPostRequest = (path, data) => {
   return fetch(`${origin}${path}`, {
@@ -168,8 +167,8 @@ export const DeleteMultipleComments = (ids) => {
   return SendPostRequest("/admin/comments/delete", ids);
 };
 
-export const EditMultipleUsers = (ids, update) => {
-  return SendPostRequest("/admin/users/editMultiple", { ids, update });
+export const EditMultipleUsers = (ids, pids, update) => {
+  return SendPostRequest("/admin/users/editMultiple", { ids, pids, update });
 };
 
 export const GetAnnouncements = () => {
@@ -238,4 +237,12 @@ export const GetReview = (reviewId) => {
 
 export const ChangeBackgroundMovie = (apiKey) => {
   return SendPostRequest("/changeBackgroundMovie", { apiKey });
+};
+
+export const DeleteMultipleUsers = (ids, pids) => {
+  return SendPostRequest("/admin/users/deleteMultiple", { ids, pids });
+};
+
+export const GetPromotedReviews = () => {
+  return SendGetRequest("/reviews/getPromoted");
 };

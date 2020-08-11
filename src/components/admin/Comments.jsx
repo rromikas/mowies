@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Comments as data } from "../../Data";
 import Select from "../utility/Select";
 import Checkbox from "../utility/Checkbox";
 import { Emoji } from "emoji-mart";
@@ -16,6 +15,7 @@ import {
 import { connect } from "react-redux";
 import store from "../../store/store";
 import Loader from "../utility/Loader";
+import history from "../../History";
 
 const Comments = ({
   setEditCommentSection,
@@ -93,7 +93,7 @@ const Comments = ({
 
   const handleApply = async (all = false) => {
     if (all) {
-      setRoleFilter(role);
+      setRoleFilter(role === "All" ? "" : role);
     }
     let selected = filteredComments.filter((x) => x.selected);
     if (selected.length) {
@@ -198,9 +198,9 @@ const Comments = ({
                   <Select
                     popoverClass="col-60 col-sm-auto"
                     onSelect={(index) =>
-                      setRole(["Administrator", "User"][index])
+                      setRole(["All", "Administrator", "User"][index])
                     }
-                    items={["Administrator", "User"]}
+                    items={["All", "Administrator", "User"]}
                     btnName={role ? role : "Select Role"}
                     className="input-light px-3 col-auto"
                   ></Select>
@@ -454,16 +454,11 @@ const Comments = ({
                             <div>
                               <div
                                 style={{ minWidth: "200px" }}
-                                className="text-clamp-4 cursor-pointer user-select-none"
+                                className="cursor-pointer user-select-none btn-link"
                                 onClick={(e) => {
-                                  let target = e.currentTarget;
-                                  if (
-                                    target.classList.contains("text-clamp-4")
-                                  ) {
-                                    target.classList.remove("text-clamp-4");
-                                  } else {
-                                    target.classList.add("text-clamp-4");
-                                  }
+                                  history.push(
+                                    `/movie/${x.movie_id}/${x.review_id}/${x._id}`
+                                  );
                                 }}
                               >
                                 {x.comment}
@@ -484,42 +479,17 @@ const Comments = ({
                                 : ""}
                             </div>
                             <div className="d-flex">
-                              <Popover
-                                content={(w) => (
-                                  <div className="p-3">
-                                    {reviewOfComment._id !== x.review_id ? (
-                                      <div className="square-50">
-                                        <Loader
-                                          theme="dark"
-                                          loading={true}
-                                        ></Loader>
-                                      </div>
-                                    ) : reviewOfComment.review ? (
-                                      reviewOfComment.review
-                                    ) : (
-                                      "Couldn't find review"
-                                    )}
-                                  </div>
-                                )}
+                              <div
+                                onClick={async () => {
+                                  history.push(
+                                    `/movie/${x.movie_id}/${x.review_id}`
+                                  );
+                                }}
+                                className="text-primary cursor-pointer"
+                                style={{ whiteSpace: "nowrap" }}
                               >
-                                <div
-                                  onClick={async () => {
-                                    let res = await GetReview(x.review_id);
-                                    if (!res.error) {
-                                      setReviewOfComment(res);
-                                    } else {
-                                      setReviewOfComment({
-                                        _id: x.review_id,
-                                        review: "",
-                                      });
-                                    }
-                                  }}
-                                  className="text-primary cursor-pointer"
-                                  style={{ whiteSpace: "nowrap" }}
-                                >
-                                  View Review
-                                </div>
-                              </Popover>
+                                View Review
+                              </div>
                             </div>
                           </td>
                           <td
@@ -553,7 +523,7 @@ const Comments = ({
                       ))
                   ) : (
                     <tr>
-                      <td colSpan={3} className="text-center py-5">
+                      <td colSpan={6} className="text-center py-5">
                         0 results found
                       </td>
                     </tr>

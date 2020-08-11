@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BsX } from "react-icons/bs";
 
 const Modal = (props) => {
   useEffect(() => {
     if (props.open) {
-      document.getElementById("root").style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
     } else {
-      document.getElementById("root").style.overflow = "visible";
+      document.body.style.overflow = "visible";
     }
   }, [props.open]);
 

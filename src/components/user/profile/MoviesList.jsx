@@ -97,7 +97,7 @@ const MoviesList = ({
                       }}
                     >
                       <div
-                        className="square-60 rounded-circle d-flex flex-center play-btn"
+                        className="square-50 rounded-circle d-flex flex-center play-btn"
                         onClick={(e) => {
                           e.stopPropagation();
                           setTrailerMovieId(formatedMovie.id);
@@ -106,7 +106,7 @@ const MoviesList = ({
                       >
                         <BsPlayFill
                           style={{
-                            fontSize: "35px",
+                            fontSize: "30px",
                             color: "white",
                             marginRight: "-5px",
                           }}

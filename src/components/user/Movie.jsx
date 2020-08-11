@@ -20,7 +20,7 @@ const Movie = (props) => {
   const ratings = props.ratings;
   const apiKey = props.settings.movies_api_key;
   const seekReviewId = props.match.params.reviewId;
-  console.log("seek rev", seekReviewId);
+  const seekCommentId = props.match.params.commentId;
   //user will be needed to write comments on reviews and to add reviews
   const user = props.user;
 
@@ -115,7 +115,7 @@ const Movie = (props) => {
         ></TrailerPlayer>
       </Modal>
       <div className="col-60 text-white px-md-5 py-5 px-4 content-container">
-        <div className="row no-gutters py-5 mb-5">
+        <div className="row no-gutters mb-5">
           <div className="col-auto mr-5 d-none d-lg-block">
             <div className="w-100 position-relative">
               <img
@@ -296,6 +296,7 @@ const Movie = (props) => {
           </div>
         </div>
         <MovieReviews
+          seekCommentId={seekCommentId}
           seekReviewId={seekReviewId}
           movie={movie}
           user={user}

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   UpdateOrCreateSettings,
   ChangeBackgroundMovie,
+  GetSettings,
 } from "../../server/DatabaseApi";
 import { connect } from "react-redux";
 import store from "../../store/store";
@@ -449,6 +450,15 @@ const Settings = ({ settings }) => {
                               type: "success",
                             },
                           });
+                          let settings = await GetSettings();
+                          if (!settings.error) {
+                            if (settings.length) {
+                              store.dispatch({
+                                type: "UPDATE_SETTINGS",
+                                settings: settings[0],
+                              });
+                            }
+                          }
                         }
                       }
                     }}

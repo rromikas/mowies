@@ -13,6 +13,7 @@ import {
 } from "../../server/DatabaseApi";
 import store from "../../store/store";
 import { connect } from "react-redux";
+import history from "../../History";
 
 const Promotions = ({
   setEditPromotion,
@@ -409,20 +410,11 @@ const Promotions = ({
                                 {x.content_type === "Review" ? (
                                   <div style={{ minWidth: "150px" }}>
                                     <div
-                                      className="text-clamp-4 cursor-pointer user-select-none"
+                                      className="cursor-pointer user-select-none btn-link"
                                       onClick={(e) => {
-                                        let target = e.currentTarget;
-                                        if (
-                                          target.classList.contains(
-                                            "text-clamp-4"
-                                          )
-                                        ) {
-                                          target.classList.remove(
-                                            "text-clamp-4"
-                                          );
-                                        } else {
-                                          target.classList.add("text-clamp-4");
-                                        }
+                                        history.push(
+                                          `/movie/${x.movie_id}/${x.content_id}`
+                                        );
                                       }}
                                     >
                                       {x.content.review}
@@ -526,7 +518,7 @@ const Promotions = ({
                           ))
                       ) : (
                         <tr>
-                          <td colSpan={3} className=" text-center py-5">
+                          <td colSpan={6} className=" text-center py-5">
                             0 results found
                           </td>
                         </tr>

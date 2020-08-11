@@ -11,17 +11,19 @@ import {
 
 const Footer = ({ user, settings }) => {
   const menuItems = [
-    { name: "Home", path: "/" },
+    { name: "Home", path: "/", condition: true },
     {
       name: "My Wishlist",
+      condition: user.display_name,
       path: user._id ? `/profile/${user._id}/0` : "/login",
     },
     {
+      condition: user.display_name,
       name: "My Reviews",
       path: user._id ? `/profile/${user._id}/2` : "/login",
     },
-    { name: "About Us", path: "/" },
-    { name: "Contact", path: "/" },
+    { name: "About Us", path: "/", condition: true },
+    { name: "Contact", path: "/", condition: true },
   ];
 
   const socialIcons = [
@@ -40,7 +42,7 @@ const Footer = ({ user, settings }) => {
   const location = useLocation();
 
   return location.pathname !== "/login" && location.pathname !== "/signup" ? (
-    <div className="row no-gutters justify-content-center bg-over-root-lighter text-white">
+    <div className="row no-gutters justify-content-center bg-over-root text-white">
       <div
         className={`px-sm-5 px-4 py-4 col-60${
           location.pathname !== "/admin" ? " content-container" : ""
@@ -49,15 +51,17 @@ const Footer = ({ user, settings }) => {
         <div className="row no-gutters justify-content-between align-items-center">
           <div className="col-auto mb-2">
             <div className="row no-gutters">
-              {menuItems.map((x, i) => (
-                <div
-                  key={`footer-item-${i}`}
-                  className="col-auto text-title-md btn-tertiary"
-                  onClick={() => history.push(x.path)}
-                >
-                  {x.name}
-                </div>
-              ))}
+              {menuItems
+                .filter((x) => x.condition)
+                .map((x, i) => (
+                  <div
+                    key={`footer-item-${i}`}
+                    className="col-auto text-title-md btn-tertiary"
+                    onClick={() => history.push(x.path)}
+                  >
+                    {x.name}
+                  </div>
+                ))}
             </div>
           </div>
           <div className="col-md-auto col-60 px-3 mb-2">

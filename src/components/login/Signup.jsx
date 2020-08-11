@@ -237,7 +237,7 @@ const Signup = () => {
                       className="row no-gutters justify-content-between"
                       style={{ fontSize: "14px" }}
                     >
-                      <div className="col-auto">
+                      <div className="col-auto mr-4">
                         Already have account?{" "}
                         <span
                           className="btn-link cursor-pointer"

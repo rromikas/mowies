@@ -83,7 +83,7 @@ const Reviews = ({
 
   const handleApply = async (all = false) => {
     if (all) {
-      setRoleFilter(role);
+      setRoleFilter(role === "All" ? "" : role);
     }
     if (action === "Edit") {
       let selected = filteredReviews.filter((x) => x.selected);
@@ -152,7 +152,9 @@ const Reviews = ({
             By Administrators (
             {Object.values(publicUsers).length
               ? reviews.filter(
-                  (x) => publicUsers[x.author].role === "Administrator"
+                  (x) =>
+                    publicUsers[x.author] &&
+                    publicUsers[x.author].role === "Administrator"
                 ).length
               : ""}
             )
@@ -192,9 +194,9 @@ const Reviews = ({
                   <Select
                     popoverClass="col-60 col-sm-auto"
                     onSelect={(index) =>
-                      setRole(["Administrator", "User"][index])
+                      setRole(["All", "Administrator", "User"][index])
                     }
-                    items={["Administrator", "User"]}
+                    items={["All", "Administrator", "User"]}
                     btnName={role ? role : "Select Role"}
                     className="input-light px-3 col-auto"
                   ></Select>
@@ -520,7 +522,7 @@ const Reviews = ({
                       ))
                   ) : (
                     <tr>
-                      <td colSpan={3} className=" text-center py-5">
+                      <td colSpan={7} className=" text-center py-5">
                         0 results found
                       </td>
                     </tr>

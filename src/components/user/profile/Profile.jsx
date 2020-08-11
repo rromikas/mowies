@@ -51,7 +51,7 @@ const Profile = (props) => {
       }
     }
     getData();
-  }, [userId, refreshProfile]);
+  }, [userId, refreshProfile, user.wishlist.length]);
 
   useEffect(() => {
     if (sectionInUrl !== undefined) {
@@ -138,7 +138,7 @@ const Profile = (props) => {
                 <div className="row no-gutters mb-3 profile-stats-title">
                   Wishlist
                 </div>
-                <div className="row no-gutters text-lift justify-content-center">
+                <div className="row no-gutters text-lift justify-content-end">
                   {profileData.wishlist.length}
                 </div>
               </div>
@@ -146,7 +146,7 @@ const Profile = (props) => {
                 <div className="row no-gutters mb-3 profile-stats-title">
                   Watched
                 </div>
-                <div className="row no-gutters text-lift justify-content-center">
+                <div className="row no-gutters text-lift justify-content-end">
                   {profileData.watchedlist.length}
                 </div>
               </div>
@@ -154,7 +154,7 @@ const Profile = (props) => {
                 <div className="row no-gutters mb-3 profile-stats-title">
                   Reviews
                 </div>
-                <div className="row no-gutters text-lift justify-content-center profile-stats-title">
+                <div className="row no-gutters text-lift justify-content-end profile-stats-title">
                   {profileData.reviews.length}
                 </div>
               </div>
@@ -162,7 +162,7 @@ const Profile = (props) => {
                 <div className="row no-gutters mb-3 profile-stats-title">
                   Comments
                 </div>
-                <div className="row no-gutters text-lift justify-content-center">
+                <div className="row no-gutters text-lift justify-content-end">
                   {profileData.comments.length}
                 </div>
               </div>

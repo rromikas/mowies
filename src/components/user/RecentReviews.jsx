@@ -101,12 +101,12 @@ const RecentReviews = ({ publicUsers, user, ratings }) => {
         <div className="row no-gutters h5">
           <div
             className="col-auto"
-            // style={{
-            //   padding: "10px 40px 10px 10px",
-            //   background: "linear-gradient(to left, #ff0037, transparent)",
-            //   borderRadius: "0 4px 4px 0",
-            //   marginBottom: "11px",
-            // }}
+            style={{
+              padding: "6px 40px 6px 10px",
+              background: "linear-gradient(to left, #ff0037, transparent)",
+              borderRadius: "0 4px 4px 0",
+              marginBottom: "11px",
+            }}
           >
             Recent Reviews
           </div>
@@ -221,7 +221,7 @@ const RecentReviews = ({ publicUsers, user, ratings }) => {
                         </div>
                         <div className="col-auto">
                           <div className="row no-gutters text-white">
-                            <span className="mr-2">Posted review on</span>
+                            <span className="mr-2">Posted on</span>
                             <span className="text-muted">
                               {date.format(new Date(x.date), "MMM DD, YYYY")}
                             </span>
@@ -287,20 +287,32 @@ const RecentReviews = ({ publicUsers, user, ratings }) => {
                                 <MdThumbUp
                                   onClick={async () => {
                                     if (user.token) {
-                                      setLoadingReview(i);
-                                      let res = await LikeReview(user, x._id);
-                                      setLoadingReview(-1);
-                                      if (res.error) {
+                                      if (user._id !== x.author) {
+                                        setLoadingReview(i);
+                                        let res = await LikeReview(user, x._id);
+                                        setLoadingReview(-1);
+                                        if (res.error) {
+                                          store.dispatch({
+                                            type: "SET_NOTIFICATION",
+                                            notification: {
+                                              title: "Error",
+                                              message: res.error,
+                                              type: "failure",
+                                            },
+                                          });
+                                        } else {
+                                          setRefreshReviews(!refreshReviews);
+                                        }
+                                      } else {
                                         store.dispatch({
                                           type: "SET_NOTIFICATION",
                                           notification: {
-                                            title: "Error",
-                                            message: res.error,
+                                            title: "Action not allowed",
+                                            message:
+                                              "You can not like your own review",
                                             type: "failure",
                                           },
                                         });
-                                      } else {
-                                        setRefreshReviews(!refreshReviews);
                                       }
                                     } else {
                                       store.dispatch({
@@ -461,25 +473,37 @@ const RecentReviews = ({ publicUsers, user, ratings }) => {
                                       <MdThumbUp
                                         onClick={async () => {
                                           if (user.token) {
-                                            setLoadingComment(ind);
-                                            let res = await LikeComment(
-                                              user,
-                                              y._id
-                                            );
-                                            setLoadingComment(-1);
-                                            if (res.error) {
+                                            if (user._id !== y.author) {
+                                              setLoadingComment(ind);
+                                              let res = await LikeComment(
+                                                user,
+                                                y._id
+                                              );
+                                              setLoadingComment(-1);
+                                              if (res.error) {
+                                                store.dispatch({
+                                                  type: "SET_NOTIFICATION",
+                                                  notification: {
+                                                    title: "Error",
+                                                    message: res.error,
+                                                    type: "failure",
+                                                  },
+                                                });
+                                              } else {
+                                                setRefreshComments(
+                                                  !refreshComments
+                                                );
+                                              }
+                                            } else {
                                               store.dispatch({
                                                 type: "SET_NOTIFICATION",
                                                 notification: {
-                                                  title: "Error",
-                                                  message: res.error,
+                                                  title: "Action not allowed",
+                                                  message:
+                                                    "You can not like your own comment",
                                                   type: "failure",
                                                 },
                                               });
-                                            } else {
-                                              setRefreshComments(
-                                                !refreshComments
-                                              );
                                             }
                                           } else {
                                             store.dispatch({

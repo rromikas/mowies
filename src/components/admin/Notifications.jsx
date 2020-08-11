@@ -494,7 +494,7 @@ const Notifications = ({
                           ))
                       ) : (
                         <tr>
-                          <td colSpan={3} className=" text-center py-5">
+                          <td colSpan={6} className=" text-center py-5">
                             0 results found
                           </td>
                         </tr>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BsChevronRight, BsChevronLeft } from "react-icons/bs";
 
 const Pagination = ({
@@ -12,7 +12,13 @@ const Pagination = ({
   let second = first + 1;
   let third = second + 1;
 
-  return (
+  useEffect(() => {
+    if (count === 1) {
+      setCurrent(1);
+    }
+  }, [count]);
+
+  return count > 1 ? (
     <React.Fragment>
       <div className="row no-gutters d-flex d-lg-none user-select-none">
         <div
@@ -112,6 +118,8 @@ const Pagination = ({
         </div>
       </div>
     </React.Fragment>
+  ) : (
+    ""
   );
 };
 

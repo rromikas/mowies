@@ -177,7 +177,7 @@ const EditUser = ({ currentUser, getBack }) => {
                   })
                 );
               }}
-              type="text"
+              type="password"
               className="px-3 input-light w-100"
             ></input>
           </div>
@@ -200,7 +200,7 @@ const EditUser = ({ currentUser, getBack }) => {
                   })
                 );
               }}
-              type="text"
+              type="password"
               className="px-3 input-light w-100"
             ></input>
           </div>
@@ -292,6 +292,10 @@ const EditUser = ({ currentUser, getBack }) => {
                       type: "success",
                     },
                   });
+                  let publicUser = store.getState().publicUsers[newUser._id];
+                  publicUser.status = newUser.status;
+                  publicUser.role = newUser.role;
+                  store.dispatch({ type: "UPDATE_PUBLICUSERS", publicUser });
                   getBack();
                 }
               }
