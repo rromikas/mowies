@@ -149,28 +149,6 @@ const AddNewUser = ({ getBack, publicUsers }) => {
           </div>
         </div>
         <div className="row no-gutters mb-4">
-          <div className="col-60 mb-1">Username</div>
-          <div className="col-60 mb-1">
-            <input
-              spellCheck={false}
-              value={newUser.username}
-              onChange={(e) => {
-                e.persist();
-                setNewUser((prev) =>
-                  Object.assign({}, prev, {
-                    username: e.target.value,
-                  })
-                );
-              }}
-              type="text"
-              className="px-3 input-light w-100"
-            ></input>
-          </div>
-          <div className="col-60 text-muted">
-            Choose something you like, this cannot be changed
-          </div>
-        </div>
-        <div className="row no-gutters mb-4">
           <div className="col-60 mb-1">*Password</div>
           <div className="col-60 mb-1">
             <input

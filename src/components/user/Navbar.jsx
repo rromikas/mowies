@@ -1,18 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import Popover from "../utility/Popover";
-import Select from "../utility/Select";
-import { BsChevronDown, BsSearch } from "react-icons/bs";
+import { BsChevronDown, BsX, BsXCircle } from "react-icons/bs";
 import history from "../../History";
 import store from "../../store/store";
 import Logo from "../../images/Logo";
 import Announcement from "./Announcement";
-import { GetUserNotifications } from "../../server/DatabaseApi";
+import {
+  GetUserNotifications,
+  DeleteUserNotification,
+} from "../../server/DatabaseApi";
 import Notifications from "../../images/Notifications";
 import { withResizeDetector } from "react-resize-detector";
 import { useLocation } from "react-router-dom";
 import SearchBox from "./SearchBox";
 import { MdMenu } from "react-icons/md";
+import date from "date-and-time";
 
 const Navbar = (props) => {
   const user = props.user;
@@ -140,41 +143,73 @@ const Navbar = (props) => {
                       <Popover
                         content={(w) => (
                           <div
-                            className="container-fluid rounded"
-                            style={{ maxWidth: "300px", width: "100%" }}
+                            className="container-fluid rounded px-0"
+                            style={{ maxWidth: "400px", width: "100%" }}
                           >
-                            {notifications.map((x, i) => (
-                              <div
-                                key={`notificaiton-${i}`}
-                                className={`row no-gutters p-4${
-                                  i !== notifications.length - 1
-                                    ? " border-bottom"
-                                    : ""
-                                }`}
-                              >
-                                <div className="col-60 text-left mb-1 font-weight-bold">
-                                  {x.subject}
+                            {notifications.length ? (
+                              notifications.map((x, i) => (
+                                <div
+                                  key={`notificaiton-${i}`}
+                                  className={`row no-gutters p-3${
+                                    i !== notifications.length - 1
+                                      ? " border-bottom"
+                                      : ""
+                                  }`}
+                                >
+                                  <div className="col-60 text-left mb-1 font-weight-bold">
+                                    <div className="row no-gutters">
+                                      <div className="col mr-3">
+                                        {x.subject}
+                                      </div>
+                                      <div className="col-auto text-left text-primary-custom">
+                                        <small>
+                                          {date.format(
+                                            new Date(x.start_date),
+                                            "MMM DD, YYYY"
+                                          )}
+                                        </small>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="col-60 text-left font-size-13">
+                                    <div className="row no-gutters align-items-center">
+                                      <div className="col mr-3">
+                                        {x.description}
+                                      </div>
+                                      <div className="col-auto">
+                                        <BsXCircle
+                                          onClick={async () => {
+                                            let res = await DeleteUserNotification(
+                                              x._id,
+                                              user._id
+                                            );
+                                            if (!res.error) {
+                                              setNotifications((prev) => {
+                                                let arr = [...prev];
+                                                arr.splice(i, 1);
+                                                return arr;
+                                              });
+                                            }
+                                          }}
+                                          fontSize="26px"
+                                          className="cursor-pointer notification-close-icon"
+                                        ></BsXCircle>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
-                                <div className="col-60 text-left">
-                                  {x.description}
-                                </div>
+                              ))
+                            ) : (
+                              <div className="row no-gutters flex-center p-4">
+                                You don't have notifications right now
                               </div>
-                            ))}
+                            )}
                           </div>
                         )}
                       >
-                        <div
-                          className="col-auto"
-                          onClick={() =>
-                            setNotifications((prev) =>
-                              prev.map((x) =>
-                                Object.assign({}, x, { seen: true })
-                              )
-                            )
-                          }
-                        >
+                        <div className="col-auto">
                           <Notifications
-                            count={notifications.filter((x) => !x.seen).length}
+                            count={notifications.length}
                           ></Notifications>
                         </div>
                       </Popover>
@@ -192,9 +227,22 @@ const Navbar = (props) => {
                             style={{
                               borderRadius: "4px",
                               overflow: "hidden",
-                              width: `${w}px`,
+                              minWidth: `${w}px`,
                             }}
                           >
+                            {user.role === "Administrator" ? (
+                              <div
+                                className="popover-item border-bottom"
+                                onClick={() => {
+                                  profilePopover.current.click();
+                                  history.push(`/admin`);
+                                }}
+                              >
+                                Administration
+                              </div>
+                            ) : (
+                              ""
+                            )}
                             <div
                               className="popover-item border-bottom"
                               onClick={() => {

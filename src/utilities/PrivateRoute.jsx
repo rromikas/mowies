@@ -18,7 +18,6 @@ const PrivateRoute = ({ Component, bearerPath, user, ...rest }) => {
           token,
         });
         if (!data.error) {
-          console.log("Data", data);
           if (data.role === "Administrator") {
             setValidity((prev) =>
               Object.assign({}, prev, { ready: true, valid: true })

@@ -45,6 +45,23 @@ const Movie = (props) => {
     //check if movie fetched from api
     if (movie.title) {
       AddViewToMovie(movie.id, apiKey);
+      if (!(movie.id in ratings)) {
+        store.dispatch({
+          type: "UPDATE_RATINGS",
+          rating: {
+            [movie.id]: {
+              excellent_rate: 0,
+              ok_rate: 0,
+              bad_rate: 0,
+              good_rate: 0,
+              movie_poster: movie.poster_path,
+              movie_title: movie.title,
+              movie_genres: movie.genres.map((x) => x.name),
+              movie_release_date: movie.release_date,
+            },
+          },
+        });
+      }
     }
   }, [movie.title]);
 

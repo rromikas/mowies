@@ -62,17 +62,27 @@ const Wishlist = ({ movies, ratings }) => {
           )}
         </div>
       </div>
-      <MoviesList
-        listType="wishlist"
-        movies={movies.filter(
-          (x) =>
-            (ratings[x.movie_id] &&
-              ratings[x.movie_id].movie_genres.includes(
-                genres[selectedGenre]
-              )) ||
-            genres[selectedGenre] === "All"
-        )}
-      ></MoviesList>
+      {movies.length ? (
+        <MoviesList
+          listType="wishlist"
+          movies={movies.filter(
+            (x) =>
+              (ratings[x.movie_id] &&
+                ratings[x.movie_id].movie_genres.includes(
+                  genres[selectedGenre]
+                )) ||
+              genres[selectedGenre] === "All"
+          )}
+        ></MoviesList>
+      ) : (
+        <div
+          className="row no-gutters flex-center bg-over-root-lighter rounded p-5 text-white"
+          style={{ height: "150px" }}
+        >
+          You have not watched any movies/series yet. Please go to your wishlist
+          any mark titles as watched.
+        </div>
+      )}
     </div>
   );
 };

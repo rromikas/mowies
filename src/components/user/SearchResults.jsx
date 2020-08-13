@@ -99,11 +99,8 @@ const SearchResults = ({ search, settings }) => {
     getData();
   }, [search]);
 
-  console.log("movies", movies);
-
   const moviesGenres = extractGenres(movies);
   const seriesGenres = extractGenres(series);
-  console.log("series genrs", seriesGenres);
   return (
     <div
       className="row no-gutters justify-content-center bg-over-root"
@@ -144,7 +141,6 @@ const SearchResults = ({ search, settings }) => {
                             {Object.keys(moviesGenres).map((x, i) => (
                               <div
                                 onClick={() => {
-                                  console.log("X0", x);
                                   setSelectedMovieGenre(x);
                                 }}
                                 style={{ display: "inline-block" }}
@@ -204,7 +200,6 @@ const SearchResults = ({ search, settings }) => {
                                 {Object.keys(seriesGenres).map((x, i) => (
                                   <div
                                     onClick={() => {
-                                      console.log("X0", x);
                                       setSelectedSerieGenre(x);
                                     }}
                                     style={{ display: "inline-block" }}

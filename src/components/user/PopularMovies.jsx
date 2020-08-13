@@ -42,17 +42,16 @@ const PopularMovies = ({ apiKey, settings }) => {
           <div
             className="col-auto"
             style={{
-              padding: "6px 40px 6px 10px",
+              padding: "6px 30px 6px 0px",
               background: "linear-gradient(to left, #ff0037, transparent)",
               borderRadius: "0 4px 4px 0",
-              marginBottom: "11px",
             }}
           >
             Popular Movies
           </div>
         </div>
         <div className="row no-gutters text-light">
-          Most watched movies by days
+          Most watched movies in last 30 days
         </div>
         <div className="row no-gutters justify-content-end text-light align-items-center mb-4">
           <div className="col-auto">

@@ -28,12 +28,13 @@ const WishlistButton = ({ user, movie, apiKey }) => {
               type: "success",
             },
           });
-          let ratingsArr = await GetAllRatings();
-          let ratings = {};
-          ratingsArr.forEach((x) => {
-            ratings[x.tmdb_id] = x;
+          GetAllRatings((ratingsArr) => {
+            let ratings = {};
+            ratingsArr.forEach((x) => {
+              ratings[x.tmdb_id] = x;
+            });
+            store.dispatch({ type: "SET_RATINGS", ratings });
           });
-          store.dispatch({ type: "SET_RATINGS", ratings });
         } else {
           store.dispatch({
             type: "SET_NOTIFICATION",
@@ -59,19 +60,27 @@ const WishlistButton = ({ user, movie, apiKey }) => {
 
   const currentlyAdded =
     user.wishlist.findIndex((x) => x.movie_id === movie.id.toString()) !== -1;
+  const isInWatchlist =
+    user.watchedlist.findIndex((x) => x.movie_id === movie.id.toString()) !==
+    -1;
 
-  return (
+  return !isInWatchlist ? (
     <Popover
       theme="dark"
       position="top"
       content={(w) => (
-        <div className="p-3">
+        <div className="px-3 py-2">
           {currentlyAdded ? "Remove from wishlist" : "Add to wishlist"}
         </div>
       )}
       trigger="mouseenter"
     >
-      <div className="btn-custom btn-custom-iconic">
+      <div
+        style={{ pointerEvents: "all" }}
+        className={`btn-custom ${
+          currentlyAdded ? "btn-custom-danger" : "btn-custom-iconic"
+        }`}
+      >
         {loading ? (
           <Loader size={30} loading={loading} color={"white"}></Loader>
         ) : currentlyAdded ? (
@@ -88,6 +97,8 @@ const WishlistButton = ({ user, movie, apiKey }) => {
         )}
       </div>
     </Popover>
+  ) : (
+    ""
   );
 };
 

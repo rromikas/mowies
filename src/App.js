@@ -31,10 +31,22 @@ import PrivacyPolicy from "./components/user/PrivacyPolicy";
 function App() {
   useEffect(() => {
     async function getData() {
-      let trending = await GetTrendingMovies();
-      let settings = await GetSettings();
-      if (!settings.error) {
-        if (!settings.length) {
+      GetSettings((settings) => {
+        if (!settings.error) {
+          if (!settings.length) {
+            store.dispatch({
+              type: "SET_NOTIFICATION",
+              notification: {
+                title: "Action required",
+                message:
+                  "Settings are not set. Inform website administrator to set Api key and other settings for the website",
+                type: "failure",
+              },
+            });
+          } else {
+            store.dispatch({ type: "UPDATE_SETTINGS", settings: settings[0] });
+          }
+        } else {
           store.dispatch({
             type: "SET_NOTIFICATION",
             notification: {
@@ -44,32 +56,24 @@ function App() {
               type: "failure",
             },
           });
-        } else {
-          store.dispatch({ type: "UPDATE_SETTINGS", settings: settings[0] });
         }
-      } else {
-        store.dispatch({
-          type: "SET_NOTIFICATION",
-          notification: {
-            title: "Action required",
-            message:
-              "Settings are not set. Inform website administrator to set Api key and other settings for the website",
-            type: "failure",
-          },
+      });
+
+      GetAllRatings((ratingsArr) => {
+        let ratings = {};
+        ratingsArr.forEach((x) => {
+          ratings[x.tmdb_id] = x;
         });
-      }
-      let ratingsArr = await GetAllRatings();
-      let ratings = {};
-      ratingsArr.forEach((x) => {
-        ratings[x.tmdb_id] = x;
+        store.dispatch({ type: "SET_RATINGS", ratings });
       });
-      store.dispatch({ type: "SET_RATINGS", ratings });
-      let publicUsers = {};
-      let publicUsersArr = await GetAllPublicUsers();
-      publicUsersArr.forEach((x) => {
-        publicUsers[x.user_id] = x;
+
+      GetAllPublicUsers((publicUsersArr) => {
+        let publicUsers = {};
+        publicUsersArr.forEach((x) => {
+          publicUsers[x.user_id] = x;
+        });
+        store.dispatch({ type: "SET_PUBLICUSERS", publicUsers });
       });
-      store.dispatch({ type: "SET_PUBLICUSERS", publicUsers });
 
       let userToken = localStorage.getItem("movies_user_token");
       if (userToken !== null && userToken.length) {

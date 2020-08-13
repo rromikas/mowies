@@ -56,6 +56,10 @@ $main-btn-line-height: 40px;
   background: $primary-custom !important;
 }
 
+.text-primary-custom {
+  color: $primary-custom;
+}
+
 .text-green {
   color: $green !important;
 }
@@ -92,6 +96,12 @@ body {
   color: rgb(202, 202, 202) !important;
 }
 
+.btn-reaction-big {
+  height: 40px;
+  @extend .px-3;
+  border-radius: 18px;
+}
+
 .btn-reaction-normal {
   height: 30px;
   @extend .px-2;
@@ -125,7 +135,7 @@ body {
   cursor: pointer;
   border: 1.5px solid $primary;
   color: white;
-  background: $primary;
+  background: $primary !important;
   transition: background 0.3s;
 }
 
@@ -169,6 +179,11 @@ body {
 .btn-custom-iconic {
   background: $primary;
   color: white;
+  width: 44px;
+}
+
+.btn-custom-danger {
+  @extend .btn-danger;
   width: 44px;
 }
 
@@ -262,6 +277,21 @@ body {
 
 .btn-tertiary:hover {
   background: rgba(0, 0, 0, 0.4);
+}
+
+.btn-tertiary-light {
+  cursor: pointer;
+  user-select: none;
+  line-height: $main-btn-height;
+  height: $main-btn-height;
+  text-align: center;
+  transition: all 0.3s;
+  border-radius: 4px;
+  @extend .px-3;
+}
+
+.btn-tertiary-light:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .btn-tertiary-selected {
@@ -587,6 +617,10 @@ h6,
 
 .font-size-14 {
   font-size: 14px;
+}
+
+.font-size-13 {
+  font-size: 13px;
 }
 
 .font-size-12 {
@@ -1127,4 +1161,14 @@ input[type="number"] {
   to {
     box-shadow: 0 0 0 2px $primary-custom;
   }
+}
+
+.notification-close-icon {
+  color: gray;
+  transition: all 0.3s;
+}
+
+.notification-close-icon:hover {
+  transform: rotate(90deg);
+  color: $primary-custom;
 }

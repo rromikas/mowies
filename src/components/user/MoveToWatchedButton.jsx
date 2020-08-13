@@ -58,10 +58,13 @@ const MoveToWatchedButton = ({ user, movieId, refreshProfile = () => {} }) => {
     <Popover
       theme="dark"
       position="top"
-      content={(w) => <div className="p-3">Mark as watched</div>}
+      content={(w) => <div className="px-3 py-2">Mark as watched</div>}
       trigger="mouseenter"
     >
-      <div className="btn-custom btn-custom-iconic">
+      <div
+        className="btn-custom btn-custom-iconic"
+        style={{ pointerEvents: "all" }}
+      >
         {loading ? (
           <Loader size={30} loading={loading} color={"white"}></Loader>
         ) : (

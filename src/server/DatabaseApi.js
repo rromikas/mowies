@@ -32,12 +32,12 @@ export const LoginWithToken = (token) => {
   return SendPostRequest("/user/loginWithToken", token);
 };
 
-export const GetAllRatings = () => {
-  return SendGetRequest("/ratings/get/all");
+export const GetAllRatings = (callback) => {
+  SendGetRequest("/ratings/get/all").then((res) => callback(res));
 };
 
-export const GetAllPublicUsers = () => {
-  return SendGetRequest("/publicUsers/get/all");
+export const GetAllPublicUsers = (callback) => {
+  return SendGetRequest("/publicUsers/get/all").then((res) => callback(res));
 };
 
 export const RateMovie = (rate, movieId, user, apiKey) => {
@@ -128,8 +128,8 @@ export const UpdateOrCreateSettings = (settings) => {
   return SendPostRequest("/settings/updateOrCreate", settings);
 };
 
-export const GetSettings = () => {
-  return SendGetRequest("/settings/get");
+export const GetSettings = (callback) => {
+  SendGetRequest("/settings/get").then((res) => callback(res));
 };
 
 export const GetUsers = () => {
@@ -209,6 +209,10 @@ export const DeleteMultiplePromotions = (ids, update) => {
 
 export const GetUserNotifications = (ids) => {
   return SendPostRequest("/user/notifications/get/", { ids });
+};
+
+export const DeleteUserNotification = (id, userId) => {
+  return SendPostRequest("/user/notifications/delete", { id, userId });
 };
 
 export const GetNotifications = () => {

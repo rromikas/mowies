@@ -64,19 +64,28 @@ const Wishlist = ({ movies, owner, refreshProfile, ratings }) => {
           )}
         </div>
       </div>
-      <MoviesList
-        refreshProfile={refreshProfile}
-        owner={owner}
-        listType="wishlist"
-        movies={movies.filter(
-          (x) =>
-            (ratings[x.movie_id] &&
-              ratings[x.movie_id].movie_genres.includes(
-                genres[selectedGenre]
-              )) ||
-            genres[selectedGenre] === "All"
-        )}
-      ></MoviesList>
+      {movies.length ? (
+        <MoviesList
+          refreshProfile={refreshProfile}
+          owner={owner}
+          listType="wishlist"
+          movies={movies.filter(
+            (x) =>
+              (ratings[x.movie_id] &&
+                ratings[x.movie_id].movie_genres.includes(
+                  genres[selectedGenre]
+                )) ||
+              genres[selectedGenre] === "All"
+          )}
+        ></MoviesList>
+      ) : (
+        <div
+          className="row no-gutters flex-center bg-over-root-lighter rounded p-5 text-white"
+          style={{ height: "150px" }}
+        >
+          You have not added any movies/series to your wishlist.
+        </div>
+      )}
     </div>
   );
 };

@@ -7417,19 +7417,19 @@ fieldset:disabled a.btn {
           box-shadow: 0 0 0 0.2rem rgba(222, 170, 12, 0.5);
 }
 
-.btn-danger {
+.btn-danger, .btn-custom-danger {
   color: #fff;
   background-color: #dc3545;
   border-color: #dc3545;
 }
 
-.btn-danger:hover {
+.btn-danger:hover, .btn-custom-danger:hover {
   color: #fff;
   background-color: #c82333;
   border-color: #bd2130;
 }
 
-.btn-danger:focus, .btn-danger.focus {
+.btn-danger:focus, .btn-custom-danger:focus, .btn-danger.focus, .focus.btn-custom-danger {
   color: #fff;
   background-color: #c82333;
   border-color: #bd2130;
@@ -7437,21 +7437,23 @@ fieldset:disabled a.btn {
           box-shadow: 0 0 0 0.2rem rgba(225, 83, 97, 0.5);
 }
 
-.btn-danger.disabled, .btn-danger:disabled {
+.btn-danger.disabled, .disabled.btn-custom-danger, .btn-danger:disabled, .btn-custom-danger:disabled {
   color: #fff;
   background-color: #dc3545;
   border-color: #dc3545;
 }
 
-.btn-danger:not(:disabled):not(.disabled):active, .btn-danger:not(:disabled):not(.disabled).active,
-.show > .btn-danger.dropdown-toggle {
+.btn-danger:not(:disabled):not(.disabled):active, .btn-custom-danger:not(:disabled):not(.disabled):active, .btn-danger:not(:disabled):not(.disabled).active, .btn-custom-danger:not(:disabled):not(.disabled).active,
+.show > .btn-danger.dropdown-toggle,
+.show > .dropdown-toggle.btn-custom-danger {
   color: #fff;
   background-color: #bd2130;
   border-color: #b21f2d;
 }
 
-.btn-danger:not(:disabled):not(.disabled):active:focus, .btn-danger:not(:disabled):not(.disabled).active:focus,
-.show > .btn-danger.dropdown-toggle:focus {
+.btn-danger:not(:disabled):not(.disabled):active:focus, .btn-custom-danger:not(:disabled):not(.disabled):active:focus, .btn-danger:not(:disabled):not(.disabled).active:focus, .btn-custom-danger:not(:disabled):not(.disabled).active:focus,
+.show > .btn-danger.dropdown-toggle:focus,
+.show > .dropdown-toggle.btn-custom-danger:focus {
   -webkit-box-shadow: 0 0 0 0.2rem rgba(225, 83, 97, 0.5);
           box-shadow: 0 0 0 0.2rem rgba(225, 83, 97, 0.5);
 }
@@ -13652,11 +13654,13 @@ button.bg-dark:focus {
 
 .pr-3,
 .px-3,
+.btn-reaction-big,
 .table-btn,
 .btn-small,
 .btn-xsmall,
 .btn-natural,
 .btn-tertiary,
+.btn-tertiary-light,
 .popover-item {
   padding-right: 1rem !important;
 }
@@ -13668,11 +13672,13 @@ button.bg-dark:focus {
 
 .pl-3,
 .px-3,
+.btn-reaction-big,
 .table-btn,
 .btn-small,
 .btn-xsmall,
 .btn-natural,
 .btn-tertiary,
+.btn-tertiary-light,
 .popover-item {
   padding-left: 1rem !important;
 }
@@ -15996,6 +16002,10 @@ a.text-dark:hover, a.textarea-light:hover, a.table-input:hover::placeholder, a.t
   background: #ff0040 !important;
 }
 
+.text-primary-custom {
+  color: #ff0040;
+}
+
 .text-green {
   color: #00db54 !important;
 }
@@ -16030,6 +16040,11 @@ body {
 
 .text-light, .textarea, .text-light-white, .text-muted-light:hover {
   color: #cacaca !important;
+}
+
+.btn-reaction-big {
+  height: 40px;
+  border-radius: 18px;
 }
 
 .btn-reaction-normal {
@@ -16070,7 +16085,7 @@ body {
   cursor: pointer;
   border: 1.5px solid #004ad5;
   color: white;
-  background: #004ad5;
+  background: #004ad5 !important;
   -webkit-transition: background 0.3s;
   transition: background 0.3s;
 }
@@ -16122,6 +16137,10 @@ body {
 .btn-custom-iconic {
   background: #004ad5;
   color: white;
+  width: 44px;
+}
+
+.btn-custom-danger {
   width: 44px;
 }
 
@@ -16214,6 +16233,24 @@ body {
 
 .btn-tertiary:hover {
   background: rgba(0, 0, 0, 0.4);
+}
+
+.btn-tertiary-light {
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  line-height: 44px;
+  height: 44px;
+  text-align: center;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  border-radius: 4px;
+}
+
+.btn-tertiary-light:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .btn-tertiary-selected {
@@ -16550,6 +16587,10 @@ h1, h2, h3, h4, h5, h6,
 
 .font-size-14 {
   font-size: 14px;
+}
+
+.font-size-13 {
+  font-size: 13px;
 }
 
 .font-size-12 {
@@ -17240,5 +17281,17 @@ input[type="number"] {
     -webkit-box-shadow: 0 0 0 2px #ff0040;
             box-shadow: 0 0 0 2px #ff0040;
   }
+}
+
+.notification-close-icon {
+  color: gray;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.notification-close-icon:hover {
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+  color: #ff0040;
 }
 /*# sourceMappingURL=style.css.map */

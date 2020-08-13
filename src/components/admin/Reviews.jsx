@@ -66,9 +66,16 @@ const Reviews = ({
       if (roleFilter) {
         arr = arr.filter((x) => publicUsers[x.author].role === roleFilter);
       }
+      if (mainFilter.key === "role" && mainFilter.value) {
+        arr = arr.filter(
+          (x) => publicUsers[x.author][mainFilter.key] === mainFilter.value
+        );
+      }
 
-      if (mainFilter.key && mainFilter.value) {
-        arr = arr.filter((x) => x[mainFilter.key] === mainFilter.value);
+      if (mainFilter.key === "deleted" && mainFilter.value) {
+        arr = arr.filter((x) => x["deleted"] === mainFilter.value);
+      } else {
+        arr = arr.filter((x) => !x["deleted"]);
       }
 
       setFilteredReviews(arr);
@@ -134,7 +141,7 @@ const Reviews = ({
               setRoleFilter("");
             }}
           >
-            All ({reviews.length})
+            All ({reviews.filter((x) => !x.deleted).length})
           </div>
           <div className="col-auto px-2 text-muted">|</div>
           <div
@@ -154,7 +161,8 @@ const Reviews = ({
               ? reviews.filter(
                   (x) =>
                     publicUsers[x.author] &&
-                    publicUsers[x.author].role === "Administrator"
+                    publicUsers[x.author].role === "Administrator" &&
+                    !x.deleted
                 ).length
               : ""}
             )

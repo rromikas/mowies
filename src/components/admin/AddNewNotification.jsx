@@ -123,9 +123,10 @@ const AddNewNotification = ({ publicUsers, getBack }) => {
               selectedType
                 ? Object.values(publicUsers).filter(
                     (x) =>
-                      x.status === autocompleteOptions[selectedType] ||
-                      x.role === autocompleteOptions[selectedType] ||
-                      autocompleteOptions[selectedType] === "All"
+                      x.status !== "Deleted" &&
+                      (x.status === autocompleteOptions[selectedType] ||
+                        x.role === autocompleteOptions[selectedType] ||
+                        autocompleteOptions[selectedType] === "All")
                   )
                 : Object.keys(autocompleteOptions)
             }
@@ -387,6 +388,13 @@ const AddNewNotification = ({ publicUsers, getBack }) => {
                       title: "Notification created",
                       message: "Notification was successfully created",
                       type: "success",
+                    },
+                  });
+                  let notifications = store.getState().user.notifications;
+                  store.dispatch({
+                    type: "UPDATE_USER",
+                    userProperty: {
+                      notifications: notifications.concat([res.id]),
                     },
                   });
                   getBack();

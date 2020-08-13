@@ -133,10 +133,9 @@ const PopularReviews = ({ publicUsers, settings, user, ratings }) => {
           <div
             className="col-auto"
             style={{
-              padding: "6px 40px 6px 10px",
+              padding: "6px 30px 6px 0px",
               background: "linear-gradient(to left, #ff0037, transparent)",
               borderRadius: "0 4px 4px 0",
-              marginBottom: "11px",
             }}
           >
             Popular Reviews

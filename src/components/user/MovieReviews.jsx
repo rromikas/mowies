@@ -20,6 +20,7 @@ import { Collapse } from "@material-ui/core";
 import Paigination from "../utility/Paigination";
 import store from "../../store/store";
 import Loader from "../utility/Loader";
+import Popover from "../utility/Popover";
 
 const MovieReviews = ({
   movie,
@@ -125,28 +126,32 @@ const MovieReviews = ({
     getData();
   }, [movie, refreshReviews]);
 
-  useEffect(() => {
-    //to avoid scroll on first render
-    if (page >= 0) {
-      //100 ms for reviews to be rendered. It increases successful scrolls to top.
-      async function scrollAfterDelayToTopReview() {
-        await new Promise((resolve) => setTimeout(resolve, 100));
-        topOfReviewsBlock.current.scrollIntoView({
-          behavior: "smooth",
-        });
-      }
-      scrollAfterDelayToTopReview();
-    }
-  }, [page]);
+  // useEffect(() => {
+  //   //to avoid scroll on first render
+  //   if (page >= 0) {
+  //     //100 ms for reviews to be rendered. It increases successful scrolls to top.
+  //     async function scrollAfterDelayToTopReview() {
+  //       await new Promise((resolve) => setTimeout(resolve, 100));
+  //       topOfReviewsBlock.current.scrollIntoView({
+  //         behavior: "smooth",
+  //       });
+  //     }
+  //     scrollAfterDelayToTopReview();
+  //   }
+  // }, [page]);
 
   //avoid scrolling on first render into view
   const realPage = page === -1 ? 1 : page;
 
   return (
     <div className="row no-gutters">
-      <div className="col-60 h5 mb-3">
-        Reviews ({nFormatter(reviews.length, 1)})
-      </div>
+      {reviews.length ? (
+        <div className="col-60 h5 mb-3">
+          Reviews ({nFormatter(reviews.length, 1)})
+        </div>
+      ) : (
+        ""
+      )}
       <div className="col-60">
         <div className="row no-gutters mb-2" ref={topOfReviewsBlock}></div>
         {promotedReviews
@@ -225,45 +230,57 @@ const MovieReviews = ({
                           </div>
                         </div>
                       </div>
-                      <div
-                        className="col-auto text-muted btn-tertiary-small"
-                        onClick={async () => {
-                          if (user.token) {
-                            let res = await ReportReview(user, x._id);
-                            if (res.error) {
-                              store.dispatch({
-                                type: "SET_NOTIFICATION",
-                                notification: {
-                                  title: "Error",
-                                  message: res.error,
-                                  type: "failure",
-                                },
-                              });
+                      <Popover
+                        arrow={false}
+                        position="top"
+                        trigger="mouseenter"
+                        theme="dark"
+                        content={(w) => (
+                          <div className="py-2 px-3 rounded bg-root">
+                            Report Abuse
+                          </div>
+                        )}
+                      >
+                        <div
+                          className="col-auto text-muted btn-tertiary-small"
+                          onClick={async () => {
+                            if (user.token) {
+                              let res = await ReportReview(user, x._id);
+                              if (res.error) {
+                                store.dispatch({
+                                  type: "SET_NOTIFICATION",
+                                  notification: {
+                                    title: "Error",
+                                    message: res.error,
+                                    type: "failure",
+                                  },
+                                });
+                              } else {
+                                store.dispatch({
+                                  type: "SET_NOTIFICATION",
+                                  notification: {
+                                    title: "Review reported",
+                                    message:
+                                      "Review was successfully reported. We will review it soon.",
+                                    type: "success",
+                                  },
+                                });
+                              }
                             } else {
                               store.dispatch({
                                 type: "SET_NOTIFICATION",
                                 notification: {
-                                  title: "Review reported",
-                                  message:
-                                    "Review was successfully reported. We will review it soon.",
-                                  type: "success",
+                                  title: "Login required",
+                                  message: "You need to login to report review",
+                                  type: "failure",
                                 },
                               });
                             }
-                          } else {
-                            store.dispatch({
-                              type: "SET_NOTIFICATION",
-                              notification: {
-                                title: "Login required",
-                                message: "You need to login to report review",
-                                type: "failure",
-                              },
-                            });
-                          }
-                        }}
-                      >
-                        <MdFlag fontSize="24px"></MdFlag>
-                      </div>
+                          }}
+                        >
+                          <MdFlag fontSize="24px"></MdFlag>
+                        </div>
+                      </Popover>
                     </div>
 
                     <div className="row no-gutters text-light text-title-md mb-3 font-weight-300">

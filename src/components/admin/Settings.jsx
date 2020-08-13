@@ -386,8 +386,11 @@ const Settings = ({ settings }) => {
               </div>
               <div className="col-60">
                 <div className="row no-gutters mb-1">Set social links</div>
-                {socialIcons.map((x) => (
-                  <div className="row no-gutters mb-2">
+                {socialIcons.map((x, i) => (
+                  <div
+                    className="row no-gutters mb-2"
+                    key={`social-icons-settings-${i}`}
+                  >
                     <div className="col-auto mr-2">
                       <div className="square-40 rounded-circle bg-white d-flex flex-center">
                         <x.icon fontSize="24px" className="text-dark"></x.icon>
@@ -450,15 +453,16 @@ const Settings = ({ settings }) => {
                               type: "success",
                             },
                           });
-                          let settings = await GetSettings();
-                          if (!settings.error) {
-                            if (settings.length) {
-                              store.dispatch({
-                                type: "UPDATE_SETTINGS",
-                                settings: settings[0],
-                              });
+                          GetSettings((settings) => {
+                            if (!settings.error) {
+                              if (settings.length) {
+                                store.dispatch({
+                                  type: "UPDATE_SETTINGS",
+                                  settings: settings[0],
+                                });
+                              }
                             }
-                          }
+                          });
                         }
                       }
                     }}

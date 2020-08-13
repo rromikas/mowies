@@ -42,7 +42,7 @@ const Footer = ({ user, settings }) => {
   const location = useLocation();
 
   return location.pathname !== "/login" && location.pathname !== "/signup" ? (
-    <div className="row no-gutters justify-content-center bg-over-root text-white">
+    <div className="row no-gutters justify-content-center bg-root text-white">
       <div
         className={`px-sm-5 px-4 py-4 col-60${
           location.pathname !== "/admin" ? " content-container" : ""
@@ -56,7 +56,7 @@ const Footer = ({ user, settings }) => {
                 .map((x, i) => (
                   <div
                     key={`footer-item-${i}`}
-                    className="col-auto text-title-md btn-tertiary"
+                    className="col-auto text-title-md btn-tertiary-light"
                     onClick={() => history.push(x.path)}
                   >
                     {x.name}

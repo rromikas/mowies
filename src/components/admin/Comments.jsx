@@ -79,6 +79,8 @@ const Comments = ({
 
       if (mainFilter.key === "deleted" && mainFilter.value) {
         arr = arr.filter((x) => x["deleted"] === mainFilter.value);
+      } else {
+        arr = arr.filter((x) => !x["deleted"]);
       }
 
       setFilteredComments(arr);
@@ -140,7 +142,7 @@ const Comments = ({
               setRoleFilter("");
             }}
           >
-            All ({comments.length})
+            All ({comments.filter((x) => !x.deleted).length})
           </div>
           <div className="col-auto px-2 text-muted">|</div>
           <div
@@ -158,7 +160,8 @@ const Comments = ({
             By Administrators (
             {Object.values(publicUsers).length
               ? comments.filter(
-                  (x) => publicUsers[x.author].role === "Administrator"
+                  (x) =>
+                    publicUsers[x.author].role === "Administrator" && !x.deleted
                 ).length
               : ""}
             )

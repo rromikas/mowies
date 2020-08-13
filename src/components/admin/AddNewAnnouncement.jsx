@@ -16,7 +16,7 @@ const AddNewAnnouncement = ({ user, getBack }) => {
     type: "",
     start_date: Date.now(),
     end_date: Date.now(),
-    status: "",
+    status: "Published",
   });
 
   const [problem, setProblem] = useState("");

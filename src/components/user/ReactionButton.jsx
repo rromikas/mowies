@@ -34,7 +34,7 @@ const ReactionButton = ({
     >
       <div className="row no-gutters align-items-center h-100 justify-content-center">
         {value !== undefined && value !== null ? (
-          <div className={`col mr-${size === "normal" ? "2" : "1"}`}>
+          <div className={`col mr-${size !== "small" ? "2" : "1"}`}>
             {nFormatter(value, 1)}
           </div>
         ) : (
@@ -45,7 +45,7 @@ const ReactionButton = ({
             <Emoji
               emoji={emoji}
               set="facebook"
-              size={size === "small" ? 14 : 16}
+              size={size === "small" ? 14 : size === "normal" ? 16 : 28}
             />
           </div>
         </div>

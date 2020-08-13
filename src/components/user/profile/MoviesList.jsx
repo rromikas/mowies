@@ -49,7 +49,12 @@ const MoviesList = ({
               {listType !== "watchedlist" && owner ? (
                 <div
                   className="row no-gutters justify-content-end position-relative px-2 d-none d-sm-flex"
-                  style={{ marginBottom: "-51px", zIndex: 5 }}
+                  style={{
+                    marginBottom: "-51px",
+                    zIndex: 5,
+                    height: "44px",
+                    pointerEvents: "none",
+                  }}
                 >
                   <React.Fragment>
                     <WishlistButton

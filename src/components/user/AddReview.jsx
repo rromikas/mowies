@@ -80,6 +80,7 @@ const AddReview = ({
                 <div className="row no-gutters">
                   <ReactionButton
                     allowRate={true}
+                    size={"big"}
                     onClick={() =>
                       setNewReview((prev) =>
                         Object.assign({}, prev, { rating: "excellent_rate" })
@@ -94,6 +95,7 @@ const AddReview = ({
                   ></ReactionButton>
                   <ReactionButton
                     allowRate={true}
+                    size={"big"}
                     onClick={() =>
                       setNewReview((prev) =>
                         Object.assign({}, prev, { rating: "good_rate" })
@@ -106,6 +108,7 @@ const AddReview = ({
                   ></ReactionButton>
                   <ReactionButton
                     allowRate={true}
+                    size={"big"}
                     onClick={() =>
                       setNewReview((prev) =>
                         Object.assign({}, prev, { rating: "ok_rate" })
@@ -118,6 +121,7 @@ const AddReview = ({
                   ></ReactionButton>
                   <ReactionButton
                     allowRate={true}
+                    size={"big"}
                     onClick={() =>
                       setNewReview((prev) =>
                         Object.assign({}, prev, { rating: "bad_rate" })
@@ -186,6 +190,12 @@ const AddReview = ({
                           type: "success",
                           message: "Your review successfully added",
                         },
+                      });
+                      let watchedlist = [...user.watchedlist];
+                      watchedlist.push({ movie_id: movie.id.toString() });
+                      store.dispatch({
+                        type: "UPDATE_USER",
+                        userProperty: { watchedlist },
                       });
                       onClose();
                       refreshReviews();
