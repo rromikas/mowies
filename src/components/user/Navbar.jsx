@@ -53,7 +53,6 @@ const Navbar = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log("updated useefcet");
     async function getData() {
       if (user.notifications) {
         let data = await GetUserNotifications(user.notifications);
@@ -196,21 +195,12 @@ const Navbar = (props) => {
                                                   1
                                                 );
                                               }
-                                              console.log(
-                                                "prev notifications",
-                                                prevNotifications
-                                              );
                                               store.dispatch({
                                                 type: "UPDATE_USER",
                                                 userProperty: {
                                                   notifications: prevNotifications,
                                                 },
                                               });
-                                              // setNotifications((prev) => {
-                                              //   let arr = [...prev];
-                                              //   arr.splice(i, 1);
-                                              //   return arr;
-                                              // });
                                             }
                                           }}
                                           fontSize="26px"
