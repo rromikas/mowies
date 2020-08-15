@@ -33,6 +33,8 @@ const Comments = ({
   const [search, setSearch] = useState("");
 
   const [comments, setComments] = useState([]);
+  const [commentsObj, setCommentsObj] = useState({});
+
   const [filteredComments, setFilteredComments] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [reviewOfComment, setReviewOfComment] = useState({
@@ -44,7 +46,14 @@ const Comments = ({
     async function getData() {
       let res = await GetComments();
       if (!res.error) {
-        setComments(res.map((x) => Object.assign({}, x, { selected: false })));
+        setComments(
+          res.reverse().map((x) => Object.assign({}, x, { selected: false }))
+        );
+        let obj = {};
+        res.forEach((x) => {
+          obj[x._id] = x;
+        });
+        setCommentsObj(obj);
       }
     }
     getData();
@@ -103,8 +112,17 @@ const Comments = ({
         setEditComment(selected[0]);
         setEditCommentSection();
       } else {
-        //delete review
-        let res = await DeleteMultipleComments(selected.map((x) => x._id));
+        let ids = selected.map((x) => x._id);
+        let allIds = [...ids];
+
+        const fetchIds = (idsArr) => {
+          allIds = allIds.concat(idsArr);
+          idsArr.forEach((x) => fetchIds(commentsObj[x].comments));
+        };
+
+        fetchIds(ids);
+
+        let res = await DeleteMultipleComments(allIds);
         if (res.error) {
           store.dispatch({
             type: "SET_NOTIFICATION",
@@ -411,8 +429,19 @@ const Comments = ({
                                       <div
                                         className="text-danger underline-link"
                                         onClick={async () => {
+                                          let allIds = [x._id];
+
+                                          const fetchIds = (idsArr) => {
+                                            allIds = allIds.concat(idsArr);
+                                            idsArr.forEach((id) =>
+                                              fetchIds(commentsObj[id].comments)
+                                            );
+                                          };
+
+                                          fetchIds(allIds);
+
                                           let res = await DeleteMultipleComments(
-                                            [x._id]
+                                            allIds
                                           );
                                           if (res.error) {
                                             store.dispatch({
@@ -457,7 +486,7 @@ const Comments = ({
                             <div>
                               <div
                                 style={{ minWidth: "200px" }}
-                                className="cursor-pointer user-select-none btn-link"
+                                className="cursor-pointer user-select-none btn-link text-clamp-4"
                                 onClick={(e) => {
                                   history.push(
                                     `/movie/${x.movie_id}/${x.review_id}/${x._id}`

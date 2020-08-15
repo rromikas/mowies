@@ -53,8 +53,9 @@ const Navbar = (props) => {
   }, []);
 
   useEffect(() => {
+    console.log("updated useefcet");
     async function getData() {
-      if (user.notifications && user.notifications.length) {
+      if (user.notifications) {
         let data = await GetUserNotifications(user.notifications);
         if (!data.error) {
           setNotifications(
@@ -184,11 +185,32 @@ const Navbar = (props) => {
                                               user._id
                                             );
                                             if (!res.error) {
-                                              setNotifications((prev) => {
-                                                let arr = [...prev];
-                                                arr.splice(i, 1);
-                                                return arr;
+                                              let prevNotifications = store.getState()
+                                                .user.notifications;
+                                              let delIndex = prevNotifications.findIndex(
+                                                (n) => n === x._id
+                                              );
+                                              if (delIndex !== -1) {
+                                                prevNotifications.splice(
+                                                  delIndex,
+                                                  1
+                                                );
+                                              }
+                                              console.log(
+                                                "prev notifications",
+                                                prevNotifications
+                                              );
+                                              store.dispatch({
+                                                type: "UPDATE_USER",
+                                                userProperty: {
+                                                  notifications: prevNotifications,
+                                                },
                                               });
+                                              // setNotifications((prev) => {
+                                              //   let arr = [...prev];
+                                              //   arr.splice(i, 1);
+                                              //   return arr;
+                                              // });
                                             }
                                           }}
                                           fontSize="26px"

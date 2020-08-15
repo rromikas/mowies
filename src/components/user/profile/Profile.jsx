@@ -69,13 +69,13 @@ const Profile = (props) => {
         reviewsFetched.current = true;
         let res = await GetUserReviews(profileData.reviews);
         if (!res.error) {
-          setReviews(res);
+          setReviews(res.reverse());
         }
       } else if (section === 3 && !commentsFetched.current) {
         commentsFetched.current = true;
         let res = await GetUserComments(profileData.comments);
         if (!res.error) {
-          setComments(res);
+          setComments(res.reverse());
         }
       }
     }

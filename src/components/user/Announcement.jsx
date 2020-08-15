@@ -3,12 +3,9 @@ import { GetActiveAnnouncements } from "../../server/DatabaseApi";
 import { BsX } from "react-icons/bs";
 
 const Announcement = () => {
-  const [announcement, setAnnouncement] = useState({
-    type: "",
-    description: "",
-  });
+  const [announcements, setAnnouncements] = useState([]);
 
-  let haveUserClosedThisAnnouncement = false;
+  let notClosedAnnouncement = false;
 
   let closedAnnouncements = localStorage.getItem("closed_movies_announcements");
 
@@ -18,9 +15,13 @@ const Announcement = () => {
     closedAnnouncements = [];
   }
 
-  if (closedAnnouncements.includes(announcement.description)) {
-    haveUserClosedThisAnnouncement = true;
+  for (let x of announcements) {
+    if (!closedAnnouncements.includes(x.description)) {
+      notClosedAnnouncement = x;
+      break;
+    }
   }
+
   const [closed, setClosed] = useState(false);
 
   useEffect(() => {
@@ -28,7 +29,7 @@ const Announcement = () => {
       let data = await GetActiveAnnouncements();
       if (!data.error) {
         if (data.length) {
-          setAnnouncement(data[0]);
+          setAnnouncements(data);
         }
       }
     }
@@ -36,17 +37,16 @@ const Announcement = () => {
     getData();
   }, []);
 
-  const type = announcement.type;
-  const description = announcement.description;
-
-  return description && !closed && !haveUserClosedThisAnnouncement ? (
+  return notClosedAnnouncement &&
+    notClosedAnnouncement.description &&
+    !closed ? (
     <div
       className={`row p-2 position-relative no-gutters justify-content-center ${
-        type === "Warning"
+        notClosedAnnouncement.type === "Warning"
           ? "bg-warning"
-          : type === "Information"
+          : notClosedAnnouncement.type === "Information"
           ? "bg-primary"
-          : type === "Error"
+          : notClosedAnnouncement.type === "Error"
           ? "bg-danger"
           : ""
       }`}
@@ -54,7 +54,7 @@ const Announcement = () => {
       <div
         onClick={() => {
           setClosed(true);
-          closedAnnouncements.push(announcement.description);
+          closedAnnouncements.push(notClosedAnnouncement.description);
 
           localStorage.setItem(
             "closed_movies_announcements",
@@ -74,7 +74,7 @@ const Announcement = () => {
           ></div>
           <div className="col mr-2 pl-2 pl-md-0">
             <div className="row no-gutters justify-content-center">
-              {description}
+              {notClosedAnnouncement.description}
             </div>
           </div>
           <div className="col-auto" style={{ width: "30px" }}></div>

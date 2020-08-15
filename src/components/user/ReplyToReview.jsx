@@ -113,6 +113,7 @@ const ReplyToReview = ({
                       let finalComment = Object.assign({}, newComment, {
                         author_name: user.display_name,
                         movie_id: movie.id,
+                        comment_id: review.comment_id,
                         review_id: review._id,
                         review: review.review,
                         review_author: review.author,

@@ -32,7 +32,9 @@ const Reviews = ({
     async function getData() {
       let res = await GetReviews();
       if (!res.error) {
-        setReviews(res.map((x) => Object.assign({}, x, { selected: false })));
+        setReviews(
+          res.reverse().map((x) => Object.assign({}, x, { selected: false }))
+        );
       }
     }
     getData();
@@ -467,7 +469,7 @@ const Reviews = ({
                             <div>
                               <div
                                 style={{ minWidth: "200px" }}
-                                className="cursor-pointer user-select-none btn-link"
+                                className="cursor-pointer user-select-none btn-link text-clamp-4"
                                 onClick={(e) => {
                                   history.push(`/movie/${x.movie_id}/${x._id}`);
                                 }}

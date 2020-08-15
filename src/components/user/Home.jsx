@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { TrendingMovies, MoviesGenresMap } from "../../Data";
-import * as API from "../../server/MoviesApi";
-import history from "../../History";
-import Navbar from "./Navbar";
 import PopularMovies from "./PopularMovies";
-import Popover from "../utility/Popover";
-import MoviesList from "./MoviesList";
 import TrailerPlayer from "./TrailerPlayer";
 import Modal from "../utility/Modal";
 import ReactionButton from "./ReactionButton";
 import { FormatDuration } from "../../utilities/Functions";
 import { connect } from "react-redux";
-import store from "../../store/store";
 import WishlistButton from "./WishlistButton";
 import Recommendations from "./Recommendations";
 import PopularReviews from "./PopularReviews";
 import RecentReviews from "./RecentReviews";
-import Footer from "./Footer";
 import { GetRecommendations } from "../../server/DatabaseApi";
 
 const GetClosestValidWidth = () => {
@@ -34,7 +26,6 @@ const GetClosestValidWidth = () => {
 };
 
 const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
-  const backgroundMovieId = "300671";
   const [recommendedMovies, setRecommendedMovies] = useState([]);
   const [openTrailer, setOpenTrailer] = useState(false);
   const [backgroundMovie, setBackgroundMovie] = useState({
@@ -77,7 +68,10 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
             }}
           ></div>
           <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
-            <TrailerPlayer movieId={backgroundMovie.id}></TrailerPlayer>
+            <TrailerPlayer
+              movieId={backgroundMovie.id}
+              onEnded={() => setOpenTrailer(false)}
+            ></TrailerPlayer>
           </Modal>
           <div
             className="col-60 position-absolute"
@@ -129,10 +123,10 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
                 >
                   {backgroundMovie.title}
                 </div>
-                <div className="row no-gutters text-light mb-4">
+                <div className="row no-gutters text-light mb-4 font-weight-300">
                   {backgroundMovie.overview}
                 </div>
-                <div className="row no-gutters mb-5 font-weight-bold">
+                <div className="row no-gutters mb-5">
                   <div className="col-auto mr-2">
                     {backgroundMovie.release_date.substring(0, 4)}
                     <strong className="px-3">•</strong>

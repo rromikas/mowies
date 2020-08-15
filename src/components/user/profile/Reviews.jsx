@@ -160,7 +160,7 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                         </div>
                       </div>
 
-                      <div className="row no-gutters text-light mb-3 flex-grow-0 font-weigt-300">
+                      <div className="row no-gutters text-light mb-3 flex-grow-0 font-weigt-300 text-break">
                         {x.review}
                       </div>
                       <div className="row no-gutters align-items-center">
@@ -282,7 +282,7 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                                   </div>
                                 </div>
 
-                                <div className="row no-gutters text-light mb-3 font-weight-300">
+                                <div className="row no-gutters text-light mb-3 font-weight-300 text-break">
                                   {y.comment}
                                 </div>
                                 <div className="row no-gutters justify-content-between align-items-center">

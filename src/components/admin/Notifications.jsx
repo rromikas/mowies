@@ -34,7 +34,9 @@ const Notifications = ({
     async function getData() {
       let data = await GetNotifications();
       if (!data.error) {
-        setNotifications(data);
+        setNotifications(
+          data.reverse().map((x) => Object.assign({}, x, { selected: false }))
+        );
       }
     }
 
@@ -113,6 +115,10 @@ const Notifications = ({
               message: "Selected notifications were successfully deleted",
               type: "success",
             },
+          });
+          store.dispatch({
+            type: "UPDATE_USER",
+            userProperty: { update: Date.now() },
           });
         }
         setRefresh(!refresh);
@@ -409,6 +415,10 @@ const Notifications = ({
                                               "Notification was successfully deleted",
                                             type: "success",
                                           },
+                                        });
+                                        store.dispatch({
+                                          type: "UPDATE_USER",
+                                          userProperty: { update: Date.now() },
                                         });
                                       }
                                       setRefresh(!refresh);

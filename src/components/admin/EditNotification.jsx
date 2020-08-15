@@ -9,9 +9,14 @@ import date from "date-and-time";
 import { connect } from "react-redux";
 import store from "../../store/store";
 import Loader from "../utility/Loader";
-import { EditNotification as Edit } from "../../server/DatabaseApi";
+import { EditNotification as Edit, GetUser } from "../../server/DatabaseApi";
 
-const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
+const EditNotification = ({
+  currentNotification,
+  getBack,
+  publicUsers,
+  user,
+}) => {
   const types = ["App", "Email"];
 
   let initialDate = Date.now();
@@ -39,17 +44,6 @@ const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
       error: "Select at least one receiver",
     },
     { valid: notification.description, error: "Description is required" },
-    {
-      valid: notification.start_date <= notification.end_date,
-      error: "End date is before start date",
-    },
-    {
-      valid: !(
-        notification.start_date === notification.end_date &&
-        notification.type === "App"
-      ),
-      error: "App notification duration can't be 0",
-    },
   ];
 
   useEffect(() => {
@@ -60,15 +54,21 @@ const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
     setNotification(currentNotification);
   }, [currentNotification]);
 
+  const autocompleteOptions = {
+    All: "All",
+    "All users": "User",
+    "All admins": "Administrator",
+    "Inactive users": "Inactive",
+    "Active users": "Active",
+  };
+
   return (
     <div className="row no-gutters p-sm-5 p-4">
       <div className="col-60 py-3 border-bottom mb-4">
         <div className="row no-gutters admin-screen-title">
-          Add new notification
+          Edit notification
         </div>
-        <div className="row no-gutters">
-          Create a brand new notification and add to this site
-        </div>
+        <div className="row no-gutters">Edit existing notification</div>
       </div>
       <div className="col-60" style={{ maxWidth: "800px" }}>
         <div className="row no-gutters mb-4">
@@ -104,6 +104,7 @@ const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
         <div className="row no-gutters mb-4">
           <div className="col-60 mb-1">Notification to</div>
           <Autocomplete
+            value={notification.receivers}
             onChange={(e, val) => {
               setNotification((prev) =>
                 Object.assign({}, prev, { receivers: val })
@@ -112,8 +113,12 @@ const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
             placeholder={"Search by username"}
             color={"primary"}
             className="col-md-30 col-60 input-light-resize"
-            options={Object.values(publicUsers)}
-            getOptionLabel={(option) => option.display_name}
+            options={Object.keys(autocompleteOptions).concat(
+              Object.values(publicUsers).filter((x) => x.status !== "Deleted")
+            )}
+            getOptionLabel={(option) =>
+              option.display_name ? option.display_name : option
+            }
           ></Autocomplete>
         </div>
         <div className="row no-gutters mb-4">
@@ -150,55 +155,55 @@ const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
         </div>
         <div className="row no-gutters">
           <div className="col-xl-40 col-md-50 col-60">
-            <div className="row no-gutters mb-4">
-              <div className="col-sm-30 col-60 pr-sm-3 mb-4">
-                <div className="row no-gutters">Start Date</div>
+            <div className="row no-gutters">
+              <div className="col-60 pr-sm-3 mb-4">
+                <div className="row no-gutters">Date</div>
                 <div className="row no-gutters">
-                  <DayPickerInput
-                    value={date.format(
-                      new Date(notification.start_date),
-                      "DD/MM/YYYY"
-                    )}
-                    component={(props) => (
-                      <div className="position-relative w-100">
-                        <BsCalendar
-                          style={{
-                            position: "absolute",
-                            top: 0,
-                            bottom: 0,
-                            margin: "auto",
-                            left: "18px",
-                          }}
-                        ></BsCalendar>
-                        <input
-                          {...props}
-                          className="input-light w-100 pl-5 pr-3"
-                          placeholder="YYYY-MM-DD"
-                        ></input>
-                      </div>
-                    )}
-                    onDayChange={(day) => {
-                      if (day) {
-                        let d = new Date(notification.start_date);
-                        let fy = day.getFullYear();
-                        let year = day.getFullYear();
-                        let month = day.getMonth();
-                        let niceDay = day.getDate();
-                        d.setFullYear(year);
-                        d.setMonth(month);
-                        d.setDate(niceDay);
-                        setNotification((prev) =>
-                          Object.assign({}, prev, { start_date: d.getTime() })
-                        );
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="col-sm-30 col-60 mb-2">
-                <div className="row no-gutters">Start Time</div>
-                <div className="row no-gutters">
-                  <div className="col-60 position-relative input-light">
+                  <div className="col-auto mr-2" style={{ width: "182px" }}>
+                    <DayPickerInput
+                      value={date.format(
+                        new Date(notification.start_date),
+                        "DD/MM/YYYY"
+                      )}
+                      component={(props) => (
+                        <div className="position-relative">
+                          <BsCalendar
+                            style={{
+                              position: "absolute",
+                              top: 0,
+                              bottom: 0,
+                              margin: "auto",
+                              left: "18px",
+                            }}
+                          ></BsCalendar>
+                          <input
+                            {...props}
+                            className="input-light w-100 pl-5 pr-3"
+                            placeholder="YYYY-MM-DD"
+                          ></input>
+                        </div>
+                      )}
+                      onDayChange={(day) => {
+                        if (day) {
+                          let d = new Date(notification.start_date);
+                          let fy = day.getFullYear();
+                          let year = day.getFullYear();
+                          let month = day.getMonth();
+                          let niceDay = day.getDate();
+                          d.setFullYear(year);
+                          d.setMonth(month);
+                          d.setDate(niceDay);
+                          setNotification((prev) =>
+                            Object.assign({}, prev, { start_date: d.getTime() })
+                          );
+                        }
+                      }}
+                    />
+                  </div>
+                  <div
+                    className="col-auto position-relative input-light"
+                    style={{ width: "150px" }}
+                  >
                     <BsClock
                       style={{
                         position: "absolute",
@@ -226,87 +231,6 @@ const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
                         }
                       }}
                       value={new Date(notification.start_date)}
-                    ></TimePicker>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="row no-gutters">
-              <div className="col-sm-30 col-60 pr-sm-3 mb-4">
-                <div className="row no-gutters">End Date</div>
-                <div className="row no-gutters">
-                  <DayPickerInput
-                    value={date.format(
-                      new Date(notification.end_date),
-                      "DD/MM/YYYY"
-                    )}
-                    component={(props) => (
-                      <div className="position-relative w-100">
-                        <BsCalendar
-                          style={{
-                            position: "absolute",
-                            top: 0,
-                            bottom: 0,
-                            margin: "auto",
-                            left: "18px",
-                          }}
-                        ></BsCalendar>
-                        <input
-                          {...props}
-                          className="input-light w-100 pl-5 pr-3"
-                          placeholder="YYYY-MM-DD"
-                        ></input>
-                      </div>
-                    )}
-                    onDayChange={(day) => {
-                      if (day) {
-                        let d = new Date(notification.end_date);
-                        let fy = day.getFullYear();
-                        let year = day.getFullYear();
-                        let month = day.getMonth();
-                        let niceDay = day.getDate();
-                        d.setFullYear(year);
-                        d.setMonth(month);
-                        d.setDate(niceDay);
-                        setNotification((prev) =>
-                          Object.assign({}, prev, { end_date: d.getTime() })
-                        );
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="col-sm-30 col-60 mb-2">
-                <div className="row no-gutters">End Time</div>
-                <div className="row no-gutters">
-                  <div className="col-60 position-relative input-light">
-                    <BsClock
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        bottom: 0,
-                        margin: "auto",
-                        left: "18px",
-                      }}
-                    ></BsClock>
-                    <TimePicker
-                      clearIcon={null}
-                      clockIcon={null}
-                      className="w-100 pl-5"
-                      onChange={(a) => {
-                        if (a) {
-                          let [h, m] = a.split(":");
-                          let newTime = new Date(notification.end_date);
-                          newTime.setHours(h);
-                          newTime.setMinutes(m);
-                          setNotification((prev) =>
-                            Object.assign({}, prev, {
-                              end_date: newTime.getTime(),
-                            })
-                          );
-                        }
-                      }}
-                      value={new Date(notification.end_date)}
                     ></TimePicker>
                   </div>
                 </div>
@@ -351,6 +275,7 @@ const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
                 setProblem(invalid[0].error);
               } else {
                 setLoading(true);
+
                 let res = await Edit(notification);
                 setLoading(false);
                 if (res.error) {
@@ -370,6 +295,11 @@ const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
                       message: "Notification was successfully edited",
                       type: "success",
                     },
+                  });
+                  let updatedUser = await GetUser(user._id);
+                  store.dispatch({
+                    type: "SET_USER",
+                    user: updatedUser,
                   });
                   getBack();
                 }
@@ -401,6 +331,7 @@ const EditNotification = ({ currentNotification, getBack, publicUsers }) => {
 function mapp(state, ownProps) {
   return {
     publicUsers: state.publicUsers,
+    user: state.user,
     ...ownProps,
   };
 }

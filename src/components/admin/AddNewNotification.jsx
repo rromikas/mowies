@@ -8,10 +8,10 @@ import TimePicker from "react-time-picker";
 import date from "date-and-time";
 import { connect } from "react-redux";
 import Loader from "../utility/Loader";
-import { CreateNotification } from "../../server/DatabaseApi";
+import { CreateNotification, GetUser } from "../../server/DatabaseApi";
 import store from "../../store/store";
 
-const AddNewNotification = ({ publicUsers, getBack }) => {
+const AddNewNotification = ({ publicUsers, getBack, user }) => {
   const types = ["App", "Email"];
   let initialDate = Date.now();
   const [notification, setNotification] = useState({
@@ -24,8 +24,6 @@ const AddNewNotification = ({ publicUsers, getBack }) => {
     status: "Sent",
   });
 
-  const [selectedType, setSelectedType] = useState(false);
-
   const [problem, setProblem] = useState("");
   const [loading, setLoading] = useState(false);
   const statuses = ["Sent", "Drafted", "Deleted"];
@@ -37,17 +35,6 @@ const AddNewNotification = ({ publicUsers, getBack }) => {
       error: "Select at least one receiver",
     },
     { valid: notification.description, error: "Description is required" },
-    {
-      valid: notification.start_date <= notification.end_date,
-      error: "End date is before start date",
-    },
-    {
-      valid: !(
-        notification.start_date === notification.end_date &&
-        notification.type === "App"
-      ),
-      error: "App notification duration can't be 0",
-    },
   ];
 
   const autocompleteOptions = {
@@ -103,33 +90,18 @@ const AddNewNotification = ({ publicUsers, getBack }) => {
           <div className="col-60 mb-1">Notification to</div>
 
           <Autocomplete
-            disableCloseOnSelect={selectedType ? false : true}
-            onBlur={() => setSelectedType("")}
             value={notification.receivers}
             onChange={(e, val) => {
-              e.preventDefault();
-              if (Object.keys(autocompleteOptions).includes(val[0])) {
-                setSelectedType(val[0]);
-              } else {
-                setNotification((prev) =>
-                  Object.assign({}, prev, { receivers: val })
-                );
-              }
+              setNotification((prev) =>
+                Object.assign({}, prev, { receivers: val })
+              );
             }}
             placeholder={"Search by username"}
             color={"primary"}
             className="col-md-30 col-60 input-light-resize"
-            options={
-              selectedType
-                ? Object.values(publicUsers).filter(
-                    (x) =>
-                      x.status !== "Deleted" &&
-                      (x.status === autocompleteOptions[selectedType] ||
-                        x.role === autocompleteOptions[selectedType] ||
-                        autocompleteOptions[selectedType] === "All")
-                  )
-                : Object.keys(autocompleteOptions)
-            }
+            options={Object.keys(autocompleteOptions).concat(
+              Object.values(publicUsers).filter((x) => x.status !== "Deleted")
+            )}
             getOptionLabel={(option) =>
               option.display_name ? option.display_name : option
             }
@@ -171,7 +143,7 @@ const AddNewNotification = ({ publicUsers, getBack }) => {
           <div className="col-xl-40 col-md-50 col-60">
             <div className="row no-gutters">
               <div className="col-60 pr-sm-3 mb-4">
-                <div className="row no-gutters">Start Date</div>
+                <div className="row no-gutters">Date</div>
                 <div className="row no-gutters">
                   <div className="col-auto mr-2" style={{ width: "182px" }}>
                     <DayPickerInput
@@ -250,87 +222,6 @@ const AddNewNotification = ({ publicUsers, getBack }) => {
                 </div>
               </div>
             </div>
-            <div className="row no-gutters">
-              <div className="col-60 mb-4">
-                <div className="row no-gutters">End Date</div>
-                <div className="row no-gutters">
-                  <div className="col-auto mr-2" style={{ width: "182px" }}>
-                    <DayPickerInput
-                      value={date.format(
-                        new Date(notification.end_date),
-                        "DD/MM/YYYY"
-                      )}
-                      component={(props) => (
-                        <div className="position-relative">
-                          <BsCalendar
-                            style={{
-                              position: "absolute",
-                              top: 0,
-                              bottom: 0,
-                              margin: "auto",
-                              left: "18px",
-                            }}
-                          ></BsCalendar>
-                          <input
-                            {...props}
-                            className="input-light w-100 pl-5 pr-3"
-                            placeholder="YYYY-MM-DD"
-                          ></input>
-                        </div>
-                      )}
-                      onDayChange={(day) => {
-                        if (day) {
-                          let d = new Date(notification.end_date);
-                          let fy = day.getFullYear();
-                          let year = day.getFullYear();
-                          let month = day.getMonth();
-                          let niceDay = day.getDate();
-                          d.setFullYear(year);
-                          d.setMonth(month);
-                          d.setDate(niceDay);
-                          setNotification((prev) =>
-                            Object.assign({}, prev, { end_date: d.getTime() })
-                          );
-                        }
-                      }}
-                    />
-                  </div>
-                  <div
-                    className="col-auto position-relative input-light"
-                    style={{ width: "150px" }}
-                  >
-                    <BsClock
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        bottom: 0,
-                        margin: "auto",
-                        left: "18px",
-                      }}
-                    ></BsClock>
-                    <TimePicker
-                      clearIcon={null}
-                      clockIcon={null}
-                      className="w-100 pl-5"
-                      onChange={(a) => {
-                        if (a) {
-                          let [h, m] = a.split(":");
-                          let newTime = new Date(notification.end_date);
-                          newTime.setHours(h);
-                          newTime.setMinutes(m);
-                          setNotification((prev) =>
-                            Object.assign({}, prev, {
-                              end_date: newTime.getTime(),
-                            })
-                          );
-                        }
-                      }}
-                      value={new Date(notification.end_date)}
-                    ></TimePicker>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
         <div className="row no-gutters mb-4">
@@ -370,6 +261,7 @@ const AddNewNotification = ({ publicUsers, getBack }) => {
                 setProblem(invalid[0].error);
               } else {
                 setLoading(true);
+
                 let res = await CreateNotification(notification);
                 setLoading(false);
                 if (res.error) {
@@ -390,13 +282,12 @@ const AddNewNotification = ({ publicUsers, getBack }) => {
                       type: "success",
                     },
                   });
-                  let notifications = store.getState().user.notifications;
+                  let updatedUser = await GetUser(user._id);
                   store.dispatch({
-                    type: "UPDATE_USER",
-                    userProperty: {
-                      notifications: notifications.concat([res.id]),
-                    },
+                    type: "SET_USER",
+                    user: updatedUser,
                   });
+
                   getBack();
                 }
               }
@@ -427,6 +318,7 @@ const AddNewNotification = ({ publicUsers, getBack }) => {
 function mapp(state, ownProps) {
   return {
     publicUsers: state.publicUsers,
+    user: state.user,
     ...ownProps,
   };
 }
