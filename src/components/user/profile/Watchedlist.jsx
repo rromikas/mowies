@@ -64,7 +64,7 @@ const Wishlist = ({ movies, ratings }) => {
       </div>
       {movies.length ? (
         <MoviesList
-          listType="wishlist"
+          listType="watchedlist"
           movies={movies.filter(
             (x) =>
               (ratings[x.movie_id] &&
