@@ -290,11 +290,17 @@ const Navbar = (props) => {
                                 store.dispatch({
                                   type: "SET_USER",
                                   user: {
+                                    first_name: "",
+                                    last_name: "",
                                     display_name: "",
                                     photo: "",
                                     token: "",
+                                    email: "",
                                     ratings: {},
+                                    reviews: [],
                                     wishlist: [],
+                                    watchedlist: [],
+                                    notifications: [],
                                   },
                                 });
                                 history.push("/");

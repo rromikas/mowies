@@ -93,7 +93,6 @@ function dashboardMenuReducer(state = false, action) {
 
 function settingsReducer(
   state = {
-    _id: "NonExistingID",
     movies_api_key: "",
     movie_data_api: "",
     latest_movies_api: "",

@@ -352,15 +352,38 @@ const Settings = ({ settings }) => {
                   <div
                     className="col-auto btn-custom btn-custom-primary btn-small"
                     onClick={async () => {
-                      setLoading(true);
-                      let res = await ChangeBackgroundMovie(
-                        settings.movies_api_key
-                      );
-                      setLoading(false);
-                      store.dispatch({
-                        type: "UPDATE_SETTINGS",
-                        settings: { current_bg_movie: res },
-                      });
+                      if (settings.movies_api_key) {
+                        setLoading(true);
+                        let res = await ChangeBackgroundMovie(
+                          settings.movies_api_key
+                        );
+                        setLoading(false);
+                        if (!res.error) {
+                          store.dispatch({
+                            type: "UPDATE_SETTINGS",
+                            settings: { current_bg_movie: res },
+                          });
+                        } else {
+                          store.dispatch({
+                            type: "SET_NOTIFICATION",
+                            notification: {
+                              title: "Action not allowed",
+                              message: res.error,
+                              type: "failure",
+                            },
+                          });
+                        }
+                      } else {
+                        store.dispatch({
+                          type: "SET_NOTIFICATION",
+                          notification: {
+                            title: "Action not allowed",
+                            message:
+                              "You need to set movies api key to change background movie",
+                            type: "failure",
+                          },
+                        });
+                      }
                     }}
                   >
                     {loading ? (
