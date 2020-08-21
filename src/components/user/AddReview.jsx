@@ -179,7 +179,7 @@ const AddReview = ({
                         notification: {
                           title: "Couldn't add your review",
                           type: "failure",
-                          message: JSON.stringify(res.error).replace(/\"/g, ""),
+                          message: JSON.stringify(res.error).replace(/"/g, ""),
                         },
                       });
                     } else {

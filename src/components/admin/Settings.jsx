@@ -301,6 +301,7 @@ const Settings = ({ settings }) => {
                 </div>
                 <div className="row no-gutters mb-3">
                   <img
+                    alt={settings.current_bg_movie.backdrop_path}
                     style={{ maxWidth: "500px" }}
                     width="100%"
                     src={`https://image.tmdb.org/t/p/w500${settings.current_bg_movie.backdrop_path}`}

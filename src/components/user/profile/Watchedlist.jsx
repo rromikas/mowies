@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 import MoviesList from "./MoviesList";
-import { MoviesGenresMap } from "../../../Data";
 
 const extractGenres = (movies, ratings) => {
   let genres = ["All"];
@@ -28,8 +27,8 @@ const Wishlist = ({ movies, ratings }) => {
   const [selectedGenre, setSelectedGenre] = useState(0);
   const genres = extractGenres(movies, ratings);
   return (
-    <div className="col-60">
-      <div className="row no-gutters justify-content-end text-light align-items-center mb-4">
+    <div className="col-60 px-0">
+      <div className="row no-gutters justify-content-end text-light align-items-center mb-2">
         <div className="col-auto">
           {genres.length > 1 ? (
             <SimpleBar

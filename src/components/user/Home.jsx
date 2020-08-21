@@ -85,11 +85,13 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
           >
             <div className="position-relative">
               <img
+                alt={backgroundMovie.poster_path}
                 className="d-block d-lg-none"
                 width="100%"
                 src={`https://image.tmdb.org/t/p/w500${backgroundMovie.poster_path}`}
               ></img>
               <img
+                alt={backgroundMovie.poster_path}
                 className="d-none d-lg-block"
                 width="100%"
                 src={`https://image.tmdb.org/t/p/w${GetClosestValidWidth(

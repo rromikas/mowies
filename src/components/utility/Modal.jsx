@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { BsX } from "react-icons/bs";
 
 const Modal = (props) => {

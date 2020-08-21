@@ -1,57 +1,17 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import date from "date-and-time";
-import { Emoji } from "emoji-mart";
 import { MdThumbUp } from "react-icons/md";
-import {
-  GetMovieReviews,
-  GetReviewComments,
-} from "../../../server/DatabaseApi";
 import { connect } from "react-redux";
 import Paigination from "../../utility/Paigination";
 import history from "../../../History";
 
-const Comments = ({ reviews, publicUsers, ratings }) => {
-  //comments object.Its property will be review id.
-  const [comments, setComments] = useState({});
-
-  //
-  const [reviewIdOfVisibleComments, setReviewIdOfVisibleComments] = useState(
-    -1
-  );
-
-  // partitioning reviews into pages (8 reviews per page)
+const Comments = ({ comments, publicUsers, ratings }) => {
+  // partitioning comments into pages (8 comments per page)
   const [page, setPage] = useState(-1);
-  const [commentsPage, setCommentsPage] = useState(1);
-
-  // reference to top of the reviews block to scroll into view after changing the page
+  // reference to top of the comments block to scroll into view after changing the page
   const topOfReviewsBlock = useRef(null);
 
-  // boolean variable to display "add review" modal or not
-  const [addReviewOpen, setAddReviewOpen] = useState(false);
-
-  // boolean variable to display "add review" modal or not
-  const [review, setReview] = useState("");
-
-  //state to refresh comments after writing it
-  const [refreshComments, setRefreshComments] = useState(false);
-
-  //state to refresh reviews after writing it
-  const [refreshReviews, setRefreshReviews] = useState(false);
-
-  const commentsPerPage = 5;
   const reviewsPerPage = 8;
-
-  useEffect(() => {
-    async function getData() {
-      if (reviewIdOfVisibleComments !== -1) {
-        let data = await GetReviewComments(reviewIdOfVisibleComments);
-        setComments((prev) =>
-          Object.assign({}, prev, { [reviewIdOfVisibleComments]: data })
-        );
-      }
-    }
-    getData();
-  }, [reviewIdOfVisibleComments, refreshComments]);
 
   //to avoid scroll into view on first render
   let realPage = page === -1 ? 1 : page;
@@ -60,8 +20,8 @@ const Comments = ({ reviews, publicUsers, ratings }) => {
     <div className="row no-gutters text-white">
       <div className="col-60">
         <div className="row no-gutters mb-2" ref={topOfReviewsBlock}></div>
-        {reviews.length ? (
-          reviews
+        {comments.length ? (
+          comments
             .slice(
               (realPage - 1) * reviewsPerPage,
               (realPage - 1) * reviewsPerPage + reviewsPerPage
@@ -77,6 +37,7 @@ const Comments = ({ reviews, publicUsers, ratings }) => {
                 >
                   <div className="row no-gutters mb-1">
                     <img
+                      alt={ratings[x.movie_id].movie_poster}
                       onClick={() => history.push(`/movie/${x.id}`)}
                       width="100%"
                       style={{ borderRadius: "13px" }}
@@ -182,8 +143,8 @@ const Comments = ({ reviews, publicUsers, ratings }) => {
             className="row no-gutters flex-center bg-over-root-lighter rounded p-5"
             style={{ height: "150px" }}
           >
-            You have not commented on any reviews. We encourage you to share
-            your opinion on your friends and family reviews.
+            You have not commented on any comments. We encourage you to share
+            your opinion on your friends and family comments.
           </div>
         )}
         <div className="row no-gutters justify-content-sm-end justify-content-center mt-2">
@@ -193,7 +154,7 @@ const Comments = ({ reviews, publicUsers, ratings }) => {
                 notSelected: "input-dark",
                 selected: "input-dark-selected",
               }}
-              count={Math.ceil(reviews.length / reviewsPerPage)}
+              count={Math.ceil(comments.length / reviewsPerPage)}
               current={realPage}
               setCurrent={setPage}
             ></Paigination>

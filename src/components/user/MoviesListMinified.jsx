@@ -1,29 +1,11 @@
-import React, { useState } from "react";
-import {
-  TrendingMovies,
-  OfficialMoviesGenres,
-  OfficialSeriesGenres,
-} from "../../Data";
+import React from "react";
+import { OfficialMoviesGenres, OfficialSeriesGenres } from "../../Data";
 import history from "../../History";
-import WishlistButton from "./WishlistButton";
 import { connect } from "react-redux";
-import ReactionButton from "./ReactionButton";
-import { BsHeart, BsEye } from "react-icons/bs";
-import TrailerPlayer from "./TrailerPlayer";
-import Modal from "../utility/Modal";
-import { BsPlayFill } from "react-icons/bs";
 
 const MoviesListMinified = ({ movies, onClick }) => {
-  const [trailerMovieId, setTrailerMovieId] = useState("");
-  const [openTrailer, setOpenTrailer] = useState(false);
   return (
     <div className="row">
-      <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
-        <TrailerPlayer
-          movieId={trailerMovieId}
-          onEnded={() => setOpenTrailer(false)}
-        ></TrailerPlayer>
-      </Modal>
       {movies.map((x, i) => (
         <div
           key={`result-${i}`}

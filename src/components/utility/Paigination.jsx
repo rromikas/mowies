@@ -16,7 +16,7 @@ const Pagination = ({
     if (count === 1) {
       setCurrent(1);
     }
-  }, [count]);
+  }, [count]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return count > 1 ? (
     <React.Fragment>

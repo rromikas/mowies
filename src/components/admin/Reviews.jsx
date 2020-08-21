@@ -3,7 +3,7 @@ import Select from "../utility/Select";
 import Checkbox from "../utility/Checkbox";
 import { Emoji } from "emoji-mart";
 import Pagination from "../utility/Paigination";
-import { BsSearch, BsX } from "react-icons/bs";
+import { BsSearch } from "react-icons/bs";
 import date from "date-and-time";
 import { Swipeable } from "react-swipeable";
 import { GetReviews, DeleteMultipleReviews } from "../../server/DatabaseApi";
@@ -82,7 +82,7 @@ const Reviews = ({
 
       setFilteredReviews(arr);
     }
-  }, [search, roleFilter, reviews, mainFilter]);
+  }, [search, roleFilter, reviews, mainFilter]); // eslint-disable-line react-hooks/exhaustive-deps
 
   //boundaries for slicing reviews array. (pagination)
   let boundaries = [(page - 1) * 5, (page - 1) * 5 + 5];

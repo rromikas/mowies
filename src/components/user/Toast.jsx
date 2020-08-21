@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import store from "../../store/store";
 import { BsCheck, BsExclamation, BsX } from "react-icons/bs";
+import { CreateNotification } from "../../server/DatabaseApi";
 
-const Toast = ({ notification }) => {
+const Toast = ({ notification, publicUsers }) => {
   const [hovered, setHovered] = useState(false);
   const [expired, setExpired] = useState(false);
   useEffect(() => {
@@ -30,6 +31,26 @@ const Toast = ({ notification }) => {
       setExpired(false);
     }
   }, [expired, hovered]);
+
+  useEffect(() => {
+    if (
+      notification.type !== "success" &&
+      typeof notification.message === "object"
+    ) {
+      let adminNotification = {
+        type: "failure",
+        subject: "System error occured",
+        receivers: Object.values(publicUsers).filter(
+          (x) => x.role === "Administrator"
+        ),
+        start_date: Date.now(),
+        end_date: Date.now(),
+        description: JSON.stringify(notification.message).replace(/"/g, ""),
+        status: "Sent",
+      };
+      CreateNotification(adminNotification);
+    }
+  }, [notification.message]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div
@@ -75,7 +96,9 @@ const Toast = ({ notification }) => {
 
       <div className="row no-gutters p-4 text-white">
         {notification.type !== "success"
-          ? JSON.stringify(notification.message).replace(/\"/g, "")
+          ? typeof notification.message === "object"
+            ? "Action failed"
+            : notification.message
           : notification.message}
       </div>
     </div>
@@ -84,6 +107,7 @@ const Toast = ({ notification }) => {
 
 function mapp(state, ownProps) {
   return {
+    publicUsers: state.publicUsers,
     notification: state.notification,
     ...ownProps,
   };

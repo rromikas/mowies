@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { MoviesGenresMap, SeriesGenresMap } from "../../../Data";
 import history from "../../../History";
 import WishlistButton from "../WishlistButton";
 import { connect } from "react-redux";
@@ -82,6 +81,7 @@ const MoviesList = ({
                 <div className="col-sm-60 col-auto mr-3 mr-sm-0">
                   <div className="row no-gutters mb-2 position-relative movies-list-image">
                     <img
+                      alt={`poster of ${formatedMovie.id}`}
                       width="100%"
                       style={{ borderRadius: "13px" }}
                       src={

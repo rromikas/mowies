@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Notifications as data, PublicUsers } from "../../Data";
 import Select from "../utility/Select";
 import Checkbox from "../utility/Checkbox";
-import { Emoji } from "emoji-mart";
 import Pagination from "../utility/Paigination";
 import { BsSearch } from "react-icons/bs";
 import date from "date-and-time";
@@ -70,7 +68,7 @@ const Notifications = ({
 
       setFilteredNotifications(arr);
     }
-  }, [search, typeFilter, notifications, mainFilter]);
+  }, [search, typeFilter, notifications, mainFilter]); // eslint-disable-line react-hooks/exhaustive-deps
 
   //boundaries for slicing reviews array. (pagination)
   let boundaries = [(page - 1) * 5, (page - 1) * 5 + 5];

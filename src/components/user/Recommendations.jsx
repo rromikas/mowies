@@ -1,9 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import history from "../../History";
-import { MoviesGenresMap } from "../../Data";
 
 const Recommendations = ({ movies }) => {
-  const [hovered, setHovered] = useState(-1);
   return (
     <div className="row no-gutters">
       {movies.map((x, i) => (
@@ -14,6 +12,7 @@ const Recommendations = ({ movies }) => {
           <div className="row no-gutters">
             <div className="col-sm-60 col-auto mr-3 mr-sm-0">
               <img
+                alt={x.movie_poster}
                 className="img-clickable movies-list-image"
                 onClick={() => history.push(`/movie/${x.movie_id}`)}
                 width="100%"

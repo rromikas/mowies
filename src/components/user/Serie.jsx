@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { GetMovie, GetTvShow, GetCredits } from "../../server/MoviesApi";
+import React, { useState, useEffect } from "react";
+import { GetTvShow, GetCredits } from "../../server/MoviesApi";
 import ReactionButton from "./ReactionButton";
 import date from "date-and-time";
 import Modal from "../utility/Modal";
@@ -44,7 +44,7 @@ const Serie = (props) => {
     if (movie.title) {
       AddViewToMovie(movie);
     }
-  }, [movie.title]);
+  }, [movie.title]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -93,6 +93,7 @@ const Serie = (props) => {
         >
           <div className="position-relative">
             <img
+              alt={movie.poster_path}
               width="100%"
               src={`https://image.tmdb.org/t/p/w342/${movie.poster_path}`}
             ></img>
@@ -126,6 +127,7 @@ const Serie = (props) => {
           <div className="col-auto mr-5 d-none d-lg-block">
             <div className="w-100 position-relative">
               <img
+                alt={movie.poster_path}
                 style={{ borderRadius: "25px" }}
                 width="300px"
                 src={`https://image.tmdb.org/t/p/w342/${movie.poster_path}`}

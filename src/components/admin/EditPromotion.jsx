@@ -27,7 +27,6 @@ const EditPromotion = ({ currentPromotion, getBack }) => {
     title: "",
   });
 
-  const [problem, setProblem] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -38,7 +37,6 @@ const EditPromotion = ({ currentPromotion, getBack }) => {
     window.scrollTo(0, 0);
   }, []);
 
-  const types = ["Review", "Comment"];
   const publishStatuses = ["Published", "Drafted", "Deleted"];
 
   return (
@@ -213,7 +211,6 @@ const EditPromotion = ({ currentPromotion, getBack }) => {
                     onDayChange={(day) => {
                       if (day) {
                         let d = new Date(promotion.start_date);
-                        let fy = day.getFullYear();
                         let year = day.getFullYear();
                         let month = day.getMonth();
                         let niceDay = day.getDate();
@@ -257,7 +254,6 @@ const EditPromotion = ({ currentPromotion, getBack }) => {
                     onDayChange={(day) => {
                       if (day) {
                         let d = new Date(promotion.end_date);
-                        let fy = day.getFullYear();
                         let year = day.getFullYear();
                         let month = day.getMonth();
                         let niceDay = day.getDate();
@@ -373,12 +369,6 @@ const EditPromotion = ({ currentPromotion, getBack }) => {
         </div>
       </div>
       <div className="col-60 mt-2">
-        <div
-          style={{ height: "50px", opacity: problem ? 1 : 0 }}
-          className="row no-gutters align-items-center text-danger mb-2"
-        >
-          {problem}
-        </div>
         <div className="row no-gutters">
           <div
             className="btn-custom btn-custom-secondary btn-small mr-sm-3 mb-3 col-60 col-sm-auto"

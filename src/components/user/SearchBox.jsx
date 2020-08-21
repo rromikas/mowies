@@ -37,11 +37,9 @@ const SearchBox = (props) => {
         queryCleaned.current = false;
         if (category === "Reviews" || category === "All") {
           let reviews = await SearchReviews(query);
-          {
-            if (!reviews.error) {
-              if (!queryCleaned.current) {
-                setReviews(reviews.slice(0, 5));
-              }
+          if (!reviews.error) {
+            if (!queryCleaned.current) {
+              setReviews(reviews.slice(0, 5));
             }
           }
         } else {
@@ -82,7 +80,7 @@ const SearchBox = (props) => {
       }
     }
     getData();
-  }, [query, category]);
+  }, [query, category]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="row no-gutters w-100">

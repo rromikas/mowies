@@ -186,7 +186,6 @@ const EditNotification = ({
                       onDayChange={(day) => {
                         if (day) {
                           let d = new Date(notification.start_date);
-                          let fy = day.getFullYear();
                           let year = day.getFullYear();
                           let month = day.getMonth();
                           let niceDay = day.getDate();

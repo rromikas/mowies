@@ -9,11 +9,7 @@ import Pagination from "../utility/Paigination";
 import { Swipeable } from "react-swipeable";
 import Checkbox from "../utility/Checkbox";
 import { Emoji } from "emoji-mart";
-import {
-  GetReviews,
-  GetComments,
-  CreatePromotions,
-} from "../../server/DatabaseApi";
+import { GetReviews, CreatePromotions } from "../../server/DatabaseApi";
 import { connect } from "react-redux";
 import store from "../../store/store";
 import Loader from "../utility/Loader";
@@ -27,7 +23,6 @@ const AddNewPromotion = ({ publicUsers, getBack, ratings }) => {
     status: "Published",
   });
   const [page, setPage] = useState(1);
-  const [action, setAction] = useState("");
 
   const [problem, setProblem] = useState("");
 
@@ -38,7 +33,6 @@ const AddNewPromotion = ({ publicUsers, getBack, ratings }) => {
   const searchKeys = ["User", "Movie", "Review"];
   const [lastVisibleColumn, setLastVisibleColumn] = useState(0);
   const [reviews, setReviews] = useState([]);
-  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     async function getData() {
@@ -94,7 +88,7 @@ const AddNewPromotion = ({ publicUsers, getBack, ratings }) => {
     }
 
     setCandidates(arr.map((x) => Object.assign({}, x, { selected: false })));
-  }, [search, reviews]);
+  }, [search, reviews]); // eslint-disable-line react-hooks/exhaustive-deps
 
   let boundaries = [(page - 1) * 5, (page - 1) * 5 + 5];
   if (boundaries[1] >= candidates.length) {
@@ -184,7 +178,6 @@ const AddNewPromotion = ({ publicUsers, getBack, ratings }) => {
                       onDayChange={(day) => {
                         if (day) {
                           let d = new Date(promotion.start_date);
-                          let fy = day.getFullYear();
                           let year = day.getFullYear();
                           let month = day.getMonth();
                           let niceDay = day.getDate();
@@ -265,7 +258,6 @@ const AddNewPromotion = ({ publicUsers, getBack, ratings }) => {
                       onDayChange={(day) => {
                         if (day) {
                           let d = new Date(promotion.end_date);
-                          let fy = day.getFullYear();
                           let year = day.getFullYear();
                           let month = day.getMonth();
                           let niceDay = day.getDate();

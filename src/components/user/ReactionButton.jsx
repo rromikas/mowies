@@ -2,14 +2,9 @@ import React from "react";
 import { Emoji } from "emoji-mart";
 import { nFormatter } from "../../utilities/Functions";
 import { connect } from "react-redux";
-import store from "../../store/store";
-import { RateMovie } from "../../server/DatabaseApi";
 
 const ReactionButton = ({
-  user,
   emoji,
-  movie,
-  ratings,
   onClick,
   size = "normal",
   allowRate = false,

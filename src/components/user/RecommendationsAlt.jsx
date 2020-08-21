@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactionButton from "./ReactionButton";
 import history from "../../History";
-import { TrendingMovies, MoviesGenresMap } from "../../Data";
+import { MoviesGenresMap } from "../../Data";
 
 const Recommendations = ({ movies, user, ratings }) => {
   const [hovered, setHovered] = useState(-1);

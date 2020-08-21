@@ -15,7 +15,7 @@ const EditComment = ({ currentComment, publicUsers, getBack }) => {
       setComment(currentComment);
       setUser(publicUsers[currentComment.author]);
     }
-  }, [currentComment]);
+  }, [currentComment]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     window.scrollTo(0, 0);

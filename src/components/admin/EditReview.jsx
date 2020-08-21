@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Select from "../utility/Select";
-import { Emoji } from "emoji-mart";
 import { Ratings } from "../../Data";
 import { connect } from "react-redux";
 import store from "../../store/store";
@@ -16,7 +15,7 @@ const EditReview = ({ currentReview, publicUsers, getBack, ratings }) => {
       setReview(currentReview);
       setUser(publicUsers[currentReview.author]);
     }
-  }, [currentReview]);
+  }, [currentReview]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     window.scrollTo(0, 0);

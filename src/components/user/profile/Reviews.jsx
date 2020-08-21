@@ -2,16 +2,11 @@ import React, { useEffect, useState, useRef } from "react";
 import date from "date-and-time";
 import { Emoji } from "emoji-mart";
 import { MdThumbUp, MdChatBubble } from "react-icons/md";
-import {
-  GetMovieReviews,
-  GetReviewComments,
-} from "../../../server/DatabaseApi";
+import { GetReviewComments } from "../../../server/DatabaseApi";
 import { connect } from "react-redux";
 import { Collapse } from "@material-ui/core";
 import Paigination from "../../utility/Paigination";
 import history from "../../../History";
-import { MoviesGenresMap } from "../../../Data";
-import ReactionButton from "../ReactionButton";
 
 const Reviews = ({ reviews, publicUsers, ratings }) => {
   //comments object.Its property will be review id.
@@ -29,18 +24,6 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
   // reference to top of the reviews block to scroll into view after changing the page
   const topOfReviewsBlock = useRef(null);
 
-  // boolean variable to display "add review" modal or not
-  const [addReviewOpen, setAddReviewOpen] = useState(false);
-
-  // boolean variable to display "add review" modal or not
-  const [review, setReview] = useState("");
-
-  //state to refresh comments after writing it
-  const [refreshComments, setRefreshComments] = useState(false);
-
-  //state to refresh reviews after writing it
-  const [refreshReviews, setRefreshReviews] = useState(false);
-
   const commentsPerPage = 5;
   const reviewsPerPage = 8;
 
@@ -54,7 +37,7 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
       }
     }
     getData();
-  }, [reviewIdOfVisibleComments, refreshComments]);
+  }, [reviewIdOfVisibleComments]);
 
   //to avoid scroll into view on first render
   let realPage = page === -1 ? 1 : page;
@@ -82,6 +65,7 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                     >
                       <div className="row no-gutters mb-1">
                         <img
+                          alt={ratings[x.movie_id].movie_poster}
                           onClick={() => history.push(`/movie/${x.id}`)}
                           width="100%"
                           style={{ borderRadius: "13px" }}

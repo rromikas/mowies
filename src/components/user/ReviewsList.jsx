@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Collapse } from "@material-ui/core";
 import { connect } from "react-redux";
-import { GetReviewComments, GetPopularReviews } from "../../server/DatabaseApi";
+import { GetReviewComments } from "../../server/DatabaseApi";
 import { Emoji } from "emoji-mart";
 import Paigination from "../utility/Paigination";
 import history from "../../History";
@@ -12,11 +12,10 @@ const ReviewsList = ({ reviews, publicUsers, ratings }) => {
   const [reviewIdOfVisibleComments, setReviewIdOfVisibleComments] = useState(
     -1
   );
-  // partitioning reviews into pages (8 reviews per page)
-  const [page, setPage] = useState(-1);
+
+  const page = 1;
   const [commentsPage, setCommentsPage] = useState(1);
 
-  const [refreshComments, setRefreshComments] = useState(false);
   const [comments, setComments] = useState({});
 
   const commentsPerPage = 5;
@@ -32,14 +31,12 @@ const ReviewsList = ({ reviews, publicUsers, ratings }) => {
       }
     }
     getData();
-  }, [reviewIdOfVisibleComments, refreshComments]);
-
-  let realPage = page === -1 ? 1 : page;
+  }, [reviewIdOfVisibleComments]);
 
   return reviews
     .slice(
-      (realPage - 1) * reviewsPerPage,
-      (realPage - 1) * reviewsPerPage + reviewsPerPage
+      (page - 1) * reviewsPerPage,
+      (page - 1) * reviewsPerPage + reviewsPerPage
     )
     .map((x, i) => (
       <React.Fragment key={`fragment-review-${i}`}>
@@ -53,6 +50,7 @@ const ReviewsList = ({ reviews, publicUsers, ratings }) => {
           >
             <div className="row no-gutters mb-1">
               <img
+                alt={ratings[x.movie_id].movie_poster}
                 onClick={() => history.push(`/movie/${x.movie_id}`)}
                 width="100%"
                 style={{ borderRadius: "13px", cursor: "pointer" }}

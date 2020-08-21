@@ -3,7 +3,6 @@ import date from "date-and-time";
 import { nFormatter } from "../../utilities/Functions";
 import { Emoji } from "emoji-mart";
 import { MdThumbUp, MdChatBubble, MdFlag } from "react-icons/md";
-import { FaRegPaperPlane } from "react-icons/fa";
 import ReplyToReview from "./ReplyToReview";
 import AddReview from "./AddReview";
 import {
@@ -33,7 +32,6 @@ const MovieReviews = ({
   // local reviews object in order to be able to update it quickly instead of waiting for real changes in database
   const [reviews, setReviews] = useState([]);
   const [promotedReviews, setPromotedReviews] = useState([]);
-  const reviewToSeek = useRef(null);
 
   const [loadingComment, setLoadingComment] = useState(-1);
   const [loadingReview, setLoadingReview] = useState(-1);
@@ -129,12 +127,14 @@ const MovieReviews = ({
       }
     }
     getData();
-  }, [movie, refreshReviews]);
+  }, [movie, refreshReviews]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const renderComments = (ids, review) => {
     return ids.map((x, ind) => {
       return comments[review._id][x] ? (
-        <React.Fragment>
+        <React.Fragment
+          key={`comment-fragment-${reviewIdOfVisibleComments}-${ind}`}
+        >
           <div
             ref={(el) => {
               if (x === seekCommentId && el && !scrolledOnce) {
@@ -417,7 +417,7 @@ const MovieReviews = ({
               ? promotedContents[x._id].content.review
               : x.review;
             return (
-              <React.Fragment>
+              <React.Fragment key={`review-fragment-${i}`}>
                 <div
                   ref={(el) => {
                     if (!seekCommentId) {

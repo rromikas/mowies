@@ -14,13 +14,10 @@ import {
   GetAllRatings,
   GetAllPublicUsers,
   LoginWithToken,
-  GetPopularReviews,
   GetSettings,
 } from "./server/DatabaseApi";
-import { GetTrendingMovies } from "./server/MoviesApi";
 import Profile from "./components/user/profile/Profile";
 import PrivateRoute from "./utilities/PrivateRoute";
-import LegalDocument from "./components/user/LegalDocument";
 import Navbar from "./components/user/Navbar";
 import Serie from "./components/user/Serie";
 import Footer from "./components/user/Footer";

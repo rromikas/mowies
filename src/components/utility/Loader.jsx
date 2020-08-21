@@ -1,5 +1,4 @@
 import React from "react";
-import ReactLoading from "react-loading";
 
 const Loader = ({ loading, size = 50, theme = "light" }) => {
   return (

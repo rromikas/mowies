@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import Popover from "../utility/Popover";
-import { BsChevronDown, BsX, BsXCircle } from "react-icons/bs";
+import { BsChevronDown, BsXCircle } from "react-icons/bs";
 import history from "../../History";
 import store from "../../store/store";
 import Logo from "../../images/Logo";

@@ -32,8 +32,7 @@ const RecentReviews = ({ publicUsers, user, ratings }) => {
   const [loadingReview, setLoadingReview] = useState(-1);
   const [loadingReport, setLoadingReport] = useState(-1);
 
-  // partitioning reviews into pages (8 reviews per page)
-  const [page, setPage] = useState(-1);
+  const page = 1;
   const [commentsPage, setCommentsPage] = useState(1);
 
   // reference to top of the reviews block to scroll into view after changing the page
@@ -84,20 +83,6 @@ const RecentReviews = ({ publicUsers, user, ratings }) => {
     }
     getData();
   }, [refreshReviews]);
-
-  useEffect(() => {
-    //to avoid scroll on first render
-    if (page >= 0) {
-      //100 ms for reviews to be rendered. It increases successful scrolls to top.
-      async function scrollAfterDelayToTopReview() {
-        await new Promise((resolve) => setTimeout(resolve, 100));
-        topOfReviewsBlock.current.scrollIntoView({
-          behavior: "smooth",
-        });
-      }
-      scrollAfterDelayToTopReview();
-    }
-  }, [page]);
 
   const renderComments = (ids, review) => {
     return ids.map((x, ind) => {
@@ -354,9 +339,6 @@ const RecentReviews = ({ publicUsers, user, ratings }) => {
     });
   };
 
-  //to avoid scroll into view on first render
-  let realPage = page === -1 ? 1 : page;
-
   return (
     <div className="row no-gutters justify-content-center text-white">
       <div className="col-60 content-container py-3 px-md-5 px-4">
@@ -378,8 +360,8 @@ const RecentReviews = ({ publicUsers, user, ratings }) => {
         <div className="row no-gutters mb-2" ref={topOfReviewsBlock}></div>
         {reviews
           .slice(
-            (realPage - 1) * reviewsPerPage,
-            (realPage - 1) * reviewsPerPage + reviewsPerPage
+            (page - 1) * reviewsPerPage,
+            (page - 1) * reviewsPerPage + reviewsPerPage
           )
           .map((x, i) => (
             <React.Fragment key={`fragment-review-${i}`}>
@@ -393,6 +375,7 @@ const RecentReviews = ({ publicUsers, user, ratings }) => {
                 >
                   <div className="row no-gutters mb-1">
                     <img
+                      alt={`poster-of-${x.movie_id}`}
                       onClick={() => history.push(`/movie/${x.movie_id}`)}
                       width="100%"
                       style={{ borderRadius: "13px", cursor: "pointer" }}

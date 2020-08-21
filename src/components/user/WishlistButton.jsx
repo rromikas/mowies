@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MdPlaylistAdd, MdPlaylistAddCheck, MdDelete } from "react-icons/md";
+import { MdPlaylistAdd, MdDelete } from "react-icons/md";
 import store from "../../store/store";
 import { AddToWishList, GetAllRatings } from "../../server/DatabaseApi";
 import Popover from "../utility/Popover";
@@ -40,7 +40,7 @@ const WishlistButton = ({ user, movie, apiKey }) => {
             type: "SET_NOTIFICATION",
             notification: {
               title: "Error",
-              message: JSON.stringify(res.error).replace(/\"/g, ""),
+              message: JSON.stringify(res.error).replace(/"/g, ""),
               type: "failure",
             },
           });

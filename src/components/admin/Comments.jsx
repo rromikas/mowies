@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Select from "../utility/Select";
 import Checkbox from "../utility/Checkbox";
-import { Emoji } from "emoji-mart";
 import Pagination from "../utility/Paigination";
 import { BsSearch } from "react-icons/bs";
 import date from "date-and-time";
-import Popover from "../utility/Popover";
 import { Swipeable } from "react-swipeable";
-import {
-  GetComments,
-  DeleteMultipleComments,
-  GetReview,
-} from "../../server/DatabaseApi";
+import { GetComments, DeleteMultipleComments } from "../../server/DatabaseApi";
 import { connect } from "react-redux";
 import store from "../../store/store";
-import Loader from "../utility/Loader";
 import history from "../../History";
 
 const Comments = ({
@@ -37,10 +30,6 @@ const Comments = ({
 
   const [filteredComments, setFilteredComments] = useState([]);
   const [refresh, setRefresh] = useState(false);
-  const [reviewOfComment, setReviewOfComment] = useState({
-    _id: "",
-    review: "",
-  });
 
   useEffect(() => {
     async function getData() {
@@ -94,7 +83,7 @@ const Comments = ({
 
       setFilteredComments(arr);
     }
-  }, [search, roleFilter, comments, mainFilter]);
+  }, [search, roleFilter, comments, mainFilter]); // eslint-disable-line react-hooks/exhaustive-deps
 
   //boundaries for slicing comments array. (pagination)
   let boundaries = [(page - 1) * 5, (page - 1) * 5 + 5];

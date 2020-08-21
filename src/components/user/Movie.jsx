@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { GetMovie, GetCredits } from "../../server/MoviesApi";
 import ReactionButton from "./ReactionButton";
 import date from "date-and-time";
@@ -10,7 +10,6 @@ import { FormatDuration } from "../../utilities/Functions";
 import store from "../../store/store";
 import { AddViewToMovie } from "../../server/DatabaseApi";
 import WishlistButton from "./WishlistButton";
-import Footer from "./Footer";
 import { FaRegPaperPlane } from "react-icons/fa";
 import history from "../../History";
 import { BsPlayFill } from "react-icons/bs";
@@ -63,7 +62,7 @@ const Movie = (props) => {
         });
       }
     }
-  }, [movie.title]);
+  }, [movie.title]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -103,6 +102,7 @@ const Movie = (props) => {
         >
           <div className="position-relative">
             <img
+              alt={movie.poster_path}
               width="100%"
               src={`https://image.tmdb.org/t/p/w342/${movie.poster_path}`}
             ></img>
@@ -136,6 +136,7 @@ const Movie = (props) => {
           <div className="col-auto mr-5 d-none d-lg-block">
             <div className="w-100 position-relative">
               <img
+                alt={movie.poster_path}
                 style={{ borderRadius: "25px" }}
                 width="300px"
                 src={`https://image.tmdb.org/t/p/w342/${movie.poster_path}`}

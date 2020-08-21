@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Collapse } from "@material-ui/core";
+import React, { useState } from "react";
 import { connect } from "react-redux";
-import { GetReviewComments, GetPopularReviews } from "../../server/DatabaseApi";
 import { Emoji } from "emoji-mart";
-import Paigination from "../utility/Paigination";
 import history from "../../History";
 import date from "date-and-time";
 import { MdThumbUp, MdChatBubble } from "react-icons/md";
@@ -12,34 +9,15 @@ const ReviewsListMinified = ({ reviews, publicUsers, ratings }) => {
   const [reviewIdOfVisibleComments, setReviewIdOfVisibleComments] = useState(
     -1
   );
-  // partitioning reviews into pages (8 reviews per page)
-  const [page, setPage] = useState(-1);
-  const [commentsPage, setCommentsPage] = useState(1);
 
-  const [refreshComments, setRefreshComments] = useState(false);
-  const [comments, setComments] = useState({});
+  const page = 1;
 
-  const commentsPerPage = 5;
   const reviewsPerPage = 8;
-
-  useEffect(() => {
-    async function getData() {
-      if (reviewIdOfVisibleComments !== -1) {
-        let data = await GetReviewComments(reviewIdOfVisibleComments);
-        setComments((prev) =>
-          Object.assign({}, prev, { [reviewIdOfVisibleComments]: data })
-        );
-      }
-    }
-    getData();
-  }, [reviewIdOfVisibleComments, refreshComments]);
-
-  let realPage = page === -1 ? 1 : page;
 
   return reviews
     .slice(
-      (realPage - 1) * reviewsPerPage,
-      (realPage - 1) * reviewsPerPage + reviewsPerPage
+      (page - 1) * reviewsPerPage,
+      (page - 1) * reviewsPerPage + reviewsPerPage
     )
     .map((x, i) => (
       <div
@@ -53,6 +31,7 @@ const ReviewsListMinified = ({ reviews, publicUsers, ratings }) => {
         >
           <div className="row no-gutters mb-1">
             <img
+              alt={ratings[x.movie_id].movie_poster}
               width="100%"
               style={{ borderRadius: "13px", cursor: "pointer" }}
               src={`https://image.tmdb.org/t/p/w154${
@@ -74,12 +53,6 @@ const ReviewsListMinified = ({ reviews, publicUsers, ratings }) => {
                       })`,
                     }}
                   ></div>
-                  {/* <img
-                    onClick={() => history.push(`/movie/${x.id}`)}
-                    width="100%"
-                    style={{ borderRadius: "13px" }}
-                    src={`https://image.tmdb.org/t/p/w154${x.movie_poster}`}
-                  ></img> */}
                 </div>
                 <div className="col">
                   <div className="row no-gutters h6 mb-0">

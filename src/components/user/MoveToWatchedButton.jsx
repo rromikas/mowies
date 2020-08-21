@@ -37,7 +37,7 @@ const MoveToWatchedButton = ({ user, movieId, refreshProfile = () => {} }) => {
             type: "SET_NOTIFICATION",
             notification: {
               title: "Error",
-              message: JSON.stringify(res.error).replace(/\"/g, ""),
+              message: JSON.stringify(res.error).replace(/"/g, ""),
               type: "failure",
             },
           });

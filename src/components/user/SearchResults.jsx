@@ -3,19 +3,12 @@ import { connect } from "react-redux";
 import { useEffect } from "react";
 import { SearchMovies, SearchSeries } from "../../server/MoviesApi";
 import MoviesList from "./MoviesList";
-import Footer from "./Footer";
-import Paigination from "../utility/Paigination";
 import { SearchReviews } from "../../server/DatabaseApi";
 import ReviewsList from "./ReviewsList";
 import store from "../../store/store";
-import { Reviews } from "../../Data";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
-import {
-  TrendingMovies,
-  OfficialMoviesGenres,
-  OfficialSeriesGenres,
-} from "../../Data";
+import { OfficialMoviesGenres, OfficialSeriesGenres } from "../../Data";
 
 const extractGenres = (movies) => {
   let genres = { 0: "All" };
@@ -36,7 +29,6 @@ const extractGenres = (movies) => {
 };
 
 const SearchResults = ({ search, settings }) => {
-  const [page, setPage] = useState(1);
   const [reviews, setReviews] = useState([]);
   const [movies, setMovies] = useState([]);
   const [series, setSeries] = useState([]);
@@ -60,10 +52,8 @@ const SearchResults = ({ search, settings }) => {
       if (search.query) {
         if (category === "Reviews" || category === "All") {
           let reviews = await SearchReviews(search.query);
-          {
-            if (!reviews.error) {
-              setReviews(reviews);
-            }
+          if (!reviews.error) {
+            setReviews(reviews);
           }
         } else {
           setReviews([]);
@@ -97,7 +87,7 @@ const SearchResults = ({ search, settings }) => {
       }
     }
     getData();
-  }, [search]);
+  }, [search]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const moviesGenres = extractGenres(movies);
   const seriesGenres = extractGenres(series);

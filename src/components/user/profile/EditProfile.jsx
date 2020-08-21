@@ -33,7 +33,7 @@ const EditProfile = ({ user, refreshProfile, editProfileOpen, onClose }) => {
         })
       );
     }
-  }, [user.first_name]);
+  }, [user.first_name]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleFileUpload = async (e) => {
     var imageFile = e.target.files[0];
@@ -136,7 +136,6 @@ const EditProfile = ({ user, refreshProfile, editProfileOpen, onClose }) => {
               disabled
               spellCheck={false}
               type="text"
-              disabled
               className="input-light-disabled px-3 w-100 user-select-none"
               value={update.email}
             ></input>

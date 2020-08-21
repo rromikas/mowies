@@ -135,7 +135,7 @@ const ReplyToReview = ({
                             title: "Couldn't add your comment",
                             type: "failure",
                             message: JSON.stringify(res.error).replace(
-                              /\"/g,
+                              /"/g,
                               ""
                             ),
                           },

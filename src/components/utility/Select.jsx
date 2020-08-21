@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import Popover from "./Popover";
-import { BsChevronDown } from "react-icons/bs";
 import { MdArrowDropDown } from "react-icons/md";
 import uniqid from "uniqid";
 

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import LeftSideMenu from "./LeftSideMenu";
 import Settings from "./Settings";
 import RightSideMenuFloating from "./RightSideMenuFloating";
-import Navbar from "./Navbar";
 import ReviewsAndComments from "./ReviewAndComments";
 import EditReview from "./EditReview";
 import { BsArrowLeft } from "react-icons/bs";
@@ -42,7 +41,6 @@ const sections = {
 
 const AdminDashboard = ({ dashboardMenuOpened }) => {
   const [section, setSection] = useState(0);
-  const [isMenuOpened, setIsMenuOpened] = useState(false);
   const [editReview, setEditReview] = useState(null);
   const [editComment, setEditComment] = useState(null);
   const [editAnnouncement, setEditAnnouncement] = useState(null);

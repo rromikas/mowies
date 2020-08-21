@@ -12,7 +12,6 @@ import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 import Comments from "./Comments";
 import EditProfile from "./EditProfile";
-import Footer from "../Footer";
 
 const Profile = (props) => {
   const user = props.user;
@@ -80,7 +79,7 @@ const Profile = (props) => {
       }
     }
     getData();
-  }, [section, profileData.reviews.length]);
+  }, [section, profileData.reviews.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="row no-gutters" style={{ minHeight: "800px" }}>
@@ -249,7 +248,7 @@ const Profile = (props) => {
         ) : section === 2 ? (
           <Reviews ratings={ratings} reviews={reviews}></Reviews>
         ) : section === 3 ? (
-          <Comments ratings={ratings} reviews={comments}></Comments>
+          <Comments ratings={ratings} comments={comments}></Comments>
         ) : (
           ""
         )}

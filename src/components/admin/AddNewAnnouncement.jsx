@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Select from "../utility/Select";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import "react-day-picker/lib/style.css";
 import { BsCalendar, BsClock } from "react-icons/bs";
 import TimePicker from "react-time-picker";
 import date from "date-and-time";
-import { CreateAnnouncement, GetAnnouncements } from "../../server/DatabaseApi";
+import { CreateAnnouncement } from "../../server/DatabaseApi";
 import store from "../../store/store";
 import { connect } from "react-redux";
 import Loader from "../utility/Loader";
@@ -127,7 +127,6 @@ const AddNewAnnouncement = ({ user, getBack }) => {
                       onDayChange={(day) => {
                         if (day) {
                           let d = new Date(announcement.start_date);
-                          let fy = day.getFullYear();
                           let year = day.getFullYear();
                           let month = day.getMonth();
                           let niceDay = day.getDate();
@@ -208,7 +207,6 @@ const AddNewAnnouncement = ({ user, getBack }) => {
                       onDayChange={(day) => {
                         if (day) {
                           let d = new Date(announcement.end_date);
-                          let fy = day.getFullYear();
                           let year = day.getFullYear();
                           let month = day.getMonth();
                           let niceDay = day.getDate();

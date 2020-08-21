@@ -3,7 +3,6 @@ import Select from "../utility/Select";
 import Checkbox from "../utility/Checkbox";
 import Pagination from "../utility/Paigination";
 import { BsSearch } from "react-icons/bs";
-import date from "date-and-time";
 import { Swipeable } from "react-swipeable";
 import {
   GetUsers,
@@ -67,7 +66,7 @@ const Users = ({
       }
     }
     setFilteredUsers(arr);
-  }, [search, roleFilter, users, statusFilter]);
+  }, [search, roleFilter, users, statusFilter]); // eslint-disable-line react-hooks/exhaustive-deps
 
   //boundaries for slicing reviews array. (pagination)
   let boundaries = [(page - 1) * 5, (page - 1) * 5 + 5];

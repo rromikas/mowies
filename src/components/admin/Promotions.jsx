@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Promotions as data } from "../../Data";
 import Select from "../utility/Select";
 import Checkbox from "../utility/Checkbox";
 import { Emoji } from "emoji-mart";
@@ -76,7 +75,7 @@ const Promotions = ({
 
       setFilteredPromotions(arr);
     }
-  }, [search, typeFilter, promotions, mainFilter]);
+  }, [search, typeFilter, promotions, mainFilter]); // eslint-disable-line react-hooks/exhaustive-deps
 
   //boundaries for slicing reviews array. (pagination)
   let boundaries = [(page - 1) * 5, (page - 1) * 5 + 5];

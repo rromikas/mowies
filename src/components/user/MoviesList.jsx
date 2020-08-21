@@ -1,14 +1,9 @@
 import React, { useState } from "react";
-import {
-  TrendingMovies,
-  OfficialMoviesGenres,
-  OfficialSeriesGenres,
-} from "../../Data";
+import { OfficialMoviesGenres, OfficialSeriesGenres } from "../../Data";
 import history from "../../History";
 import WishlistButton from "./WishlistButton";
 import { connect } from "react-redux";
 import ReactionButton from "./ReactionButton";
-import { BsHeart, BsEye } from "react-icons/bs";
 import TrailerPlayer from "./TrailerPlayer";
 import Modal from "../utility/Modal";
 import { BsPlayFill } from "react-icons/bs";
@@ -44,6 +39,7 @@ const MoviesList = ({ movies, user, ratings }) => {
             <div className="col-sm-60 col-auto mr-3 mr-sm-0">
               <div className="row no-gutters mb-2 position-relative movies-list-image">
                 <img
+                  alt={x.poster_path}
                   width="100%"
                   style={{ borderRadius: "13px" }}
                   className="img-clickable"

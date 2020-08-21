@@ -120,7 +120,6 @@ const EditAnnouncement = ({ currentAnnouncement, getBack }) => {
                       onDayChange={(day) => {
                         if (day) {
                           let d = new Date(announcement.start_date);
-                          let fy = day.getFullYear();
                           let year = day.getFullYear();
                           let month = day.getMonth();
                           let niceDay = day.getDate();
@@ -201,7 +200,6 @@ const EditAnnouncement = ({ currentAnnouncement, getBack }) => {
                       onDayChange={(day) => {
                         if (day) {
                           let d = new Date(announcement.end_date);
-                          let fy = day.getFullYear();
                           let year = day.getFullYear();
                           let month = day.getMonth();
                           let niceDay = day.getDate();

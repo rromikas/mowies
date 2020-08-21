@@ -9,6 +9,7 @@ import Checkbox from "../utility/Checkbox";
 import Modal from "../utility/Modal";
 import LegalDocument from "../user/LegalDocument";
 import { BsChevronLeft } from "react-icons/bs";
+import { CaptchaApiKey } from "../../Settings";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -182,7 +183,7 @@ const Signup = () => {
                     </div>
                     <div className="row no-gutters mb-3">
                       <ReCAPTCHA
-                        sitekey="6Lc_87cZAAAAAHRx49G1d-mM3gxWM_RKLAA41T3U"
+                        sitekey={CaptchaApiKey}
                         onChange={(value) => {
                           if (value) {
                             setValidated(true);
