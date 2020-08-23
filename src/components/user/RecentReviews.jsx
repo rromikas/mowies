@@ -17,6 +17,7 @@ import ReplyToReview from "./ReplyToReview";
 import store from "../../store/store";
 import Loader from "../utility/Loader";
 import Popover from "../utility/Popover";
+import OkIcon from "../../images/OkIcon";
 
 const RecentReviews = ({ publicUsers, user, ratings }) => {
   //comments object.Its property will be review id.
@@ -484,21 +485,25 @@ const RecentReviews = ({ publicUsers, user, ratings }) => {
                         <div className="col-auto">
                           <div className="row no-gutters">
                             {x.rating ? (
-                              <div style={{ marginBottom: "-6px" }}>
-                                <Emoji
-                                  emoji={
-                                    x.rating === "excellent_rate"
-                                      ? "fire"
-                                      : x.rating === "good_rate"
-                                      ? "heart"
-                                      : x.rating === "ok_rate"
-                                      ? "heavy-division-sign"
-                                      : "shit"
-                                  }
-                                  set="facebook"
-                                  size={24}
-                                />
-                              </div>
+                              x.rating === "ok_rate" ? (
+                                <OkIcon size={24}></OkIcon>
+                              ) : (
+                                <div style={{ marginBottom: "-6px" }}>
+                                  <Emoji
+                                    emoji={
+                                      x.rating === "excellent_rate"
+                                        ? "fire"
+                                        : x.rating === "good_rate"
+                                        ? "heart"
+                                        : x.rating === "ok_rate"
+                                        ? "heavy-division-sign"
+                                        : "shit"
+                                    }
+                                    set="facebook"
+                                    size={24}
+                                  />
+                                </div>
+                              )
                             ) : (
                               ""
                             )}

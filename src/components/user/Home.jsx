@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import PopularMovies from "./PopularMovies";
 import TrailerPlayer from "./TrailerPlayer";
 import Modal from "../utility/Modal";
@@ -25,7 +25,21 @@ const GetClosestValidWidth = () => {
   return closestSize;
 };
 
+function useWindowSize() {
+  const [height, setHeight] = useState(0);
+  useLayoutEffect(() => {
+    function updateSize() {
+      setHeight(window.innerHeight);
+    }
+    window.addEventListener("resize", updateSize);
+    updateSize();
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+  return height;
+}
+
 const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
+  const height = useWindowSize();
   const [recommendedMovies, setRecommendedMovies] = useState([]);
   const [openTrailer, setOpenTrailer] = useState(false);
   const [backgroundMovie, setBackgroundMovie] = useState({
@@ -56,7 +70,7 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
       <div className="col-60">
         <div
           className="row no-gutters align-items-end position-relative overflow-hidden"
-          style={{ height: window.innerHeight }}
+          style={{ height: height }}
         >
           <div
             className="position-absolute w-100 h-100"
@@ -125,21 +139,33 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
                 >
                   {backgroundMovie.title}
                 </div>
-                <div className="row no-gutters text-light mb-4 font-weight-300">
+                <div className="row no-gutters text-light mb-4 font-weight-300 text-clamp-6">
                   {backgroundMovie.overview}
                 </div>
-                <div className="row no-gutters mb-5">
-                  <div className="col-auto mr-2">
+                <div className="row no-gutters mb-md-5 mb-4">
+                  <div className="col-auto mr-2 d-flex">
                     {backgroundMovie.release_date.substring(0, 4)}
                     <strong className="px-3">•</strong>
-                    {backgroundMovie.genres.map((x) => x.name).join("/")}
+                    <div>
+                      <div className="d-none d-md-block">
+                        {backgroundMovie.genres
+                          .slice(0, 3)
+                          .map((x) => x.name)
+                          .join("/")}
+                      </div>
+                      <div className="d-block d-md-none">
+                        {backgroundMovie.genres
+                          .slice(0, 2)
+                          .map((x) => x.name)
+                          .join("/")}
+                      </div>
+                    </div>
+
                     <strong className="px-3">•</strong>
                     {FormatDuration(backgroundMovie.runtime)}
                   </div>
-                  <div className="col-auto mr-2"></div>
-                  <div className="col-auto mr-2"></div>
                 </div>
-                <div className="row no-gutters mb-4">
+                <div className="row no-gutters mb-md-4 mb-2">
                   <div
                     className="col-auto mr-3 btn-custom btn-custom-primary btn-small"
                     onClick={() => setOpenTrailer(true)}

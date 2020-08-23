@@ -20,6 +20,7 @@ import Paigination from "../utility/Paigination";
 import store from "../../store/store";
 import Loader from "../utility/Loader";
 import Popover from "../utility/Popover";
+import OkIcon from "../../images/OkIcon";
 
 const MovieReviews = ({
   movie,
@@ -558,19 +559,23 @@ const MovieReviews = ({
                     </div>
                     <div className="row no-gutters justify-content-between align-items-center">
                       <div className="col-auto">
-                        <Emoji
-                          emoji={
-                            rating === "excellent_rate"
-                              ? "fire"
-                              : rating === "good_rate"
-                              ? "heart"
-                              : rating === "ok_rate"
-                              ? "heavy_division_sign"
-                              : "shit"
-                          }
-                          set="facebook"
-                          size={24}
-                        />
+                        {rating === "ok_rate" ? (
+                          <OkIcon size={24}></OkIcon>
+                        ) : (
+                          <Emoji
+                            emoji={
+                              rating === "excellent_rate"
+                                ? "fire"
+                                : rating === "good_rate"
+                                ? "heart"
+                                : rating === "ok_rate"
+                                ? "heavy_division_sign"
+                                : "shit"
+                            }
+                            set="facebook"
+                            size={24}
+                          />
+                        )}
                       </div>
                       <div className="col-auto">
                         <div className="row no-gutters align-items-center">

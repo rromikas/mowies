@@ -18,6 +18,7 @@ import ReplyToReview from "./ReplyToReview";
 import store from "../../store/store";
 import Loader from "../utility/Loader";
 import Popover from "../utility/Popover";
+import OkIcon from "../../images/OkIcon";
 
 const PopularReviews = ({ publicUsers, settings, user, ratings }) => {
   //comments object.Its property will be review id.
@@ -503,19 +504,23 @@ const PopularReviews = ({ publicUsers, settings, user, ratings }) => {
                           <div className="col-auto">
                             <div className="row no-gutters">
                               <div style={{ marginBottom: "-6px" }}>
-                                <Emoji
-                                  emoji={
-                                    rating === "excellent_rate"
-                                      ? "fire"
-                                      : rating === "good_rate"
-                                      ? "heart"
-                                      : rating === "ok_rate"
-                                      ? "heavy-division-sign"
-                                      : "shit"
-                                  }
-                                  set="facebook"
-                                  size={24}
-                                />
+                                {rating === "ok_rate" ? (
+                                  <OkIcon size={24}></OkIcon>
+                                ) : (
+                                  <Emoji
+                                    emoji={
+                                      rating === "excellent_rate"
+                                        ? "fire"
+                                        : rating === "good_rate"
+                                        ? "heart"
+                                        : rating === "ok_rate"
+                                        ? "heavy-division-sign"
+                                        : "shit"
+                                    }
+                                    set="facebook"
+                                    size={24}
+                                  />
+                                )}
                               </div>
                             </div>
                           </div>

@@ -31,13 +31,14 @@ const Settings = ({ settings }) => {
       valid:
         (/^http/.test(settings.FacebookLink) || settings.FacebookLink === "") &&
         (/^http/.test(settings.TwitterLink) || settings.TwitterLink === "") &&
-        (/^http/.test(settings.LinkedinLinks) ||
-          settings.LinkedinLink === "") &&
+        (/^http/.test(settings.LinkedinLink) || settings.LinkedinLink === "") &&
         (/^http/.test(settings.InstagramLink) || settings.InstagramLink === ""),
 
       error: "Social link must start with http:// or https://",
     },
   ];
+
+  console.log(/^http/.test(settings.FacebookLink));
   return (
     <div className={`row no-gutters admin-screen`}>
       <div className="col-60">

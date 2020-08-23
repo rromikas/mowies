@@ -13,6 +13,7 @@ import {
 import store from "../../store/store";
 import { connect } from "react-redux";
 import history from "../../History";
+import OkIcon from "../../images/OkIcon";
 
 const Promotions = ({
   setEditPromotion,
@@ -447,21 +448,27 @@ const Promotions = ({
                                 }`}
                               >
                                 {x.content.rating ? (
-                                  <div style={{ marginBottom: "-6px" }}>
-                                    <Emoji
-                                      emoji={
-                                        x.content.rating === "excellent_rate"
-                                          ? "fire"
-                                          : x.content.rating === "good_rate"
-                                          ? "heart"
-                                          : x.content.rating === "ok_rate"
-                                          ? "heavy_division_sign"
-                                          : "shit"
-                                      }
-                                      set="facebook"
-                                      size={24}
-                                    />
-                                  </div>
+                                  x.content.rating === "ok_rate" ? (
+                                    <div style={{ marginTop: "-4px" }}>
+                                      <OkIcon size={24}></OkIcon>
+                                    </div>
+                                  ) : (
+                                    <div style={{ marginBottom: "-6px" }}>
+                                      <Emoji
+                                        emoji={
+                                          x.content.rating === "excellent_rate"
+                                            ? "fire"
+                                            : x.content.rating === "good_rate"
+                                            ? "heart"
+                                            : x.content.rating === "ok_rate"
+                                            ? "heavy_division_sign"
+                                            : "shit"
+                                        }
+                                        set="facebook"
+                                        size={24}
+                                      />
+                                    </div>
+                                  )
                                 ) : (
                                   "-"
                                 )}
@@ -523,48 +530,6 @@ const Promotions = ({
                         </tr>
                       )}
                     </tbody>
-                    {/* <tfoot>
-                      <tr>
-                        <th className="text-center">
-                          <Checkbox
-                            color={"primary"}
-                            checked={
-                              filteredPromotions
-                                .slice(boundaries[0], boundaries[1])
-                                .filter((x) => x.selected).length ===
-                              boundaries[1] - boundaries[0]
-                            }
-                            onChange={(e) => {
-                              setFilteredPromotions((prev) => {
-                                let arr = [...prev];
-                                for (
-                                  let i = boundaries[0];
-                                  i < boundaries[1];
-                                  i++
-                                ) {
-                                  arr[i].selected = e.target.checked;
-                                }
-                                return arr;
-                              });
-                            }}
-                          ></Checkbox>
-                        </th>
-                        <th className="table-footer text-truncate text-left">
-                          Title
-                        </th>
-                        <th className="d-table-cell d-xl-none table-header text-truncate">
-                          {columns[lastVisibleColumn]}
-                        </th>
-                        {columns.map((c, j) => (
-                          <th
-                            className="d-none d-xl-table-cell table-header text-truncate"
-                            key={`footer-column-${j}`}
-                          >
-                            <div>{c}</div>
-                          </th>
-                        ))}
-                      </tr>
-                    </tfoot> */}
                   </table>
                 </div>
               </Swipeable>

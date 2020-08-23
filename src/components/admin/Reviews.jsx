@@ -10,6 +10,7 @@ import { GetReviews, DeleteMultipleReviews } from "../../server/DatabaseApi";
 import { connect } from "react-redux";
 import store from "../../store/store";
 import history from "../../History";
+import OkIcon from "../../images/OkIcon";
 
 const Reviews = ({
   setEditReviewSection,
@@ -485,21 +486,27 @@ const Reviews = ({
                                 : "d-none d-xl-table-cell"
                             }`}
                           >
-                            <div style={{ marginBottom: "-6px" }}>
-                              <Emoji
-                                emoji={
-                                  x.rating === "excellent_rate"
-                                    ? "fire"
-                                    : x.rating === "good_rate"
-                                    ? "heart"
-                                    : x.rating === "ok_rate"
-                                    ? "heavy_division_sign"
-                                    : "shit"
-                                }
-                                set="facebook"
-                                size={24}
-                              />
-                            </div>
+                            {x.rating === "ok_rate" ? (
+                              <div style={{ marginTop: "-4px" }}>
+                                <OkIcon size={24}></OkIcon>
+                              </div>
+                            ) : (
+                              <div style={{ marginBottom: "-6px" }}>
+                                <Emoji
+                                  emoji={
+                                    x.rating === "excellent_rate"
+                                      ? "fire"
+                                      : x.rating === "good_rate"
+                                      ? "heart"
+                                      : x.rating === "ok_rate"
+                                      ? "heavy_division_sign"
+                                      : "shit"
+                                  }
+                                  set="facebook"
+                                  size={24}
+                                />
+                              </div>
+                            )}
                           </td>
                           <td
                             className={`${

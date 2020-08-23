@@ -82,6 +82,7 @@ function App() {
     }
     getData();
   }, []);
+
   return (
     <Provider store={store}>
       <Router history={history}>

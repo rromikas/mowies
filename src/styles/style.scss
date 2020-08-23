@@ -652,6 +652,14 @@ h6,
   text-overflow: ellipsis;
 }
 
+.text-clamp-6 {
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .bg-movie-over-root {
   background: black;
   @include media-breakpoint-up(lg) {

@@ -16,6 +16,10 @@ const SendGetRequest = (path) => {
   return fetch(`${origin}${path}`).then((res) => res.json());
 };
 
+export const CreateError = () => {
+  return SendGetRequest("/error");
+};
+
 export const FindOrCreateMovie = (movie) => {
   return SendPostRequest("/movie/findOrCreate", movie);
 };

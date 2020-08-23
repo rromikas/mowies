@@ -2,6 +2,7 @@ import React from "react";
 import { Emoji } from "emoji-mart";
 import { nFormatter } from "../../utilities/Functions";
 import { connect } from "react-redux";
+import OkIcon from "../../images/OkIcon";
 
 const ReactionButton = ({
   emoji,
@@ -36,13 +37,21 @@ const ReactionButton = ({
           ""
         )}
         <div className="col-auto">
-          <div style={{ marginBottom: size === "normal" ? "-6px" : "-2px" }}>
-            <Emoji
-              emoji={emoji}
-              set="facebook"
-              size={size === "small" ? 14 : size === "normal" ? 16 : 28}
-            />
-          </div>
+          {emoji === "heavy_division_sign" ? (
+            <div style={{ marginTop: "-4px" }}>
+              <OkIcon
+                size={size === "small" ? 14 : size === "normal" ? 16 : 28}
+              ></OkIcon>
+            </div>
+          ) : (
+            <div style={{ marginBottom: size === "normal" ? "-6px" : "-2px" }}>
+              <Emoji
+                emoji={emoji}
+                set="facebook"
+                size={size === "small" ? 14 : size === "normal" ? 16 : 28}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
