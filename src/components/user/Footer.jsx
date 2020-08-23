@@ -41,7 +41,10 @@ const Footer = ({ user, settings }) => {
 
   const location = useLocation();
 
-  return location.pathname !== "/login" && location.pathname !== "/signup" ? (
+  return location.pathname !== "/login" &&
+    location.pathname !== "/signup" &&
+    location.pathname !== "/forgot-password" &&
+    !location.pathname.includes("/reset-password") ? (
     <div className="row no-gutters justify-content-center bg-over-root text-light">
       <div
         className={`px-sm-5 px-4 py-4 col-60${

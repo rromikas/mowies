@@ -123,7 +123,10 @@ const Login = () => {
                           Sign up
                         </span>
                       </div>
-                      <div className="col-auto btn-link cursor-pointer">
+                      <div
+                        className="col-auto btn-link cursor-pointer"
+                        onClick={() => history.push("/forgot-password")}
+                      >
                         Forgot password
                       </div>
                     </div>

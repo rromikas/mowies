@@ -254,3 +254,11 @@ export const DeleteMultipleUsers = (ids, pids) => {
 export const GetPromotedReviews = () => {
   return SendGetRequest("/reviews/getPromoted");
 };
+
+export const SendPasswordResetLink = (email) => {
+  return SendPostRequest("/user/password/sendResetLink", { email });
+};
+
+export const ResetPassword = (password, token) => {
+  return SendPostRequest("/user/password/reset", { token, password });
+};

@@ -24,6 +24,8 @@ import Footer from "./components/user/Footer";
 import CookiesPolicy from "./components/user/CookiesPolicy";
 import TermsAndConditions from "./components/user/TermsAndConditions";
 import PrivacyPolicy from "./components/user/PrivacyPolicy";
+import ForgotPassword from "./components/login/ForgotPassword";
+import ResetPassword from "./components/login/ResetPassword";
 
 function App() {
   useEffect(() => {
@@ -126,6 +128,16 @@ function App() {
             ></PrivateRoute>
             <Route exact path="/login" component={Login}></Route>
             <Route exact path="/signup" component={Signup}></Route>
+            <Route
+              exact
+              path="/forgot-password"
+              component={ForgotPassword}
+            ></Route>
+            <Route
+              exact
+              path="/reset-password/:token"
+              component={ResetPassword}
+            ></Route>
             <Route
               exact
               path="/profile/:userId/:section"

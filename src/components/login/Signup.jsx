@@ -235,10 +235,10 @@ const Signup = () => {
                       </div>
                     </div>
                     <div
-                      className="row no-gutters justify-content-between"
+                      className="row no-gutters justify-content-end"
                       style={{ fontSize: "14px" }}
                     >
-                      <div className="col-auto mr-4">
+                      <div className="col-auto">
                         Already have account?{" "}
                         <span
                           className="btn-link cursor-pointer"
@@ -246,9 +246,6 @@ const Signup = () => {
                         >
                           Login
                         </span>
-                      </div>
-                      <div className="col-auto btn-link cursor-pointer">
-                        Forgot password
                       </div>
                     </div>
                   </div>

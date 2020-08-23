@@ -72,7 +72,12 @@ const Navbar = (props) => {
     }
   }, [height]);
 
-  return location.pathname !== "/login" && location.pathname !== "/signup" ? (
+  console.log("location.pathname ", location.pathname);
+
+  return location.pathname !== "/login" &&
+    location.pathname !== "/signup" &&
+    location.pathname !== "/forgot-password" &&
+    !location.pathname.includes("/reset-password") ? (
     <div
       className="col-60 px-0"
       style={{
