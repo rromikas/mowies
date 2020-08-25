@@ -1,19 +1,22 @@
 import React, { useState } from "react";
 import Modal from "../utility/Modal";
 import ReactionButton from "./ReactionButton";
-import { WriteReview } from "../../server/DatabaseApi";
+import { WriteReview, EditReview } from "../../server/DatabaseApi";
 import store from "../../store/store";
 import Loader from "../utility/Loader";
 import { connect } from "react-redux";
+import { useEffect } from "react";
 
 const AddReview = ({
   open,
   onClose,
   movie,
   user,
-  refreshReviews,
+  review,
+  refreshReviews = () => {},
   settings,
   ratings,
+  userHasWrittenReview,
 }) => {
   const [newReview, setNewReview] = useState({
     review: "",
@@ -21,11 +24,23 @@ const AddReview = ({
   });
   const [problem, setProblem] = useState("");
   const [loading, setLoading] = useState(false);
-  return (
+
+  useEffect(() => {
+    if (review) {
+      setNewReview((prev) =>
+        Object.assign({}, prev, {
+          review: review.review,
+          rating: review.rating,
+        })
+      );
+    }
+  }, [review]);
+  return movie ? (
     <Modal open={open} onClose={onClose}>
       <div className="col-xl-42 p-4 bg-over-root-lighter rounded mx-4">
         <div className="row no-gutters h5 mb-4">
-          Add Review - {movie.title} ({movie.release_date.substring(0, 4)})
+          {userHasWrittenReview ? "Edit" : "Add"} Review - {movie.title} (
+          {movie.release_date.substring(0, 4)})
         </div>
         <div className="row no-gutters">
           <div className="col-auto pr-3 d-none d-md-block">
@@ -165,19 +180,23 @@ const AddReview = ({
                     setProblem("Review is empty");
                   } else {
                     setLoading(true);
-                    let res = await WriteReview(
-                      newReview,
-                      movie.id,
-                      user,
-                      settings.movies_api_key
-                    );
+                    let res = userHasWrittenReview
+                      ? await EditReview(newReview, review, user._id)
+                      : await WriteReview(
+                          newReview,
+                          movie.id,
+                          user,
+                          settings.movies_api_key
+                        );
                     setLoading(false);
                     setNewReview({ review: "", rating: "" });
                     if (res.error) {
                       store.dispatch({
                         type: "SET_NOTIFICATION",
                         notification: {
-                          title: "Couldn't add your review",
+                          title: `Couldn't ${
+                            userHasWrittenReview ? "edit" : "add"
+                          } review`,
                           type: "failure",
                           message: JSON.stringify(res.error).replace(/"/g, ""),
                         },
@@ -186,16 +205,32 @@ const AddReview = ({
                       store.dispatch({
                         type: "SET_NOTIFICATION",
                         notification: {
-                          title: "You successfully writed review",
+                          title: `You successfully ${
+                            userHasWrittenReview ? "edited" : "wrote"
+                          } review`,
                           type: "success",
-                          message: "Your review successfully added",
+                          message: `Your review was successfully ${
+                            userHasWrittenReview ? "edited" : "added"
+                          }`,
                         },
                       });
                       let watchedlist = [...user.watchedlist];
                       watchedlist.push({ movie_id: movie.id.toString() });
+                      let reviewsList = [...user.reviews];
+                      reviewsList.push(res.reviewId);
+                      let userRatings = { ...user.ratings };
+                      userRatings[movie.id] = {
+                        movie_id: movie.id,
+                        rate_type: review.rating,
+                      };
+
                       store.dispatch({
                         type: "UPDATE_USER",
-                        userProperty: { watchedlist },
+                        userProperty: {
+                          watchedlist,
+                          reviews: reviewsList,
+                          ratings: userRatings,
+                        },
                       });
                       onClose();
                       refreshReviews();
@@ -224,6 +259,8 @@ const AddReview = ({
         </div>
       </div>
     </Modal>
+  ) : (
+    ""
   );
 };
 

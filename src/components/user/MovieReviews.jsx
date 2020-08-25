@@ -29,6 +29,7 @@ const MovieReviews = ({
   addReviewTrigger,
   seekReviewId,
   seekCommentId,
+  userHasWrittenReview,
 }) => {
   // local reviews object in order to be able to update it quickly instead of waiting for real changes in database
   const [reviews, setReviews] = useState([]);
@@ -58,6 +59,7 @@ const MovieReviews = ({
 
   // boolean variable to display "add review" modal or not
   const [addReviewOpen, setAddReviewOpen] = useState(false);
+  const [replyOpen, setReplyOpen] = useState(false);
 
   // boolean variable to display "add review" modal or not
   const [review, setReview] = useState("");
@@ -113,6 +115,10 @@ const MovieReviews = ({
           let promReviews = [],
             notPromotedReviews = [];
           data.reverse().forEach((x) => {
+            if (user.reviews.includes(x._id)) {
+              setReview(x);
+            }
+
             if (x._id === seekReviewId) {
               promReviews.unshift(x);
             } else if (promotedContentIds.includes(x._id)) {
@@ -372,6 +378,7 @@ const MovieReviews = ({
                               ]),
                             })
                           );
+                          setReplyOpen(true);
                         }
                       }}
                     >
@@ -664,15 +671,16 @@ const MovieReviews = ({
                           </div>
                           <div
                             className="col-auto text-orange btn-tertiary"
-                            onClick={() =>
+                            onClick={() => {
                               setReview(
                                 Object.assign({}, x, {
                                   notificationReceivers: [
                                     publicUsers[x.author],
                                   ],
                                 })
-                              )
-                            }
+                              );
+                              setReplyOpen(true);
+                            }}
                           >
                             Reply
                           </div>
@@ -685,7 +693,10 @@ const MovieReviews = ({
                   in={reviewIdOfVisibleComments === x._id}
                   className="mb-3"
                 >
-                  <div style={{ marginLeft: "30px" }} className="h5 py-2">
+                  <div
+                    style={{ marginLeft: "30px" }}
+                    className="py-2 text-light"
+                  >
                     Comments (
                     {comments[x._id]
                       ? Object.values(comments[x._id]).length
@@ -734,9 +745,11 @@ const MovieReviews = ({
             ></Paigination>
           </div>
           <AddReview
+            userHasWrittenReview={userHasWrittenReview}
             open={addReviewOpen}
             onClose={() => setAddReviewOpen(false)}
             movie={movie}
+            review={review}
             user={user}
             refreshReviews={() => setRefreshReviews(!refreshReviews)}
           ></AddReview>
@@ -752,8 +765,8 @@ const MovieReviews = ({
                 : { display_name: "" }
             }
             review={review}
-            open={review}
-            onClose={() => setReview("")}
+            open={replyOpen}
+            onClose={() => setReplyOpen(false)}
             user={user}
           ></ReplyToReview>
         </div>

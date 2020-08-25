@@ -45,13 +45,13 @@ const Footer = ({ user, settings }) => {
     location.pathname !== "/signup" &&
     location.pathname !== "/forgot-password" &&
     !location.pathname.includes("/reset-password") ? (
-    <div className="row no-gutters justify-content-center bg-over-root text-light">
+    <div className="row no-gutters justify-content-center bg-over-root text-muted">
       <div
         className={`px-sm-5 px-4 py-4 col-60${
           location.pathname !== "/admin" ? " content-container" : ""
         }`}
       >
-        <div className="row no-gutters justify-content-between align-items-center">
+        <div className="row no-gutters justify-content-between align-items-center font-size-16">
           <div className="col-auto mb-2">
             <div className="row no-gutters">
               {menuItems
@@ -59,7 +59,7 @@ const Footer = ({ user, settings }) => {
                 .map((x, i) => (
                   <div
                     key={`footer-item-${i}`}
-                    className="col-auto text-title-md btn-tertiary-light"
+                    className="col-auto btn-tertiary text-muted-light"
                     onClick={() => history.push(x.path)}
                   >
                     {x.name}

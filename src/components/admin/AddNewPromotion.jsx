@@ -396,8 +396,8 @@ const AddNewPromotion = ({ publicUsers, getBack, ratings }) => {
                     <th className="d-table-cell d-xl-none table-header text-truncate">
                       {columns[lastVisibleColumn]}
                     </th>
-                    {columns.map((c) => (
-                      <th className="d-none d-xl-table-cell table-header text-truncate">
+                    {columns.map((c,p) => (
+                      <th className="d-none d-xl-table-cell table-header text-truncate" key={`x-col-${p}`}>
                         <div>{c}</div>
                       </th>
                     ))}

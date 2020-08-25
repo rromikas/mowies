@@ -1,5 +1,6 @@
 import React from "react";
 import { Emoji } from "emoji-mart";
+import OkIcon from "./images/OkIcon";
 
 export const OfficialMoviesGenres = [
   { id: 28, name: "Action" },
@@ -151,7 +152,7 @@ export const Ratings = [
     name: "ok_rate",
     element: (
       <div className="text-center py-3" style={{ lineHeight: "100%" }}>
-        <Emoji emoji="heavy_division_sign" set="facebook" size={24} />
+        <OkIcon size={34} />
       </div>
     ),
   },

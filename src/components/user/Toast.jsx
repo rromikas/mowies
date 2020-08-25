@@ -38,7 +38,7 @@ const Toast = ({ notification, publicUsers }) => {
       typeof notification.message === "object"
     ) {
       let adminNotification = {
-        type: "App",
+        type: "System",
         subject: "System error occured",
         receivers: ["All admins"],
         start_date: Date.now(),

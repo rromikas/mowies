@@ -26,6 +26,7 @@ const extractGenres = (movies, ratings) => {
 const Wishlist = ({ movies, ratings }) => {
   const [selectedGenre, setSelectedGenre] = useState(0);
   const genres = extractGenres(movies, ratings);
+
   return (
     <div className="col-60 px-0">
       <div className="row no-gutters justify-content-end text-light align-items-center mb-2">

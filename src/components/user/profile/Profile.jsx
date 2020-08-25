@@ -239,6 +239,7 @@ const Profile = (props) => {
             refreshProfile={() => setRefreshProfile(!refreshProfile)}
             movies={profileData.wishlist}
             owner={user._id === profileData._id}
+            user={user}
           ></Wishlist>
         ) : section === 1 ? (
           <Watchedlist

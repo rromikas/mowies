@@ -15804,35 +15804,35 @@ a.text-light:hover, a.textarea:hover, a.text-light-white:hover, a.text-muted-lig
   color: #cbd3da !important;
 }
 
-.text-dark, .textarea-light, .table-input::-webkit-input-placeholder {
+.text-dark, .textarea-light, .table-input::-webkit-input-placeholder, .textarea-light-disabled {
   color: #343a40 !important;
 }
 
-.text-dark, .textarea-light, .table-input:-ms-input-placeholder {
+.text-dark, .textarea-light, .table-input:-ms-input-placeholder, .textarea-light-disabled {
   color: #343a40 !important;
 }
 
-.text-dark, .textarea-light, .table-input::-ms-input-placeholder {
+.text-dark, .textarea-light, .table-input::-ms-input-placeholder, .textarea-light-disabled {
   color: #343a40 !important;
 }
 
-.text-dark, .textarea-light, .table-input::placeholder {
+.text-dark, .textarea-light, .table-input::placeholder, .textarea-light-disabled {
   color: #343a40 !important;
 }
 
-a.text-dark:hover, a.textarea-light:hover, a.table-input:hover::-webkit-input-placeholder, a.text-dark:focus, a.textarea-light:focus, a.table-input:focus::-webkit-input-placeholder {
+a.text-dark:hover, a.textarea-light:hover, a.table-input:hover::-webkit-input-placeholder, a.textarea-light-disabled:hover, a.text-dark:focus, a.textarea-light:focus, a.table-input:focus::-webkit-input-placeholder, a.textarea-light-disabled:focus {
   color: #121416 !important;
 }
 
-a.text-dark:hover, a.textarea-light:hover, a.table-input:hover:-ms-input-placeholder, a.text-dark:focus, a.textarea-light:focus, a.table-input:focus:-ms-input-placeholder {
+a.text-dark:hover, a.textarea-light:hover, a.table-input:hover:-ms-input-placeholder, a.textarea-light-disabled:hover, a.text-dark:focus, a.textarea-light:focus, a.table-input:focus:-ms-input-placeholder, a.textarea-light-disabled:focus {
   color: #121416 !important;
 }
 
-a.text-dark:hover, a.textarea-light:hover, a.table-input:hover::-ms-input-placeholder, a.text-dark:focus, a.textarea-light:focus, a.table-input:focus::-ms-input-placeholder {
+a.text-dark:hover, a.textarea-light:hover, a.table-input:hover::-ms-input-placeholder, a.textarea-light-disabled:hover, a.text-dark:focus, a.textarea-light:focus, a.table-input:focus::-ms-input-placeholder, a.textarea-light-disabled:focus {
   color: #121416 !important;
 }
 
-a.text-dark:hover, a.textarea-light:hover, a.table-input:hover::placeholder, a.text-dark:focus, a.textarea-light:focus, a.table-input:focus::placeholder {
+a.text-dark:hover, a.textarea-light:hover, a.table-input:hover::placeholder, a.textarea-light-disabled:hover, a.text-dark:focus, a.textarea-light:focus, a.table-input:focus::placeholder, a.textarea-light-disabled:focus {
   color: #121416 !important;
 }
 
@@ -16232,7 +16232,7 @@ body {
 }
 
 .btn-tertiary:hover {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .btn-tertiary-light {
@@ -16594,6 +16594,10 @@ h1, h2, h3, h4, h5, h6,
   font-weight: 600;
 }
 
+.font-size-16 {
+  font-size: 16px;
+}
+
 .font-size-14 {
   font-size: 14px;
 }
@@ -16651,8 +16655,8 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .text-muted-light {
-  -webkit-transition: color 0.3s;
-  transition: color 0.3s;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
   color: #cacaca;
 }
 
@@ -16972,6 +16976,33 @@ input[type="number"]::-webkit-outer-spin-button {
   line-height: 44px;
 }
 
+.input-light-resize-disabled {
+  border: 1px solid #dfe1e6;
+  background: white;
+  outline: none;
+  border-radius: 2px;
+  -webkit-box-shadow: 0 0 0 1px #dfe1e6 !important;
+          box-shadow: 0 0 0 1px #dfe1e6 !important;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.input-light-resize-disabled::-webkit-input-placeholder {
+  color: #c0c0cb;
+}
+
+.input-light-resize-disabled:-ms-input-placeholder {
+  color: #c0c0cb;
+}
+
+.input-light-resize-disabled::-ms-input-placeholder {
+  color: #c0c0cb;
+}
+
+.input-light-resize-disabled::placeholder {
+  color: #c0c0cb;
+}
+
 .input-light-resize {
   border: 1px solid #dfe1e6;
   background: white;
@@ -17262,6 +17293,35 @@ input[type="number"] {
 }
 
 .input-light-disabled::placeholder {
+  color: #c0c0cb;
+}
+
+.textarea-light-disabled {
+  background: white;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  border: 1px solid #dfe1e6;
+  -webkit-box-shadow: 0 0 0 1px #dfe1e6 !important;
+          box-shadow: 0 0 0 1px #dfe1e6 !important;
+  border-radius: 4px;
+  padding: 10px;
+  outline: none !important;
+  resize: none;
+}
+
+.textarea-light-disabled::-webkit-input-placeholder {
+  color: #c0c0cb;
+}
+
+.textarea-light-disabled:-ms-input-placeholder {
+  color: #c0c0cb;
+}
+
+.textarea-light-disabled::-ms-input-placeholder {
+  color: #c0c0cb;
+}
+
+.textarea-light-disabled::placeholder {
   color: #c0c0cb;
 }
 

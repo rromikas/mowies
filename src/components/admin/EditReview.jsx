@@ -21,8 +21,6 @@ const EditReview = ({ currentReview, publicUsers, getBack, ratings }) => {
     window.scrollTo(0, 0);
   }, []);
 
-  const movies = Object.values(ratings).map((x) => x.movie_title);
-
   return (
     <div className="row no-gutters p-md-5 p-4" style={{ maxWidth: "800px" }}>
       <div className="col-60 py-3 border-bottom mb-4">
@@ -111,22 +109,14 @@ const EditReview = ({ currentReview, publicUsers, getBack, ratings }) => {
       </div>
       <div className="col-60 mb-4">
         <div className="row no-gutters">
-          <div className="60 mb-1">Movie name</div>
+          <div className="60 mb-1">Title</div>
         </div>
         <div className="row no-gutters">
-          <Select
-            popoverClass="col-md-30 col-60"
-            className="input-light px-3"
-            btnName={review.movie_title ? review.movie_title : "Select"}
-            onSelect={(index) => {
-              setReview((prev) =>
-                Object.assign({}, prev, {
-                  movie_title: movies[index],
-                })
-              );
-            }}
-            items={movies}
-          ></Select>
+          <input
+            value={ratings[currentReview.movie_id].movie_title}
+            disabled
+            className="input-light-disabled col-md-30 col-60 px-3"
+          ></input>
         </div>
       </div>
       <div className="col-60 mt-5">

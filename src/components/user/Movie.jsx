@@ -12,7 +12,7 @@ import { AddViewToMovie } from "../../server/DatabaseApi";
 import WishlistButton from "./WishlistButton";
 import { FaRegPaperPlane } from "react-icons/fa";
 import history from "../../History";
-import { BsPlayFill } from "react-icons/bs";
+import { BsPlayFill, BsPencil } from "react-icons/bs";
 
 const Movie = (props) => {
   const movieId = props.match.params.movieId;
@@ -176,9 +176,73 @@ const Movie = (props) => {
               style={{ zIndex: 5 }}
             >
               <div className="col-60">
-                <div className="row no-gutters h5">
-                  {movie.title} ({movie.release_date.substring(0, 4)})
+                <div className="row no-gutters align-items-center">
+                  <div className="col-auto mr-3">
+                    <div className="row no-gutters h5 mb-2 align-items-center">
+                      {movie.title} ({movie.release_date.substring(0, 4)})
+                    </div>
+                  </div>
+                  <div className="col-auto">
+                    <div className="row no-gutters mb-2 align-items-center mt-2">
+                      <ReactionButton
+                        selected={
+                          user.ratings[movie.id]
+                            ? user.ratings[movie.id].rate_type ===
+                              "excellent_rate"
+                            : false
+                        }
+                        movie={movie}
+                        emoji="fire"
+                        className="mr-2 mb-2"
+                        value={
+                          ratings[movie.id]
+                            ? ratings[movie.id].excellent_rate
+                            : 0
+                        }
+                      ></ReactionButton>
+                      <ReactionButton
+                        selected={
+                          user.ratings[movie.id]
+                            ? user.ratings[movie.id].rate_type === "good_rate"
+                            : false
+                        }
+                        movie={movie}
+                        emoji="heart"
+                        className="mr-2 mb-2"
+                        value={
+                          ratings[movie.id] ? ratings[movie.id].good_rate : 0
+                        }
+                      ></ReactionButton>
+                      <ReactionButton
+                        selected={
+                          user.ratings[movie.id]
+                            ? user.ratings[movie.id].rate_type === "ok_rate"
+                            : false
+                        }
+                        movie={movie}
+                        className="mr-2 mb-2"
+                        emoji="heavy_division_sign"
+                        value={
+                          ratings[movie.id] ? ratings[movie.id].ok_rate : 0
+                        }
+                      ></ReactionButton>
+                      <ReactionButton
+                        className="mb-2"
+                        emoji="shit"
+                        value={
+                          ratings[movie.id] ? ratings[movie.id].bad_rate : 0
+                        }
+                        selected={
+                          user.ratings[movie.id]
+                            ? user.ratings[movie.id].rate_type === "bad_rate"
+                            : false
+                        }
+                        movie={movie}
+                      ></ReactionButton>
+                    </div>
+                  </div>
                 </div>
+
                 <div className="row no-gutters text-movie-muted mb-2">
                   <div className="text-truncate">
                     {movie.genres.map((x) => x.name).join("/")}
@@ -223,59 +287,12 @@ const Movie = (props) => {
                               }
                             }}
                           >
-                            {movie.cast.join("    ")}
+                            {movie.cast.join(", ")}
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="row no-gutters mb-3">
-                  <ReactionButton
-                    selected={
-                      user.ratings[movie.id]
-                        ? user.ratings[movie.id].rate_type === "excellent_rate"
-                        : false
-                    }
-                    movie={movie}
-                    emoji="fire"
-                    className="mr-2 mb-2"
-                    value={
-                      ratings[movie.id] ? ratings[movie.id].excellent_rate : 0
-                    }
-                  ></ReactionButton>
-                  <ReactionButton
-                    selected={
-                      user.ratings[movie.id]
-                        ? user.ratings[movie.id].rate_type === "good_rate"
-                        : false
-                    }
-                    movie={movie}
-                    emoji="heart"
-                    className="mr-2 mb-2"
-                    value={ratings[movie.id] ? ratings[movie.id].good_rate : 0}
-                  ></ReactionButton>
-                  <ReactionButton
-                    selected={
-                      user.ratings[movie.id]
-                        ? user.ratings[movie.id].rate_type === "ok_rate"
-                        : false
-                    }
-                    movie={movie}
-                    className="mr-2 mb-2"
-                    emoji="heavy_division_sign"
-                    value={ratings[movie.id] ? ratings[movie.id].ok_rate : 0}
-                  ></ReactionButton>
-                  <ReactionButton
-                    emoji="shit"
-                    value={ratings[movie.id] ? ratings[movie.id].bad_rate : 0}
-                    selected={
-                      user.ratings[movie.id]
-                        ? user.ratings[movie.id].rate_type === "bad_rate"
-                        : false
-                    }
-                    movie={movie}
-                  ></ReactionButton>
                 </div>
                 <div className="row no-gutters mb-5">
                   <div className="col-auto mr-2">Release date:</div>
@@ -301,11 +318,20 @@ const Movie = (props) => {
                       }
                     }}
                   >
-                    Add Review
-                    <FaRegPaperPlane
-                      fontSize="20px"
-                      className="ml-2"
-                    ></FaRegPaperPlane>
+                    {user.ratings[movie.id] ? (
+                      <React.Fragment>
+                        Edit Review
+                        <BsPencil fontSize="20px" className="ml-2"></BsPencil>
+                      </React.Fragment>
+                    ) : (
+                      <React.Fragment>
+                        Add Review
+                        <FaRegPaperPlane
+                          fontSize="20px"
+                          className="ml-2"
+                        ></FaRegPaperPlane>
+                      </React.Fragment>
+                    )}
                   </div>
                   <WishlistButton movie={movie} user={user}></WishlistButton>
                 </div>
@@ -314,6 +340,7 @@ const Movie = (props) => {
           </div>
         </div>
         <MovieReviews
+          userHasWrittenReview={user.ratings[movie.id]}
           seekCommentId={seekCommentId}
           seekReviewId={seekReviewId}
           movie={movie}

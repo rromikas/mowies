@@ -49,7 +49,11 @@ export const RateMovie = (rate, movieId, user, apiKey) => {
 };
 
 export const WriteReview = (review, movieId, user, apiKey) => {
-  return SendPostRequest("/reviews/update", { review, movieId, user, apiKey });
+  return SendPostRequest("/reviews/add", { review, movieId, user, apiKey });
+};
+
+export const EditReview = (review, prevReview, userId) => {
+  return SendPostRequest("/reviews/edit", { review, prevReview, userId });
 };
 
 export const GetMovieReviews = (movieId) => {
@@ -235,8 +239,8 @@ export const DeleteMultipleNotifications = (ids, update) => {
   return SendPostRequest("/admin/notifications/delete", { ids, update });
 };
 
-export const MoveMovieToWatchList = (user, movieId) => {
-  return SendPostRequest("/movie/moveToWatchedList", { user, movieId });
+export const MoveMovieToWatchList = (user, movieId, apiKey) => {
+  return SendPostRequest("/movie/moveToWatchedList", { user, movieId, apiKey });
 };
 
 export const GetReview = (reviewId) => {

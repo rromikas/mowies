@@ -17,7 +17,7 @@ const EditNotification = ({
   publicUsers,
   user,
 }) => {
-  const types = ["App", "Email"];
+  const types = ["App", "Email", "System"];
 
   let initialDate = Date.now();
 
@@ -75,8 +75,13 @@ const EditNotification = ({
           <div className="col-60 mb-1">Subject</div>
           <div className="col-60">
             <input
+              disabled={notification.type === "System"}
               type="text"
-              className="w-100 input-light px-3"
+              className={`w-100 ${
+                notification.type === "System"
+                  ? "input-light-disabled"
+                  : "input-light"
+              } px-3`}
               value={notification.subject}
               onChange={(e) => {
                 e.persist();
@@ -90,8 +95,11 @@ const EditNotification = ({
         <div className="row no-gutters mb-4">
           <div className="col-60 mb-1">Type</div>
           <Select
+            disabled={notification.type === "System"}
             popoverClass="col-sm-30 col-60"
-            className="input-light col-60"
+            className={`input-light${
+              notification.type === "System" ? "-disabled" : ""
+            } col-60`}
             btnName={notification.type ? notification.type : "Select"}
             items={types}
             onSelect={(index) =>
@@ -104,6 +112,7 @@ const EditNotification = ({
         <div className="row no-gutters mb-4">
           <div className="col-60 mb-1">Notification to</div>
           <Autocomplete
+            disabled={notification.type === "System"}
             value={notification.receivers}
             onChange={(e, val) => {
               setNotification((prev) =>
@@ -112,7 +121,9 @@ const EditNotification = ({
             }}
             placeholder={"Search by username"}
             color={"primary"}
-            className="col-md-30 col-60 input-light-resize"
+            className={`col-md-30 col-60 input-light-resize${
+              notification.type === "System" ? "-disabled" : ""
+            }`}
             options={Object.keys(autocompleteOptions).concat(
               Object.values(publicUsers).filter((x) => x.status !== "Deleted")
             )}
@@ -125,6 +136,7 @@ const EditNotification = ({
           <div className="col-60 mb-1">Description</div>
           <div className="col-60">
             <textarea
+              disabled={notification.type === "System"}
               value={notification.description}
               onChange={(e) => {
                 e.persist();
@@ -135,7 +147,11 @@ const EditNotification = ({
                   );
                 }
               }}
-              className="textarea-light w-100"
+              className={`${
+                notification.type === "System"
+                  ? "textarea-light-disabled"
+                  : "textarea-light"
+              } w-100`}
               style={{ height: "150px" }}
             ></textarea>
           </div>
@@ -177,8 +193,11 @@ const EditNotification = ({
                             }}
                           ></BsCalendar>
                           <input
+                            disabled={notification.type === "System"}
                             {...props}
-                            className="input-light w-100 pl-5 pr-3"
+                            className={`input-light${
+                              notification.type === "System" ? "-disabled" : ""
+                            } w-100 pl-5 pr-3`}
                             placeholder="YYYY-MM-DD"
                           ></input>
                         </div>
@@ -200,7 +219,9 @@ const EditNotification = ({
                     />
                   </div>
                   <div
-                    className="col-auto position-relative input-light"
+                    className={`col-auto position-relative input-light${
+                      notification.type === "System" ? "-disabled" : ""
+                    }`}
                     style={{ width: "150px" }}
                   >
                     <BsClock
@@ -212,25 +233,34 @@ const EditNotification = ({
                         left: "18px",
                       }}
                     ></BsClock>
-                    <TimePicker
-                      clearIcon={null}
-                      clockIcon={null}
-                      className="w-100 pl-5"
-                      onChange={(a) => {
-                        if (a) {
-                          let [h, m] = a.split(":");
-                          let newTime = new Date(notification.start_date);
-                          newTime.setHours(h);
-                          newTime.setMinutes(m);
-                          setNotification((prev) =>
-                            Object.assign({}, prev, {
-                              start_date: newTime.getTime(),
-                            })
-                          );
-                        }
-                      }}
-                      value={new Date(notification.start_date)}
-                    ></TimePicker>
+                    {notification.type === "System" ? (
+                      <div className="w-100 pl-5">
+                        {date.format(
+                          new Date(notification.start_date),
+                          "hh:mm A"
+                        )}
+                      </div>
+                    ) : (
+                      <TimePicker
+                        clearIcon={null}
+                        clockIcon={null}
+                        className="w-100 pl-5"
+                        onChange={(a) => {
+                          if (a) {
+                            let [h, m] = a.split(":");
+                            let newTime = new Date(notification.start_date);
+                            newTime.setHours(h);
+                            newTime.setMinutes(m);
+                            setNotification((prev) =>
+                              Object.assign({}, prev, {
+                                start_date: newTime.getTime(),
+                              })
+                            );
+                          }
+                        }}
+                        value={new Date(notification.start_date)}
+                      ></TimePicker>
+                    )}
                   </div>
                 </div>
               </div>
@@ -240,8 +270,11 @@ const EditNotification = ({
         <div className="row no-gutters mb-4">
           <div className="col-60 mb-1">Status</div>
           <Select
+            disabled={notification.type === "System"}
             popoverClass="col-sm-30 col-60"
-            className="input-light col-60"
+            className={`input-light${
+              notification.type === "System" ? "-disabled" : ""
+            } col-60`}
             btnName={
               notification.status ? notification.status : "Select status"
             }
@@ -259,69 +292,80 @@ const EditNotification = ({
         >
           {problem}
         </div>
-        <div className="row no-gutters">
-          <div
-            className="btn-custom btn-custom-secondary btn-small mr-sm-3 mb-3 col-60 col-sm-auto"
-            onClick={getBack}
-          >
-            Cancel
-          </div>
-          <div
-            className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto"
-            onClick={async () => {
-              let invalid = validations.filter((x) => !x.valid);
-              if (invalid.length) {
-                setProblem(invalid[0].error);
-              } else {
-                setLoading(true);
-
-                let res = await Edit(notification);
-                setLoading(false);
-                if (res.error) {
-                  store.dispatch({
-                    type: "SET_NOTIFICATION",
-                    notification: {
-                      title: "Error",
-                      message: res.error,
-                      type: "failure",
-                    },
-                  });
+        {notification.type !== "System" ? (
+          <div className="row no-gutters">
+            <div
+              className="btn-custom btn-custom-secondary btn-small mr-sm-3 mb-3 col-60 col-sm-auto"
+              onClick={getBack}
+            >
+              Cancel
+            </div>
+            <div
+              className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto"
+              onClick={async () => {
+                let invalid = validations.filter((x) => !x.valid);
+                if (invalid.length) {
+                  setProblem(invalid[0].error);
                 } else {
-                  store.dispatch({
-                    type: "SET_NOTIFICATION",
-                    notification: {
-                      title: "Notification edited",
-                      message: "Notification was successfully edited",
-                      type: "success",
-                    },
-                  });
-                  let updatedUser = await GetUser(user._id);
-                  store.dispatch({
-                    type: "SET_USER",
-                    user: updatedUser,
-                  });
-                  getBack();
+                  setLoading(true);
+
+                  let res = await Edit(notification);
+                  setLoading(false);
+                  if (res.error) {
+                    store.dispatch({
+                      type: "SET_NOTIFICATION",
+                      notification: {
+                        title: "Error",
+                        message: res.error,
+                        type: "failure",
+                      },
+                    });
+                  } else {
+                    store.dispatch({
+                      type: "SET_NOTIFICATION",
+                      notification: {
+                        title: "Notification edited",
+                        message: "Notification was successfully edited",
+                        type: "success",
+                      },
+                    });
+                    let updatedUser = await GetUser(user._id);
+                    store.dispatch({
+                      type: "SET_USER",
+                      user: updatedUser,
+                    });
+                    getBack();
+                  }
                 }
-              }
-            }}
-          >
-            <Loader
-              color={"white"}
-              style={{
-                position: "absolute",
-                left: "10px",
-                top: 0,
-                bottom: 0,
-                margin: "auto",
-                display: "flex",
-                alignItems: "center",
               }}
-              loading={loading}
-              size={20}
-            ></Loader>
-            Save
+            >
+              <Loader
+                color={"white"}
+                style={{
+                  position: "absolute",
+                  left: "10px",
+                  top: 0,
+                  bottom: 0,
+                  margin: "auto",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                loading={loading}
+                size={20}
+              ></Loader>
+              Save
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="row no-gutters">
+            <div
+              className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto"
+              onClick={getBack}
+            >
+              Go back
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

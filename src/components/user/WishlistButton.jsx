@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { MdPlaylistAdd, MdDelete } from "react-icons/md";
+import { MdPlaylistAdd } from "react-icons/md";
 import store from "../../store/store";
 import { AddToWishList, GetAllRatings } from "../../server/DatabaseApi";
 import Popover from "../utility/Popover";
 import Loader from "../utility/Loader";
 import { connect } from "react-redux";
+import RemoveIcon from "../../images/RemoveIcon";
 
 const WishlistButton = ({ user, movie, apiKey }) => {
   const [loading, setLoading] = useState(false);
@@ -84,10 +85,12 @@ const WishlistButton = ({ user, movie, apiKey }) => {
         {loading ? (
           <Loader size={30} loading={loading} color={"white"}></Loader>
         ) : currentlyAdded ? (
-          <MdDelete
+          <RemoveIcon
+            color={"white"}
+            fill={"white"}
             onClick={() => handleClick("removed from")}
-            fontSize="24px"
-          ></MdDelete>
+            size={28}
+          ></RemoveIcon>
         ) : (
           <MdPlaylistAdd
             onClick={() => handleClick("added to")}

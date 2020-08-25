@@ -12,7 +12,7 @@ import { CreateNotification, GetUser } from "../../server/DatabaseApi";
 import store from "../../store/store";
 
 const AddNewNotification = ({ publicUsers, getBack, user }) => {
-  const types = ["App", "Email"];
+  const types = ["App", "Email", "System"];
   let initialDate = Date.now();
   const [notification, setNotification] = useState({
     type: "",

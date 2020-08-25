@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 import MoviesList from "./MoviesList";
+import AddReview from "../AddReview";
 
 const extractGenres = (movies, ratings) => {
   let genres = ["All"];
@@ -23,12 +24,24 @@ const extractGenres = (movies, ratings) => {
   return genres;
 };
 
-const Wishlist = ({ movies, owner, refreshProfile, ratings }) => {
+const Wishlist = ({ movies, owner, refreshProfile, ratings, user }) => {
   const [selectedGenre, setSelectedGenre] = useState(0);
   const genres = extractGenres(movies, ratings);
 
+  const [movie, setMovie] = useState(false);
+  const [addReviewOpen, setAddReviewOpen] = useState(false);
+
   return (
     <div className="col-60 px-0">
+      <AddReview
+        movie={movie}
+        user={user}
+        open={addReviewOpen}
+        onClose={() => {
+          setAddReviewOpen(false);
+          refreshProfile();
+        }}
+      ></AddReview>
       <div className="row no-gutters justify-content-end text-light align-items-center mb-2">
         <div className="col-auto">
           {genres.length > 1 ? (
@@ -64,6 +77,8 @@ const Wishlist = ({ movies, owner, refreshProfile, ratings }) => {
       </div>
       {movies.length ? (
         <MoviesList
+          setAddReviewOpen={setAddReviewOpen}
+          setMovie={setMovie}
           refreshProfile={refreshProfile}
           owner={owner}
           listType="wishlist"

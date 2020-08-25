@@ -4,14 +4,21 @@ import Popover from "../utility/Popover";
 import Loader from "../utility/Loader";
 import { MoveMovieToWatchList } from "../../server/DatabaseApi";
 import store from "../../store/store";
+import { connect } from "react-redux";
 
-const MoveToWatchedButton = ({ user, movieId, refreshProfile = () => {} }) => {
+const MoveToWatchedButton = ({
+  user,
+  movieId,
+  refreshProfile = () => {},
+  apiKey,
+}) => {
   const [loading, setLoading] = useState(false);
+
   const handleClick = async () => {
     if (user.display_name) {
       if (movieId) {
         setLoading(true);
-        let res = await MoveMovieToWatchList(user, movieId);
+        let res = await MoveMovieToWatchList(user, movieId, apiKey);
         setLoading(false);
         if (res.updatedUser) {
           let wishlist = [...user.wishlist];
@@ -78,4 +85,11 @@ const MoveToWatchedButton = ({ user, movieId, refreshProfile = () => {} }) => {
   );
 };
 
-export default MoveToWatchedButton;
+function mapp(state, ownProps) {
+  return {
+    apiKey: state.settings.movies_api_key,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(MoveToWatchedButton);

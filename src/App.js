@@ -81,6 +81,16 @@ function App() {
           store.dispatch({ type: "SET_USER", user: res });
         }
       }
+
+      // let errorRes = await CreateError();
+      // store.dispatch({
+      //   type: "SET_NOTIFICATION",
+      //   notification: {
+      //     title: "Action required",
+      //     message: errorRes,
+      //     type: "failure",
+      //   },
+      // });
     }
     getData();
   }, []);

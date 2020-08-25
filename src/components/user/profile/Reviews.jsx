@@ -88,12 +88,6 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                                   })`,
                                 }}
                               ></div>
-                              {/* <img
-                            onClick={() => history.push(`/movie/${x.id}`)}
-                            width="100%"
-                            style={{ borderRadius: "13px" }}
-                            src={`https://image.tmdb.org/t/p/w154${x.movie_poster}`}
-                          ></img> */}
                             </div>
                             <div className="col">
                               <div className="row no-gutters text-white mb-0">
@@ -103,9 +97,6 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                                 ].movie_release_date.substring(0, 4)}
                                 )
                               </div>
-                              {/* <div className="row no-gutters text-muted">
-                            {x.movie_genres}
-                          </div> */}
                             </div>
                           </div>
                         </div>
@@ -209,7 +200,7 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                     in={reviewIdOfVisibleComments === x._id}
                     className="mb-3"
                   >
-                    <div className="ml-4 h5 py-2 text-white">
+                    <div className="ml-4 py-2 text-light">
                       Comments ({comments[x._id] ? comments[x._id].length : 0})
                     </div>
                     {comments[x._id]

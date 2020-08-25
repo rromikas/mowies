@@ -7,10 +7,15 @@ import ReactionButton from "./ReactionButton";
 import TrailerPlayer from "./TrailerPlayer";
 import Modal from "../utility/Modal";
 import { BsPlayFill } from "react-icons/bs";
+import MoveToWatchedButton from "./MoveToWatchedButton";
+import AddReview from "./AddReview";
 
 const MoviesList = ({ movies, user, ratings }) => {
   const [trailerMovieId, setTrailerMovieId] = useState("");
   const [openTrailer, setOpenTrailer] = useState(false);
+  const [addReviewOpen, setAddReviewOpen] = useState(false);
+
+  const [movie, setMovie] = useState(false); // movie to add review for
   return (
     <div className="row justify-content-end">
       <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
@@ -19,6 +24,12 @@ const MoviesList = ({ movies, user, ratings }) => {
           onEnded={() => setOpenTrailer(false)}
         ></TrailerPlayer>
       </Modal>
+      <AddReview
+        open={addReviewOpen}
+        onClose={() => setAddReviewOpen(false)}
+        movie={movie}
+        user={user}
+      ></AddReview>
       {movies.map((x, i) => (
         <div
           key={`result-${i}`}
@@ -34,6 +45,15 @@ const MoviesList = ({ movies, user, ratings }) => {
             }}
           >
             <WishlistButton movie={x} user={user}></WishlistButton>
+            <div className="pr-1"></div>
+            <MoveToWatchedButton
+              refreshProfile={() => {
+                setMovie(x);
+                setAddReviewOpen(true);
+              }}
+              user={user}
+              movieId={x.id}
+            ></MoveToWatchedButton>
           </div>
           <div className="row no-gutters">
             <div className="col-sm-60 col-auto mr-3 mr-sm-0">

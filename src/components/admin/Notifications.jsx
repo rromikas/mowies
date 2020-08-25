@@ -41,7 +41,7 @@ const Notifications = ({
     getData();
   }, [refresh]);
 
-  const types = ["App", "Email"];
+  const types = ["App", "Email", "System"];
 
   useEffect(() => {
     let arr = [...notifications];
@@ -508,56 +508,6 @@ const Notifications = ({
                         </tr>
                       )}
                     </tbody>
-                    {/* <tfoot>
-                      <tr>
-                        <th className="text-center">
-                          <Checkbox
-                            color={"primary"}
-                            checked={
-                              filteredNotifications
-                                .slice(boundaries[0], boundaries[1])
-                                .filter((x) => x.selected).length ===
-                              boundaries[1] - boundaries[0]
-                            }
-                            onChange={(e) => {
-                              setFilteredNotifications((prev) => {
-                                let arr = [...prev];
-                                for (
-                                  let i = boundaries[0];
-                                  i < boundaries[1];
-                                  i++
-                                ) {
-                                  arr[i].selected = e.target.checked;
-                                }
-                                return arr;
-                              });
-                            }}
-                          ></Checkbox>
-                        </th>
-                        <th className="table-footer text-truncate text-left">
-                          Subject
-                        </th>
-                        <th className="d-table-cell d-xl-none table-header text-truncate">
-                          {
-                            ["Type", "Description", "Duration", "Status"][
-                              lastVisibleColumn
-                            ]
-                          }
-                        </th>
-                        <th className="d-none d-xl-table-cell table-footer text-truncate">
-                          <div>Type</div>
-                        </th>
-                        <th className="d-none d-xl-table-cell table-footer text-truncate">
-                          <div>Description</div>
-                        </th>
-                        <th className="d-none d-xl-table-cell table-footer text-truncate">
-                          <div>Duration</div>
-                        </th>
-                        <th className="d-none d-xl-table-cell table-footer text-truncate">
-                          <div>Status</div>
-                        </th>
-                      </tr>
-                    </tfoot> */}
                   </table>
                 </div>
               </Swipeable>

@@ -131,13 +131,85 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
           >
             <div className="row no-gutters justify-content-between position-relative">
               <div className="col-60 col-sm-40 col-lg-30 d-flex flex-column justify-content-end text-white">
-                <div
-                  className="row no-gutters mb-4 text-title-lg"
-                  style={{
-                    fontWeight: "700",
-                  }}
-                >
-                  {backgroundMovie.title}
+                <div className="row no-gutters align-items-center">
+                  <div className="col-auto mr-3">
+                    <div
+                      className="row no-gutters mb-2 text-title-lg align-items-center"
+                      style={{
+                        fontWeight: "700",
+                      }}
+                    >
+                      {backgroundMovie.title}
+                    </div>
+                  </div>
+                  <div className="col-auto">
+                    <div className="row no-gutters align-items-center">
+                      <ReactionButton
+                        selected={
+                          user.ratings[backgroundMovie.id]
+                            ? user.ratings[backgroundMovie.id].rate_type ===
+                              "excellent_rate"
+                            : false
+                        }
+                        movie={backgroundMovie}
+                        emoji="fire"
+                        className="mr-2 mb-2"
+                        value={
+                          ratings[backgroundMovie.id]
+                            ? ratings[backgroundMovie.id].excellent_rate
+                            : 0
+                        }
+                      ></ReactionButton>
+                      <ReactionButton
+                        selected={
+                          user.ratings[backgroundMovie.id]
+                            ? user.ratings[backgroundMovie.id].rate_type ===
+                              "good_rate"
+                            : false
+                        }
+                        movie={backgroundMovie}
+                        emoji="heart"
+                        className="mr-2 mb-2"
+                        value={
+                          ratings[backgroundMovie.id]
+                            ? ratings[backgroundMovie.id].good_rate
+                            : 0
+                        }
+                      ></ReactionButton>
+                      <ReactionButton
+                        selected={
+                          user.ratings[backgroundMovie.id]
+                            ? user.ratings[backgroundMovie.id].rate_type ===
+                              "ok_rate"
+                            : false
+                        }
+                        movie={backgroundMovie}
+                        className="mr-2 mb-2"
+                        emoji="heavy_division_sign"
+                        value={
+                          ratings[backgroundMovie.id]
+                            ? ratings[backgroundMovie.id].ok_rate
+                            : 0
+                        }
+                      ></ReactionButton>
+                      <ReactionButton
+                        className="mb-2"
+                        selected={
+                          user.ratings[backgroundMovie.id]
+                            ? user.ratings[backgroundMovie.id].rate_type ===
+                              "bad_rate"
+                            : false
+                        }
+                        movie={backgroundMovie}
+                        emoji="shit"
+                        value={
+                          ratings[backgroundMovie.id]
+                            ? ratings[backgroundMovie.id].bad_rate
+                            : 0
+                        }
+                      ></ReactionButton>
+                    </div>
+                  </div>
                 </div>
                 <div className="row no-gutters text-light mb-4 font-weight-300 text-clamp-6">
                   {backgroundMovie.overview}
@@ -176,71 +248,6 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
                     movie={backgroundMovie}
                     user={user}
                   ></WishlistButton>
-                </div>
-                <div className="row no-gutters">
-                  <ReactionButton
-                    selected={
-                      user.ratings[backgroundMovie.id]
-                        ? user.ratings[backgroundMovie.id].rate_type ===
-                          "excellent_rate"
-                        : false
-                    }
-                    movie={backgroundMovie}
-                    emoji="fire"
-                    className="mr-2 mb-2"
-                    value={
-                      ratings[backgroundMovie.id]
-                        ? ratings[backgroundMovie.id].excellent_rate
-                        : 0
-                    }
-                  ></ReactionButton>
-                  <ReactionButton
-                    selected={
-                      user.ratings[backgroundMovie.id]
-                        ? user.ratings[backgroundMovie.id].rate_type ===
-                          "good_rate"
-                        : false
-                    }
-                    movie={backgroundMovie}
-                    emoji="heart"
-                    className="mr-2 mb-2"
-                    value={
-                      ratings[backgroundMovie.id]
-                        ? ratings[backgroundMovie.id].good_rate
-                        : 0
-                    }
-                  ></ReactionButton>
-                  <ReactionButton
-                    selected={
-                      user.ratings[backgroundMovie.id]
-                        ? user.ratings[backgroundMovie.id].rate_type ===
-                          "ok_rate"
-                        : false
-                    }
-                    movie={backgroundMovie}
-                    className="mr-2 mb-2"
-                    emoji="heavy_division_sign"
-                    value={
-                      ratings[backgroundMovie.id]
-                        ? ratings[backgroundMovie.id].ok_rate
-                        : 0
-                    }
-                  ></ReactionButton>
-                  <ReactionButton
-                    selected={
-                      user.ratings[backgroundMovie.id]
-                        ? user.ratings[backgroundMovie.id].rate_type ===
-                          "bad_rate"
-                        : false
-                    }
-                    movie={backgroundMovie}
-                    emoji="shit"
-                    value={
-                      ratings[backgroundMovie.id]
-                        ? ratings[backgroundMovie.id].bad_rate
-                        : 0
-                    }
-                  ></ReactionButton>
                 </div>
               </div>
 

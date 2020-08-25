@@ -10,11 +10,33 @@ const Select = ({
   multipleSelect = false,
   popoverClass = "",
   popoverWidth = "auto",
+  disabled = false,
   onSelect = () => {},
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const opener = useRef(null);
-  return (
+  return disabled ? (
+    <div className={popoverClass}>
+      <div
+        ref={opener}
+        className={
+          "user-select-none d-flex justify-content-between align-items-center " +
+          className
+        }
+      >
+        <div className="mr-2">{btnName}</div>
+        <MdArrowDropDown
+          fontSize="16px"
+          strokeWidth="1.5px"
+          className="text-internly"
+          style={{
+            transform: `rotate(${isOpen ? "180deg" : "0deg"})`,
+            transition: "transform 0.3s",
+          }}
+        ></MdArrowDropDown>
+      </div>
+    </div>
+  ) : (
     <Popover
       className={popoverClass}
       arrow={false}

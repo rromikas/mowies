@@ -545,49 +545,6 @@ const Reviews = ({
                     </tr>
                   )}
                 </tbody>
-                {/* <tfoot>
-                  <tr>
-                    <th className="text-center">
-                      <Checkbox
-                        color={"primary"}
-                        checked={
-                          filteredReviews
-                            .slice(boundaries[0], boundaries[1])
-                            .filter((x) => x.selected).length ===
-                          boundaries[1] - boundaries[0]
-                        }
-                        onChange={(e) => {
-                          setFilteredReviews((prev) => {
-                            let arr = [...prev];
-                            for (
-                              let i = boundaries[0];
-                              i < boundaries[1];
-                              i++
-                            ) {
-                              arr[i].selected = e.target.checked;
-                            }
-                            return arr;
-                          });
-                        }}
-                      ></Checkbox>
-                    </th>
-                    <th className="table-footer text-truncate text-left">
-                      <div className="d-none d-lg-block">Posted By</div>
-                      <div className="d-block d-lg-none">By</div>
-                    </th>
-                    <th className="d-table-cell d-xl-none table-header text-truncate">
-                      {columns[lastVisibleColumn]}
-                    </th>
-                    {columns.map((x, i) => (
-                      <th
-                        key={`footer-col-${i}`}
-                        className="d-none d-xl-table-cell table-header text-truncate"
-                      >
-                        <div>{x}</div>
-                      </th>
-                    ))}
-                  </tr>
-                </tfoot> */}
               </table>
             </div>
           </Swipeable>

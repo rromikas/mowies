@@ -276,7 +276,7 @@ body {
 }
 
 .btn-tertiary:hover {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .btn-tertiary-light {
@@ -624,6 +624,10 @@ h6,
   font-weight: 600;
 }
 
+.font-size-16 {
+  font-size: 16px;
+}
+
 .font-size-14 {
   font-size: 14px;
 }
@@ -675,7 +679,7 @@ h6,
 }
 
 .text-muted-light {
-  transition: color 0.3s;
+  transition: all 0.3s;
   color: #cacaca;
   @include media-breakpoint-up(lg) {
     color: #6c757d;
@@ -902,6 +906,19 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .line-height-60 {
   line-height: $main-btn-height;
+}
+
+.input-light-resize-disabled {
+  border: 1px solid rgb(223, 225, 230);
+  background: white;
+  outline: none;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgb(223, 225, 230) !important;
+  transition: all 0.3s;
+}
+
+.input-light-resize-disabled::placeholder {
+  color: rgb(192, 192, 203);
 }
 
 .input-light-resize {
@@ -1159,6 +1176,22 @@ input[type="number"] {
 }
 
 .input-light-disabled::placeholder {
+  color: rgb(192, 192, 203);
+}
+
+.textarea-light-disabled {
+  background: white;
+  transition: all 0.3s;
+  border: 1px solid rgb(223, 225, 230);
+  box-shadow: 0 0 0 1px rgb(223, 225, 230) !important;
+  border-radius: 4px;
+  padding: 10px;
+  outline: none !important;
+  resize: none;
+  @extend .text-dark;
+}
+
+.textarea-light-disabled::placeholder {
   color: rgb(192, 192, 203);
 }
 

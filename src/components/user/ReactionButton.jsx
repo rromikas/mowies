@@ -38,7 +38,7 @@ const ReactionButton = ({
         )}
         <div className="col-auto">
           {emoji === "heavy_division_sign" ? (
-            <div style={{ marginTop: "-4px" }}>
+            <div style={{ marginTop: size === "normal" ? "-2px" : "-4px" }}>
               <OkIcon
                 size={size === "small" ? 14 : size === "normal" ? 16 : 28}
               ></OkIcon>

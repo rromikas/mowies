@@ -15,17 +15,30 @@ const genresPairs = [
   { name: "History & Documentary", genresIds: [36, 99] },
 ];
 
-const PopularMovies = ({ apiKey, settings }) => {
+const PopularMovies = ({ apiKey, settings, user }) => {
   const horizontalMenu = useRef();
 
   const [genresIds, setGenresIds] = useState([]);
   const [genreName, setGenreName] = useState("All");
   const [movies, setMovies] = useState([]);
+
+  const [userWishList, setUserWishList] = useState([]);
+  const [userWatchedList, setUserWatchedList] = useState([]);
+
+  const [filteredMovies, setFilteredMovies] = useState([]);
+
+  useEffect(() => {
+    if (user) {
+      setUserWishList(user.wishlist.map((x) => x.movie_id));
+      setUserWatchedList(user.watchedlist.map((x) => x.movie_id));
+    }
+  }, [user]);
+
   useEffect(() => {
     async function getData() {
       if (apiKey && settings.no_popular_movies) {
         let data = await GetPopularMoviesByGenre(genresIds, apiKey);
-        setMovies(data.results.slice(0, settings.no_popular_movies));
+        setMovies(data.results);
       }
     }
     getData();
@@ -34,6 +47,20 @@ const PopularMovies = ({ apiKey, settings }) => {
   useEffect(() => {
     horizontalMenu.current.recalculate();
   }, [movies]);
+
+  useEffect(() => {
+    if (movies) {
+      setFilteredMovies(
+        movies
+          .filter(
+            (x) =>
+              !userWishList.includes(x.id.toString()) &&
+              !userWatchedList.includes(x.id.toString())
+          )
+          .slice(0, settings.no_popular_movies)
+      );
+    }
+  }, [userWatchedList, userWishList, movies]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="row no-gutters justify-content-center text-white">
@@ -85,7 +112,7 @@ const PopularMovies = ({ apiKey, settings }) => {
           </div>
         </div>
         <div className="row no-gutters">
-          <MoviesList movies={movies}></MoviesList>
+          <MoviesList movies={filteredMovies}></MoviesList>
         </div>
       </div>
     </div>
@@ -95,6 +122,7 @@ const PopularMovies = ({ apiKey, settings }) => {
 function mapp(state, ownProps) {
   return {
     settings: state.settings,
+    user: state.user,
     ...ownProps,
   };
 }

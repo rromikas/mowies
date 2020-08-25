@@ -72,8 +72,6 @@ const Navbar = (props) => {
     }
   }, [height]);
 
-  console.log("location.pathname ", location.pathname);
-
   return location.pathname !== "/login" &&
     location.pathname !== "/signup" &&
     location.pathname !== "/forgot-password" &&
@@ -148,8 +146,12 @@ const Navbar = (props) => {
                       <Popover
                         content={(w) => (
                           <div
-                            className="container-fluid rounded px-0"
-                            style={{ maxWidth: "400px", width: "100%" }}
+                            className="container-fluid rounded px-0 overflow-auto"
+                            style={{
+                              maxWidth: "400px",
+                              width: "100%",
+                              maxHeight: "450px",
+                            }}
                           >
                             {notifications.length ? (
                               notifications.map((x, i) => (
@@ -178,7 +180,7 @@ const Navbar = (props) => {
                                   </div>
                                   <div className="col-60 text-left font-size-13">
                                     <div className="row no-gutters align-items-center">
-                                      <div className="col mr-3">
+                                      <div className="col mr-3 text-break">
                                         {x.description}
                                       </div>
                                       <div className="col-auto">
