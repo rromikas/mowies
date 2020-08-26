@@ -111,9 +111,7 @@ const PopularMovies = ({ apiKey, settings, user }) => {
             </SimpleBar>
           </div>
         </div>
-        <div className="row no-gutters">
-          <MoviesList movies={filteredMovies}></MoviesList>
-        </div>
+        <MoviesList movies={filteredMovies}></MoviesList>
       </div>
     </div>
   );

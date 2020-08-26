@@ -84,6 +84,7 @@ const Profile = (props) => {
   return (
     <div className="row no-gutters" style={{ minHeight: "800px" }}>
       <EditProfile
+        userId={userId}
         refreshProfile={() => setRefreshProfile(!refreshProfile)}
         editProfileOpen={editProfileOpen}
         user={user}
@@ -120,14 +121,18 @@ const Profile = (props) => {
                 <div className="row no-gutters justify-content-md-start justify-content-center text-title-md mb-2">
                   @{publicUsers[userId] ? publicUsers[userId].display_name : ""}
                 </div>
-                <div className="row no-gutters justify-content-md-start justify-content-center">
-                  <div
-                    className="col-auto btn-custom btn-custom-primary btn-small"
-                    onClick={() => setEditProfileOpen(true)}
-                  >
-                    Edit Profile
+                {user._id === userId ? (
+                  <div className="row no-gutters justify-content-md-start justify-content-center">
+                    <div
+                      className="col-auto btn-custom btn-custom-primary btn-small"
+                      onClick={() => setEditProfileOpen(true)}
+                    >
+                      Edit Profile
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>

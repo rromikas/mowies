@@ -174,68 +174,82 @@ const AddReview = ({
               <div
                 className="btn-custom btn-custom-primary btn-small position-relative"
                 onClick={async () => {
-                  if (!newReview.rating) {
-                    setProblem("Select rating");
-                  } else if (!newReview.review) {
-                    setProblem("Review is empty");
-                  } else {
-                    setLoading(true);
-                    let res = userHasWrittenReview
-                      ? await EditReview(newReview, review, user._id)
-                      : await WriteReview(
-                          newReview,
-                          movie.id,
-                          user,
-                          settings.movies_api_key
-                        );
-                    setLoading(false);
-                    setNewReview({ review: "", rating: "" });
-                    if (res.error) {
-                      store.dispatch({
-                        type: "SET_NOTIFICATION",
-                        notification: {
-                          title: `Couldn't ${
-                            userHasWrittenReview ? "edit" : "add"
-                          } review`,
-                          type: "failure",
-                          message: JSON.stringify(res.error).replace(/"/g, ""),
-                        },
-                      });
+                  try {
+                    if (!newReview.rating) {
+                      setProblem("Select rating");
+                    } else if (!newReview.review) {
+                      setProblem("Review is empty");
                     } else {
-                      store.dispatch({
-                        type: "SET_NOTIFICATION",
-                        notification: {
-                          title: `You successfully ${
-                            userHasWrittenReview ? "edited" : "wrote"
-                          } review`,
-                          type: "success",
-                          message: `Your review was successfully ${
-                            userHasWrittenReview ? "edited" : "added"
-                          }`,
-                        },
-                      });
-                      let watchedlist = [...user.watchedlist];
-                      watchedlist.push({ movie_id: movie.id.toString() });
-                      let reviewsList = [...user.reviews];
-                      reviewsList.push(res.reviewId);
-                      let userRatings = { ...user.ratings };
-                      userRatings[movie.id] = {
-                        movie_id: movie.id,
-                        rate_type: review.rating,
-                      };
+                      setLoading(true);
+                      let res = userHasWrittenReview
+                        ? await EditReview(newReview, review, user._id)
+                        : await WriteReview(
+                            newReview,
+                            movie.id,
+                            user,
+                            settings.movies_api_key
+                          );
+                      setLoading(false);
+                      setNewReview({ review: "", rating: "" });
+                      if (res.error) {
+                        store.dispatch({
+                          type: "SET_NOTIFICATION",
+                          notification: {
+                            title: `Couldn't ${
+                              userHasWrittenReview ? "edit" : "add"
+                            } review`,
+                            type: "failure",
+                            message: JSON.stringify(res.error).replace(
+                              /"/g,
+                              ""
+                            ),
+                          },
+                        });
+                      } else {
+                        store.dispatch({
+                          type: "SET_NOTIFICATION",
+                          notification: {
+                            title: `You successfully ${
+                              userHasWrittenReview ? "edited" : "wrote"
+                            } review`,
+                            type: "success",
+                            message: `Your review was successfully ${
+                              userHasWrittenReview ? "edited" : "added"
+                            }`,
+                          },
+                        });
 
-                      store.dispatch({
-                        type: "UPDATE_USER",
-                        userProperty: {
-                          watchedlist,
-                          reviews: reviewsList,
-                          ratings: userRatings,
-                        },
-                      });
-                      onClose();
-                      refreshReviews();
+                        store.dispatch({
+                          type: "UPDATE_RATINGS",
+                          rating: {
+                            [movie.id]: res.rating,
+                          },
+                        });
+
+                        let watchedlist = [...user.watchedlist];
+                        watchedlist.push({ movie_id: movie.id.toString() });
+                        let reviewsList = [...user.reviews];
+                        reviewsList.push(res.reviewId);
+                        let userRatings = { ...user.ratings };
+                        userRatings[movie.id] = {
+                          movie_id: movie.id,
+                          rate_type: newReview.rating,
+                        };
+
+                        store.dispatch({
+                          type: "UPDATE_USER",
+                          userProperty: {
+                            watchedlist,
+                            reviews: reviewsList,
+                            ratings: userRatings,
+                          },
+                        });
+
+                        onClose();
+                        refreshReviews();
+                      }
                     }
-                  }
+                  } catch (er) {}
                 }}
               >
                 <Loader

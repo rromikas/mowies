@@ -10,7 +10,7 @@ import { BsPlayFill } from "react-icons/bs";
 import MoveToWatchedButton from "./MoveToWatchedButton";
 import AddReview from "./AddReview";
 
-const MoviesList = ({ movies, user, ratings }) => {
+const MoviesList = ({ movies, user, ratings, prefix = "" }) => {
   const [trailerMovieId, setTrailerMovieId] = useState("");
   const [openTrailer, setOpenTrailer] = useState(false);
   const [addReviewOpen, setAddReviewOpen] = useState(false);
@@ -71,7 +71,7 @@ const MoviesList = ({ movies, user, ratings }) => {
                 ></img>
                 <div
                   onClick={() =>
-                    history.push(`/${x.name ? "series" : "movie"}/${x.id}`)
+                    history.push(`/movie/${x.name ? `serie-${x.id}` : x.id}`)
                   }
                   className="col-60 h-100 text-white d-flex flex-center img-cover cursor-pointer"
                   style={{

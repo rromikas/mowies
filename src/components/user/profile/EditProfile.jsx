@@ -4,7 +4,13 @@ import imageCompression from "browser-image-compression";
 import { EditUser } from "../../../server/DatabaseApi";
 import store from "../../../store/store";
 
-const EditProfile = ({ user, refreshProfile, editProfileOpen, onClose }) => {
+const EditProfile = ({
+  user,
+  refreshProfile,
+  editProfileOpen,
+  onClose,
+  userId,
+}) => {
   const [update, setUpdate] = useState({
     first_name: "",
     last_name: "",
@@ -230,7 +236,7 @@ const EditProfile = ({ user, refreshProfile, editProfileOpen, onClose }) => {
                   });
                   store.dispatch({
                     type: "UPDATE_PUBLICUSERS",
-                    publiUser: res.updatedPublicUser,
+                    publicUser: { [userId]: res.updatedPublicUser },
                   });
 
                   store.dispatch({

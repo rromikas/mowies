@@ -66,7 +66,7 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                       <div className="row no-gutters mb-1">
                         <img
                           alt={ratings[x.movie_id].movie_poster}
-                          onClick={() => history.push(`/movie/${x.id}`)}
+                          onClick={() => history.push(`/movie/${x.movie_id}`)}
                           width="100%"
                           style={{ borderRadius: "13px" }}
                           src={`https://image.tmdb.org/t/p/w154${

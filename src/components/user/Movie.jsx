@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { GetMovie, GetCredits } from "../../server/MoviesApi";
+import { GetMovie, GetCredits, GetTvShow } from "../../server/MoviesApi";
 import ReactionButton from "./ReactionButton";
 import date from "date-and-time";
 import Modal from "../utility/Modal";
@@ -30,7 +30,7 @@ const Movie = (props) => {
     genres: [],
     title: "",
     overview: "",
-    director: "",
+    director: [],
     cast: [],
     runtime: 0,
     release_date: "",
@@ -68,16 +68,29 @@ const Movie = (props) => {
     window.scrollTo(0, 0);
     async function getData() {
       if (movieId && apiKey) {
-        let data = await GetMovie(movieId, apiKey);
+        let data;
+        if (movieId.substring(0, 6) === "serie-") {
+          let serieId = movieId.substring(6);
+          let serieData = await GetTvShow(serieId, apiKey);
+          data = Object.assign({}, serieData, {
+            title: serieData.name,
+            release_date: serieData.first_air_date,
+            id: movieId,
+          });
+        } else {
+          data = await GetMovie(movieId, apiKey);
+        }
+        if (data.success !== undefined && !data.success) {
+        }
         setMovie((prev) => Object.assign({}, prev, data));
         let credits = await GetCredits(movieId, apiKey);
-        let directorObj = credits.crew
-          ? credits.crew.find((x) => x.job === "Director")
-          : null;
-        let director = directorObj ? directorObj.name : "unknown";
+        let directors = credits.crew
+          ? credits.crew.filter((x) => x.job === "Director").map((x) => x.name)
+          : [];
+        let director = directors.length
+          ? directors
+          : credits.crew.map((x) => x.name);
         let cast = credits.cast ? credits.cast.map((x) => x.name) : [];
-        data.director = director;
-        data.cast = cast;
         setMovie((prev) => Object.assign({}, prev, { director, cast }));
       }
     }
@@ -261,15 +274,17 @@ const Movie = (props) => {
                   <div className="col-auto">
                     <div className="row no-gutters">
                       <div className="col-auto mr-2">Director:</div>
-                      <div className="col-auto mr-5 text-movie-muted">
-                        {movie.director ? movie.director : "unknown"}
+                      <div className="col-auto col-sm mr-5 text-movie-muted">
+                        {movie.director.length
+                          ? movie.director.join(", ")
+                          : "unknown"}
                       </div>
                     </div>
                   </div>
                   <div className="col-auto">
                     <div className="row no-gutters">
                       <div className="col-auto mr-2">Cast:</div>
-                      <div className="col">
+                      <div className="col-auto col-sm">
                         <div className="row no-gutters">
                           <div
                             className="text-clamp-2 text-muted-light cursor-pointer"
@@ -287,7 +302,9 @@ const Movie = (props) => {
                               }
                             }}
                           >
-                            {movie.cast.join(", ")}
+                            {movie.cast.length
+                              ? movie.cast.join(", ")
+                              : "unknown"}
                           </div>
                         </div>
                       </div>

@@ -11,48 +11,59 @@ const WishlistButton = ({ user, movie, apiKey }) => {
   const [loading, setLoading] = useState(false);
 
   const handleClick = async (message) => {
-    if (user.display_name) {
-      if (movie.id) {
-        setLoading(true);
-        let res = await AddToWishList(user, movie.id, apiKey);
-        setLoading(false);
-        if (res.updatedUser) {
-          store.dispatch({
-            type: "UPDATE_USER",
-            userProperty: res.updatedUser,
-          });
-          store.dispatch({
-            type: "SET_NOTIFICATION",
-            notification: {
-              title: `Movie ${message} wishlist`,
-              message: `Movie successfully ${message} your wishlist`,
-              type: "success",
-            },
-          });
-          GetAllRatings((ratingsArr) => {
-            let ratings = {};
-            ratingsArr.forEach((x) => {
-              ratings[x.tmdb_id] = x;
+    try {
+      if (user.display_name) {
+        if (movie.id) {
+          setLoading(true);
+          let res = await AddToWishList(user, movie.id, apiKey);
+          setLoading(false);
+          if (res.updatedUser) {
+            store.dispatch({
+              type: "UPDATE_USER",
+              userProperty: res.updatedUser,
             });
-            store.dispatch({ type: "SET_RATINGS", ratings });
-          });
-        } else {
-          store.dispatch({
-            type: "SET_NOTIFICATION",
-            notification: {
-              title: "Error",
-              message: JSON.stringify(res.error).replace(/"/g, ""),
-              type: "failure",
-            },
-          });
+            store.dispatch({
+              type: "SET_NOTIFICATION",
+              notification: {
+                title: `Movie ${message} wishlist`,
+                message: `Movie successfully ${message} your wishlist`,
+                type: "success",
+              },
+            });
+            GetAllRatings((ratingsArr) => {
+              let ratings = {};
+              ratingsArr.forEach((x) => {
+                ratings[x.tmdb_id] = x;
+              });
+              store.dispatch({ type: "SET_RATINGS", ratings });
+            });
+          } else {
+            store.dispatch({
+              type: "SET_NOTIFICATION",
+              notification: {
+                title: "Error",
+                message: JSON.stringify(res.error).replace(/"/g, ""),
+                type: "failure",
+              },
+            });
+          }
         }
+      } else {
+        store.dispatch({
+          type: "SET_NOTIFICATION",
+          notification: {
+            title: "Action not allowed",
+            message: "You need to login to add movie to wishlist",
+            type: "failure",
+          },
+        });
       }
-    } else {
+    } catch (error) {
       store.dispatch({
         type: "SET_NOTIFICATION",
         notification: {
-          title: "Action not allowed",
-          message: "You need to login to add movie to wishlist",
+          title: "Action failed",
+          message: "Couldn't add movie to wishlist",
           type: "failure",
         },
       });

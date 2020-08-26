@@ -38,6 +38,12 @@ const MoveToWatchedButton = ({
               type: "success",
             },
           });
+          store.dispatch({
+            type: "UPDATE_RATINGS",
+            rating: {
+              [movieId]: res.rating,
+            },
+          });
           refreshProfile();
         } else {
           store.dispatch({

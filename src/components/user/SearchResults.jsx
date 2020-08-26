@@ -214,6 +214,7 @@ const SearchResults = ({ search, settings }) => {
                     {series.length ? (
                       <React.Fragment>
                         <MoviesList
+                          prefix={"serie-"}
                           movies={series.filter((x) => {
                             return (
                               x.genre_ids.includes(+selectedSerieGenre) ||

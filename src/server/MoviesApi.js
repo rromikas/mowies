@@ -28,8 +28,16 @@ export const GetPopularMoviesByGenre = (genres, apiKey) => {
 };
 
 export const GetTrailers = (movieId, apiKey) => {
+  let finalId =
+    movieId.substring(0, 6) === "serie-" ? movieId.substring(6) : movieId;
   return fetch(
-    FormatRequestUrl(`/movie/${movieId}/videos`, [], apiKey)
+    FormatRequestUrl(
+      `/${
+        movieId.substring(0, 6) === "serie-" ? "tv" : "movie"
+      }/${finalId}/videos`,
+      [],
+      apiKey
+    )
   ).then((res) => res.json());
 };
 
@@ -50,8 +58,16 @@ export const GetMovie = (movieId, apiKey) => {
 };
 
 export const GetCredits = (movieId, apiKey) => {
+  let finalId =
+    movieId.substring(0, 6) === "serie-" ? movieId.substring(6) : movieId;
   return fetch(
-    FormatRequestUrl(`/movie/${movieId}/credits`, [], apiKey)
+    FormatRequestUrl(
+      `/${
+        movieId.substring(0, 6) === "serie-" ? "tv" : "movie"
+      }/${finalId}/credits`,
+      [],
+      apiKey
+    )
   ).then((res) => res.json());
 };
 

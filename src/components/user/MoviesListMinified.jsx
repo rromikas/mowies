@@ -12,7 +12,7 @@ const MoviesListMinified = ({ movies, onClick }) => {
           className="p-2 movie-card-minified"
           style={{ flexBasis: "300px", flexGrow: 1 }}
           onClick={() => {
-            history.push(`/${x.name ? "series" : "movie"}/${x.id}`);
+            history.push(`/movie/${x.name ? `serie-${x.id}` : x.id}`);
             onClick();
           }}
         >
