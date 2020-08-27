@@ -29,6 +29,8 @@ const Profile = (props) => {
     last_name: "",
   });
 
+  const [refreshReviews, setRefreshReviews] = useState(false);
+  const [refreshComments, setRefreshComments] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [comments, setComments] = useState([]);
 
@@ -81,6 +83,32 @@ const Profile = (props) => {
     getData();
   }, [section, profileData.reviews.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    async function getData() {
+      if (reviewsFetched.current) {
+        setRefreshComments(!refreshComments);
+        let res = await GetUserReviews(profileData.reviews);
+        if (!res.error) {
+          setReviews(res.reverse());
+        }
+      }
+    }
+    getData();
+  }, [refreshReviews]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    async function getData() {
+      if (commentsFetched.current) {
+        setRefreshProfile(!refreshProfile);
+        let res = await GetUserComments(profileData.comments);
+        if (!res.error) {
+          setComments(res.reverse());
+        }
+      }
+    }
+    getData();
+  }, [refreshComments]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <div className="row no-gutters" style={{ minHeight: "800px" }}>
       <EditProfile
@@ -119,7 +147,12 @@ const Profile = (props) => {
                 )}
 
                 <div className="row no-gutters justify-content-md-start justify-content-center text-title-md mb-2">
-                  @{publicUsers[userId] ? publicUsers[userId].display_name : ""}
+                  <div className="text-truncate" style={{ maxWidth: "150px" }}>
+                    @
+                    {publicUsers[userId]
+                      ? publicUsers[userId].display_name
+                      : ""}
+                  </div>
                 </div>
                 {user._id === userId ? (
                   <div className="row no-gutters justify-content-md-start justify-content-center">
@@ -252,9 +285,21 @@ const Profile = (props) => {
             movies={profileData.watchedlist}
           ></Watchedlist>
         ) : section === 2 ? (
-          <Reviews ratings={ratings} reviews={reviews}></Reviews>
+          <Reviews
+            refreshReviews={() => setRefreshReviews(!refreshReviews)}
+            user={user}
+            ratings={ratings}
+            reviews={reviews}
+            owner={user._id === profileData._id}
+          ></Reviews>
         ) : section === 3 ? (
-          <Comments ratings={ratings} comments={comments}></Comments>
+          <Comments
+            refreshComments={() => setRefreshComments(!refreshComments)}
+            user={user}
+            ratings={ratings}
+            comments={comments}
+            owner={user._id === profileData._id}
+          ></Comments>
         ) : (
           ""
         )}

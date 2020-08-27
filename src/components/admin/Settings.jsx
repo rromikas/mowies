@@ -38,7 +38,6 @@ const Settings = ({ settings }) => {
     },
   ];
 
-  console.log(/^http/.test(settings.FacebookLink));
   return (
     <div className={`row no-gutters admin-screen`}>
       <div className="col-60">
@@ -195,6 +194,32 @@ const Settings = ({ settings }) => {
                           store.dispatch({
                             type: "UPDATE_SETTINGS",
                             settings: { no_comment_characters: e.target.value },
+                          });
+                        }}
+                        min={0}
+                        type="number"
+                        className="px-3 input-light w-100"
+                      ></input>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-60">
+                <div className="row no-gutters">
+                  <div className="col-lg-30 col-60 mb-4">
+                    <div className="row no-gutters mb-1">
+                      Number of characters allowed in display name
+                    </div>
+                    <div className="row no-gutters">
+                      <input
+                        value={settings.no_display_name_characters}
+                        onChange={(e) => {
+                          e.persist();
+                          store.dispatch({
+                            type: "UPDATE_SETTINGS",
+                            settings: {
+                              no_display_name_characters: e.target.value,
+                            },
                           });
                         }}
                         min={0}

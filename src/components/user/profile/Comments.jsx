@@ -4,13 +4,30 @@ import { MdThumbUp } from "react-icons/md";
 import { connect } from "react-redux";
 import Paigination from "../../utility/Paigination";
 import history from "../../../History";
+import EditComment from "../EditComment";
+import { BsPencil, BsTrash } from "react-icons/bs";
+import Popover from "../../utility/Popover";
+import { DeleteComment } from "../../../server/DatabaseApi";
+import store from "../../../store/store";
+import Loader from "../../utility/Loader";
 
-const Comments = ({ comments, publicUsers, ratings }) => {
+const Comments = ({
+  comments,
+  publicUsers,
+  ratings,
+  owner,
+  user,
+  refreshComments,
+}) => {
   // partitioning comments into pages (8 comments per page)
   const [page, setPage] = useState(-1);
   // reference to top of the comments block to scroll into view after changing the page
   const topOfReviewsBlock = useRef(null);
 
+  const [movie, setMovie] = useState(false);
+  const [replyOpen, setReplyOpen] = useState(false);
+  const [comment, setComment] = useState(false);
+  const [deletingComment, setDeletingComment] = useState(-1);
   const reviewsPerPage = 8;
 
   //to avoid scroll into view on first render
@@ -18,6 +35,15 @@ const Comments = ({ comments, publicUsers, ratings }) => {
 
   return (
     <div className="row no-gutters text-white">
+      <EditComment
+        comment={comment}
+        refreshComments={refreshComments}
+        setComments={() => {}}
+        movie={movie}
+        open={replyOpen}
+        onClose={() => setReplyOpen(false)}
+        user={user}
+      ></EditComment>
       <div className="col-60">
         <div className="row no-gutters mb-2" ref={topOfReviewsBlock}></div>
         {comments.length ? (
@@ -38,7 +64,7 @@ const Comments = ({ comments, publicUsers, ratings }) => {
                   <div className="row no-gutters mb-1">
                     <img
                       alt={ratings[x.movie_id].movie_poster}
-                      onClick={() => history.push(`/movie/${x.id}`)}
+                      onClick={() => history.push(`/movie/${x.movie_id}`)}
                       width="100%"
                       style={{ borderRadius: "13px" }}
                       src={`https://image.tmdb.org/t/p/w154${
@@ -105,10 +131,104 @@ const Comments = ({ comments, publicUsers, ratings }) => {
                     </div>
                     <div className="col-auto">
                       <div className="row no-gutters text-white">
-                        <span className="mr-2">Commented on</span>
-                        <span className="text-muted">
+                        <span className="mr-2 col-auto">Commented on</span>
+                        <span className="text-muted col-auto mr-2">
                           {date.format(new Date(x.date), "MMM DD, YYYY")}
                         </span>
+                        {owner ? (
+                          <React.Fragment>
+                            <Popover
+                              arrow={false}
+                              position="top"
+                              trigger="mouseenter"
+                              theme="dark"
+                              content={(w) => (
+                                <div className="py-2 px-3 rounded bg-root">
+                                  Edit comment
+                                </div>
+                              )}
+                            >
+                              <div
+                                className="col-auto text-muted btn-tertiary-small d-flex flex-center"
+                                onClick={async () => {
+                                  setMovie({
+                                    release_date:
+                                      ratings[x.movie_id].movie_release_date,
+                                    title: ratings[x.movie_id].movie_title,
+                                    id: ratings[x.movie_id].tmdb_id,
+                                  });
+                                  setComment(x);
+                                  setReplyOpen(true);
+                                }}
+                              >
+                                <BsPencil fontSize="24px"></BsPencil>
+                              </div>
+                            </Popover>
+                            <Popover
+                              arrow={false}
+                              position="top"
+                              trigger="mouseenter"
+                              theme="dark"
+                              content={(w) => (
+                                <div className="py-2 px-3 rounded bg-root">
+                                  Delete comment
+                                </div>
+                              )}
+                            >
+                              <div
+                                className="col-auto text-muted btn-tertiary-small d-flex flex-center"
+                                onClick={async () => {
+                                  setDeletingComment(x._id);
+                                  let res = await DeleteComment(x._id);
+                                  setDeletingComment(-1);
+                                  if (res.error) {
+                                    store.dispatch({
+                                      type: "SET_NOTIFICATION",
+                                      notification: {
+                                        title: `Couldn't delete comment`,
+                                        type: "failure",
+                                        message: res.error,
+                                      },
+                                    });
+                                  } else {
+                                    store.dispatch({
+                                      type: "SET_NOTIFICATION",
+                                      notification: {
+                                        title: `Success`,
+                                        type: "success",
+                                        message: "Comment successfully deleted",
+                                      },
+                                    });
+                                    refreshComments();
+                                  }
+                                }}
+                              >
+                                {deletingComment === x._id ? (
+                                  <div className="square-20">
+                                    <Loader
+                                      color={"white"}
+                                      style={{
+                                        position: "absolute",
+                                        left: "10px",
+                                        top: 0,
+                                        bottom: 0,
+                                        margin: "auto",
+                                        display: "flex",
+                                        alignItems: "center",
+                                      }}
+                                      loading={true}
+                                      size={20}
+                                    ></Loader>
+                                  </div>
+                                ) : (
+                                  <BsTrash fontSize="24px"></BsTrash>
+                                )}
+                              </div>
+                            </Popover>
+                          </React.Fragment>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </div>
                   </div>

@@ -56,6 +56,10 @@ export const EditReview = (review, prevReview, userId) => {
   return SendPostRequest("/reviews/edit", { review, prevReview, userId });
 };
 
+export const DeleteReview = (review) => {
+  return SendPostRequest("/reviews/delete", { review });
+};
+
 export const GetMovieReviews = (movieId) => {
   return SendPostRequest("/reviews/get/movie", { movieId });
 };
@@ -66,6 +70,14 @@ export const GetMoviePromotedReviews = (movieId) => {
 
 export const WriteComment = (comment, user) => {
   return SendPostRequest("/comments/update", { user, comment });
+};
+
+export const EditComment = (comment, commentId) => {
+  return SendPostRequest("/comments/edit", { commentId, comment });
+};
+
+export const DeleteComment = (commentId) => {
+  return SendPostRequest("/comments/delete", { commentsIds: [commentId] });
 };
 
 export const GetReviewComments = (reviewId) => {

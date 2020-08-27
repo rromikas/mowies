@@ -2,20 +2,37 @@ import React, { useEffect, useState, useRef } from "react";
 import date from "date-and-time";
 import { Emoji } from "emoji-mart";
 import { MdThumbUp, MdChatBubble } from "react-icons/md";
-import { GetReviewComments } from "../../../server/DatabaseApi";
+import { GetReviewComments, DeleteReview } from "../../../server/DatabaseApi";
 import { connect } from "react-redux";
 import { Collapse } from "@material-ui/core";
 import Paigination from "../../utility/Paigination";
 import history from "../../../History";
+import AddReview from "../AddReview";
+import { BsPencil, BsTrash } from "react-icons/bs";
+import Popover from "../../utility/Popover";
+import OkIcon from "../../../images/OkIcon";
+import store from "../../../store/store";
+import Loader from "../../utility/Loader";
 
-const Reviews = ({ reviews, publicUsers, ratings }) => {
+const Reviews = ({
+  reviews,
+  publicUsers,
+  ratings,
+  owner,
+  user,
+  refreshReviews,
+}) => {
   //comments object.Its property will be review id.
   const [comments, setComments] = useState({});
 
-  //
+  const [addReviewOpen, setAddReviewOpen] = useState(false);
+  const [movie, setMovie] = useState(false);
+  const [review, setReview] = useState(false);
+
   const [reviewIdOfVisibleComments, setReviewIdOfVisibleComments] = useState(
     -1
   );
+  const [deletingReview, setDeletingReview] = useState(-1);
 
   // partitioning reviews into pages (8 reviews per page)
   const [page, setPage] = useState(-1);
@@ -44,6 +61,15 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
 
   return (
     <div className="row no-gutters text-white">
+      <AddReview
+        userHasWrittenReview={true}
+        open={addReviewOpen}
+        onClose={() => setAddReviewOpen(false)}
+        movie={movie}
+        review={review}
+        user={user}
+        refreshReviews={refreshReviews}
+      ></AddReview>
       <div className="col-60">
         <div className="row no-gutters mb-2" ref={topOfReviewsBlock}></div>
         {reviews.length ? (
@@ -127,10 +153,124 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                         </div>
                         <div className="col-auto">
                           <div className="row no-gutters text-white">
-                            <span className="mr-2">Posted review on</span>
-                            <span className="text-muted">
+                            <span className="mr-2 col-auto">
+                              Posted review on
+                            </span>
+                            <span className="text-muted col-auto mr-2">
                               {date.format(new Date(x.date), "MMM DD, YYYY")}
                             </span>
+                            {owner ? (
+                              <React.Fragment>
+                                <Popover
+                                  arrow={false}
+                                  position="top"
+                                  trigger="mouseenter"
+                                  theme="dark"
+                                  content={(w) => (
+                                    <div className="py-2 px-3 rounded bg-root">
+                                      Edit review
+                                    </div>
+                                  )}
+                                >
+                                  <div
+                                    className="col-auto text-muted btn-tertiary-small d-flex flex-center"
+                                    onClick={async () => {
+                                      setMovie({
+                                        release_date:
+                                          ratings[x.movie_id]
+                                            .movie_release_date,
+                                        title: ratings[x.movie_id].movie_title,
+                                        id: ratings[x.movie_id].tmdb_id,
+                                      });
+                                      setReview(x);
+                                      setAddReviewOpen(true);
+                                    }}
+                                  >
+                                    <BsPencil fontSize="24px"></BsPencil>
+                                  </div>
+                                </Popover>
+                                <Popover
+                                  arrow={false}
+                                  position="top"
+                                  trigger="mouseenter"
+                                  theme="dark"
+                                  content={(w) => (
+                                    <div className="py-2 px-3 rounded bg-root">
+                                      Delete review
+                                    </div>
+                                  )}
+                                >
+                                  <div
+                                    className="col-auto text-muted btn-tertiary-small d-flex flex-center"
+                                    onClick={async () => {
+                                      setDeletingReview(x._id);
+                                      let res = await DeleteReview(x);
+                                      setDeletingReview(-1);
+                                      if (res.error) {
+                                        store.dispatch({
+                                          type: "SET_NOTIFICATION",
+                                          notification: {
+                                            title: `Couldn't delete comment`,
+                                            type: "failure",
+                                            message: res.error,
+                                          },
+                                        });
+                                      } else {
+                                        store.dispatch({
+                                          type: "SET_NOTIFICATION",
+                                          notification: {
+                                            title: `Success`,
+                                            type: "success",
+                                            message:
+                                              "Comment successfully deleted",
+                                          },
+                                        });
+
+                                        let rating = ratings[x.movie_id];
+                                        rating[x.rating] -= 1;
+                                        store.dispatch({
+                                          type: "UPDATE_RATINGS",
+                                          rating: { [x.movie_id]: rating },
+                                        });
+
+                                        let userRatings = { ...user.ratings };
+                                        delete userRatings[x.movie_id];
+                                        store.dispatch({
+                                          type: "UPDATE_USER",
+                                          userProperty: {
+                                            ratings: userRatings,
+                                          },
+                                        });
+                                        refreshReviews();
+                                      }
+                                    }}
+                                  >
+                                    {deletingReview === x._id ? (
+                                      <div className="square-20">
+                                        <Loader
+                                          color={"white"}
+                                          style={{
+                                            position: "absolute",
+                                            left: "10px",
+                                            top: 0,
+                                            bottom: 0,
+                                            margin: "auto",
+                                            display: "flex",
+                                            alignItems: "center",
+                                          }}
+                                          loading={true}
+                                          size={20}
+                                        ></Loader>
+                                      </div>
+                                    ) : (
+                                      <BsTrash fontSize="24px"></BsTrash>
+                                    )}
+                                  </div>
+                                </Popover>
+                              </React.Fragment>
+                            ) : (
+                              ""
+                            )}
                           </div>
                         </div>
                       </div>
@@ -140,7 +280,9 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                       </div>
                       <div className="row no-gutters align-items-center">
                         {x.rating ? (
-                          <div style={{ marginBottom: "-6px" }}>
+                          x.rating === "ok_rate" ? (
+                            <OkIcon size={24}></OkIcon>
+                          ) : (
                             <Emoji
                               emoji={
                                 x.rating === "excellent_rate"
@@ -148,13 +290,13 @@ const Reviews = ({ reviews, publicUsers, ratings }) => {
                                   : x.rating === "good_rate"
                                   ? "heart"
                                   : x.rating === "ok_rate"
-                                  ? "heavy-division-sign"
+                                  ? "heavy_division_sign"
                                   : "shit"
                               }
                               set="facebook"
                               size={24}
                             />
-                          </div>
+                          )
                         ) : (
                           ""
                         )}

@@ -399,7 +399,7 @@ const Users = ({
                                       ></div>
                                     </div>
                                     <div className="d-none d-md-inline-block align-top">
-                                      <div className="text-primary mb-2">
+                                      <div className="text-primary mb-2 text-truncate" style={{maxWidth:"300px"}}>
                                         {x.display_name}
                                       </div>
                                       <div className="d-flex">

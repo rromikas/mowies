@@ -10,8 +10,9 @@ import Modal from "../utility/Modal";
 import LegalDocument from "../user/LegalDocument";
 import { BsChevronLeft } from "react-icons/bs";
 import { CaptchaApiKey } from "../../Settings";
+import { connect } from "react-redux";
 
-const Signup = () => {
+const Signup = ({ no_display_name_characters }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -22,6 +23,10 @@ const Signup = () => {
 
   const validations = [
     { valid: validateEmail(email), error: "Email is not valid" },
+    {
+      valid: email.split("@")[0].length < no_display_name_characters,
+      error: "Email is too long",
+    },
     {
       valid: /[^\w\s]/.test(password) || /\d/.test(password),
       error: "Password must contain number or symbol",
@@ -259,4 +264,11 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+function mapp(state, ownProps) {
+  return {
+    no_display_name_characters: state.settings.no_display_name_characters,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(Signup);

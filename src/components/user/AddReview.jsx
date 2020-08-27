@@ -226,10 +226,20 @@ const AddReview = ({
                           },
                         });
 
-                        let watchedlist = [...user.watchedlist];
-                        watchedlist.push({ movie_id: movie.id.toString() });
-                        let reviewsList = [...user.reviews];
-                        reviewsList.push(res.reviewId);
+                        if (!userHasWrittenReview) {
+                          let watchedlist = [...user.watchedlist];
+                          watchedlist.push({ movie_id: movie.id.toString() });
+                          let reviewsList = [...user.reviews];
+                          reviewsList.push(res.reviewId);
+                          store.dispatch({
+                            type: "UPDATE_USER",
+                            userProperty: {
+                              watchedlist,
+                              reviews: reviewsList,
+                            },
+                          });
+                        }
+
                         let userRatings = { ...user.ratings };
                         userRatings[movie.id] = {
                           movie_id: movie.id,
@@ -239,8 +249,6 @@ const AddReview = ({
                         store.dispatch({
                           type: "UPDATE_USER",
                           userProperty: {
-                            watchedlist,
-                            reviews: reviewsList,
                             ratings: userRatings,
                           },
                         });

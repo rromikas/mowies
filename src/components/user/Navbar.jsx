@@ -328,7 +328,12 @@ const Navbar = (props) => {
                               }}
                             ></div>
                             <div className="col-auto mr-2 d-none d-sm-block">
-                              {user.display_name}
+                              <div
+                                className="text-truncate"
+                                style={{ maxWidth: "120px" }}
+                              >
+                                {user.display_name}
+                              </div>
                             </div>
                             <div className="col-auto user-select-none">
                               <BsChevronDown fontSize="14px"></BsChevronDown>

@@ -100,6 +100,7 @@ function settingsReducer(
     no_popular_movies: 5,
     no_allowed_reviews: 5,
     no_comment_characters: 400,
+    no_display_name_characters: 40,
     no_review_words: 80,
     bg_image_refresh_time_days: 1,
     bg_image_refresh_time_hours: 0,

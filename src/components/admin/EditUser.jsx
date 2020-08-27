@@ -3,8 +3,9 @@ import Select from "../utility/Select";
 import { EditUserForAdmin } from "../../server/DatabaseApi";
 import store from "../../store/store";
 import Loader from "../utility/Loader";
+import { connect } from "react-redux";
 
-const EditUser = ({ currentUser, getBack }) => {
+const EditUser = ({ currentUser, getBack, no_display_name_characters }) => {
   const [newUser, setNewUser] = useState({
     first_name: "",
     last_name: "",
@@ -17,16 +18,14 @@ const EditUser = ({ currentUser, getBack }) => {
     role: "Administrator",
   });
 
-  const [initialPassword, setInitialPassword] = useState("");
   const [problem, setProblem] = useState("");
 
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (currentUser) {
-      setInitialPassword(currentUser.password);
       setNewUser(
-        Object.assign({}, currentUser, { re_password: currentUser.password })
+        Object.assign({}, currentUser, { re_password: "", password: "" })
       );
     }
   }, [currentUser]);
@@ -36,6 +35,10 @@ const EditUser = ({ currentUser, getBack }) => {
   }, []);
 
   const validations = [
+    {
+      valid: newUser.display_name.length <= no_display_name_characters,
+      error: "Display name is too long",
+    },
     {
       valid: /[^\w\s]/.test(newUser.password) || /\d/.test(newUser.password),
       error: "Password must contain number or symbol",
@@ -241,16 +244,21 @@ const EditUser = ({ currentUser, getBack }) => {
             className="btn-custom btn-custom-primary btn-small col-sm-auto col-60 mb-3"
             onClick={async () => {
               let allowEdit = true;
-              if (newUser.password !== initialPassword) {
+              let finalUser = { ...newUser };
+              if (newUser.password) {
                 let invalid = validations.filter((x) => !x.valid);
                 if (invalid.length) {
                   allowEdit = false;
                   setProblem(invalid[0].error);
                 }
               }
+              if (finalUser.password === "") {
+                delete finalUser.password;
+                delete finalUser.re_password;
+              }
               if (allowEdit) {
                 setLoading(true);
-                let res = await EditUserForAdmin(newUser);
+                let res = await EditUserForAdmin(finalUser);
                 setLoading(false);
                 if (res.error) {
                   store.dispatch({
@@ -301,4 +309,11 @@ const EditUser = ({ currentUser, getBack }) => {
   );
 };
 
-export default EditUser;
+function mapp(state, ownProps) {
+  return {
+    no_display_name_characters: state.settings.no_display_name_characters,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(EditUser);
