@@ -170,7 +170,7 @@ const MoviesList = ({
                         value={
                           ratings[formatedMovie.id]
                             ? ratings[formatedMovie.id].excellent_rate
-                            : 0
+                            : []
                         }
                       ></ReactionButton>
                       <ReactionButton
@@ -187,7 +187,7 @@ const MoviesList = ({
                         value={
                           ratings[formatedMovie.id]
                             ? ratings[formatedMovie.id].good_rate
-                            : 0
+                            : []
                         }
                       ></ReactionButton>
                       <ReactionButton
@@ -204,7 +204,7 @@ const MoviesList = ({
                         value={
                           ratings[formatedMovie.id]
                             ? ratings[formatedMovie.id].ok_rate
-                            : 0
+                            : []
                         }
                       ></ReactionButton>
                       <ReactionButton
@@ -213,7 +213,7 @@ const MoviesList = ({
                         value={
                           ratings[formatedMovie.id]
                             ? ratings[formatedMovie.id].bad_rate
-                            : 0
+                            : []
                         }
                         selected={
                           user.ratings[formatedMovie.id]

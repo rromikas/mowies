@@ -8,11 +8,12 @@ import MovieReviews from "./MovieReviews";
 import { connect } from "react-redux";
 import { FormatDuration } from "../../utilities/Functions";
 import store from "../../store/store";
-import { AddViewToMovie } from "../../server/DatabaseApi";
+import { AddViewToMovie, GetUserReview } from "../../server/DatabaseApi";
 import WishlistButton from "./WishlistButton";
 import { FaRegPaperPlane } from "react-icons/fa";
 import history from "../../History";
 import { BsPlayFill, BsPencil } from "react-icons/bs";
+import AddReview from "./AddReview";
 
 const Movie = (props) => {
   const movieId = props.match.params.movieId;
@@ -22,9 +23,10 @@ const Movie = (props) => {
   const seekCommentId = props.match.params.commentId;
   //user will be needed to write comments on reviews and to add reviews
   const user = props.user;
-
-  const [addReviewTrigger, setAddReviewTrigger] = useState(-1);
-
+  const [review, setReview] = useState(false);
+  const [refreshReviews, setRefreshReviews] = useState(false);
+  const [trailerIsEmpty, setTrailerIsEmpty] = useState(false);
+  const [addReviewOpen, setAddReviewOpen] = useState(false);
   const [movie, setMovie] = useState({
     poster_path: "",
     genres: [],
@@ -49,10 +51,10 @@ const Movie = (props) => {
           type: "UPDATE_RATINGS",
           rating: {
             [movie.id]: {
-              excellent_rate: 0,
-              ok_rate: 0,
-              bad_rate: 0,
-              good_rate: 0,
+              excellent_rate: [],
+              ok_rate: [],
+              bad_rate: [],
+              good_rate: [],
               movie_poster: movie.poster_path,
               movie_title: movie.title,
               movie_genres: movie.genres.map((x) => x.name),
@@ -80,6 +82,7 @@ const Movie = (props) => {
         } else {
           data = await GetMovie(movieId, apiKey);
         }
+        data.release_date = data.release_date ? data.release_date : "0";
         if (data.success !== undefined && !data.success) {
         }
         setMovie((prev) => Object.assign({}, prev, data));
@@ -97,6 +100,22 @@ const Movie = (props) => {
 
     getData();
   }, [movieId, apiKey]);
+
+  useEffect(() => {
+    async function getData() {
+      let res = await GetUserReview(user._id, movieId);
+      if (res) {
+        if (!res.error) {
+          setReview(res);
+        }
+      } else {
+        setReview({ review: "", rating: "" });
+      }
+    }
+    if (user._id && movieId) {
+      getData();
+    }
+  }, [refreshReviews, user, movieId]);
 
   // const director = movie.credits.crew.find((x) => x.job === "Director");
 
@@ -117,7 +136,11 @@ const Movie = (props) => {
             <img
               alt={movie.poster_path}
               width="100%"
-              src={`https://image.tmdb.org/t/p/w342/${movie.poster_path}`}
+              src={
+                movie.poster_path
+                  ? `https://image.tmdb.org/t/p/w342/${movie.poster_path}`
+                  : "https://critics.io/img/movies/poster-placeholder.png"
+              }
             ></img>
             <div
               className="position-absolute w-100 h-100"
@@ -140,6 +163,7 @@ const Movie = (props) => {
       </div>
       <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
         <TrailerPlayer
+          setIsEmpty={() => setTrailerIsEmpty(true)}
           movieId={movieId}
           onEnded={() => setOpenTrailer(false)}
         ></TrailerPlayer>
@@ -152,7 +176,11 @@ const Movie = (props) => {
                 alt={movie.poster_path}
                 style={{ borderRadius: "25px" }}
                 width="300px"
-                src={`https://image.tmdb.org/t/p/w342/${movie.poster_path}`}
+                src={
+                  movie.poster_path
+                    ? `https://image.tmdb.org/t/p/w342/${movie.poster_path}`
+                    : "https://critics.io/img/movies/poster-placeholder.png"
+                }
               ></img>
               <div
                 onClick={() => history.push(`/movie/${movie.id}`)}
@@ -165,21 +193,25 @@ const Movie = (props) => {
                   borderRadius: "13px",
                 }}
               >
-                <div
-                  className="square-60 rounded-circle d-flex flex-center play-btn"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setOpenTrailer(true);
-                  }}
-                >
-                  <BsPlayFill
-                    style={{
-                      fontSize: "35px",
-                      color: "white",
-                      marginRight: "-5px",
+                {!trailerIsEmpty ? (
+                  <div
+                    className="square-60 rounded-circle d-flex flex-center play-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setOpenTrailer(true);
                     }}
-                  ></BsPlayFill>
-                </div>
+                  >
+                    <BsPlayFill
+                      style={{
+                        fontSize: "35px",
+                        color: "white",
+                        marginRight: "-5px",
+                      }}
+                    ></BsPlayFill>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>
@@ -210,7 +242,7 @@ const Movie = (props) => {
                         value={
                           ratings[movie.id]
                             ? ratings[movie.id].excellent_rate
-                            : 0
+                            : []
                         }
                       ></ReactionButton>
                       <ReactionButton
@@ -223,7 +255,7 @@ const Movie = (props) => {
                         emoji="heart"
                         className="mr-2 mb-2"
                         value={
-                          ratings[movie.id] ? ratings[movie.id].good_rate : 0
+                          ratings[movie.id] ? ratings[movie.id].good_rate : []
                         }
                       ></ReactionButton>
                       <ReactionButton
@@ -236,14 +268,14 @@ const Movie = (props) => {
                         className="mr-2 mb-2"
                         emoji="heavy_division_sign"
                         value={
-                          ratings[movie.id] ? ratings[movie.id].ok_rate : 0
+                          ratings[movie.id] ? ratings[movie.id].ok_rate : []
                         }
                       ></ReactionButton>
                       <ReactionButton
                         className="mb-2"
                         emoji="shit"
                         value={
-                          ratings[movie.id] ? ratings[movie.id].bad_rate : 0
+                          ratings[movie.id] ? ratings[movie.id].bad_rate : []
                         }
                         selected={
                           user.ratings[movie.id]
@@ -314,7 +346,12 @@ const Movie = (props) => {
                 <div className="row no-gutters mb-5">
                   <div className="col-auto mr-2">Release date:</div>
                   <div className="col-auto text-movie-muted">
-                    {date.format(new Date(movie.release_date), "MMMM DD, YYYY")}
+                    {movie.release_date !== "0"
+                      ? date.format(
+                          new Date(movie.release_date),
+                          "MMMM DD, YYYY"
+                        )
+                      : "unknown"}
                   </div>
                 </div>
                 <div className="row no-gutters justify-content-center justify-content-md-start">
@@ -331,7 +368,7 @@ const Movie = (props) => {
                           },
                         });
                       } else {
-                        setAddReviewTrigger(addReviewTrigger + 1);
+                        setAddReviewOpen(!addReviewOpen);
                       }
                     }}
                   >
@@ -356,13 +393,22 @@ const Movie = (props) => {
             </div>
           </div>
         </div>
+        <AddReview
+          userIsOwner={user.ratings[movie.id]}
+          open={addReviewOpen}
+          onClose={() => setAddReviewOpen(false)}
+          movie={movie}
+          review={review}
+          user={user}
+          refreshReviews={() => setRefreshReviews(!refreshReviews)}
+        ></AddReview>
         <MovieReviews
+          refreshReviewsFromParent={refreshReviews}
           userHasWrittenReview={user.ratings[movie.id]}
           seekCommentId={seekCommentId}
           seekReviewId={seekReviewId}
           movie={movie}
           user={user}
-          addReviewTrigger={addReviewTrigger}
         ></MovieReviews>
       </div>
     </div>

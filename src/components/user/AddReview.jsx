@@ -16,7 +16,7 @@ const AddReview = ({
   refreshReviews = () => {},
   settings,
   ratings,
-  userHasWrittenReview,
+  userIsOwner,
 }) => {
   const [newReview, setNewReview] = useState({
     review: "",
@@ -39,7 +39,7 @@ const AddReview = ({
     <Modal open={open} onClose={onClose}>
       <div className="col-xl-42 p-4 bg-over-root-lighter rounded mx-4">
         <div className="row no-gutters h5 mb-4">
-          {userHasWrittenReview ? "Edit" : "Add"} Review - {movie.title} (
+          {userIsOwner ? "Edit" : "Add"} Review - {movie.title} (
           {movie.release_date.substring(0, 4)})
         </div>
         <div className="row no-gutters">
@@ -181,7 +181,7 @@ const AddReview = ({
                       setProblem("Review is empty");
                     } else {
                       setLoading(true);
-                      let res = userHasWrittenReview
+                      let res = userIsOwner
                         ? await EditReview(newReview, review, user._id)
                         : await WriteReview(
                             newReview,
@@ -196,7 +196,7 @@ const AddReview = ({
                           type: "SET_NOTIFICATION",
                           notification: {
                             title: `Couldn't ${
-                              userHasWrittenReview ? "edit" : "add"
+                              userIsOwner ? "edit" : "add"
                             } review`,
                             type: "failure",
                             message: JSON.stringify(res.error).replace(
@@ -210,11 +210,11 @@ const AddReview = ({
                           type: "SET_NOTIFICATION",
                           notification: {
                             title: `You successfully ${
-                              userHasWrittenReview ? "edited" : "wrote"
+                              userIsOwner ? "edited" : "wrote"
                             } review`,
                             type: "success",
                             message: `Your review was successfully ${
-                              userHasWrittenReview ? "edited" : "added"
+                              userIsOwner ? "edited" : "added"
                             }`,
                           },
                         });
@@ -226,7 +226,7 @@ const AddReview = ({
                           },
                         });
 
-                        if (!userHasWrittenReview) {
+                        if (!userIsOwner) {
                           let watchedlist = [...user.watchedlist];
                           watchedlist.push({ movie_id: movie.id.toString() });
                           let reviewsList = [...user.reviews];

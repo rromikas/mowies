@@ -4,7 +4,13 @@ import "simplebar/dist/simplebar.min.css";
 import { GetTrailers } from "../../server/MoviesApi";
 import { connect } from "react-redux";
 
-const TrailerPlayer = ({ movieId, settings, onEnded }) => {
+const TrailerPlayer = ({
+  movieId,
+  settings,
+  onEnded,
+  modalOpened,
+  setIsEmpty = () => {},
+}) => {
   const [videoIds, setVideoIds] = useState([]);
   const [problem, setProblem] = useState("");
 
@@ -14,6 +20,7 @@ const TrailerPlayer = ({ movieId, settings, onEnded }) => {
         let trailers = await GetTrailers(movieId, settings.movies_api_key);
         if (!trailers.results || !trailers.results.length) {
           setProblem("We couldn't find trailer for this movie");
+          setIsEmpty();
         } else {
           setVideoIds(trailers.results.map((x) => x.key));
         }
@@ -21,12 +28,12 @@ const TrailerPlayer = ({ movieId, settings, onEnded }) => {
     }
 
     getData();
-  }, [movieId, settings.movies_api_key]);
+  }, [movieId, settings.movies_api_key]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="col-xl-33 col-lg-36 col-md-39 col-sm-42 col-60">
       <div className="row no-gutters">
-        {videoIds.length ? (
+        {videoIds.length && modalOpened ? (
           <div className="col-60">
             <div className="trailer-player-wrapper">
               <ReactPlayer

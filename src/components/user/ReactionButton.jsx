@@ -31,7 +31,7 @@ const ReactionButton = ({
       <div className="row no-gutters align-items-center h-100 justify-content-center">
         {value !== undefined && value !== null ? (
           <div className={`col mr-${size !== "small" ? "2" : "1"}`}>
-            {nFormatter(value, 1)}
+            {nFormatter(value.length, 1)}
           </div>
         ) : (
           ""

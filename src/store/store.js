@@ -94,6 +94,7 @@ function dashboardMenuReducer(state = false, action) {
 function settingsReducer(
   state = {
     movies_api_key: "",
+    captcha_api_key: "6Lc_87cZAAAAAHRx49G1d-mM3gxWM_RKLAA41T3U",
     movie_data_api: "",
     latest_movies_api: "",
     no_popular_reviews: 5,

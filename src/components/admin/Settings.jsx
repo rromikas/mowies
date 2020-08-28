@@ -108,6 +108,24 @@ const Settings = ({ settings }) => {
                   ></input>
                 </div>
               </div>
+              <div className="col-60 mb-4">
+                <div className="row no-gutters mb-1">Set Captcha API key</div>
+                <div className="row no-gutters">
+                  <input
+                    type="text"
+                    placeholder="Enter API key"
+                    value={settings.captcha_api_key}
+                    onChange={(e) => {
+                      e.persist();
+                      store.dispatch({
+                        type: "UPDATE_SETTINGS",
+                        settings: { captcha_api_key: e.target.value },
+                      });
+                    }}
+                    className="px-3 input-light w-100"
+                  ></input>
+                </div>
+              </div>
               <div className="col-60">
                 <div className="row no-gutters">
                   <div className="col-lg-30 col-60 mb-4">

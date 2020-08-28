@@ -215,12 +215,16 @@ const SearchResults = ({ search, settings }) => {
                       <React.Fragment>
                         <MoviesList
                           prefix={"serie-"}
-                          movies={series.filter((x) => {
-                            return (
-                              x.genre_ids.includes(+selectedSerieGenre) ||
-                              +selectedSerieGenre === 0
-                            );
-                          })}
+                          movies={series
+                            .filter((x) => {
+                              return (
+                                x.genre_ids.includes(+selectedSerieGenre) ||
+                                +selectedSerieGenre === 0
+                              );
+                            })
+                            .map((x) =>
+                              Object.assign({}, x, { id: `serie-${x.id}` })
+                            )}
                         ></MoviesList>
                       </React.Fragment>
                     ) : (

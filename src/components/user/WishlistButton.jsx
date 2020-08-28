@@ -12,6 +12,7 @@ const WishlistButton = ({ user, movie, apiKey }) => {
 
   const handleClick = async (message) => {
     try {
+      console.log("movie id wishlist", movie.id);
       if (user.display_name) {
         if (movie.id) {
           setLoading(true);

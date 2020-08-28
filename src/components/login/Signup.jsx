@@ -9,10 +9,9 @@ import Checkbox from "../utility/Checkbox";
 import Modal from "../utility/Modal";
 import LegalDocument from "../user/LegalDocument";
 import { BsChevronLeft } from "react-icons/bs";
-import { CaptchaApiKey } from "../../Settings";
 import { connect } from "react-redux";
 
-const Signup = ({ no_display_name_characters }) => {
+const Signup = ({ no_display_name_characters, captcha_api_key }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -188,7 +187,7 @@ const Signup = ({ no_display_name_characters }) => {
                     </div>
                     <div className="row no-gutters mb-3">
                       <ReCAPTCHA
-                        sitekey={CaptchaApiKey}
+                        sitekey={captcha_api_key}
                         onChange={(value) => {
                           if (value) {
                             setValidated(true);
@@ -266,6 +265,7 @@ const Signup = ({ no_display_name_characters }) => {
 
 function mapp(state, ownProps) {
   return {
+    captcha_api_key: state.settings.captcha_api_key,
     no_display_name_characters: state.settings.no_display_name_characters,
     ...ownProps,
   };

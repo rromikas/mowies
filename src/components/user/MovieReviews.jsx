@@ -3,6 +3,7 @@ import date from "date-and-time";
 import { nFormatter } from "../../utilities/Functions";
 import { Emoji } from "emoji-mart";
 import { MdThumbUp, MdChatBubble, MdFlag } from "react-icons/md";
+import { BsPencil, BsTrash } from "react-icons/bs";
 import ReplyToReview from "./ReplyToReview";
 import AddReview from "./AddReview";
 import {
@@ -12,7 +13,9 @@ import {
   LikeReview,
   LikeComment,
   ReportReview,
+  DeleteReview,
   ReportComment,
+  DeleteComment,
 } from "../../server/DatabaseApi";
 import { connect } from "react-redux";
 import { Collapse } from "@material-ui/core";
@@ -21,15 +24,16 @@ import store from "../../store/store";
 import Loader from "../utility/Loader";
 import Popover from "../utility/Popover";
 import OkIcon from "../../images/OkIcon";
+import EditComment from "./EditComment";
 
 const MovieReviews = ({
   movie,
   user,
   publicUsers,
-  addReviewTrigger,
+  refreshReviewsFromParent,
   seekReviewId,
   seekCommentId,
-  userHasWrittenReview,
+  ratings,
 }) => {
   // local reviews object in order to be able to update it quickly instead of waiting for real changes in database
   const [reviews, setReviews] = useState([]);
@@ -38,12 +42,16 @@ const MovieReviews = ({
   const [loadingComment, setLoadingComment] = useState(-1);
   const [loadingReview, setLoadingReview] = useState(-1);
   const [loadingReport, setLoadingReport] = useState(-1);
+  const [deletingComment, setDeletingComment] = useState(-1);
+  const [deletingReview, setDeletingReview] = useState(-1);
+  const [userIsOwnerOfReview, setUserIsOwnerOfReview] = useState(false);
 
   //admin can edit review and rating in promotions section. So promotions have edited content.
   const [promotedContents, setPromotedContents] = useState({});
 
   //comments object.Its property will be review id.
   const [comments, setComments] = useState({});
+  const [comment, setComment] = useState(false);
 
   //
   const [reviewIdOfVisibleComments, setReviewIdOfVisibleComments] = useState(
@@ -60,6 +68,7 @@ const MovieReviews = ({
   // boolean variable to display "add review" modal or not
   const [addReviewOpen, setAddReviewOpen] = useState(false);
   const [replyOpen, setReplyOpen] = useState(false);
+  const [editCommentOpen, setEditCommentOpen] = useState(false);
 
   // boolean variable to display "add review" modal or not
   const [review, setReview] = useState("");
@@ -74,12 +83,6 @@ const MovieReviews = ({
   const reviewsPerPage = 8;
 
   const [scrolledOnce, setScrolledOnce] = useState(false);
-
-  useEffect(() => {
-    if (addReviewTrigger >= 0) {
-      setAddReviewOpen(true);
-    }
-  }, [addReviewTrigger]);
 
   useEffect(() => {
     async function getData() {
@@ -115,10 +118,6 @@ const MovieReviews = ({
           let promReviews = [],
             notPromotedReviews = [];
           data.reverse().forEach((x) => {
-            if (user.reviews.includes(x._id)) {
-              setReview(x);
-            }
-
             if (x._id === seekReviewId) {
               promReviews.unshift(x);
             } else if (promotedContentIds.includes(x._id)) {
@@ -134,7 +133,7 @@ const MovieReviews = ({
       }
     }
     getData();
-  }, [movie, refreshReviews]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [movie, refreshReviews, refreshReviewsFromParent]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const renderComments = (ids, review) => {
     return ids.map((x, ind) => {
@@ -207,78 +206,170 @@ const MovieReviews = ({
                     </div>
                   </div>
                 </div>
-                <Popover
-                  arrow={false}
-                  position="top"
-                  trigger="mouseenter"
-                  theme="dark"
-                  content={(w) => (
-                    <div className="py-2 px-3 rounded bg-root">
-                      Report Abuse
+                {user._id === comments[review._id][x].author ? (
+                  <div className="col-auto">
+                    <div className="row no-gutters">
+                      <Popover
+                        arrow={false}
+                        position="top"
+                        trigger="mouseenter"
+                        theme="dark"
+                        content={(w) => (
+                          <div className="py-2 px-3 rounded bg-root">
+                            Edit comment
+                          </div>
+                        )}
+                      >
+                        <div
+                          className="col-auto text-muted btn-tertiary-small d-flex flex-center"
+                          onClick={async () => {
+                            setComment(comments[review._id][x]);
+                            setEditCommentOpen(true);
+                          }}
+                        >
+                          <BsPencil fontSize="24px"></BsPencil>
+                        </div>
+                      </Popover>
+                      <Popover
+                        arrow={false}
+                        position="top"
+                        trigger="mouseenter"
+                        theme="dark"
+                        content={(w) => (
+                          <div className="py-2 px-3 rounded bg-root">
+                            Delete comment
+                          </div>
+                        )}
+                      >
+                        <div
+                          className="col-auto text-muted btn-tertiary-small d-flex flex-center"
+                          onClick={async () => {
+                            setDeletingComment(comments[review._id][x]._id);
+                            let res = await DeleteComment(
+                              comments[review._id][x]._id
+                            );
+                            setDeletingComment(-1);
+                            if (res.error) {
+                              store.dispatch({
+                                type: "SET_NOTIFICATION",
+                                notification: {
+                                  title: `Couldn't delete comment`,
+                                  type: "failure",
+                                  message: res.error,
+                                },
+                              });
+                            } else {
+                              store.dispatch({
+                                type: "SET_NOTIFICATION",
+                                notification: {
+                                  title: `Success`,
+                                  type: "success",
+                                  message: "Comment successfully deleted",
+                                },
+                              });
+                              setRefreshComments(!refreshComments);
+                              setRefreshReviews(!refreshReviews);
+                            }
+                          }}
+                        >
+                          {deletingComment === comments[review._id][x]._id ? (
+                            <div className="square-20">
+                              <Loader
+                                color={"white"}
+                                style={{
+                                  position: "absolute",
+                                  left: "10px",
+                                  top: 0,
+                                  bottom: 0,
+                                  margin: "auto",
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
+                                loading={true}
+                                size={20}
+                              ></Loader>
+                            </div>
+                          ) : (
+                            <BsTrash fontSize="24px"></BsTrash>
+                          )}
+                        </div>
+                      </Popover>
                     </div>
-                  )}
-                >
-                  <div
-                    className="col-auto text-muted btn-tertiary-small d-flex flex-center"
-                    onClick={async () => {
-                      if (user.token) {
-                        setLoadingReport(x);
-                        let res = await ReportComment(user, x);
-                        setLoadingReport(-1);
-                        if (res.error) {
-                          store.dispatch({
-                            type: "SET_NOTIFICATION",
-                            notification: {
-                              title: "Error",
-                              message: res.error,
-                              type: "failure",
-                            },
-                          });
+                  </div>
+                ) : (
+                  <Popover
+                    arrow={false}
+                    position="top"
+                    trigger="mouseenter"
+                    theme="dark"
+                    content={(w) => (
+                      <div className="py-2 px-3 rounded bg-root">
+                        Report Abuse
+                      </div>
+                    )}
+                  >
+                    <div
+                      className="col-auto text-muted btn-tertiary-small d-flex flex-center"
+                      onClick={async () => {
+                        if (user.token) {
+                          setLoadingReport(x);
+                          let res = await ReportComment(user, x);
+                          setLoadingReport(-1);
+                          if (res.error) {
+                            store.dispatch({
+                              type: "SET_NOTIFICATION",
+                              notification: {
+                                title: "Error",
+                                message: res.error,
+                                type: "failure",
+                              },
+                            });
+                          } else {
+                            store.dispatch({
+                              type: "SET_NOTIFICATION",
+                              notification: {
+                                title: "Comment reported",
+                                message:
+                                  "Comment was successfully reported. We will review it soon.",
+                                type: "success",
+                              },
+                            });
+                          }
                         } else {
                           store.dispatch({
                             type: "SET_NOTIFICATION",
                             notification: {
-                              title: "Comment reported",
-                              message:
-                                "Comment was successfully reported. We will review it soon.",
-                              type: "success",
+                              title: "Login required",
+                              message: "You need to login to report comment",
+                              type: "failure",
                             },
                           });
                         }
-                      } else {
-                        store.dispatch({
-                          type: "SET_NOTIFICATION",
-                          notification: {
-                            title: "Login required",
-                            message: "You need to login to report comment",
-                            type: "failure",
-                          },
-                        });
-                      }
-                    }}
-                  >
-                    {loadingReport === x ? (
-                      <div className="square-20">
-                        <Loader
-                          color={"white"}
-                          style={{
-                            position: "absolute",
-                            left: "10px",
-                            top: 0,
-                            bottom: 0,
-                            margin: "auto",
-                            display: "flex",
-                            alignItems: "center",
-                          }}
-                          loading={true}
-                          size={20}
-                        ></Loader>
-                      </div>
-                    ) : (
-                      <MdFlag fontSize="24px"></MdFlag>
-                    )}
-                  </div>
-                </Popover>
+                      }}
+                    >
+                      {loadingReport === x ? (
+                        <div className="square-20">
+                          <Loader
+                            color={"white"}
+                            style={{
+                              position: "absolute",
+                              left: "10px",
+                              top: 0,
+                              bottom: 0,
+                              margin: "auto",
+                              display: "flex",
+                              alignItems: "center",
+                            }}
+                            loading={true}
+                            size={20}
+                          ></Loader>
+                        </div>
+                      ) : (
+                        <MdFlag fontSize="24px"></MdFlag>
+                      )}
+                    </div>
+                  </Popover>
+                )}
               </div>
 
               <div className="row no-gutters text-light mb-3 font-weight-300 text-break">
@@ -487,78 +578,190 @@ const MovieReviews = ({
                           </div>
                         </div>
                       </div>
-                      <Popover
-                        arrow={false}
-                        position="top"
-                        trigger="mouseenter"
-                        theme="dark"
-                        content={(w) => (
-                          <div className="py-2 px-3 rounded bg-root">
-                            Report Abuse
+                      {user._id === x.author ? (
+                        <div className="col-auto">
+                          <div className="row no-gutters">
+                            <Popover
+                              arrow={false}
+                              position="top"
+                              trigger="mouseenter"
+                              theme="dark"
+                              content={(w) => (
+                                <div className="py-2 px-3 rounded bg-root">
+                                  Edit review
+                                </div>
+                              )}
+                            >
+                              <div
+                                className="col-auto text-muted btn-tertiary-small d-flex flex-center"
+                                onClick={async () => {
+                                  setReview(x);
+                                  setUserIsOwnerOfReview(true);
+                                  setAddReviewOpen(true);
+                                }}
+                              >
+                                <BsPencil fontSize="24px"></BsPencil>
+                              </div>
+                            </Popover>
+                            <Popover
+                              arrow={false}
+                              position="top"
+                              trigger="mouseenter"
+                              theme="dark"
+                              content={(w) => (
+                                <div className="py-2 px-3 rounded bg-root">
+                                  Delete review
+                                </div>
+                              )}
+                            >
+                              <div
+                                className="col-auto text-muted btn-tertiary-small d-flex flex-center"
+                                onClick={async () => {
+                                  setDeletingReview(x._id);
+                                  let res = await DeleteReview(x);
+                                  setDeletingReview(-1);
+                                  if (res.error) {
+                                    store.dispatch({
+                                      type: "SET_NOTIFICATION",
+                                      notification: {
+                                        title: `Couldn't delete comment`,
+                                        type: "failure",
+                                        message: res.error,
+                                      },
+                                    });
+                                  } else {
+                                    store.dispatch({
+                                      type: "SET_NOTIFICATION",
+                                      notification: {
+                                        title: `Success`,
+                                        type: "success",
+                                        message: "Comment successfully deleted",
+                                      },
+                                    });
+
+                                    let rating = ratings[movie.id];
+                                    let userInd = rating[x.rating].findIndex(
+                                      (r) => r === x.author
+                                    );
+                                    if (userInd !== -1) {
+                                      rating[x.rating].splice(userInd, 1);
+                                    }
+                                    store.dispatch({
+                                      type: "UPDATE_RATINGS",
+                                      rating: { [movie.id]: rating },
+                                    });
+
+                                    let userRatings = { ...user.ratings };
+                                    delete userRatings[movie.id];
+                                    store.dispatch({
+                                      type: "UPDATE_USER",
+                                      userProperty: {
+                                        ratings: userRatings,
+                                      },
+                                    });
+                                    setRefreshReviews(!refreshReviews);
+                                  }
+                                }}
+                              >
+                                {deletingReview === x._id ? (
+                                  <div className="square-20">
+                                    <Loader
+                                      color={"white"}
+                                      style={{
+                                        position: "absolute",
+                                        left: "10px",
+                                        top: 0,
+                                        bottom: 0,
+                                        margin: "auto",
+                                        display: "flex",
+                                        alignItems: "center",
+                                      }}
+                                      loading={true}
+                                      size={20}
+                                    ></Loader>
+                                  </div>
+                                ) : (
+                                  <BsTrash fontSize="24px"></BsTrash>
+                                )}
+                              </div>
+                            </Popover>
                           </div>
-                        )}
-                      >
-                        <div
-                          className="col-auto text-muted btn-tertiary-small d-flex flex-center"
-                          onClick={async () => {
-                            if (user.token) {
-                              setLoadingReport(x._id);
-                              let res = await ReportReview(user, x._id);
-                              setLoadingReport(-1);
-                              if (res.error) {
-                                store.dispatch({
-                                  type: "SET_NOTIFICATION",
-                                  notification: {
-                                    title: "Error",
-                                    message: res.error,
-                                    type: "failure",
-                                  },
-                                });
+                        </div>
+                      ) : (
+                        <Popover
+                          arrow={false}
+                          position="top"
+                          trigger="mouseenter"
+                          theme="dark"
+                          content={(w) => (
+                            <div className="py-2 px-3 rounded bg-root">
+                              Report Abuse
+                            </div>
+                          )}
+                        >
+                          <div
+                            className="col-auto text-muted btn-tertiary-small d-flex flex-center"
+                            onClick={async () => {
+                              if (user.token) {
+                                setLoadingReport(x._id);
+                                let res = await ReportReview(user, x._id);
+                                setLoadingReport(-1);
+                                if (res.error) {
+                                  store.dispatch({
+                                    type: "SET_NOTIFICATION",
+                                    notification: {
+                                      title: "Error",
+                                      message: res.error,
+                                      type: "failure",
+                                    },
+                                  });
+                                } else {
+                                  store.dispatch({
+                                    type: "SET_NOTIFICATION",
+                                    notification: {
+                                      title: "Review reported",
+                                      message:
+                                        "Review was successfully reported. We will review it soon.",
+                                      type: "success",
+                                    },
+                                  });
+                                }
                               } else {
                                 store.dispatch({
                                   type: "SET_NOTIFICATION",
                                   notification: {
-                                    title: "Review reported",
+                                    title: "Login required",
                                     message:
-                                      "Review was successfully reported. We will review it soon.",
-                                    type: "success",
+                                      "You need to login to report review",
+                                    type: "failure",
                                   },
                                 });
                               }
-                            } else {
-                              store.dispatch({
-                                type: "SET_NOTIFICATION",
-                                notification: {
-                                  title: "Login required",
-                                  message: "You need to login to report review",
-                                  type: "failure",
-                                },
-                              });
-                            }
-                          }}
-                        >
-                          {loadingReport === x._id ? (
-                            <div className="square-20">
-                              <Loader
-                                color={"white"}
-                                style={{
-                                  position: "absolute",
-                                  left: "10px",
-                                  top: 0,
-                                  bottom: 0,
-                                  margin: "auto",
-                                  display: "flex",
-                                  alignItems: "center",
-                                }}
-                                loading={true}
-                                size={20}
-                              ></Loader>
-                            </div>
-                          ) : (
-                            <MdFlag fontSize="24px"></MdFlag>
-                          )}
-                        </div>
-                      </Popover>
+                            }}
+                          >
+                            {loadingReport === x._id ? (
+                              <div className="square-20">
+                                <Loader
+                                  color={"white"}
+                                  style={{
+                                    position: "absolute",
+                                    left: "10px",
+                                    top: 0,
+                                    bottom: 0,
+                                    margin: "auto",
+                                    display: "flex",
+                                    alignItems: "center",
+                                  }}
+                                  loading={true}
+                                  size={20}
+                                ></Loader>
+                              </div>
+                            ) : (
+                              <MdFlag fontSize="24px"></MdFlag>
+                            )}
+                          </div>
+                        </Popover>
+                      )}
                     </div>
 
                     <div className="row no-gutters text-light mb-3 font-weight-300 text-break">
@@ -745,7 +948,7 @@ const MovieReviews = ({
             ></Paigination>
           </div>
           <AddReview
-            userHasWrittenReview={userHasWrittenReview}
+            userIsOwner={userIsOwnerOfReview}
             open={addReviewOpen}
             onClose={() => setAddReviewOpen(false)}
             movie={movie}
@@ -769,6 +972,15 @@ const MovieReviews = ({
             onClose={() => setReplyOpen(false)}
             user={user}
           ></ReplyToReview>
+          <EditComment
+            comment={comment}
+            refreshComments={() => setRefreshComments(!refreshComments)}
+            setComments={() => {}}
+            movie={movie}
+            open={editCommentOpen}
+            onClose={() => setEditCommentOpen(false)}
+            user={user}
+          ></EditComment>
         </div>
       </div>
     </div>
@@ -778,6 +990,7 @@ const MovieReviews = ({
 function mapp(state, ownProps) {
   return {
     publicUsers: state.publicUsers,
+    ratings: state.ratings,
     ...ownProps,
   };
 }

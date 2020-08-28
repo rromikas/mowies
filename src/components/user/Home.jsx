@@ -52,6 +52,8 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
     release_date: "",
     genres: [],
   });
+  const [trailerIsEmpty, setTrailerIsEmpty] = useState(false);
+
   useEffect(() => {
     async function getData() {
       setBackgroundMovie(settings.current_bg_movie);
@@ -83,6 +85,7 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
           ></div>
           <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
             <TrailerPlayer
+              setIsEmpty={() => setTrailerIsEmpty(true)}
               movieId={backgroundMovie.id}
               onEnded={() => setOpenTrailer(false)}
             ></TrailerPlayer>
@@ -157,7 +160,7 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
                         value={
                           ratings[backgroundMovie.id]
                             ? ratings[backgroundMovie.id].excellent_rate
-                            : 0
+                            : []
                         }
                       ></ReactionButton>
                       <ReactionButton
@@ -173,7 +176,7 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
                         value={
                           ratings[backgroundMovie.id]
                             ? ratings[backgroundMovie.id].good_rate
-                            : 0
+                            : []
                         }
                       ></ReactionButton>
                       <ReactionButton
@@ -189,7 +192,7 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
                         value={
                           ratings[backgroundMovie.id]
                             ? ratings[backgroundMovie.id].ok_rate
-                            : 0
+                            : []
                         }
                       ></ReactionButton>
                       <ReactionButton
@@ -205,7 +208,7 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
                         value={
                           ratings[backgroundMovie.id]
                             ? ratings[backgroundMovie.id].bad_rate
-                            : 0
+                            : []
                         }
                       ></ReactionButton>
                     </div>
@@ -238,12 +241,16 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
                   </div>
                 </div>
                 <div className="row no-gutters mb-md-4 mb-2">
-                  <div
-                    className="col-auto mr-3 btn-custom btn-custom-primary btn-small"
-                    onClick={() => setOpenTrailer(true)}
-                  >
-                    Play Trailer
-                  </div>
+                  {!trailerIsEmpty ? (
+                    <div
+                      className="col-auto mr-3 btn-custom btn-custom-primary btn-small"
+                      onClick={() => setOpenTrailer(true)}
+                    >
+                      Play Trailer
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   <WishlistButton
                     movie={backgroundMovie}
                     user={user}

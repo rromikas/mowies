@@ -6,7 +6,13 @@ import store from "../../store/store";
 import { EditReviewForAdmin } from "../../server/DatabaseApi";
 import Loader from "../utility/Loader";
 
-const EditReview = ({ currentReview, publicUsers, getBack, ratings }) => {
+const EditReview = ({
+  currentReview,
+  publicUsers,
+  getBack,
+  ratings,
+  admin,
+}) => {
   const [review, setReview] = useState({});
   const [user, setUser] = useState({ display_name: "", email: "" });
   const [loading, setLoading] = useState(false);
@@ -130,29 +136,52 @@ const EditReview = ({ currentReview, publicUsers, getBack, ratings }) => {
           <div
             className="btn-custom btn-custom-primary btn-small mb-3 col-60 col-sm-auto"
             onClick={async () => {
-              setLoading(true);
-              let res = await EditReviewForAdmin(review, user);
-              setLoading(false);
-              if (res.error) {
-                store.dispatch({
-                  type: "SET_NOTIFICATION",
-                  notification: {
-                    title: "Error",
-                    message: res.error,
-                    type: "failure",
-                  },
-                });
-              } else {
-                store.dispatch({
-                  type: "SET_NOTIFICATION",
-                  notification: {
-                    title: "Review updated",
-                    message: "Review was successfully updated",
-                    type: "success",
-                  },
-                });
-                getBack();
-              }
+              try {
+                setLoading(true);
+                let res = await EditReviewForAdmin(review, user);
+                setLoading(false);
+                if (res.error) {
+                  store.dispatch({
+                    type: "SET_NOTIFICATION",
+                    notification: {
+                      title: "Error",
+                      message: res.error,
+                      type: "failure",
+                    },
+                  });
+                } else {
+                  store.dispatch({
+                    type: "SET_NOTIFICATION",
+                    notification: {
+                      title: "Review updated",
+                      message: "Review was successfully updated",
+                      type: "success",
+                    },
+                  });
+                  store.dispatch({
+                    type: "UPDATE_RATINGS",
+                    rating: {
+                      [review.movie_id]: res.rating,
+                    },
+                  });
+                  if (admin._id === review.author) {
+                    let adminRatings = { ...admin.ratings };
+                    adminRatings[review.movie_id] = {
+                      movie_id: review.movie_id,
+                      rate_type: review.rating,
+                    };
+
+                    store.dispatch({
+                      type: "UPDATE_USER",
+                      userProperty: {
+                        ratings: adminRatings,
+                      },
+                    });
+                  }
+
+                  getBack();
+                }
+              } catch (er) {}
             }}
           >
             <Loader
@@ -180,6 +209,7 @@ const EditReview = ({ currentReview, publicUsers, getBack, ratings }) => {
 function mapp(state, ownProps) {
   return {
     publicUsers: state.publicUsers,
+    admin: state.user,
     ratings: state.ratings,
     ...ownProps,
   };

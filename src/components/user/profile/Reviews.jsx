@@ -62,7 +62,7 @@ const Reviews = ({
   return (
     <div className="row no-gutters text-white">
       <AddReview
-        userHasWrittenReview={true}
+        userIsOwner={true}
         open={addReviewOpen}
         onClose={() => setAddReviewOpen(false)}
         movie={movie}
@@ -203,46 +203,53 @@ const Reviews = ({
                                   <div
                                     className="col-auto text-muted btn-tertiary-small d-flex flex-center"
                                     onClick={async () => {
-                                      setDeletingReview(x._id);
-                                      let res = await DeleteReview(x);
-                                      setDeletingReview(-1);
-                                      if (res.error) {
-                                        store.dispatch({
-                                          type: "SET_NOTIFICATION",
-                                          notification: {
-                                            title: `Couldn't delete comment`,
-                                            type: "failure",
-                                            message: res.error,
-                                          },
-                                        });
-                                      } else {
-                                        store.dispatch({
-                                          type: "SET_NOTIFICATION",
-                                          notification: {
-                                            title: `Success`,
-                                            type: "success",
-                                            message:
-                                              "Comment successfully deleted",
-                                          },
-                                        });
+                                      try {
+                                        setDeletingReview(x._id);
+                                        let res = await DeleteReview(x);
+                                        setDeletingReview(-1);
+                                        if (res.error) {
+                                          store.dispatch({
+                                            type: "SET_NOTIFICATION",
+                                            notification: {
+                                              title: `Couldn't delete comment`,
+                                              type: "failure",
+                                              message: res.error,
+                                            },
+                                          });
+                                        } else {
+                                          store.dispatch({
+                                            type: "SET_NOTIFICATION",
+                                            notification: {
+                                              title: `Success`,
+                                              type: "success",
+                                              message:
+                                                "Comment successfully deleted",
+                                            },
+                                          });
 
-                                        let rating = ratings[x.movie_id];
-                                        rating[x.rating] -= 1;
-                                        store.dispatch({
-                                          type: "UPDATE_RATINGS",
-                                          rating: { [x.movie_id]: rating },
-                                        });
+                                          let rating = ratings[x.movie_id];
+                                          let userInd = rating[
+                                            x.rating
+                                          ].findIndex((r) => r === x.author);
+                                          if (userInd !== -1) {
+                                            rating[x.rating].splice(userInd, 1);
+                                          }
+                                          store.dispatch({
+                                            type: "UPDATE_RATINGS",
+                                            rating: { [x.movie_id]: rating },
+                                          });
 
-                                        let userRatings = { ...user.ratings };
-                                        delete userRatings[x.movie_id];
-                                        store.dispatch({
-                                          type: "UPDATE_USER",
-                                          userProperty: {
-                                            ratings: userRatings,
-                                          },
-                                        });
-                                        refreshReviews();
-                                      }
+                                          let userRatings = { ...user.ratings };
+                                          delete userRatings[x.movie_id];
+                                          store.dispatch({
+                                            type: "UPDATE_USER",
+                                            userProperty: {
+                                              ratings: userRatings,
+                                            },
+                                          });
+                                          refreshReviews();
+                                        }
+                                      } catch (er) {}
                                     }}
                                   >
                                     {deletingReview === x._id ? (

@@ -10,8 +10,12 @@ const Modal = (props) => {
     }
   }, [props.open]);
 
-  return props.open ? (
-    <div className="container-fluid w-100 h-100 modal-container px-0 text-white overflow-auto">
+  return (
+    <div
+      className={`container-fluid w-100 h-100 modal-container px-0 text-white overflow-auto${
+        !props.open ? " d-none" : ""
+      }`}
+    >
       <div
         className="row no-gutters justify-content-end"
         style={{ position: "sticky", top: 0 }}
@@ -21,11 +25,12 @@ const Modal = (props) => {
         </div>
       </div>
       <div className="row no-gutters h-100 align-items-center justify-content-center">
-        {props.children}
+        {React.cloneElement(
+          props.children,
+          Object.assign({}, props.children.props, { modalOpened: props.open })
+        )}
       </div>
     </div>
-  ) : (
-    ""
   );
 };
 

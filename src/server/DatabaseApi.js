@@ -120,6 +120,10 @@ export const GetUserReviews = (reviewIds) => {
   return SendPostRequest("/reviews/get/user", { reviewIds });
 };
 
+export const GetUserReview = (userId, movieId) => {
+  return SendPostRequest("/reviews/get/user/one", { userId, movieId });
+};
+
 export const GetUserComments = (commentIds) => {
   return SendPostRequest("/comments/get/user", { commentIds });
 };
