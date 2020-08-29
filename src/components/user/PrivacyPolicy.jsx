@@ -8,7 +8,7 @@ const PrivacyPolicy = () => {
   }, []);
   return (
     <div className="row no-gutters px-0" style={{ minHeight: "800px" }}>
-      <div className="col-60 py-5 text-dark">
+      <div className="col-60 py-md-5 text-dark">
         <FileViewer
           fileType={"docx"}
           filePath={doc}

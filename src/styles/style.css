@@ -15876,7 +15876,7 @@ a.text-dark:hover, a.textarea-light:hover, a.table-input:hover::placeholder, a.t
   text-decoration: none !important;
 }
 
-.text-break {
+.text-break, .document-container {
   word-wrap: break-word !important;
 }
 
@@ -17372,6 +17372,22 @@ input[type="number"] {
   color: #ff0040;
 }
 
-.text-break {
+.text-break, .document-container {
   word-break: break-word;
+}
+
+.document-container {
+  width: auto !important;
+  max-width: 700px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.pg-viewer {
+  width: 100%;
+}
+
+img {
+  -ms-flex-item-align: start;
+      align-self: flex-start;
 }

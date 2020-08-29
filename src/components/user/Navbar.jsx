@@ -81,7 +81,7 @@ const Navbar = (props) => {
       style={{
         position: "sticky",
         zIndex: 59,
-        transition: "top 0.5s",
+        transition: "all 0.5s",
         top: direction === "up" ? "0px" : `-${height}px`,
         left: 0,
         right: 0,

@@ -89,7 +89,11 @@ const Signup = ({ no_display_name_characters, captcha_api_key }) => {
       className="row no-gutters justify-content-center aligm-items-start align-items-sm-center py-sm-3"
       style={{ minHeight: window.innerHeight }}
     >
-      <Modal open={legalDocument} onClose={() => setLegalDocument("")}>
+      <Modal
+        open={legalDocument}
+        mobileCloserColor={"black"}
+        onClose={() => setLegalDocument("")}
+      >
         <LegalDocument type={legalDocument}></LegalDocument>
       </Modal>
       <div className="col-xl-50 col-60 col-lg-50 col-md-30 col-sm-40 login-rounded overflow-hidden">

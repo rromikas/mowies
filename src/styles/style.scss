@@ -1226,3 +1226,18 @@ input[type="number"] {
 .text-break {
   word-break: break-word;
 }
+
+.document-container {
+  width: auto !important;
+  max-width: 700px;
+  box-sizing: border-box;
+  @extend .text-break;
+}
+
+.pg-viewer {
+  width: 100%;
+}
+
+img {
+  align-self: flex-start;
+}

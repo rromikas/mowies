@@ -30,7 +30,9 @@ const Recommendations = ({ movies }) => {
                 {x.movie_title}
               </div>
               <div className="row no-gutters text-muted">
-                <small className="text-truncate">{x.movie_genres}</small>
+                <small className="text-truncate">
+                  {x.movie_genres.join("/")}
+                </small>
               </div>
             </div>
           </div>
