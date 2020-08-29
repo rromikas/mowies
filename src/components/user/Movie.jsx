@@ -163,6 +163,7 @@ const Movie = (props) => {
       </div>
       <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
         <TrailerPlayer
+          modalOpened={openTrailer}
           setIsEmpty={() => setTrailerIsEmpty(true)}
           movieId={movieId}
           onEnded={() => setOpenTrailer(false)}

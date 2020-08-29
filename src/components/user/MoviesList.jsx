@@ -20,6 +20,7 @@ const MoviesList = ({ movies, user, ratings, prefix = "" }) => {
     <div className="row justify-content-end">
       <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
         <TrailerPlayer
+          modalOpened={openTrailer}
           movieId={trailerMovieId}
           onEnded={() => setOpenTrailer(false)}
         ></TrailerPlayer>

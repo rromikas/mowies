@@ -49,10 +49,7 @@ const Modal = (props) => {
         </div>
       </div>
       <div className="row no-gutters h-100 align-items-center justify-content-center">
-        {React.cloneElement(
-          props.children,
-          Object.assign({}, props.children.props, { modalOpened: props.open })
-        )}
+        {props.children}
       </div>
     </div>
   );

@@ -85,6 +85,7 @@ const Home = ({ publicUsers, ratings, user, settings, navbarHeight }) => {
           ></div>
           <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
             <TrailerPlayer
+              modalOpened={openTrailer}
               setIsEmpty={() => setTrailerIsEmpty(true)}
               movieId={backgroundMovie.id}
               onEnded={() => setOpenTrailer(false)}
