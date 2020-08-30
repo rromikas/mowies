@@ -2,24 +2,20 @@ import React from "react";
 
 export default () => {
   return (
-    <div class="pg-viewer-wrapper">
-      <div class="pg-viewer" id="pg-viewer">
+    <div className="pg-viewer-wrapper">
+      <div className="pg-viewer" id="pg-viewer">
         <div id="docx">
-          <div class="document-container">
+          <div className="document-container">
             <p>
               <strong>TERMS AND CONDITIONS</strong>
             </p>
             <p>
               <strong>Welcome to CozyPotato!</strong>
             </p>
-            <p>
-              <a id="_gjdgxs"></a>CozyPotato Is owned and operated by SkonLabs
-              LLC.
-            </p>
+            <p>CozyPotato Is owned and operated by SkonLabs LLC.</p>
             <p>These are the terms and conditions for: </p>
             <ul>
               <li>
-                <a id="_30j0zll"></a>
                 <strong>
                   CozyPotato App (Android and iOS version – Available on Google
                   Play and App store)
@@ -107,9 +103,7 @@ export default () => {
               you are under no legal disability or contractual restriction that
               prevents you from entering into this agreement.
             </p>
-            <p>
-              <a id="_1fob9te"></a>
-            </p>
+            <p></p>
             <p>
               <strong>COZYPOTATO </strong>
             </p>
@@ -121,9 +115,8 @@ export default () => {
               ads in our application.
             </p>
             <p>
-              <a id="_3znysh7"></a>The CozyPotato application is available for
-              iOS and Android and downloadable through Google Play and Apple
-              Store.{" "}
+              The CozyPotato application is available for iOS and Android and
+              downloadable through Google Play and Apple Store.{" "}
             </p>
             <p>
               For more information about the app, please contact us, through our
@@ -180,12 +173,12 @@ export default () => {
               the personal data granted to CozyPotato.
             </p>
             <p>
-              <a id="_2et92p0"></a>CozyPotato reserves the right to terminate
-              your account or your access immediately, with or without notice to
-              you, and without liability to you, if CozyPotato believes that you
-              have breached any of these terms, furnished CozyPotato with false
-              or misleading information, or interfered with use of the website
-              or the service by others.
+              CozyPotato reserves the right to terminate your account or your
+              access immediately, with or without notice to you, and without
+              liability to you, if CozyPotato believes that you have breached
+              any of these terms, furnished CozyPotato with false or misleading
+              information, or interfered with use of the website or the service
+              by others.
             </p>
             <p>
               <strong>SUBSCRIPTIONS</strong>
@@ -202,12 +195,11 @@ export default () => {
               subscription, before placing an order.
             </p>
             <p>
-              <a id="_tyjcwt"></a>When a website user with the intent to
-              purchase a subscription on the website, places an order,
-              CozyPotato will send that user an email to confirm that the order
-              has been received. This email confirmation will be produced
-              automatically so that the user has confirmation of their
-              subscription details.
+              When a website user with the intent to purchase a subscription on
+              the website, places an order, CozyPotato will send that user an
+              email to confirm that the order has been received. This email
+              confirmation will be produced automatically so that the user has
+              confirmation of their subscription details.
             </p>
             <p>
               CozyPotato may cancel any sale and not supply services if it is
@@ -219,9 +211,8 @@ export default () => {
               <strong>PAYMENTS</strong>
             </p>
             <p>
-              <a id="_3dy6vkm"></a>All payments to CozyPotato are handled
-              securely. Subscriptions will be paid through “Stripe” (credit
-              card) and “PayPal”.
+              All payments to CozyPotato are handled securely. Subscriptions
+              will be paid through “Stripe” (credit card) and “PayPal”.
             </p>
             <p>
               Payment will be debited from your credit card or PayPal account,
@@ -230,9 +221,9 @@ export default () => {
               receipt which will be sent to the email address you provide.{" "}
             </p>
             <p>
-              <a id="_1t3h5sf"></a>Your payment information will be treated and
-              safeguarded with total security and with the exclusive purpose of
-              processing the purchase of the services. CozyPotato
+              Your payment information will be treated and safeguarded with
+              total security and with the exclusive purpose of processing the
+              purchase of the services. CozyPotato
               <strong> </strong>reserves the right to contract any payment
               platform available in the market, which treats your data for the
               exclusive purpose of processing the purchase of the services.
@@ -241,17 +232,17 @@ export default () => {
               <strong>DISCLAIMER</strong>
             </p>
             <p>
-              <a id="_4d34og8"></a>Even though we work very hard to provide you
-              with up-to-date information, we make no representations or
-              warranties of any kind (expressed or implied) about the
-              completeness, accuracy, reliability, suitability or availability
-              of any information, products, services or related movies, series,
-              documentaries, books, photographs, graphics contained on
-              CozyPotato application for any purpose. Our aim to provide you
-              with accurate information at the time of publishing, but some
-              information will understandably be less accurate as time passes.
-              Should you find any inaccurate information, please do not hesitate
-              to contact me, and we can update said info as soon as possible.
+              Even though we work very hard to provide you with up-to-date
+              information, we make no representations or warranties of any kind
+              (expressed or implied) about the completeness, accuracy,
+              reliability, suitability or availability of any information,
+              products, services or related movies, series, documentaries,
+              books, photographs, graphics contained on CozyPotato application
+              for any purpose. Our aim to provide you with accurate information
+              at the time of publishing, but some information will
+              understandably be less accurate as time passes. Should you find
+              any inaccurate information, please do not hesitate to contact me,
+              and we can update said info as soon as possible.
             </p>
             <p>
               <strong>LICENSE TO USE THE PLATFORM</strong>
@@ -285,21 +276,18 @@ export default () => {
               withheld in CozyPotato sole discretion.
             </p>
             <p>
-              <a id="_2s8eyo1"></a>
               <strong>SECURITY COMPONENTS</strong>
             </p>
             <p>
-              <a id="_17dp8vu"></a>You understand that CozyPotato and software
-              embodied within CozyPotato may include security components that
-              permit digital materials to be protected, and that use of these
-              materials is subject to usage rules set by CozyPotato and/or
-              content providers who provide content to CozyPotato platform. You
-              may not attempt to override, disable, circumvent or otherwise
-              interfere with any such security components and usage rules
-              embedded into CozyPotato.
+              You understand that CozyPotato and software embodied within
+              CozyPotato may include security components that permit digital
+              materials to be protected, and that use of these materials is
+              subject to usage rules set by CozyPotato and/or content providers
+              who provide content to CozyPotato platform. You may not attempt to
+              override, disable, circumvent or otherwise interfere with any such
+              security components and usage rules embedded into CozyPotato.
             </p>
             <p>
-              <a id="_3rdcrjn"></a>
               <strong>COPYRIGHT</strong>
             </p>
             <p>
@@ -326,12 +314,12 @@ export default () => {
               <strong>COPYRIGHT COMPLAINTS </strong>
             </p>
             <p>
-              <a id="_26in1rg"></a>CozyPotato respects the intellectual property
-              of others, and expects users to do the same. If you believe, in
-              good faith, that any materials provided on or in connection with
-              the CozyPotato website and application infringe upon your
-              copyright or other intellectual property right, please send the
-              following information to:&nbsp;
+              CozyPotato respects the intellectual property of others, and
+              expects users to do the same. If you believe, in good faith, that
+              any materials provided on or in connection with the CozyPotato
+              website and application infringe upon your copyright or other
+              intellectual property right, please send the following information
+              to:&nbsp;
             </p>
             <ol>
               <li>
@@ -341,11 +329,10 @@ export default () => {
                 included.
               </li>
               <li>
-                <a id="_lnxbz9"></a>A statement specifically identifying the
-                location of the infringing material, with enough detail that
-                CozyPotato may find it on the CozyPotato website and
-                application. &nbsp;Please note: it is not sufficient to merely
-                provide a top-level URL.
+                A statement specifically identifying the location of the
+                infringing material, with enough detail that CozyPotato may find
+                it on the CozyPotato website and application. &nbsp;Please note:
+                it is not sufficient to merely provide a top-level URL.
               </li>
               <li>Your name, address, telephone number and e-mail address.</li>
               <li>
@@ -456,18 +443,17 @@ export default () => {
               <strong>CONTENT REVIEW</strong>
             </p>
             <p>
-              <a id="_35nkun2"></a>CozyPotato does not control and does not have
-              any obligation to monitor: (a) User Content; (ii) any content made
-              available by third parties; or (iii) the use of the services by
-              its users. You acknowledge and agree that CozyPotato reserves the
-              right to, and may from time to time, monitor any and all
-              information transmitted or received through the service for
-              operational and other purposes. If at any time CozyPotato chooses
-              to monitor the content, CozyPotato still assumes no responsibility
-              or liability for content or any loss or damage incurred as a
-              result of the use of content. During monitoring, information may
-              be examined, recorded, copied, and used in accordance with our
-              Privacy Policy.
+              CozyPotato does not control and does not have any obligation to
+              monitor: (a) User Content; (ii) any content made available by
+              third parties; or (iii) the use of the services by its users. You
+              acknowledge and agree that CozyPotato reserves the right to, and
+              may from time to time, monitor any and all information transmitted
+              or received through the service for operational and other
+              purposes. If at any time CozyPotato chooses to monitor the
+              content, CozyPotato still assumes no responsibility or liability
+              for content or any loss or damage incurred as a result of the use
+              of content. During monitoring, information may be examined,
+              recorded, copied, and used in accordance with our Privacy Policy.
             </p>
             <p>
               <strong>PERSONAL DATA</strong>
@@ -484,7 +470,6 @@ export default () => {
               our Privacy Policy.
             </p>
             <p>
-              <a id="_1ksv4uv"></a>
               <strong>NON-COMMERCIAL USE</strong>
             </p>
             <p>
@@ -496,7 +481,6 @@ export default () => {
               the account.
             </p>
             <p>
-              <a id="_44sinio"></a>
               <strong>THIRD PARTIES</strong>
             </p>
             <p>
@@ -512,26 +496,24 @@ export default () => {
               and using the services.{" "}
             </p>
             <p>
-              <a id="_2jxsxqh"></a>Any dealings with third parties included
-              within or on CozyPotato involving the delivery of and payment for
-              goods and services, or any other terms, conditions, warranties, or
-              representations associated with such third parties, are solely
-              between you and that third party. CozyPotato is neither
-              responsible nor liable for any part of such dealings or
-              promotions. Any reference to any third party or the products or
-              services of any third party on CozyPotato does not constitute an
-              endorsement or recommendation of such third party or the product
-              or services of such third party by CozyPotato or any of its
-              employees, officers, independent contractors, agents or other
-              representatives. Any reference to any third party on CozyPotato is
-              provided to you for informational purposes only. CozyPotato
-              encourages you to conduct your own research and due diligence
-              regarding such third parties and their products and services.
-              While CozyPotato works to ensure the information on CozyPotato is
-              current and accurate.
+              Any dealings with third parties included within or on CozyPotato
+              involving the delivery of and payment for goods and services, or
+              any other terms, conditions, warranties, or representations
+              associated with such third parties, are solely between you and
+              that third party. CozyPotato is neither responsible nor liable for
+              any part of such dealings or promotions. Any reference to any
+              third party or the products or services of any third party on
+              CozyPotato does not constitute an endorsement or recommendation of
+              such third party or the product or services of such third party by
+              CozyPotato or any of its employees, officers, independent
+              contractors, agents or other representatives. Any reference to any
+              third party on CozyPotato is provided to you for informational
+              purposes only. CozyPotato encourages you to conduct your own
+              research and due diligence regarding such third parties and their
+              products and services. While CozyPotato works to ensure the
+              information on CozyPotato is current and accurate.
             </p>
             <p>
-              <a id="_z337ya"></a>
               <strong>PROHIBITED ACTIVITIES</strong>
             </p>
             <p>
@@ -592,8 +574,8 @@ export default () => {
                 use or copying of any Content.
               </li>
               <li>
-                <a id="_3j2qqm3"></a>Download any Content unless it’s expressly
-                made available for download by CozyPotato.
+                Download any Content unless it’s expressly made available for
+                download by CozyPotato.
               </li>
             </ol>
             <p>
@@ -708,7 +690,6 @@ export default () => {
             </p>
             <p>
               <strong>INDEMNIFICATION</strong>
-              <a id="1y810tw"></a>
             </p>
             <p>
               You agree to defend and indemnify CozyPotato from and against any
@@ -753,12 +734,10 @@ export default () => {
               <strong>INTEGRATION CLAUSE</strong>
             </p>
             <p>
-              This agreement together with the&nbsp;
-              <a href="https://www.doyouyoga.com/privacy/">Privacy Policy</a>
-              &nbsp;and any other legal notices published by CozyPotato, shall
-              constitute the entire agreement between you and CozyPotato
-              concerning and governs your use of the applicationlication,
-              website and the service.
+              This agreement together with the&nbsp; &nbsp;and any other legal
+              notices published by CozyPotato, shall constitute the entire
+              agreement between you and CozyPotato concerning and governs your
+              use of the applicationlication, website and the service.
             </p>
             <p>
               <strong>DISPUTES</strong>
