@@ -21,9 +21,7 @@ import PrivateRoute from "./utilities/PrivateRoute";
 import Navbar from "./components/user/Navbar";
 import Serie from "./components/user/Serie";
 import Footer from "./components/user/Footer";
-import CookiesPolicy from "./components/user/CookiesPolicy";
-import TermsAndConditions from "./components/user/TermsAndConditions";
-import PrivacyPolicy from "./components/user/PrivacyPolicy";
+import LegalDocument from "./components/user/LegalDocument";
 import ForgotPassword from "./components/login/ForgotPassword";
 import ResetPassword from "./components/login/ResetPassword";
 
@@ -104,17 +102,23 @@ function App() {
             <Route
               exact
               path="/terms-and-conditions"
-              component={TermsAndConditions}
+              render={() => (
+                <LegalDocument type="terms-and-conditions"></LegalDocument>
+              )}
             ></Route>
             <Route
               exact
               path="/cookies-policy"
-              component={CookiesPolicy}
+              render={() => (
+                <LegalDocument type="cookies-policy"></LegalDocument>
+              )}
             ></Route>
             <Route
               exact
               path="/privacy-policy"
-              component={PrivacyPolicy}
+              render={() => (
+                <LegalDocument type="privacy-policy"></LegalDocument>
+              )}
             ></Route>
             <Route exact path="/" component={Home}></Route>
             <Route

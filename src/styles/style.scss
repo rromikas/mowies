@@ -1241,3 +1241,70 @@ input[type="number"] {
 img {
   align-self: flex-start;
 }
+
+.pg-viewer-wrapper {
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  overflow: auto !important;
+}
+
+.pg-viewer-wrapper .pg-viewer {
+  height: 100%;
+  position: relative;
+  -webkit-box-flex: 2;
+  -ms-flex-positive: 2;
+  flex-grow: 2;
+}
+
+.pg-viewer-wrapper #docx {
+  width: 100%;
+  height: 100%;
+}
+
+.pg-viewer-wrapper blockquote,
+.pg-viewer-wrapper body,
+.pg-viewer-wrapper bodyaddress,
+.pg-viewer-wrapper center,
+.pg-viewer-wrapper dd,
+.pg-viewer-wrapper dir,
+.pg-viewer-wrapper div,
+.pg-viewer-wrapper dl,
+.pg-viewer-wrapper dt,
+.pg-viewer-wrapper fieldset,
+.pg-viewer-wrapper form,
+.pg-viewer-wrapper frame,
+.pg-viewer-wrapper frameset,
+.pg-viewer-wrapper h1,
+.pg-viewer-wrapper h2,
+.pg-viewer-wrapper h3,
+.pg-viewer-wrapper h4,
+.pg-viewer-wrapper h5,
+.pg-viewer-wrapper h6,
+.pg-viewer-wrapper hr,
+.pg-viewer-wrapper html,
+.pg-viewer-wrapper menu,
+.pg-viewer-wrapper noframes,
+.pg-viewer-wrapper ol,
+.pg-viewer-wrapper p,
+.pg-viewer-wrapper pre,
+.pg-viewer-wrapper ul {
+  display: block;
+  unicode-bidi: embed;
+}
+
+.document-container {
+  width: auto !important;
+  max-width: 700px;
+  box-sizing: border-box;
+}
+
+.document-container,
+.text-break {
+  word-break: break-word;
+}

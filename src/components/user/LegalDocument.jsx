@@ -1,27 +1,26 @@
-import React from "react";
-import FileViewer from "react-file-viewer";
-import TermsAndConditions from "../../documents/TermsAndConditions.docx";
-import PrivacyPolicy from "../../documents/PrivacyPolicy.docx";
-import CookiePolicy from "../../documents/CookiesPolicy.docx";
+import React, { useEffect } from "react";
+import PrivacyPolicy from "../../documents/PrivacyPolicy";
+import TermsAndConditions from "../../documents/TermsAndConditions";
+import CookiesPolicy from "../../documents/CookiesPolicy";
 
 const LegalDocument = ({ type }) => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [type]);
   return type ? (
-    <div className="row no-gutters px-0">
-      <div className="col-60 py-md-5 text-dark">
-        <FileViewer
-          fileType={"docx"}
-          filePath={
-            type === "privacy-policy"
-              ? PrivacyPolicy
-              : type === "cookies-policy"
-              ? CookiePolicy
-              : type === "terms-and-conditions"
-              ? TermsAndConditions
-              : ""
-          }
-          errorComponent={() => <div></div>}
-          onError={() => console.log("error doc")}
-        />
+    <div className="col-60 py-md-5 text-dark">
+      <div className="row no-gutters justify-content-center">
+        <div className="p-sm-5 p-4 bg-white">
+          {type === "privacy-policy" ? (
+            <PrivacyPolicy></PrivacyPolicy>
+          ) : type === "terms-and-conditions" ? (
+            <TermsAndConditions></TermsAndConditions>
+          ) : type === "cookies-policy" ? (
+            <CookiesPolicy></CookiesPolicy>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </div>
   ) : (
