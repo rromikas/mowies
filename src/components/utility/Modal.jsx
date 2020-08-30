@@ -42,7 +42,7 @@ const Modal = (props) => {
       >
         <div
           onClick={props.onClose}
-          className="modal-closer d-md-none d-block"
+          className="modal-closer d-md-none d-flex"
           style={{ color: mobileCloserColor }}
         >
           <BsX fontSize="24px" strokeWidth="2px"></BsX>

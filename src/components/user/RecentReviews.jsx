@@ -471,79 +471,83 @@ const RecentReviews = ({ publicUsers, user, ratings }) => {
                             <span className="text-muted col-auto mr-2">
                               {date.format(new Date(x.date), "MMM DD, YYYY")}
                             </span>
-                            <Popover
-                              arrow={false}
-                              position="top"
-                              trigger="mouseenter"
-                              theme="dark"
-                              content={(w) => (
-                                <div className="py-2 px-3 rounded bg-root">
-                                  Report Abuse
-                                </div>
-                              )}
-                            >
-                              <div
-                                className="col-auto text-muted btn-tertiary-small d-flex flex-center"
-                                onClick={async () => {
-                                  if (user.token) {
-                                    setLoadingReport(x._id);
-                                    let res = await ReportReview(user, x._id);
-                                    setLoadingReport(-1);
-                                    if (res.error) {
-                                      store.dispatch({
-                                        type: "SET_NOTIFICATION",
-                                        notification: {
-                                          title: "Error",
-                                          message: res.error,
-                                          type: "failure",
-                                        },
-                                      });
+                            {user._id !== x.author ? (
+                              <Popover
+                                arrow={false}
+                                position="top"
+                                trigger="mouseenter"
+                                theme="dark"
+                                content={(w) => (
+                                  <div className="py-2 px-3 rounded bg-root">
+                                    Report Abuse
+                                  </div>
+                                )}
+                              >
+                                <div
+                                  className="col-auto text-muted btn-tertiary-small d-flex flex-center"
+                                  onClick={async () => {
+                                    if (user.token) {
+                                      setLoadingReport(x._id);
+                                      let res = await ReportReview(user, x._id);
+                                      setLoadingReport(-1);
+                                      if (res.error) {
+                                        store.dispatch({
+                                          type: "SET_NOTIFICATION",
+                                          notification: {
+                                            title: "Error",
+                                            message: res.error,
+                                            type: "failure",
+                                          },
+                                        });
+                                      } else {
+                                        store.dispatch({
+                                          type: "SET_NOTIFICATION",
+                                          notification: {
+                                            title: "Review reported",
+                                            message:
+                                              "Review was successfully reported. We will review it soon.",
+                                            type: "success",
+                                          },
+                                        });
+                                      }
                                     } else {
                                       store.dispatch({
                                         type: "SET_NOTIFICATION",
                                         notification: {
-                                          title: "Review reported",
+                                          title: "Login required",
                                           message:
-                                            "Review was successfully reported. We will review it soon.",
-                                          type: "success",
+                                            "You need to login to report review",
+                                          type: "failure",
                                         },
                                       });
                                     }
-                                  } else {
-                                    store.dispatch({
-                                      type: "SET_NOTIFICATION",
-                                      notification: {
-                                        title: "Login required",
-                                        message:
-                                          "You need to login to report review",
-                                        type: "failure",
-                                      },
-                                    });
-                                  }
-                                }}
-                              >
-                                {loadingReport === x._id ? (
-                                  <div className="square-20">
-                                    <Loader
-                                      color={"white"}
-                                      style={{
-                                        position: "absolute",
-                                        left: "10px",
-                                        top: 0,
-                                        bottom: 0,
-                                        margin: "auto",
-                                        display: "flex",
-                                        alignItems: "center",
-                                      }}
-                                      loading={true}
-                                      size={20}
-                                    ></Loader>
-                                  </div>
-                                ) : (
-                                  <MdFlag fontSize="24px"></MdFlag>
-                                )}
-                              </div>
-                            </Popover>
+                                  }}
+                                >
+                                  {loadingReport === x._id ? (
+                                    <div className="square-20">
+                                      <Loader
+                                        color={"white"}
+                                        style={{
+                                          position: "absolute",
+                                          left: "10px",
+                                          top: 0,
+                                          bottom: 0,
+                                          margin: "auto",
+                                          display: "flex",
+                                          alignItems: "center",
+                                        }}
+                                        loading={true}
+                                        size={20}
+                                      ></Loader>
+                                    </div>
+                                  ) : (
+                                    <MdFlag fontSize="24px"></MdFlag>
+                                  )}
+                                </div>
+                              </Popover>
+                            ) : (
+                              ""
+                            )}
                           </div>
                         </div>
                       </div>

@@ -96,7 +96,7 @@ const Signup = ({ no_display_name_characters, captcha_api_key }) => {
       >
         <LegalDocument type={legalDocument}></LegalDocument>
       </Modal>
-      <div className="col-xl-50 col-60 col-lg-50 col-md-30 col-sm-40 login-rounded overflow-hidden">
+      <div className="col-xl-50 col-60 col-lg-50 col-md-35 col-sm-50 login-rounded overflow-hidden">
         <div className="row no-gutters h-100">
           <div className="col bg-dark d-lg-block d-none text-center">
             <div className="row no-gutters h-100 flex-center position-relative">
