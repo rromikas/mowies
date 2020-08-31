@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense } from "react";
 import store from "./store/store";
 import { Provider } from "react-redux";
 import { Router, Switch, Route } from "react-router-dom";
@@ -6,7 +6,6 @@ import history from "./History";
 import Home from "./components/user/Home";
 import Movie from "./components/user/Movie";
 import SearchResults from "./components/user/SearchResults";
-import AdminDashboard from "./components/admin/AdminDashboard";
 import Login from "./components/login/Login";
 import Signup from "./components/login/Signup";
 import Toast from "./components/user/Toast";
@@ -24,6 +23,9 @@ import Footer from "./components/user/Footer";
 import LegalDocument from "./components/user/LegalDocument";
 import ForgotPassword from "./components/login/ForgotPassword";
 import ResetPassword from "./components/login/ResetPassword";
+const AdminDashboard = React.lazy(() =>
+  import("./components/admin/AdminDashboard")
+);
 
 function App() {
   useEffect(() => {
@@ -138,7 +140,11 @@ function App() {
               exact
               path="/admin"
               bearerPath="/login"
-              Component={AdminDashboard}
+              Component={() => (
+                <Suspense fallback={<div>Loading...</div>}>
+                  <AdminDashboard />
+                </Suspense>
+              )}
             ></PrivateRoute>
             <Route exact path="/login" component={Login}></Route>
             <Route exact path="/signup" component={Signup}></Route>

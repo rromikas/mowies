@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import date from "date-and-time";
 import { nFormatter } from "../../utilities/Functions";
-import { Emoji } from "emoji-mart";
+import Emoji from "./Emoji";
 import { MdThumbUp, MdChatBubble, MdFlag } from "react-icons/md";
 import { BsPencil, BsTrash } from "react-icons/bs";
 import ReplyToReview from "./ReplyToReview";
@@ -23,7 +23,6 @@ import Paigination from "../utility/Paigination";
 import store from "../../store/store";
 import Loader from "../utility/Loader";
 import Popover from "../utility/Popover";
-import OkIcon from "../../images/OkIcon";
 import EditComment from "./EditComment";
 
 const MovieReviews = ({
@@ -769,23 +768,17 @@ const MovieReviews = ({
                     </div>
                     <div className="row no-gutters justify-content-between align-items-center">
                       <div className="col-auto">
-                        {rating === "ok_rate" ? (
-                          <OkIcon size={24}></OkIcon>
-                        ) : (
-                          <Emoji
-                            emoji={
-                              rating === "excellent_rate"
-                                ? "fire"
-                                : rating === "good_rate"
-                                ? "heart"
-                                : rating === "ok_rate"
-                                ? "heavy_division_sign"
-                                : "shit"
-                            }
-                            set="facebook"
-                            size={24}
-                          />
-                        )}
+                        <Emoji
+                          emoji={
+                            rating === "excellent_rate"
+                              ? "fire"
+                              : rating === "good_rate"
+                              ? "heart"
+                              : rating === "ok_rate"
+                              ? "heavy_division_sign"
+                              : "shit"
+                          }
+                        />
                       </div>
                       <div className="col-auto">
                         <div className="row no-gutters align-items-center">

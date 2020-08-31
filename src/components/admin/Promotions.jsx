@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Select from "../utility/Select";
 import Checkbox from "../utility/Checkbox";
-import { Emoji } from "emoji-mart";
+import Emoji from "../user/Emoji";
 import Pagination from "../utility/Paigination";
 import { BsSearch } from "react-icons/bs";
 import date from "date-and-time";
@@ -13,7 +13,6 @@ import {
 import store from "../../store/store";
 import { connect } from "react-redux";
 import history from "../../History";
-import OkIcon from "../../images/OkIcon";
 
 const Promotions = ({
   setEditPromotion,
@@ -448,27 +447,17 @@ const Promotions = ({
                                 }`}
                               >
                                 {x.content.rating ? (
-                                  x.content.rating === "ok_rate" ? (
-                                    <div style={{ marginTop: "-4px" }}>
-                                      <OkIcon size={24}></OkIcon>
-                                    </div>
-                                  ) : (
-                                    <div style={{ marginBottom: "-6px" }}>
-                                      <Emoji
-                                        emoji={
-                                          x.content.rating === "excellent_rate"
-                                            ? "fire"
-                                            : x.content.rating === "good_rate"
-                                            ? "heart"
-                                            : x.content.rating === "ok_rate"
-                                            ? "heavy_division_sign"
-                                            : "shit"
-                                        }
-                                        set="facebook"
-                                        size={24}
-                                      />
-                                    </div>
-                                  )
+                                  <Emoji
+                                    emoji={
+                                      x.content.rating === "excellent_rate"
+                                        ? "fire"
+                                        : x.content.rating === "good_rate"
+                                        ? "heart"
+                                        : x.content.rating === "ok_rate"
+                                        ? "heavy_division_sign"
+                                        : "shit"
+                                    }
+                                  />
                                 ) : (
                                   "-"
                                 )}

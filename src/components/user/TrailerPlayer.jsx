@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ReactPlayer from "react-player";
+import ReactPlayer from "react-player/youtube";
 import "simplebar/dist/simplebar.min.css";
 import { GetTrailers } from "../../server/MoviesApi";
 import { connect } from "react-redux";

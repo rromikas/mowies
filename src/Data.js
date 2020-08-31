@@ -1,5 +1,5 @@
 import React from "react";
-import { Emoji } from "emoji-mart";
+import Emoji from "./components/user/Emoji";
 import OkIcon from "./images/OkIcon";
 
 export const OfficialMoviesGenres = [
@@ -136,7 +136,7 @@ export const Ratings = [
     name: "excellent_rate",
     element: (
       <div className="text-center py-3" style={{ lineHeight: "100%" }}>
-        <Emoji emoji="fire" set="facebook" size={24} />
+        <Emoji emoji="fire" />
       </div>
     ),
   },
@@ -144,7 +144,7 @@ export const Ratings = [
     name: "good_rate",
     element: (
       <div className="text-center py-3" style={{ lineHeight: "100%" }}>
-        <Emoji emoji="heart" set="facebook" size={24} />
+        <Emoji emoji="heart" />
       </div>
     ),
   },
@@ -160,7 +160,7 @@ export const Ratings = [
     name: "bad_rate",
     element: (
       <div className="text-center py-3" style={{ lineHeight: "100%" }}>
-        <Emoji emoji="shit" set="facebook" size={24} />
+        <Emoji emoji="shit" />
       </div>
     ),
   },

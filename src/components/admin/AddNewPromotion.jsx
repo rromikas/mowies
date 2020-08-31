@@ -8,12 +8,11 @@ import date from "date-and-time";
 import Pagination from "../utility/Paigination";
 import { Swipeable } from "react-swipeable";
 import Checkbox from "../utility/Checkbox";
-import { Emoji } from "emoji-mart";
+import Emoji from "../user/Emoji";
 import { GetReviews, CreatePromotions } from "../../server/DatabaseApi";
 import { connect } from "react-redux";
 import store from "../../store/store";
 import Loader from "../utility/Loader";
-import OkIcon from "../../images/OkIcon";
 
 const AddNewPromotion = ({ publicUsers, getBack, ratings }) => {
   const [promotion, setPromotion] = useState({
@@ -396,8 +395,11 @@ const AddNewPromotion = ({ publicUsers, getBack, ratings }) => {
                     <th className="d-table-cell d-xl-none table-header text-truncate">
                       {columns[lastVisibleColumn]}
                     </th>
-                    {columns.map((c,p) => (
-                      <th className="d-none d-xl-table-cell table-header text-truncate" key={`x-col-${p}`}>
+                    {columns.map((c, p) => (
+                      <th
+                        className="d-none d-xl-table-cell table-header text-truncate"
+                        key={`x-col-${p}`}
+                      >
                         <div>{c}</div>
                       </th>
                     ))}
@@ -512,27 +514,17 @@ const AddNewPromotion = ({ publicUsers, getBack, ratings }) => {
                             }`}
                           >
                             {x.rating ? (
-                              x.rating === "ok_rate" ? (
-                                <div style={{ marginTop: "-4px" }}>
-                                  <OkIcon size={24}></OkIcon>
-                                </div>
-                              ) : (
-                                <div style={{ marginBottom: "-6px" }}>
-                                  <Emoji
-                                    emoji={
-                                      x.rating === "excellent_rate"
-                                        ? "fire"
-                                        : x.rating === "good_rate"
-                                        ? "heart"
-                                        : x.rating === "ok_rate"
-                                        ? "heavy_division_sign"
-                                        : "shit"
-                                    }
-                                    set="facebook"
-                                    size={24}
-                                  />
-                                </div>
-                              )
+                              <Emoji
+                                emoji={
+                                  x.rating === "excellent_rate"
+                                    ? "fire"
+                                    : x.rating === "good_rate"
+                                    ? "heart"
+                                    : x.rating === "ok_rate"
+                                    ? "heavy_division_sign"
+                                    : "shit"
+                                }
+                              />
                             ) : (
                               "-"
                             )}

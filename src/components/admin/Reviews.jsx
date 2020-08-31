@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Select from "../utility/Select";
 import Checkbox from "../utility/Checkbox";
-import { Emoji } from "emoji-mart";
+import Emoji from "../user/Emoji";
 import Pagination from "../utility/Paigination";
 import { BsSearch } from "react-icons/bs";
 import date from "date-and-time";
@@ -10,7 +10,6 @@ import { GetReviews, DeleteMultipleReviews } from "../../server/DatabaseApi";
 import { connect } from "react-redux";
 import store from "../../store/store";
 import history from "../../History";
-import OkIcon from "../../images/OkIcon";
 
 const Reviews = ({
   setEditReviewSection,
@@ -486,27 +485,17 @@ const Reviews = ({
                                 : "d-none d-xl-table-cell"
                             }`}
                           >
-                            {x.rating === "ok_rate" ? (
-                              <div style={{ marginTop: "-4px" }}>
-                                <OkIcon size={24}></OkIcon>
-                              </div>
-                            ) : (
-                              <div style={{ marginBottom: "-6px" }}>
-                                <Emoji
-                                  emoji={
-                                    x.rating === "excellent_rate"
-                                      ? "fire"
-                                      : x.rating === "good_rate"
-                                      ? "heart"
-                                      : x.rating === "ok_rate"
-                                      ? "heavy_division_sign"
-                                      : "shit"
-                                  }
-                                  set="facebook"
-                                  size={24}
-                                />
-                              </div>
-                            )}
+                            <Emoji
+                              emoji={
+                                x.rating === "excellent_rate"
+                                  ? "fire"
+                                  : x.rating === "good_rate"
+                                  ? "heart"
+                                  : x.rating === "ok_rate"
+                                  ? "heavy_division_sign"
+                                  : "shit"
+                              }
+                            />
                           </td>
                           <td
                             className={`${

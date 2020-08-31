@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Emoji } from "emoji-mart";
+import Emoji from "./Emoji";
 import history from "../../History";
 import date from "date-and-time";
 import { MdThumbUp, MdChatBubble } from "react-icons/md";
@@ -112,21 +112,17 @@ const ReviewsListMinified = ({ reviews, publicUsers, ratings }) => {
                 <div className="col-auto">
                   <div className="row no-gutters">
                     {x.rating ? (
-                      <div style={{ marginBottom: "-6px" }}>
-                        <Emoji
-                          emoji={
-                            x.rating === "excellent_rate"
-                              ? "fire"
-                              : x.rating === "good_rate"
-                              ? "heart"
-                              : x.rating === "ok_rate"
-                              ? "heavy-division-sign"
-                              : "shit"
-                          }
-                          set="facebook"
-                          size={24}
-                        />
-                      </div>
+                      <Emoji
+                        emoji={
+                          x.rating === "excellent_rate"
+                            ? "fire"
+                            : x.rating === "good_rate"
+                            ? "heart"
+                            : x.rating === "ok_rate"
+                            ? "heavy-division-sign"
+                            : "shit"
+                        }
+                      />
                     ) : (
                       ""
                     )}

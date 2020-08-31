@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import Collapse from "@material-ui/core/Collapse";
 import { connect } from "react-redux";
 import { GetReviewComments } from "../../server/DatabaseApi";
-import { Emoji } from "emoji-mart";
-import OkIcon from "../../images/OkIcon";
+import Emoji from "./Emoji";
 import Paigination from "../utility/Paigination";
 import history from "../../History";
 import date from "date-and-time";
@@ -140,27 +139,17 @@ const ReviewsList = ({ reviews, publicUsers, ratings }) => {
                   <div className="col-auto">
                     <div className="row no-gutters">
                       {x.rating ? (
-                        x.rating === "ok_rate" ? (
-                          <div style={{ marginTop: "-4px" }}>
-                            <OkIcon size={24}></OkIcon>
-                          </div>
-                        ) : (
-                          <div style={{ marginBottom: "-6px" }}>
-                            <Emoji
-                              emoji={
-                                x.rating === "excellent_rate"
-                                  ? "fire"
-                                  : x.rating === "good_rate"
-                                  ? "heart"
-                                  : x.rating === "ok_rate"
-                                  ? "heavy-division-sign"
-                                  : "shit"
-                              }
-                              set="facebook"
-                              size={24}
-                            />
-                          </div>
-                        )
+                        <Emoji
+                          emoji={
+                            x.rating === "excellent_rate"
+                              ? "fire"
+                              : x.rating === "good_rate"
+                              ? "heart"
+                              : x.rating === "ok_rate"
+                              ? "heavy-division-sign"
+                              : "shit"
+                          }
+                        />
                       ) : (
                         ""
                       )}
