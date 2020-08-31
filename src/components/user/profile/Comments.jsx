@@ -10,6 +10,7 @@ import Popover from "../../utility/Popover";
 import { DeleteComment } from "../../../server/DatabaseApi";
 import store from "../../../store/store";
 import Loader from "../../utility/Loader";
+import { confirm } from "../../../utilities/Functions";
 
 const Comments = ({
   comments,
@@ -32,6 +33,102 @@ const Comments = ({
 
   //to avoid scroll into view on first render
   let realPage = page === -1 ? 1 : page;
+
+  const renderEditOptions = (element) => {
+    return (
+      <React.Fragment>
+        <Popover
+          arrow={false}
+          position="top"
+          trigger="mouseenter"
+          theme="dark"
+          content={(w) => (
+            <div className="py-2 px-3 rounded bg-root">Edit comment</div>
+          )}
+        >
+          <div
+            className="col-auto text-muted btn-tertiary-small d-flex flex-center"
+            onClick={async () => {
+              setMovie({
+                release_date: ratings[element.movie_id].movie_release_date,
+                title: ratings[element.movie_id].movie_title,
+                id: ratings[element.movie_id].tmdb_id,
+              });
+              setComment(element);
+              setReplyOpen(true);
+            }}
+          >
+            <BsPencil fontSize="24px"></BsPencil>
+          </div>
+        </Popover>
+        <Popover
+          arrow={false}
+          position="top"
+          trigger="mouseenter"
+          theme="dark"
+          content={(w) => (
+            <div className="py-2 px-3 rounded bg-root">Delete comment</div>
+          )}
+        >
+          <div
+            className="col-auto text-muted btn-tertiary-small d-flex flex-center"
+            onClick={async () => {
+              if (
+                await confirm({
+                  confirmation: "Do you really want to delete comment?",
+                })
+              ) {
+                setDeletingComment(element._id);
+                let res = await DeleteComment(element._id);
+                setDeletingComment(-1);
+                if (res.error) {
+                  store.dispatch({
+                    type: "SET_NOTIFICATION",
+                    notification: {
+                      title: `Couldn't delete comment`,
+                      type: "failure",
+                      message: res.error,
+                    },
+                  });
+                } else {
+                  store.dispatch({
+                    type: "SET_NOTIFICATION",
+                    notification: {
+                      title: `Success`,
+                      type: "success",
+                      message: "Comment successfully deleted",
+                    },
+                  });
+                  refreshComments();
+                }
+              }
+            }}
+          >
+            {deletingComment === element._id ? (
+              <div className="square-20">
+                <Loader
+                  color={"white"}
+                  style={{
+                    position: "absolute",
+                    left: "10px",
+                    top: 0,
+                    bottom: 0,
+                    margin: "auto",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                  loading={true}
+                  size={20}
+                ></Loader>
+              </div>
+            ) : (
+              <BsTrash fontSize="24px"></BsTrash>
+            )}
+          </div>
+        </Popover>
+      </React.Fragment>
+    );
+  };
 
   return (
     <div className="row no-gutters text-white">
@@ -76,30 +173,32 @@ const Comments = ({
                 <div className="col d-flex flex-column">
                   <div className="row no-gutters justify-content-between align-items-center mb-2 flex-grow-0">
                     <div className="col-60 d-block d-sm-none mb-3">
-                      <div className="row no-gutters mb-1">
-                        <div className="col-auto pr-3">
-                          <div
-                            className="square-70 rounded bg-image"
-                            style={{
-                              backgroundImage: `url(https://image.tmdb.org/t/p/w154${
-                                ratings[x.movie_id].movie_poster
-                              })`,
-                            }}
-                          ></div>
-                          {/* <img
-                            onClick={() => history.push(`/movie/${x.id}`)}
-                            width="100%"
-                            style={{ borderRadius: "13px" }}
-                            src={`https://image.tmdb.org/t/p/w154${x.movie_poster}`}
-                          ></img> */}
+                      <div className="row no-gutters mb-1 justify-content-between">
+                        <div className="col-auto">
+                          <div className="row no-gutters">
+                            <div className="col-auto pr-3">
+                              <div
+                                className="square-70 rounded bg-image"
+                                style={{
+                                  backgroundImage: `url(https://image.tmdb.org/t/p/w154${
+                                    ratings[x.movie_id].movie_poster
+                                  })`,
+                                }}
+                              ></div>
+                            </div>
+                            <div className="col">
+                              <div className="row no-gutters text-white mb-0">
+                                {ratings[x.movie_id].movie_title} (
+                                {ratings[
+                                  x.movie_id
+                                ].movie_release_date.substring(0, 4)}
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <div className="col">
-                          <div className="row no-gutters text-white mb-0">
-                            {ratings[x.movie_id].movie_title} (
-                            {ratings[x.movie_id].movie_release_date.substring(
-                              0,
-                              4
-                            )}
+                        <div className="col-auto d-block d-sm-none">
+                          <div className="row no-gutters">
+                            {owner ? renderEditOptions(x) : ""}
                           </div>
                         </div>
                       </div>
@@ -131,104 +230,15 @@ const Comments = ({
                     </div>
                     <div className="col-auto">
                       <div className="row no-gutters text-white">
-                        <span className="mr-2 col-auto">Commented on</span>
+                        <span className="mr-2 col-auto d-md-block d-none">
+                          Commented on
+                        </span>
                         <span className="text-muted col-auto mr-2">
                           {date.format(new Date(x.date), "MMM DD, YYYY")}
                         </span>
-                        {owner ? (
-                          <React.Fragment>
-                            <Popover
-                              arrow={false}
-                              position="top"
-                              trigger="mouseenter"
-                              theme="dark"
-                              content={(w) => (
-                                <div className="py-2 px-3 rounded bg-root">
-                                  Edit comment
-                                </div>
-                              )}
-                            >
-                              <div
-                                className="col-auto text-muted btn-tertiary-small d-flex flex-center"
-                                onClick={async () => {
-                                  setMovie({
-                                    release_date:
-                                      ratings[x.movie_id].movie_release_date,
-                                    title: ratings[x.movie_id].movie_title,
-                                    id: ratings[x.movie_id].tmdb_id,
-                                  });
-                                  setComment(x);
-                                  setReplyOpen(true);
-                                }}
-                              >
-                                <BsPencil fontSize="24px"></BsPencil>
-                              </div>
-                            </Popover>
-                            <Popover
-                              arrow={false}
-                              position="top"
-                              trigger="mouseenter"
-                              theme="dark"
-                              content={(w) => (
-                                <div className="py-2 px-3 rounded bg-root">
-                                  Delete comment
-                                </div>
-                              )}
-                            >
-                              <div
-                                className="col-auto text-muted btn-tertiary-small d-flex flex-center"
-                                onClick={async () => {
-                                  setDeletingComment(x._id);
-                                  let res = await DeleteComment(x._id);
-                                  setDeletingComment(-1);
-                                  if (res.error) {
-                                    store.dispatch({
-                                      type: "SET_NOTIFICATION",
-                                      notification: {
-                                        title: `Couldn't delete comment`,
-                                        type: "failure",
-                                        message: res.error,
-                                      },
-                                    });
-                                  } else {
-                                    store.dispatch({
-                                      type: "SET_NOTIFICATION",
-                                      notification: {
-                                        title: `Success`,
-                                        type: "success",
-                                        message: "Comment successfully deleted",
-                                      },
-                                    });
-                                    refreshComments();
-                                  }
-                                }}
-                              >
-                                {deletingComment === x._id ? (
-                                  <div className="square-20">
-                                    <Loader
-                                      color={"white"}
-                                      style={{
-                                        position: "absolute",
-                                        left: "10px",
-                                        top: 0,
-                                        bottom: 0,
-                                        margin: "auto",
-                                        display: "flex",
-                                        alignItems: "center",
-                                      }}
-                                      loading={true}
-                                      size={20}
-                                    ></Loader>
-                                  </div>
-                                ) : (
-                                  <BsTrash fontSize="24px"></BsTrash>
-                                )}
-                              </div>
-                            </Popover>
-                          </React.Fragment>
-                        ) : (
-                          ""
-                        )}
+                        <span className="d-none d-sm-flex">
+                          {owner ? renderEditOptions(x) : ""}
+                        </span>
                       </div>
                     </div>
                   </div>

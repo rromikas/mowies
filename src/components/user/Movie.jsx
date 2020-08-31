@@ -145,7 +145,7 @@ const Movie = (props) => {
             <div
               className="position-absolute w-100 h-100"
               style={{
-                background: "linear-gradient(rgba(0, 0, 0, 0.3) 90%, black)",
+                background: "linear-gradient(rgba(0, 0, 0, 0.6) 90%, black)",
                 top: 0,
                 left: 0,
               }}

@@ -178,6 +178,15 @@ const MoviesList = ({ movies, user, ratings, prefix = "" }) => {
                 </div>
                 <div className="row no-gutters d-flex d-sm-none">
                   <WishlistButton movie={x} user={user}></WishlistButton>
+                  <div className="pr-1"></div>
+                  <MoveToWatchedButton
+                    refreshProfile={() => {
+                      setMovie(x);
+                      setAddReviewOpen(true);
+                    }}
+                    user={user}
+                    movieId={x.id}
+                  ></MoveToWatchedButton>
                 </div>
               </div>
             </div>

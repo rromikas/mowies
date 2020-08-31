@@ -1,3 +1,8 @@
+import { createConfirmation } from "react-confirm";
+import Confirm from "../components/utility/Confirm";
+
+export const confirm = createConfirmation(Confirm);
+
 export const nFormatter = (num, digits) => {
   var si = [
     { value: 1, symbol: "" },

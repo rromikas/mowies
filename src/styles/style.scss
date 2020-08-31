@@ -170,28 +170,31 @@ body {
   line-height: $main-btn-line-height;
   height: $main-btn-height;
   border-radius: 4px;
+  border: 2px solid transparent;
   user-select: none;
   cursor: pointer;
   transition: all 0.3s;
   text-align: center;
 }
 
-.btn-custom-iconic {
+.btn-custom-iconic-primary {
   background: $primary;
   color: white;
+}
+
+.btn-custom-iconic {
   width: 44px;
 }
 
 .btn-custom-danger {
   @extend .btn-danger;
-  width: 44px;
 }
 
-.btn-custom-iconic:hover {
+.btn-custom-iconic-primary:hover {
   background: darken($color: $primary, $amount: 10);
 }
 
-.btn-custom-iconic:active {
+.btn-custom-iconic-primary:active {
   background: darken($color: $primary, $amount: 20);
 }
 
@@ -544,8 +547,15 @@ body {
   }
 }
 
+@media only screen and (max-width: 567px) {
+  .profile-stats-title {
+    font-size: 12px !important;
+  }
+}
+
 .profile-stats-title {
   justify-content: center;
+  font-size: 14px;
 }
 
 @media only screen and (min-width: 567px) {
@@ -964,13 +974,22 @@ input[type="number"]::-webkit-outer-spin-button {
 .toast-pro {
   background: lighten($color: $over-root, $amount: 5);
   border-radius: 0.5rem;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.38);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.38);
   overflow: hidden;
   position: fixed;
   left: 50px;
   bottom: 50px;
   transition: all 0.5s;
   z-index: 99;
+}
+
+.confirm-pro {
+  background: lighten($color: $over-root, $amount: 5);
+  border-radius: 0.5rem;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.38);
+  animation-name: fadein;
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
 }
 
 .toast-pro-title {
@@ -1307,4 +1326,8 @@ img {
 .document-container,
 .text-break {
   word-break: break-word;
+}
+
+.corners-20 {
+  border-radius: 20px;
 }

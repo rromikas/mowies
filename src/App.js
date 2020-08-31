@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import store from "./store/store";
 import { Provider } from "react-redux";
 import { Router, Switch, Route } from "react-router-dom";
@@ -23,11 +23,15 @@ import Footer from "./components/user/Footer";
 import LegalDocument from "./components/user/LegalDocument";
 import ForgotPassword from "./components/login/ForgotPassword";
 import ResetPassword from "./components/login/ResetPassword";
+import LogoLoader from "./images/LogoLoader.gif";
+
 const AdminDashboard = React.lazy(() =>
   import("./components/admin/AdminDashboard")
 );
 
 function App() {
+  const [initialLoadCompleted, setInitialLoadCompleted] = useState(false);
+
   useEffect(() => {
     async function getData() {
       GetSettings((settings) => {
@@ -56,6 +60,7 @@ function App() {
             },
           });
         }
+        setInitialLoadCompleted(true);
       });
 
       GetAllRatings((ratingsArr) => {
@@ -99,7 +104,7 @@ function App() {
     <Provider store={store}>
       <Router history={history}>
         <div className="container-fluid px-0">
-          <Navbar></Navbar>
+          {initialLoadCompleted ? <Navbar></Navbar> : ""}
           <Switch>
             <Route
               exact
@@ -122,7 +127,23 @@ function App() {
                 <LegalDocument type="privacy-policy"></LegalDocument>
               )}
             ></Route>
-            <Route exact path="/" component={Home}></Route>
+            <Route
+              exact
+              path="/"
+              render={() => {
+                return initialLoadCompleted ? (
+                  <Home></Home>
+                ) : (
+                  <div className="row no-gutters justify-content-center">
+                    <img
+                      alt="loading"
+                      height={window.innerHeight}
+                      src={LogoLoader}
+                    ></img>
+                  </div>
+                );
+              }}
+            ></Route>
             <Route
               exact
               path="/movie/:movieId/:reviewId/:commentId"
@@ -165,7 +186,7 @@ function App() {
             ></Route>
             <Route exact path="/profile/:userId" component={Profile}></Route>
           </Switch>
-          <Footer></Footer>
+          {initialLoadCompleted ? <Footer></Footer> : ""}
           <Toast></Toast>
         </div>
       </Router>

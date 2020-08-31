@@ -75,7 +75,7 @@ const MoveToWatchedButton = ({
       trigger="mouseenter"
     >
       <div
-        className="btn-custom btn-custom-iconic"
+        className="btn-custom btn-custom-iconic btn-custom-iconic-primary"
         style={{ pointerEvents: "all" }}
       >
         {loading ? (

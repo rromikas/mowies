@@ -28,6 +28,7 @@ const MoviesList = ({
     <React.Fragment>
       <Modal open={openTrailer} onClose={() => setOpenTrailer(false)}>
         <TrailerPlayer
+          modalOpened={openTrailer}
           movieId={trailerMovieId}
           onEnded={() => setOpenTrailer(false)}
         ></TrailerPlayer>

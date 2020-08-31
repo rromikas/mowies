@@ -175,7 +175,7 @@ const Profile = (props) => {
                 <div className="row no-gutters mb-3 profile-stats-title">
                   Wishlist
                 </div>
-                <div className="row no-gutters text-lift justify-content-end">
+                <div className="row no-gutters text-lift justify-content-sm-end justify-content-center">
                   {profileData.wishlist.length}
                 </div>
               </div>
@@ -183,7 +183,7 @@ const Profile = (props) => {
                 <div className="row no-gutters mb-3 profile-stats-title">
                   Watched
                 </div>
-                <div className="row no-gutters text-lift justify-content-end">
+                <div className="row no-gutters text-lift justify-content-sm-end justify-content-center">
                   {profileData.watchedlist.length}
                 </div>
               </div>
@@ -191,7 +191,7 @@ const Profile = (props) => {
                 <div className="row no-gutters mb-3 profile-stats-title">
                   Reviews
                 </div>
-                <div className="row no-gutters text-lift justify-content-end profile-stats-title">
+                <div className="row no-gutters text-lift justify-content-sm-end justify-content-center">
                   {profileData.reviews.length}
                 </div>
               </div>
@@ -199,7 +199,7 @@ const Profile = (props) => {
                 <div className="row no-gutters mb-3 profile-stats-title">
                   Comments
                 </div>
-                <div className="row no-gutters text-lift justify-content-end">
+                <div className="row no-gutters text-lift justify-content-sm-end justify-content-center">
                   {profileData.comments.length}
                 </div>
               </div>

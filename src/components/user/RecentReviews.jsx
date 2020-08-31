@@ -148,78 +148,83 @@ const RecentReviews = ({ publicUsers, user, ratings }) => {
                         </div>
                       </div>
                     </div>
-                    <Popover
-                      arrow={false}
-                      position="top"
-                      trigger="mouseenter"
-                      theme="dark"
-                      content={(w) => (
-                        <div className="py-2 px-3 rounded bg-over-root">
-                          Report Abuse
-                        </div>
-                      )}
-                    >
-                      <div
-                        className="col-auto text-muted btn-tertiary-small d-flex flex-center"
-                        onClick={async () => {
-                          if (user.token) {
-                            setLoadingReport(x);
-                            let res = await ReportComment(user, x);
-                            setLoadingReport(-1);
-                            if (res.error) {
-                              store.dispatch({
-                                type: "SET_NOTIFICATION",
-                                notification: {
-                                  title: "Error",
-                                  message: res.error,
-                                  type: "failure",
-                                },
-                              });
+                    {user._id !== comments[review._id][x].author ? (
+                      <Popover
+                        arrow={false}
+                        position="top"
+                        trigger="mouseenter"
+                        theme="dark"
+                        content={(w) => (
+                          <div className="py-2 px-3 rounded bg-over-root">
+                            Report Abuse
+                          </div>
+                        )}
+                      >
+                        <div
+                          className="col-auto text-muted btn-tertiary-small d-flex flex-center"
+                          onClick={async () => {
+                            if (user.token) {
+                              setLoadingReport(x);
+                              let res = await ReportComment(user, x);
+                              setLoadingReport(-1);
+                              if (res.error) {
+                                store.dispatch({
+                                  type: "SET_NOTIFICATION",
+                                  notification: {
+                                    title: "Error",
+                                    message: res.error,
+                                    type: "failure",
+                                  },
+                                });
+                              } else {
+                                store.dispatch({
+                                  type: "SET_NOTIFICATION",
+                                  notification: {
+                                    title: "Comment reported",
+                                    message:
+                                      "Comment was successfully reported. We will review it soon.",
+                                    type: "success",
+                                  },
+                                });
+                              }
                             } else {
                               store.dispatch({
                                 type: "SET_NOTIFICATION",
                                 notification: {
-                                  title: "Comment reported",
+                                  title: "Login required",
                                   message:
-                                    "Comment was successfully reported. We will review it soon.",
-                                  type: "success",
+                                    "You need to login to report comment",
+                                  type: "failure",
                                 },
                               });
                             }
-                          } else {
-                            store.dispatch({
-                              type: "SET_NOTIFICATION",
-                              notification: {
-                                title: "Login required",
-                                message: "You need to login to report comment",
-                                type: "failure",
-                              },
-                            });
-                          }
-                        }}
-                      >
-                        {loadingReport === x ? (
-                          <div className="square-20">
-                            <Loader
-                              color={"white"}
-                              style={{
-                                position: "absolute",
-                                left: "10px",
-                                top: 0,
-                                bottom: 0,
-                                margin: "auto",
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                              loading={true}
-                              size={20}
-                            ></Loader>
-                          </div>
-                        ) : (
-                          <MdFlag fontSize="24px"></MdFlag>
-                        )}
-                      </div>
-                    </Popover>
+                          }}
+                        >
+                          {loadingReport === x ? (
+                            <div className="square-20">
+                              <Loader
+                                color={"white"}
+                                style={{
+                                  position: "absolute",
+                                  left: "10px",
+                                  top: 0,
+                                  bottom: 0,
+                                  margin: "auto",
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
+                                loading={true}
+                                size={20}
+                              ></Loader>
+                            </div>
+                          ) : (
+                            <MdFlag fontSize="24px"></MdFlag>
+                          )}
+                        </div>
+                      </Popover>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
               </div>
@@ -387,12 +392,6 @@ const RecentReviews = ({ publicUsers, user, ratings }) => {
                       }`}
                     ></img>
                   </div>
-                  {/* <div className="row no-gutters text-white h6 mb-0">
-                    {x.movie_title} ({x.movie_release_date.substring(0, 4)})
-                  </div>
-                  <div className="row no-gutters text-muted">
-                    <div className="text-truncate">{x.movie_genres}</div>
-                  </div> */}
                 </div>
                 <div className="col d-flex flex-column">
                   <div className="row no-gutters justify-content-between align-items-center mb-2 flex-grow-0">
@@ -400,6 +399,7 @@ const RecentReviews = ({ publicUsers, user, ratings }) => {
                       <div className="row no-gutters mb-1">
                         <div className="col-auto pr-3">
                           <div
+                            onClick={() => history.push(`/movie/${x.movie_id}`)}
                             className="square-70 rounded bg-image"
                             style={{
                               backgroundImage: `url(https://image.tmdb.org/t/p/w154${
@@ -409,12 +409,6 @@ const RecentReviews = ({ publicUsers, user, ratings }) => {
                               })`,
                             }}
                           ></div>
-                          {/* <img
-                            onClick={() => history.push(`/movie/${x.id}`)}
-                            width="100%"
-                            style={{ borderRadius: "13px" }}
-                            src={`https://image.tmdb.org/t/p/w154${x.movie_poster}`}
-                          ></img> */}
                         </div>
                         <div className="col">
                           <div className="row no-gutters text-white mb-0">
@@ -429,11 +423,6 @@ const RecentReviews = ({ publicUsers, user, ratings }) => {
                               : ""}
                             )
                           </div>
-                          {/* <div className="row no-gutters text-muted">
-                            <div className="text-truncate">
-                              {x.movie_genres}
-                            </div>
-                          </div> */}
                         </div>
                       </div>
                     </div>

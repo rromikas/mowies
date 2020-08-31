@@ -12,6 +12,7 @@ import { BsPencil, BsTrash } from "react-icons/bs";
 import Popover from "../../utility/Popover";
 import store from "../../../store/store";
 import Loader from "../../utility/Loader";
+import { confirm } from "../../../utilities/Functions";
 
 const Reviews = ({
   reviews,
@@ -58,6 +59,126 @@ const Reviews = ({
   //to avoid scroll into view on first render
   let realPage = page === -1 ? 1 : page;
 
+  const renderEditOptions = (element) => {
+    return (
+      <React.Fragment>
+        <Popover
+          arrow={false}
+          position="top"
+          trigger="mouseenter"
+          theme="dark"
+          content={(w) => (
+            <div className="py-2 px-3 rounded bg-root">Edit review</div>
+          )}
+        >
+          <div
+            className="col-auto text-muted btn-tertiary-small d-flex flex-center"
+            onClick={async () => {
+              setMovie({
+                release_date: ratings[element.movie_id].movie_release_date,
+                title: ratings[element.movie_id].movie_title,
+                id: ratings[element.movie_id].tmdb_id,
+              });
+              setReview(element);
+              setAddReviewOpen(true);
+            }}
+          >
+            <BsPencil fontSize="24px"></BsPencil>
+          </div>
+        </Popover>
+        <Popover
+          arrow={false}
+          position="top"
+          trigger="mouseenter"
+          theme="dark"
+          content={(w) => (
+            <div className="py-2 px-3 rounded bg-root">Delete review</div>
+          )}
+        >
+          <div
+            className="col-auto text-muted btn-tertiary-small d-flex flex-center"
+            onClick={async () => {
+              try {
+                if (
+                  await confirm({
+                    confirmation: "Do you really want to delete review?",
+                  })
+                ) {
+                  setDeletingReview(element._id);
+                  let res = await DeleteReview(element);
+                  setDeletingReview(-1);
+                  if (res.error) {
+                    store.dispatch({
+                      type: "SET_NOTIFICATION",
+                      notification: {
+                        title: `Couldn't delete comment`,
+                        type: "failure",
+                        message: res.error,
+                      },
+                    });
+                  } else {
+                    store.dispatch({
+                      type: "SET_NOTIFICATION",
+                      notification: {
+                        title: `Success`,
+                        type: "success",
+                        message: "Comment successfully deleted",
+                      },
+                    });
+
+                    let rating = ratings[element.movie_id];
+                    let userInd = rating[element.rating].findIndex(
+                      (r) => r === element.author
+                    );
+                    if (userInd !== -1) {
+                      rating[element.rating].splice(userInd, 1);
+                    }
+                    store.dispatch({
+                      type: "UPDATE_RATINGS",
+                      rating: { [element.movie_id]: rating },
+                    });
+
+                    let userRatings = { ...user.ratings };
+                    delete userRatings[element.movie_id];
+                    store.dispatch({
+                      type: "UPDATE_USER",
+                      userProperty: {
+                        ratings: userRatings,
+                      },
+                    });
+                    refreshReviews();
+                  }
+                } else {
+                }
+              } catch (er) {}
+            }}
+          >
+            {deletingReview === element._id ? (
+              <div className="square-20">
+                <Loader
+                  color={"white"}
+                  style={{
+                    position: "absolute",
+                    left: "10px",
+                    top: 0,
+                    bottom: 0,
+                    margin: "auto",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                  loading={true}
+                  size={20}
+                ></Loader>
+              </div>
+            ) : (
+              <BsTrash fontSize="24px"></BsTrash>
+            )}
+          </div>
+        </Popover>
+      </React.Fragment>
+    );
+  };
+
   return (
     <div className="row no-gutters text-white">
       <AddReview
@@ -103,24 +224,33 @@ const Reviews = ({
                     <div className="col d-flex flex-column">
                       <div className="row no-gutters justify-content-between align-items-center mb-2 flex-grow-0">
                         <div className="col-60 d-block d-sm-none mb-3">
-                          <div className="row no-gutters mb-1">
-                            <div className="col-auto pr-3">
-                              <div
-                                className="square-70 rounded bg-image"
-                                style={{
-                                  backgroundImage: `url(https://image.tmdb.org/t/p/w154${
-                                    ratings[x.movie_id].movie_poster
-                                  })`,
-                                }}
-                              ></div>
+                          <div className="row no-gutters mb-1 justify-content-between">
+                            <div className="col-auto mr-3">
+                              <div className="row no-gutters">
+                                <div className="col-auto pr-3">
+                                  <div
+                                    className="square-70 rounded bg-image"
+                                    style={{
+                                      backgroundImage: `url(https://image.tmdb.org/t/p/w154${
+                                        ratings[x.movie_id].movie_poster
+                                      })`,
+                                    }}
+                                  ></div>
+                                </div>
+                                <div className="col">
+                                  <div className="row no-gutters text-white mb-0">
+                                    {ratings[x.movie_id].movie_title} (
+                                    {ratings[
+                                      x.movie_id
+                                    ].movie_release_date.substring(0, 4)}
+                                    )
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                            <div className="col">
-                              <div className="row no-gutters text-white mb-0">
-                                {ratings[x.movie_id].movie_title} (
-                                {ratings[
-                                  x.movie_id
-                                ].movie_release_date.substring(0, 4)}
-                                )
+                            <div className="col-auto d-block d-sm-none">
+                              <div className="row no-gutters">
+                                {owner ? renderEditOptions(x) : ""}
                               </div>
                             </div>
                           </div>
@@ -152,131 +282,15 @@ const Reviews = ({
                         </div>
                         <div className="col-auto">
                           <div className="row no-gutters text-white">
-                            <span className="mr-2 col-auto">
+                            <span className="mr-2 col-auto d-none d-md-block">
                               Posted review on
                             </span>
                             <span className="text-muted col-auto mr-2">
                               {date.format(new Date(x.date), "MMM DD, YYYY")}
                             </span>
-                            {owner ? (
-                              <React.Fragment>
-                                <Popover
-                                  arrow={false}
-                                  position="top"
-                                  trigger="mouseenter"
-                                  theme="dark"
-                                  content={(w) => (
-                                    <div className="py-2 px-3 rounded bg-root">
-                                      Edit review
-                                    </div>
-                                  )}
-                                >
-                                  <div
-                                    className="col-auto text-muted btn-tertiary-small d-flex flex-center"
-                                    onClick={async () => {
-                                      setMovie({
-                                        release_date:
-                                          ratings[x.movie_id]
-                                            .movie_release_date,
-                                        title: ratings[x.movie_id].movie_title,
-                                        id: ratings[x.movie_id].tmdb_id,
-                                      });
-                                      setReview(x);
-                                      setAddReviewOpen(true);
-                                    }}
-                                  >
-                                    <BsPencil fontSize="24px"></BsPencil>
-                                  </div>
-                                </Popover>
-                                <Popover
-                                  arrow={false}
-                                  position="top"
-                                  trigger="mouseenter"
-                                  theme="dark"
-                                  content={(w) => (
-                                    <div className="py-2 px-3 rounded bg-root">
-                                      Delete review
-                                    </div>
-                                  )}
-                                >
-                                  <div
-                                    className="col-auto text-muted btn-tertiary-small d-flex flex-center"
-                                    onClick={async () => {
-                                      try {
-                                        setDeletingReview(x._id);
-                                        let res = await DeleteReview(x);
-                                        setDeletingReview(-1);
-                                        if (res.error) {
-                                          store.dispatch({
-                                            type: "SET_NOTIFICATION",
-                                            notification: {
-                                              title: `Couldn't delete comment`,
-                                              type: "failure",
-                                              message: res.error,
-                                            },
-                                          });
-                                        } else {
-                                          store.dispatch({
-                                            type: "SET_NOTIFICATION",
-                                            notification: {
-                                              title: `Success`,
-                                              type: "success",
-                                              message:
-                                                "Comment successfully deleted",
-                                            },
-                                          });
-
-                                          let rating = ratings[x.movie_id];
-                                          let userInd = rating[
-                                            x.rating
-                                          ].findIndex((r) => r === x.author);
-                                          if (userInd !== -1) {
-                                            rating[x.rating].splice(userInd, 1);
-                                          }
-                                          store.dispatch({
-                                            type: "UPDATE_RATINGS",
-                                            rating: { [x.movie_id]: rating },
-                                          });
-
-                                          let userRatings = { ...user.ratings };
-                                          delete userRatings[x.movie_id];
-                                          store.dispatch({
-                                            type: "UPDATE_USER",
-                                            userProperty: {
-                                              ratings: userRatings,
-                                            },
-                                          });
-                                          refreshReviews();
-                                        }
-                                      } catch (er) {}
-                                    }}
-                                  >
-                                    {deletingReview === x._id ? (
-                                      <div className="square-20">
-                                        <Loader
-                                          color={"white"}
-                                          style={{
-                                            position: "absolute",
-                                            left: "10px",
-                                            top: 0,
-                                            bottom: 0,
-                                            margin: "auto",
-                                            display: "flex",
-                                            alignItems: "center",
-                                          }}
-                                          loading={true}
-                                          size={20}
-                                        ></Loader>
-                                      </div>
-                                    ) : (
-                                      <BsTrash fontSize="24px"></BsTrash>
-                                    )}
-                                  </div>
-                                </Popover>
-                              </React.Fragment>
-                            ) : (
-                              ""
-                            )}
+                            <span className="d-none d-sm-flex">
+                              {owner ? renderEditOptions(x) : ""}
+                            </span>
                           </div>
                         </div>
                       </div>

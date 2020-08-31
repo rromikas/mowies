@@ -91,7 +91,9 @@ const WishlistButton = ({ user, movie, apiKey }) => {
       <div
         style={{ pointerEvents: "all" }}
         className={`btn-custom ${
-          currentlyAdded ? "btn-custom-danger" : "btn-custom-iconic"
+          currentlyAdded
+            ? "btn-custom-danger btn-custom-iconic"
+            : "btn-custom-iconic btn-custom-iconic-primary"
         }`}
       >
         {loading ? (

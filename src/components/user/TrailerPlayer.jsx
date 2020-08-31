@@ -17,6 +17,7 @@ const TrailerPlayer = ({
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
+    setVideoIds([]);
     async function getData() {
       if (movieId && settings.movies_api_key) {
         let trailers = await GetTrailers(
@@ -50,7 +51,7 @@ const TrailerPlayer = ({
                       playerVars: { showinfo: 0, iv_load_policy: 3 },
                     },
                   }}
-                  playing
+                  playing={isReady}
                   className="trailer-player"
                   controls
                   width="100%"
