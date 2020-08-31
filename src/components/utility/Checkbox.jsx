@@ -1,6 +1,6 @@
 import React from "react";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { Checkbox as MuiCheckbox } from "@material-ui/core";
+import { default as MuiCheckbox } from "@material-ui/core/Checkbox";
 
 const theme = createMuiTheme({
   palette: {
