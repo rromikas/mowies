@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Collapse } from "@material-ui/core";
+import Collapse from "@material-ui/core/Collapse";
 import { connect } from "react-redux";
 import { GetReviewComments } from "../../server/DatabaseApi";
 import { Emoji } from "emoji-mart";

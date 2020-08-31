@@ -11,7 +11,7 @@ import {
   ReportReview,
 } from "../../server/DatabaseApi";
 import { connect } from "react-redux";
-import { Collapse } from "@material-ui/core";
+import Collapse from "@material-ui/core/Collapse";
 import Paigination from "../utility/Paigination";
 import history from "../../History";
 import ReplyToReview from "./ReplyToReview";

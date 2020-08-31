@@ -4,7 +4,7 @@ import { Emoji } from "emoji-mart";
 import { MdThumbUp, MdChatBubble } from "react-icons/md";
 import { GetReviewComments, DeleteReview } from "../../../server/DatabaseApi";
 import { connect } from "react-redux";
-import { Collapse } from "@material-ui/core";
+import Collapse from "@material-ui/core/Collapse";
 import Paigination from "../../utility/Paigination";
 import history from "../../../History";
 import AddReview from "../AddReview";

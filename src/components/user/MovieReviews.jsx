@@ -18,7 +18,7 @@ import {
   DeleteComment,
 } from "../../server/DatabaseApi";
 import { connect } from "react-redux";
-import { Collapse } from "@material-ui/core";
+import Collapse from "@material-ui/core/Collapse";
 import Paigination from "../utility/Paigination";
 import store from "../../store/store";
 import Loader from "../utility/Loader";
