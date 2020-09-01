@@ -350,7 +350,7 @@ const Navbar = (props) => {
                   ) : (
                     <div className="row no-gutters pr-sm-3 pr-2 align-items-center">
                       <div
-                        className="col-auto cursor-pointer fb-btn"
+                        className="col-auto cursor-pointer fb-btn px-sm-4 px-2"
                         onClick={() => {
                           history.push("/login");
                         }}
@@ -358,7 +358,7 @@ const Navbar = (props) => {
                         Login
                       </div>
                       <div
-                        className="col-auto cursor-pointer fb-btn"
+                        className="col-auto cursor-pointer fb-btn px-sm-4 px-2"
                         onClick={() => history.push("/signup")}
                       >
                         Signup
