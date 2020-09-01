@@ -33,3 +33,19 @@ export const validateEmail = (email) => {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 };
+
+export function setCaretPosition(ctrl, pos) {
+  // Modern browsers
+  if (ctrl.setSelectionRange) {
+    // ctrl.focus();
+    ctrl.setSelectionRange(pos, pos);
+
+    // IE8 and below
+  } else if (ctrl.createTextRange) {
+    var range = ctrl.createTextRange();
+    range.collapse(true);
+    range.moveEnd("character", pos);
+    range.moveStart("character", pos);
+    range.select();
+  }
+}

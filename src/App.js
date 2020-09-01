@@ -24,6 +24,7 @@ import LegalDocument from "./components/user/LegalDocument";
 import ForgotPassword from "./components/login/ForgotPassword";
 import ResetPassword from "./components/login/ResetPassword";
 import LogoLoader from "./images/LogoLoader.gif";
+import MobileSearchBar from "./components/user/MobileSearchBar";
 
 const AdminDashboard = React.lazy(() =>
   import("./components/admin/AdminDashboard")
@@ -187,6 +188,7 @@ function App() {
             <Route exact path="/profile/:userId" component={Profile}></Route>
           </Switch>
           {initialLoadCompleted ? <Footer></Footer> : ""}
+          <MobileSearchBar></MobileSearchBar>
           <Toast></Toast>
         </div>
       </Router>

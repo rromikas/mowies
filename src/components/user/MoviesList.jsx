@@ -35,6 +35,7 @@ const MoviesList = ({ movies, user, ratings, prefix = "" }) => {
         return (
           <div
             key={`result-${i}`}
+            style={{ alignSelf: "start" }}
             className="col-lg-12 col-md-15 col-sm-20 col-60 p-3 text-white"
           >
             <div

@@ -9,6 +9,7 @@ import store from "../../store/store";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 import { OfficialMoviesGenres, OfficialSeriesGenres } from "../../Data";
+import LogoLoader from "../../images/LogoLoader.gif";
 
 const extractGenres = (movies) => {
   let genres = { 0: "All" };
@@ -34,6 +35,7 @@ const SearchResults = ({ search, settings }) => {
   const [series, setSeries] = useState([]);
   const [selectedMovieGenre, setSelectedMovieGenre] = useState(0);
   const [selectedSerieGenre, setSelectedSerieGenre] = useState(0);
+  const [loading, setLoading] = useState(false);
   const category = search.category;
 
   const onFail = () => {
@@ -48,6 +50,7 @@ const SearchResults = ({ search, settings }) => {
   };
 
   useEffect(() => {
+    setLoading(true);
     async function getData() {
       if (search.query) {
         if (category === "Reviews" || category === "All") {
@@ -85,6 +88,7 @@ const SearchResults = ({ search, settings }) => {
           setSeries([]);
         }
       }
+      setLoading(false);
     }
     getData();
   }, [search]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -99,153 +103,165 @@ const SearchResults = ({ search, settings }) => {
       <div className="col-60 d-flex flex-column">
         <div className="row no-gutters flex-grow-0"></div>
         <div className="row no-gutters flex-grow-1">
-          <div className="col-60 d-flex flex-column">
-            <div className="row no-gutters flex-grow-1 justify-content-center">
-              <div className="col-60 p-5 text-white content-container d-flex flex-column">
-                <div className="row no-gutters flex-grow-1">
-                  <div className="col-60 mb-4">
-                    <div className="row no-gutters h4">Search Results</div>
-                    <div className="row no-gutters text-muted border-bottom pb-3">
-                      Showing all results
-                    </div>
-                  </div>
-                  <div className="col-60">
-                    {movies.length ? (
-                      <div className="row no-gutters h5 mb-2">
-                        Movies ({movies.length})
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                    <div className="row no-gutters justify-content-end text-light align-items-center mb-4">
-                      <div className="col-auto">
-                        {Object.keys(moviesGenres).length > 1 ? (
-                          <SimpleBar
-                            style={{
-                              padding: "14px 0",
-                              width: "100%",
-                              overflowX: "auto",
-                              whiteSpace: "nowrap",
-                            }}
-                          >
-                            {Object.keys(moviesGenres).map((x, i) => (
-                              <div
-                                onClick={() => {
-                                  setSelectedMovieGenre(x);
-                                }}
-                                style={{ display: "inline-block" }}
-                                key={`genre-for-popular-movie-${i}`}
-                                className={`px-4 ${
-                                  +selectedMovieGenre === +x
-                                    ? "btn-tertiary-selected text-white"
-                                    : "btn-tertiary text-light-white"
-                                }`}
-                              >
-                                {moviesGenres[x]}
-                              </div>
-                            ))}
-                          </SimpleBar>
-                        ) : (
-                          ""
-                        )}
+          {loading ? (
+            <div className="col-60 bg-root">
+              <div className="row no-gutters justify-content-center">
+                <img
+                  alt="loading"
+                  src={LogoLoader}
+                  style={{ height: "80vh" }}
+                ></img>
+              </div>
+            </div>
+          ) : (
+            <div className="col-60 d-flex flex-column">
+              <div className="row no-gutters flex-grow-1 justify-content-center">
+                <div className="col-60 p-sm-5 p-4 text-white content-container d-flex flex-column">
+                  <div className="row no-gutters flex-grow-1 align-content-start">
+                    <div className="col-60 mb-4">
+                      <div className="row no-gutters h4">Search Results</div>
+                      <div className="row no-gutters text-muted border-bottom pb-3">
+                        Showing all results
                       </div>
                     </div>
-                  </div>
-                  <div className="col-60">
-                    {movies.length ? (
-                      <React.Fragment>
-                        <MoviesList
-                          movies={movies.filter((x) => {
-                            return (
-                              x.genre_ids.includes(+selectedMovieGenre) ||
-                              +selectedMovieGenre === 0
-                            );
-                          })}
-                        ></MoviesList>
-                      </React.Fragment>
-                    ) : (
-                      ""
-                    )}
-                    <div className="py-2 row no-gutters"></div>
-                    <div className="row no-gutters">
-                      <div className="col-60">
-                        {series.length ? (
-                          <div className="row no-gutters h5 mb-2">
-                            Series ({series.length})
-                          </div>
-                        ) : (
-                          ""
-                        )}
-                        <div className="row no-gutters justify-content-end text-light align-items-center mb-4">
-                          <div className="col-auto">
-                            {Object.keys(seriesGenres).length > 1 ? (
-                              <SimpleBar
-                                style={{
-                                  padding: "14px 0",
-                                  width: "100%",
-                                  overflowX: "auto",
-                                  whiteSpace: "nowrap",
-                                }}
-                              >
-                                {Object.keys(seriesGenres).map((x, i) => (
-                                  <div
-                                    onClick={() => {
-                                      setSelectedSerieGenre(x);
-                                    }}
-                                    style={{ display: "inline-block" }}
-                                    key={`genre-for-popular-movie-${i}`}
-                                    className={`px-4 ${
-                                      +selectedSerieGenre === +x
-                                        ? "btn-tertiary-selected text-white"
-                                        : "btn-tertiary text-light-white"
-                                    }`}
-                                  >
-                                    {seriesGenres[x]}
-                                  </div>
-                                ))}
-                              </SimpleBar>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {series.length ? (
-                      <React.Fragment>
-                        <MoviesList
-                          prefix={"serie-"}
-                          movies={series
-                            .filter((x) => {
-                              return (
-                                x.genre_ids.includes(+selectedSerieGenre) ||
-                                +selectedSerieGenre === 0
-                              );
-                            })
-                            .map((x) =>
-                              Object.assign({}, x, { id: `serie-${x.id}` })
-                            )}
-                        ></MoviesList>
-                      </React.Fragment>
-                    ) : (
-                      ""
-                    )}
-                    <div className="py-2 row no-gutters"></div>
-                    {reviews.length ? (
-                      <React.Fragment>
+                    <div className="col-60">
+                      {movies.length ? (
                         <div className="row no-gutters h5 mb-2">
-                          Reviews ({reviews.length})
+                          Movies ({movies.length})
                         </div>
-                        <ReviewsList reviews={reviews}></ReviewsList>
-                      </React.Fragment>
-                    ) : (
-                      ""
-                    )}
+                      ) : (
+                        ""
+                      )}
+                      <div className="row no-gutters justify-content-end text-light align-items-center mb-4">
+                        <div className="col-auto">
+                          {Object.keys(moviesGenres).length > 1 ? (
+                            <SimpleBar
+                              style={{
+                                padding: "14px 0",
+                                width: "100%",
+                                overflowX: "auto",
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              {Object.keys(moviesGenres).map((x, i) => (
+                                <div
+                                  onClick={() => {
+                                    setSelectedMovieGenre(x);
+                                  }}
+                                  style={{ display: "inline-block" }}
+                                  key={`genre-for-popular-movie-${i}`}
+                                  className={`px-4 ${
+                                    +selectedMovieGenre === +x
+                                      ? "btn-tertiary-selected text-white"
+                                      : "btn-tertiary text-light-white"
+                                  }`}
+                                >
+                                  {moviesGenres[x]}
+                                </div>
+                              ))}
+                            </SimpleBar>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-60">
+                      {movies.length ? (
+                        <React.Fragment>
+                          <MoviesList
+                            movies={movies.filter((x) => {
+                              return (
+                                x.genre_ids.includes(+selectedMovieGenre) ||
+                                +selectedMovieGenre === 0
+                              );
+                            })}
+                          ></MoviesList>
+                        </React.Fragment>
+                      ) : (
+                        ""
+                      )}
+                      <div className="py-2 row no-gutters"></div>
+                      <div className="row no-gutters">
+                        <div className="col-60">
+                          {series.length ? (
+                            <div className="row no-gutters h5 mb-2">
+                              Series ({series.length})
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                          <div className="row no-gutters justify-content-end text-light align-items-center mb-4">
+                            <div className="col-auto">
+                              {Object.keys(seriesGenres).length > 1 ? (
+                                <SimpleBar
+                                  style={{
+                                    padding: "14px 0",
+                                    width: "100%",
+                                    overflowX: "auto",
+                                    whiteSpace: "nowrap",
+                                  }}
+                                >
+                                  {Object.keys(seriesGenres).map((x, i) => (
+                                    <div
+                                      onClick={() => {
+                                        setSelectedSerieGenre(x);
+                                      }}
+                                      style={{ display: "inline-block" }}
+                                      key={`genre-for-popular-movie-${i}`}
+                                      className={`px-4 ${
+                                        +selectedSerieGenre === +x
+                                          ? "btn-tertiary-selected text-white"
+                                          : "btn-tertiary text-light-white"
+                                      }`}
+                                    >
+                                      {seriesGenres[x]}
+                                    </div>
+                                  ))}
+                                </SimpleBar>
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {series.length ? (
+                        <React.Fragment>
+                          <MoviesList
+                            prefix={"serie-"}
+                            movies={series
+                              .filter((x) => {
+                                return (
+                                  x.genre_ids.includes(+selectedSerieGenre) ||
+                                  +selectedSerieGenre === 0
+                                );
+                              })
+                              .map((x) =>
+                                Object.assign({}, x, { id: `serie-${x.id}` })
+                              )}
+                          ></MoviesList>
+                        </React.Fragment>
+                      ) : (
+                        ""
+                      )}
+                      <div className="py-2 row no-gutters"></div>
+                      {reviews.length ? (
+                        <React.Fragment>
+                          <div className="row no-gutters h5 mb-2">
+                            Reviews ({reviews.length})
+                          </div>
+                          <ReviewsList reviews={reviews}></ReviewsList>
+                        </React.Fragment>
+                      ) : (
+                        ""
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
