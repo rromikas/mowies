@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import history from "../../History";
 import { MdSearch } from "react-icons/md";
 
-const MobileSearchBar = () => {
+const MobileSearchBar = ({ navbarWidth }) => {
   const [searchBarExapanded, setSearchBarExpanded] = useState(false);
   const [query, setQuery] = useState("");
   const inputRef = useRef(null);
@@ -18,7 +18,7 @@ const MobileSearchBar = () => {
         right: "0px",
         zIndex: "15",
         transition: "width 0.3s",
-        width: searchBarExapanded ? "100%" : "84px",
+        width: searchBarExapanded ? `${navbarWidth}px` : "84px",
       }}
     >
       <div className="row no-gutters justify-content-end">
@@ -95,9 +95,7 @@ const MobileSearchBar = () => {
 
 function mapp(state, ownProps) {
   return {
-    user: state.user,
-    search: state.search,
-    settings: state.settings,
+    navbarWidth: state.navbarSize.width,
     ...ownProps,
   };
 }

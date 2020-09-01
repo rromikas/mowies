@@ -322,7 +322,7 @@ function mapp(state, ownProps) {
     ratings: state.ratings,
     settings: state.settings,
     user: state.user,
-    navbarHeight: state.navbarHeight,
+    navbarHeight: state.navbarSize.height,
     ...ownProps,
   };
 }

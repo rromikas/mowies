@@ -18,9 +18,11 @@ import { MdMenu } from "react-icons/md";
 import date from "date-and-time";
 
 const Navbar = (props) => {
+  console.log("props width", props.width);
   const user = props.user;
   const dashboardMenuOpened = props.dashboardMenuOpened;
   const height = props.height;
+  const width = props.width;
 
   const [scrolledToTop, setScrolledTopTop] = useState(true);
   const lastScroll = useRef(100);
@@ -67,10 +69,10 @@ const Navbar = (props) => {
   }, [user]);
 
   useEffect(() => {
-    if (height) {
-      store.dispatch({ type: "SET_HEIGHT", height });
+    if (height && width) {
+      store.dispatch({ type: "SET_SIZE", size: { height, width } });
     }
-  }, [height]);
+  }, [height, width]);
 
   return location.pathname !== "/login" &&
     location.pathname !== "/signup" &&

@@ -73,10 +73,10 @@ function searchReducer(state = { query: "", category: "All" }, action) {
   }
 }
 
-function navbarHeightReducer(state = 0, action) {
+function navbarSizeReducer(state = { width: 0, height: 0 }, action) {
   switch (action.type) {
-    case "SET_HEIGHT":
-      return action.height;
+    case "SET_SIZE":
+      return action.size;
     default:
       return state;
   }
@@ -146,7 +146,7 @@ const rootReducer = combineReducers({
   search: searchReducer,
   notification: notificationReducer,
   settings: settingsReducer,
-  navbarHeight: navbarHeightReducer,
+  navbarSize: navbarSizeReducer,
   dashboardMenuOpened: dashboardMenuReducer,
 });
 
