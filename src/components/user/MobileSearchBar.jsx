@@ -11,14 +11,14 @@ const MobileSearchBar = () => {
 
   return (
     <div
-      className="container-fluid d-block d-md-none px-2 py-3"
+      className="container-fluid d-block d-md-none p-3"
       style={{
         position: "fixed",
         bottom: "0px",
         right: "0px",
         zIndex: "15",
         transition: "width 0.3s",
-        width: searchBarExapanded ? "100%" : "56px",
+        width: searchBarExapanded ? "100%" : "71px",
       }}
     >
       <div className="row no-gutters justify-content-end">
