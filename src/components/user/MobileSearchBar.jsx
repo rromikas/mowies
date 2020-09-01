@@ -18,7 +18,7 @@ const MobileSearchBar = () => {
         right: "0px",
         zIndex: "15",
         transition: "width 0.3s",
-        width: searchBarExapanded ? "100%" : "71px",
+        width: searchBarExapanded ? "100%" : "84px",
       }}
     >
       <div className="row no-gutters justify-content-end">
@@ -27,8 +27,8 @@ const MobileSearchBar = () => {
           style={{
             transition: "width 0.3s",
             borderRadius: "40px",
-            height: "40px",
-            width: "100%",
+            height: "50px",
+            width: searchBarExapanded ? "100%" : "50px",
             background: "white",
           }}
         >
@@ -66,15 +66,15 @@ const MobileSearchBar = () => {
             style={{
               borderRadius: "40px",
               paddingLeft: searchBarExapanded ? "20px" : 0,
-              paddingRight: searchBarExapanded ? "40px" : 0,
+              paddingRight: searchBarExapanded ? "50px" : 0,
               transition: "padding-right 0.3s, padding-left 0.3s",
             }}
             className={"w-100 transparent-input text-dark"}
           ></input>
           <div
             style={{
-              height: "40px",
-              width: "40px",
+              height: "50px",
+              width: "50px",
               position: "absolute",
               right: 0,
               bottom: 0,
@@ -85,7 +85,7 @@ const MobileSearchBar = () => {
             }}
             className="d-flex flex-center bg-custom-primary text-white"
           >
-            <MdSearch fontSize="24px"></MdSearch>
+            <MdSearch fontSize="28px"></MdSearch>
           </div>
         </div>
       </div>
