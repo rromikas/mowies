@@ -125,7 +125,7 @@ const Navbar = (props) => {
               <div className="square-30 mx-auto">
                 <Logo></Logo>
               </div>
-              <div className="col-auto text-white">
+              <div className="col-auto text-white pl-1">
                 <div
                   className="row no-gutters logo"
                   style={{ fontSize: "16px" }}
