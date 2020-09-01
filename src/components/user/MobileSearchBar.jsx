@@ -65,6 +65,7 @@ const MobileSearchBar = ({ navbarWidth }) => {
             type="text"
             spellCheck={false}
             style={{
+              fontSize: "16px",
               lineHeight: "50px",
               borderRadius: "40px",
               paddingLeft: searchBarExapanded ? "20px" : 0,
