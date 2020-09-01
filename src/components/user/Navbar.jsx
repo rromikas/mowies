@@ -18,7 +18,6 @@ import { MdMenu } from "react-icons/md";
 import date from "date-and-time";
 
 const Navbar = (props) => {
-  console.log("props width", props.width);
   const user = props.user;
   const dashboardMenuOpened = props.dashboardMenuOpened;
   const height = props.height;
