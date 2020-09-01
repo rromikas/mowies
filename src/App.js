@@ -34,7 +34,6 @@ function App() {
   const [initialLoadCompleted, setInitialLoadCompleted] = useState(false);
 
   useEffect(() => {
-    alert(window.innerWidth + " " + window.outerWidth);
     async function getData() {
       GetSettings((settings) => {
         if (!settings.error) {
