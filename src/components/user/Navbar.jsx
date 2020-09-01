@@ -122,14 +122,19 @@ const Navbar = (props) => {
               className="d-block d-sm-none cursor-pointer"
               onClick={() => history.push("/")}
             >
-              <div className="square-40 mx-auto">
+              <div className="square-30 mx-auto">
                 <Logo></Logo>
               </div>
               <div className="col-auto text-white">
-                <div className="row no-gutters logo h5">CozyPotato</div>
+                <div
+                  className="row no-gutters logo"
+                  style={{ fontSize: "16px" }}
+                >
+                  CozyPotato
+                </div>
                 <div
                   className="row no-gutters justify-content-end text-light"
-                  style={{ fontSize: "10px", marginTop: "-10px" }}
+                  style={{ fontSize: "9px", marginTop: "-6px" }}
                 >
                   Community
                 </div>
