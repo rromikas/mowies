@@ -122,7 +122,7 @@ const Navbar = (props) => {
               className="d-block d-sm-none cursor-pointer"
               onClick={() => history.push("/")}
             >
-              <div className="square-30 mx-auto">
+              <div className="square-35 mx-auto">
                 <Logo></Logo>
               </div>
               <div className="col-auto text-white pl-1">
