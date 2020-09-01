@@ -5,7 +5,7 @@ import history from "../../History";
 import { MdSearch } from "react-icons/md";
 
 const MobileSearchBar = () => {
-  const [searchBarExapanded, setSearchBarExpanded] = useState(true);
+  const [searchBarExapanded, setSearchBarExpanded] = useState(false);
   const [query, setQuery] = useState("");
   const inputRef = useRef(null);
 
