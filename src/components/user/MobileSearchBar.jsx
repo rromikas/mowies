@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
-import { BsSearch } from "react-icons/bs";
 import store from "../../store/store";
 import { connect } from "react-redux";
 import history from "../../History";
+import { MdSearch } from "react-icons/md";
 
 const MobileSearchBar = () => {
   const [searchBarExapanded, setSearchBarExpanded] = useState(false);
@@ -11,7 +11,7 @@ const MobileSearchBar = () => {
 
   return (
     <div
-      className="row no-gutters justify-content-end px-2 py-3 d-flex d-md-none"
+      className="container-fluid d-block d-md-none px-2 py-3"
       style={{
         position: "fixed",
         bottom: "0px",
@@ -21,69 +21,72 @@ const MobileSearchBar = () => {
         width: searchBarExapanded ? "100%" : "56px",
       }}
     >
-      <div
-        className="text-white d-flex justify-content-end col-auto position-relative"
-        style={{
-          transition: "width 0.3s",
-          borderRadius: "40px",
-          height: "40px",
-          width: "100%",
-          background: "#585858",
-        }}
-      >
-        <input
-          ref={inputRef}
-          onBlur={() => {
-            setSearchBarExpanded(false);
-          }}
-          onFocus={async (e) => {
-            setSearchBarExpanded(true);
-            e.persist();
-            await new Promise((resolve) => setTimeout(resolve, 300));
-            e.target.setSelectionRange(
-              e.target.value.toString().length,
-              e.target.value.toString().length
-            );
-          }}
-          value={query}
-          onKeyUp={(e) => {
-            if (e.keyCode === 13) {
-              inputRef.current.blur();
-              store.dispatch({
-                type: "UPDATE_SEARCH",
-                search: { query },
-              });
-              history.push("/search");
-            }
-          }}
-          onChange={(e) => {
-            e.persist();
-            setQuery(e.target.value);
-          }}
-          type="text"
-          spellCheck={false}
-          style={{
-            borderRadius: "40px",
-            paddingLeft: searchBarExapanded ? "20px" : 0,
-            paddingRight: searchBarExapanded ? "40px" : 0,
-            transition: "padding-right 0.3s, padding-left 0.3s",
-          }}
-          className={"w-100 transparent-input text-white"}
-        ></input>
+      <div className="row no-gutters justify-content-end">
         <div
+          className="text-dark d-flex justify-content-end col-auto position-relative"
           style={{
-            height: "40px",
-            width: "40px",
-            position: "absolute",
-            right: 0,
-            bottom: 0,
-            pointerEvents: "none",
+            transition: "width 0.3s",
             borderRadius: "40px",
-            background: "#585858",
+            height: "40px",
+            width: "100%",
+            background: "white",
           }}
-          className="d-flex flex-center"
         >
-          <BsSearch></BsSearch>
+          <input
+            ref={inputRef}
+            onBlur={() => {
+              setSearchBarExpanded(false);
+            }}
+            onFocus={async (e) => {
+              setSearchBarExpanded(true);
+              e.persist();
+              await new Promise((resolve) => setTimeout(resolve, 300));
+              e.target.setSelectionRange(
+                e.target.value.toString().length,
+                e.target.value.toString().length
+              );
+            }}
+            value={query}
+            onKeyUp={(e) => {
+              if (e.keyCode === 13) {
+                inputRef.current.blur();
+                store.dispatch({
+                  type: "UPDATE_SEARCH",
+                  search: { query },
+                });
+                history.push("/search");
+              }
+            }}
+            onChange={(e) => {
+              e.persist();
+              setQuery(e.target.value);
+            }}
+            type="text"
+            spellCheck={false}
+            style={{
+              borderRadius: "40px",
+              paddingLeft: searchBarExapanded ? "20px" : 0,
+              paddingRight: searchBarExapanded ? "40px" : 0,
+              transition: "padding-right 0.3s, padding-left 0.3s",
+            }}
+            className={"w-100 transparent-input text-dark"}
+          ></input>
+          <div
+            style={{
+              height: "40px",
+              width: "40px",
+              position: "absolute",
+              right: 0,
+              bottom: 0,
+              pointerEvents: "none",
+              borderRadius: "40px",
+              boxShadow:
+                "0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0,0,0,.12)",
+            }}
+            className="d-flex flex-center bg-custom-primary text-white"
+          >
+            <MdSearch fontSize="24px"></MdSearch>
+          </div>
         </div>
       </div>
     </div>
