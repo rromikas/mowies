@@ -19,7 +19,7 @@ const MobileSearchBar = ({ navbarWidth }) => {
         right: "0px",
         zIndex: "15",
         transition: "width 0.3s",
-        width: searchBarExapanded ? `${navbarWidth}px` : "84px",
+        width: searchBarExapanded ? `320px` : "84px",
       }}
     >
       <div className="row no-gutters justify-content-end">
