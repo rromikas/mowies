@@ -50,6 +50,7 @@ const SearchResults = ({ search, settings }) => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     setLoading(true);
     async function getData() {
       if (search.query) {
