@@ -188,7 +188,10 @@ function App() {
             <Route exact path="/profile/:userId" component={Profile}></Route>
           </Switch>
           {initialLoadCompleted ? <Footer></Footer> : ""}
-          <MobileSearchBar></MobileSearchBar>
+          <div style={{ overflow: "auto" }}>
+            <MobileSearchBar></MobileSearchBar>
+          </div>
+
           <Toast></Toast>
         </div>
       </Router>
