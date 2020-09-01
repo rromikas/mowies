@@ -11,7 +11,7 @@ const MobileSearchBar = ({ navbarWidth }) => {
 
   return (
     <div
-      className="container-fluid d-block d-md-none"
+      className="container-fluid d-block d-md-none px-0"
       style={{
         boxSizing: "border-box",
         position: "fixed",
