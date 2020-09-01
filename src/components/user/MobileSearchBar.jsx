@@ -41,11 +41,11 @@ const MobileSearchBar = ({ navbarWidth }) => {
             onFocus={async (e) => {
               setSearchBarExpanded(true);
               e.persist();
-              await new Promise((resolve) => setTimeout(resolve, 300));
-              e.target.setSelectionRange(
-                e.target.value.toString().length,
-                e.target.value.toString().length
-              );
+              // await new Promise((resolve) => setTimeout(resolve, 300));
+              // e.target.setSelectionRange(
+              //   e.target.value.toString().length,
+              //   e.target.value.toString().length
+              // );
             }}
             value={query}
             onKeyUp={(e) => {
