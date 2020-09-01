@@ -690,10 +690,7 @@ h6,
 
 .text-muted-light {
   transition: all 0.3s;
-  color: #cacaca;
-  @include media-breakpoint-up(lg) {
-    color: #6c757d;
-  }
+  color: #6c757d;
 }
 
 .bg-transition {

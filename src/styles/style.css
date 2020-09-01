@@ -16664,13 +16664,7 @@ h1, h2, h3, h4, h5, h6,
 .text-muted-light {
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
-  color: #cacaca;
-}
-
-@media (min-width: 992px) {
-  .text-muted-light {
-    color: #6c757d;
-  }
+  color: #6c757d;
 }
 
 .bg-transition {
