@@ -23,7 +23,7 @@ const MobileSearchBar = ({ navbarWidth }) => {
     >
       <div className="row no-gutters justify-content-end">
         <div
-          className="text-dark d-flex justify-content-end col-auto position-relative"
+          className="text-dark col-auto position-relative"
           style={{
             transition: "width 0.3s",
             borderRadius: "40px",
@@ -64,6 +64,7 @@ const MobileSearchBar = ({ navbarWidth }) => {
             type="text"
             spellCheck={false}
             style={{
+              lineHeight: "50px",
               borderRadius: "40px",
               paddingLeft: searchBarExapanded ? "20px" : 0,
               paddingRight: searchBarExapanded ? "50px" : 0,
