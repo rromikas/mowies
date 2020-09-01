@@ -11,7 +11,7 @@ const MobileSearchBar = ({ navbarWidth }) => {
 
   return (
     <div
-      className="container-fluid d-block d-md-none px-0"
+      className="container-fluid d-block d-md-none p-3"
       style={{
         boxSizing: "border-box",
         position: "fixed",
@@ -19,7 +19,7 @@ const MobileSearchBar = ({ navbarWidth }) => {
         right: "0px",
         zIndex: "15",
         transition: "width 0.3s",
-        width: searchBarExapanded ? `320px` : "84px",
+        width: searchBarExapanded ? `100%` : "84px",
       }}
     >
       <div className="row no-gutters justify-content-end">
@@ -41,11 +41,11 @@ const MobileSearchBar = ({ navbarWidth }) => {
             onFocus={async (e) => {
               setSearchBarExpanded(true);
               e.persist();
-              // await new Promise((resolve) => setTimeout(resolve, 300));
-              // e.target.setSelectionRange(
-              //   e.target.value.toString().length,
-              //   e.target.value.toString().length
-              // );
+              await new Promise((resolve) => setTimeout(resolve, 300));
+              e.target.setSelectionRange(
+                e.target.value.toString().length,
+                e.target.value.toString().length
+              );
             }}
             value={query}
             onKeyUp={(e) => {
