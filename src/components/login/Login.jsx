@@ -27,11 +27,11 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const initialHeight = useRef(window.innerHeight);
-  console.log("niitila height", initialHeight);
+  console.log("niitila height", initialHeight.current);
   return (
     <div
       className="row no-gutters justify-content-center aligm-items-start align-items-sm-center"
-      style={{ height: initialHeight }}
+      style={{ height: initialHeight.current }}
     >
       <div className="col-xl-50 col-60 col-lg-50 col-md-30 col-sm-40 login-rounded overflow-hidden">
         <div className="row no-gutters h-100">
