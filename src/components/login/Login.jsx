@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import history from "../../History";
 import { Login as LoginFunction } from "../../server/DatabaseApi";
 import store from "../../store/store";
@@ -24,13 +24,14 @@ const handleSubmit = async (credentials) => {
 };
 
 const Login = () => {
-  console.log("inne height", window.innerHeight);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const initialHeight = useRef(window.innerHeight);
+  console.log("niitila height", initialHeight);
   return (
     <div
       className="row no-gutters justify-content-center aligm-items-start align-items-sm-center"
-      style={{ height: window.innerHeight }}
+      style={{ height: initialHeight }}
     >
       <div className="col-xl-50 col-60 col-lg-50 col-md-30 col-sm-40 login-rounded overflow-hidden">
         <div className="row no-gutters h-100">
