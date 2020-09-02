@@ -24,6 +24,7 @@ const handleSubmit = async (credentials) => {
 };
 
 const Login = () => {
+  console.log("inne height", window.innerHeight);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   return (
