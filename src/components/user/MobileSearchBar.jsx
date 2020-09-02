@@ -3,13 +3,18 @@ import store from "../../store/store";
 import { connect } from "react-redux";
 import history from "../../History";
 import { MdSearch } from "react-icons/md";
+import { useLocation } from "react-router-dom";
 
-const MobileSearchBar = ({ navbarWidth }) => {
+const MobileSearchBar = () => {
   const [searchBarExapanded, setSearchBarExpanded] = useState(false);
   const [query, setQuery] = useState("");
   const inputRef = useRef(null);
+  const location = useLocation();
 
-  return (
+  return location.pathname !== "/login" &&
+    location.pathname !== "/signup" &&
+    location.pathname !== "/forgot-password" &&
+    !location.pathname.includes("/reset-password") ? (
     <div
       className="container-fluid d-block d-md-none p-3"
       style={{
@@ -31,6 +36,8 @@ const MobileSearchBar = ({ navbarWidth }) => {
             height: "50px",
             width: searchBarExapanded ? "100%" : "50px",
             background: "white",
+            boxShadow:
+              "0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0,0,0,.12)",
           }}
         >
           <input
@@ -83,8 +90,6 @@ const MobileSearchBar = ({ navbarWidth }) => {
               bottom: 0,
               pointerEvents: "none",
               borderRadius: "40px",
-              boxShadow:
-                "0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0,0,0,.12)",
             }}
             className="d-flex flex-center bg-custom-primary text-white"
           >
@@ -93,6 +98,8 @@ const MobileSearchBar = ({ navbarWidth }) => {
         </div>
       </div>
     </div>
+  ) : (
+    ""
   );
 };
 
