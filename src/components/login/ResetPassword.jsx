@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import history from "../../History";
 import { ResetPassword } from "../../server/DatabaseApi";
 import store from "../../store/store";
@@ -10,6 +10,7 @@ const ResetPasswordPage = (props) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [problem, setProblem] = useState("");
+  const initialHeight = useRef(window.innerHeight);
   const validations = [
     {
       valid: /[^\w\s]/.test(password) || /\d/.test(password),
@@ -55,7 +56,7 @@ const ResetPasswordPage = (props) => {
   return (
     <div
       className="row no-gutters justify-content-center aligm-items-start align-items-sm-center"
-      style={{ height: window.innerHeight }}
+      style={{ minHeight: initialHeight.current }}
     >
       <div className="col-xl-50 col-60 col-lg-50 col-md-30 col-sm-40 login-rounded overflow-hidden">
         <div className="row no-gutters h-100">

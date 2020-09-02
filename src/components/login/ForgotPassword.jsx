@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import history from "../../History";
 import { SendPasswordResetLink } from "../../server/DatabaseApi";
 import store from "../../store/store";
@@ -9,6 +9,7 @@ import { validateEmail } from "../../utilities/Functions";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [problem, setProblem] = useState("");
+  const initialHeight = useRef(window.innerHeight);
   const handleSubmit = async (email) => {
     if (!validateEmail(email)) {
       setProblem("Email is not valid");
@@ -41,7 +42,7 @@ const Login = () => {
   return (
     <div
       className="row no-gutters justify-content-center aligm-items-start align-items-sm-center"
-      style={{ height: window.innerHeight }}
+      style={{ minHeight: initialHeight.current }}
     >
       <div className="col-xl-50 col-60 col-lg-50 col-md-30 col-sm-40 login-rounded overflow-hidden">
         <div className="row no-gutters h-100">
