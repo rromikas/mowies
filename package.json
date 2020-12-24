@@ -10,7 +10,7 @@
     "@testing-library/user-event": "^7.2.1",
     "bootstrap": "^4.5.0",
     "browser-image-compression": "^1.0.12",
-    "date-and-time": "^0.13.1",
+    "date-and-time": "^0.14.2",
     "history": "^4.10.1",
     "i": "^0.3.6",
     "moment": "^2.27.0",
